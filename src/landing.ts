@@ -12,6 +12,13 @@ export class Landing {
     }
 
     root.innerHTML = `
+      <div class="pc" aria-hidden="true">
+        <div class="wallpaper__image"></div>
+        <div class="wallpaper__clock">
+          <span class="wallpaper__time" id="wallpaper-time"></span>
+          <span class="wallpaper__date" id="wallpaper-date"></span>
+        </div>
+      </div>
       <main class="landing" aria-label="Illustrated room landing">
         <canvas id="landing-canvas" aria-label="Illustrated room"></canvas>
         <section class="intro" aria-label="Introduction overlay">
@@ -70,6 +77,8 @@ export class Landing {
       dpr: window.devicePixelRatio || 1
     };
     const layoutOffset = { left: 0, top: 0 };
+    const wallpaperTimeEl = root.querySelector<HTMLSpanElement>('#wallpaper-time');
+    const wallpaperDateEl = root.querySelector<HTMLSpanElement>('#wallpaper-date');
 
     const TOP_RATIO = 0.2;
     const BOTTOM_RATIO = 0.1;
@@ -87,10 +96,10 @@ export class Landing {
     const NOISE_FRAME_MS = 1000 / 30;
     const NOISE_ALPHA = 0.05; // tiny white noise overlay
     const NB_SCREEN_POS = { x: 218, y: 415 };
-    const NB_CLOCK_POS = { x: 253, y: 547 };
+    const NB_CLOCK_POS = { x: 253, y: 550 };
     const NB_CLOCK_ROTATION = (-6 * Math.PI) / 180;
-    const NB_CLOCK_FONT = '22px "Space Grotesk", "Segoe UI", system-ui, sans-serif';
-    const NB_DATE_FONT = '14px "Space Grotesk", "Segoe UI", system-ui, sans-serif';
+    const NB_CLOCK_FONT = '22px "Arial", "Space Grotesk", "Segoe UI", system-ui, sans-serif';
+    const NB_DATE_FONT = '14px "Arial", "Space Grotesk", "Segoe UI", system-ui, sans-serif';
     const NB_DATE_OFFSET_Y = 26;
     const NB_FALLBACK_SIZE = { width: 320, height: 200 };
     const MONITOR_POS = { x: 550, y: 231 };
@@ -192,7 +201,8 @@ export class Landing {
       const now = new Date();
       const hh = String(now.getHours());
       const mm = String(now.getMinutes()).padStart(2, '0');
-      return `${hh}:${mm}`;
+      const time = `${hh}:${mm}`;
+      return time;
     }
 
     function getDateText() {
@@ -200,7 +210,8 @@ export class Landing {
       const weekday = now.toLocaleString('en-US', { weekday: 'long' });
       const month = now.toLocaleString('en-US', { month: 'long' });
       const day = now.getDate();
-      return `${weekday}, ${month} ${day}`;
+      const date = `${weekday}, ${month} ${day}`;
+      return date;
     }
 
     function composeBackgroundLayers() {
@@ -569,6 +580,11 @@ export class Landing {
       noiseRaf = window.requestAnimationFrame(animateNoise);
     }
 
+    function tickWallpaperClock() {
+      if (wallpaperTimeEl) wallpaperTimeEl.textContent = getClockText();
+      if (wallpaperDateEl) wallpaperDateEl.textContent = getDateText();
+    }
+
     function computeStartTarget() {
       const rect = canvas.getBoundingClientRect();
       const vw = rect.width;
@@ -693,5 +709,9 @@ export class Landing {
         beginStartAnimation();
       });
     }
+
+    // Wallpaper clock ticks every 5 seconds.
+    tickWallpaperClock();
+    window.setInterval(tickWallpaperClock, 5000);
   }
 }
