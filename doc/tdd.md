@@ -48,11 +48,13 @@ If limits are hit, then image is cropped by maximum limits and black bars are pl
  
 If image is wider than viewport, then image should be croped up to 10% from the left side and up to 60% from the right side proportionally. If limits are hit, then black borders should be added on top and bottom.
 
-When mouse is moved, image should be moved in opposite direction up to 1% of with and height. Half-screen mouse movement should result in 1% movement of the image.
+When mouse is moved, image should be moved in opposite direction up to 0.5% of with and height. Half-screen mouse movement should result in 0.5% movement of the image.
 
-To avoid introducing black bars with a movement, image cropping calculated above should include minium 1% of cropping.
+To avoid introducing black bars with a movement, image cropping calculated above should include minium 1.5% of cropping.
 
-
+When image is moved to the right, it should be transfomed: the 
+image plane should be rotated around middle screen vertical axis. The left side of screen shold became close, the right side should became smaler. Maximum is 1 degree.
+The same effect is applied to the left, top and bottom movement.
 
 
 ## Glossary

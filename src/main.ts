@@ -31,7 +31,7 @@ const RATIO_SUM = TOP_RATIO + BOTTOM_RATIO;
 const LEFT_RATIO = 0.1;
 const RIGHT_RATIO = 0.6;
 const H_RATIO_SUM = LEFT_RATIO + RIGHT_RATIO;
-const PARALLAX_BUFFER = 0.01; // minimum crop to avoid bars when applying parallax
+const PARALLAX_BUFFER = 0.015; // minimum crop to avoid bars when applying parallax
 
 function applyLayout() {
   if (!state.naturalWidth || !state.naturalHeight) return;
@@ -202,7 +202,8 @@ function handleImageReady() {
 }
 
 // Mouse parallax: move image opposite to cursor up to 1% of width/height for half-screen travel.
-const MAX_OFFSET_FACTOR = 0.01;
+const MAX_OFFSET_FACTOR = 0.005;
+const MAX_ROTATE_DEG = 1;
 
 function applyParallax(event: MouseEvent) {
   const rect = img.getBoundingClientRect();
@@ -218,7 +219,16 @@ function applyParallax(event: MouseEvent) {
   const translateX = -clampedX * (rect.width * (MAX_OFFSET_FACTOR / 0.5));
   const translateY = -clampedY * (rect.height * (MAX_OFFSET_FACTOR / 0.5));
 
-  img.style.translate = `${translateX}px ${translateY}px`;
+  // Normalize image movement (-1..1) and rotate so the leading edge recedes at max movement.
+  const movementX = translateX / (rect.width * MAX_OFFSET_FACTOR);
+  const movementY = translateY / (rect.height * MAX_OFFSET_FACTOR);
+  const rotateY = -movementX * MAX_ROTATE_DEG;
+  const rotateX = movementY * MAX_ROTATE_DEG;
+
+  const originX = centerX - rect.left;
+  const originY = centerY - rect.top;
+  img.style.transformOrigin = `${originX}px ${originY}px`;
+  img.style.transform = `translate(${translateX}px, ${translateY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 }
 
 window.addEventListener('mousemove', applyParallax);
