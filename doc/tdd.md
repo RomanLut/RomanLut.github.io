@@ -40,21 +40,19 @@ The project will follow a simple, static site generator pattern.
 
 ### 5.1. Landing page
 
-The landing page is a fullscreen view without scrolling. It displays the `room.png` image.
+#### 5.1.1 Background image
 
-The image is scaled to fill the screen width horizontally.
-It is allowed to crop up to 20% of the upper part of image and up to 10% of bottom part of the image to fill the screen. Top and bottom parts a cropped proportionally. 
-If limits are hit, then image is cropped by maximum limits and black bars are placed on the left and right edges.
- 
-If image is wider than viewport, then image should be croped up to 10% from the left side and up to 60% from the right side proportionally. If limits are hit, then black borders should be added on top and bottom.
+*   Rendering: A canvas fills the landing container, drawing `room.png` as the backdrop.
+*   Layout & scaling: The image scales to fill viewport width. Up to 20% top / 10% bottom crop is allowed before adding side bars; when scaled to height, up to 10% left / 60% right crop is allowed before adding top/bottom bars. Cropping is proportional until limits are reached.
+*   Buffering: A 1.5% overdraw buffer is added on all sides to avoid revealing bars during parallax shifts.
+*   Parallax translate: Cursor movement up to half-screen moves the image in the opposite direction by up to 0.5% of its width/height.
+*   Parallax rotation: Horizontal movement applies `rotateY` up to 1° around the viewport’s vertical center axis (right shift makes the right edge recede). Vertical movement applies `rotateX` up to 1° (down shift makes the top recede). The transform origin is pinned to screen center.
+*   Perspective: The landing container uses a 1200px centered perspective to support the 3D tilt.
 
-When mouse is moved, image should be moved in opposite direction up to 0.5% of with and height. Half-screen mouse movement should result in 0.5% movement of the image.
+#### 5.1.2 Background image animation
 
-To avoid introducing black bars with a movement, image cropping calculated above should include minium 1.5% of cropping.
-
-When image is moved to the right, it should be transfomed: the 
-image plane should be rotated around middle screen vertical axis. The left side of screen shold became close, the right side should became smaler. Maximum is 1 degree.
-The same effect is applied to the left, top and bottom movement.
+*   The background is drawn on the canvas; a white HDD LED overlay is composited during redraw.
+*   LED details: 2px diameter (source pixels) at source coordinates (409, 737), scaling with the rendered image. It blinks on for ~120ms at random intervals between 0.1–5 seconds to simulate a notebook HDD indicator.
 
 
 ## Glossary

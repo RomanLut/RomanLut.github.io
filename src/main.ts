@@ -1,4 +1,5 @@
 import './style.scss';
+import roomUrl from '../public/room.png';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
@@ -8,21 +9,46 @@ if (!app) {
 
 app.innerHTML = `
   <main class="landing" aria-label="Illustrated room landing">
-    <img id="landing-image" src="/room.png" alt="Illustrated room" decoding="async" loading="lazy" />
+    <canvas id="landing-canvas" aria-label="Illustrated room"></canvas>
   </main>
 `;
 
-const img = document.querySelector<HTMLImageElement>('#landing-image');
+const canvas = document.querySelector<HTMLCanvasElement>('#landing-canvas');
 
-if (!img) {
-  throw new Error('Landing image not found');
+if (!canvas) {
+  throw new Error('Landing canvas not found');
 }
+
+const ctx = canvas.getContext('2d');
+
+if (!ctx) {
+  throw new Error('2D context not available');
+}
+
+const baseImage = new Image();
+baseImage.src = roomUrl;
+baseImage.decoding = 'async';
+baseImage.loading = 'lazy';
+baseImage.addEventListener('error', () => {
+  console.error('Failed to load base image', roomUrl);
+});
 
 type ImageDimensions = { naturalWidth: number; naturalHeight: number };
 
 const state: ImageDimensions = {
   naturalWidth: 0,
   naturalHeight: 0
+};
+type RenderState = {
+  width: number;
+  height: number;
+  dpr: number;
+};
+
+const renderState: RenderState = {
+  width: 0,
+  height: 0,
+  dpr: window.devicePixelRatio || 1
 };
 
 const TOP_RATIO = 0.2;
@@ -32,6 +58,50 @@ const LEFT_RATIO = 0.1;
 const RIGHT_RATIO = 0.6;
 const H_RATIO_SUM = LEFT_RATIO + RIGHT_RATIO;
 const PARALLAX_BUFFER = 0.015; // minimum crop to avoid bars when applying parallax
+const LED_POSITION = { x: 409, y: 737 };
+const LED_DIAMETER = 2;
+const BLINK_MIN_MS = 100;
+const BLINK_MAX_MS = 5000;
+const BLINK_DURATION_MS = 120;
+let ledOn = false;
+let blinkTimeout: number | undefined;
+
+function drawFrame() {
+  if (!renderState.width || !renderState.height || !state.naturalWidth || !state.naturalHeight) return;
+
+  const dpr = renderState.dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, renderState.width, renderState.height);
+
+  ctx.drawImage(baseImage, 0, 0, renderState.width, renderState.height);
+
+  if (!ledOn) return;
+
+  const scale = renderState.width / state.naturalWidth;
+  const ledRadius = (LED_DIAMETER / 2) * scale;
+  const ledX = LED_POSITION.x * scale;
+  const ledY = LED_POSITION.y * scale;
+
+  ctx.save();
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(ledX, ledY, ledRadius, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function queueBlink() {
+  const delay = BLINK_MIN_MS + Math.random() * (BLINK_MAX_MS - BLINK_MIN_MS);
+  blinkTimeout = window.setTimeout(() => {
+    ledOn = true;
+    drawFrame();
+    blinkTimeout = window.setTimeout(() => {
+      ledOn = false;
+      drawFrame();
+      queueBlink();
+    }, BLINK_DURATION_MS);
+  }, delay);
+}
 
 function applyLayout() {
   if (!state.naturalWidth || !state.naturalHeight) return;
@@ -48,18 +118,28 @@ function applyLayout() {
   const allowedCropTotal = topLimit + bottomLimit;
 
   const applyBufferedLayout = (width: number, height: number, left: number, top: number) => {
-    // Add 1% overdraw on each side to keep parallax shifts from revealing bars.
+    // Add 1.5% overdraw on each side to keep parallax shifts from revealing bars.
     const bufferedWidth = width * (1 + PARALLAX_BUFFER * 2);
     const bufferedHeight = height * (1 + PARALLAX_BUFFER * 2);
     const bufferedLeft = left - width * PARALLAX_BUFFER;
     const bufferedTop = top - height * PARALLAX_BUFFER;
+    const dpr = window.devicePixelRatio || 1;
 
-    img.style.position = 'absolute';
-    img.style.width = `${bufferedWidth}px`;
-    img.style.height = `${bufferedHeight}px`;
-    img.style.left = `${bufferedLeft}px`;
-    img.style.top = `${bufferedTop}px`;
-    img.style.transform = 'none';
+    renderState.width = bufferedWidth;
+    renderState.height = bufferedHeight;
+    renderState.dpr = dpr;
+
+    canvas.width = Math.max(1, Math.round(bufferedWidth * dpr));
+    canvas.height = Math.max(1, Math.round(bufferedHeight * dpr));
+
+    canvas.style.position = 'absolute';
+    canvas.style.width = `${bufferedWidth}px`;
+    canvas.style.height = `${bufferedHeight}px`;
+    canvas.style.left = `${bufferedLeft}px`;
+    canvas.style.top = `${bufferedTop}px`;
+    canvas.style.transform = 'none';
+
+    drawFrame();
   };
 
   if (heightFromWidth <= vh) {
@@ -196,17 +276,22 @@ function applyLayout() {
 }
 
 function handleImageReady() {
-  state.naturalWidth = img.naturalWidth;
-  state.naturalHeight = img.naturalHeight;
+  state.naturalWidth = baseImage.naturalWidth;
+  state.naturalHeight = baseImage.naturalHeight;
   applyLayout();
+  if (blinkTimeout !== undefined) {
+    window.clearTimeout(blinkTimeout);
+    blinkTimeout = undefined;
+  }
+  queueBlink();
 }
 
-// Mouse parallax: move image opposite to cursor up to 1% of width/height for half-screen travel.
+// Mouse parallax: move image opposite to cursor up to 0.5% of width/height for half-screen travel.
 const MAX_OFFSET_FACTOR = 0.005;
 const MAX_ROTATE_DEG = 1;
 
 function applyParallax(event: MouseEvent) {
-  const rect = img.getBoundingClientRect();
+  const rect = canvas.getBoundingClientRect();
   const centerX = window.innerWidth / 2;
   const centerY = window.innerHeight / 2;
 
@@ -227,14 +312,14 @@ function applyParallax(event: MouseEvent) {
 
   const originX = centerX - rect.left;
   const originY = centerY - rect.top;
-  img.style.transformOrigin = `${originX}px ${originY}px`;
-  img.style.transform = `translate(${translateX}px, ${translateY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  canvas.style.transformOrigin = `${originX}px ${originY}px`;
+  canvas.style.transform = `translate(${translateX}px, ${translateY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 }
 
 window.addEventListener('mousemove', applyParallax);
 
-img.addEventListener('load', handleImageReady, { once: true });
-if (img.complete && img.naturalWidth) {
+baseImage.addEventListener('load', handleImageReady, { once: true });
+if (baseImage.complete && baseImage.naturalWidth) {
   handleImageReady();
 }
 
