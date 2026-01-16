@@ -7,4 +7,7 @@ if (!app) {
   throw new Error('Root container #app not found');
 }
 
-new Landing(app);
+const params = new URLSearchParams(window.location.search);
+const initialState = params.get('start') === '1' ? 'pc' : 'landing';
+
+new Landing(app, initialState);

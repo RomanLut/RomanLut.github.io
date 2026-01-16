@@ -5,14 +5,15 @@ import { BlockedScreen } from './blockedScreen';
 
 type ImageDimensions = { naturalWidth: number; naturalHeight: number };
 type RenderState = { width: number; height: number; dpr: number };
+type AppState = 'landing' | 'pc';
 
 export class Landing {
-  constructor(root: HTMLElement) {
+  constructor(root: HTMLElement, initialState: AppState = 'landing') {
     if (!root) {
       throw new Error('Root container not provided');
     }
 
-    new BlockedScreen(root);
+    const blockedScreen = new BlockedScreen(root);
 
     root.insertAdjacentHTML(
       'beforeend',
@@ -698,8 +699,15 @@ export class Landing {
     if (startButton && landing) {
       startButton.addEventListener('click', () => {
         landing.classList.add('intro-dismissed');
+        blockedScreen.show();
         beginStartAnimation();
       });
+    }
+
+    if (initialState === 'pc' && landing) {
+      landing.classList.add('intro-dismissed');
+      blockedScreen.show();
+      beginStartAnimation();
     }
   }
 }
