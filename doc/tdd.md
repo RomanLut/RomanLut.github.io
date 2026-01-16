@@ -53,6 +53,7 @@ The project will follow a simple, static site generator pattern.
 
 *   The background is drawn on the canvas; a white HDD LED overlay is composited during redraw.
 *   LED details: 2px diameter (source pixels) at source coordinates (409, 737), scaling with the rendered image. It blinks on for ~120ms at random intervals between 0.1–5 seconds to simulate a notebook HDD indicator.
+*   Background noise: A subtle white-noise overlay (tiled, low-res texture) is refreshed at ~30 FPS with low opacity to add slight film grain to the scene.
 
 
 ## Glossary

@@ -63,8 +63,22 @@ const LED_DIAMETER = 2;
 const BLINK_MIN_MS = 100;
 const BLINK_MAX_MS = 5000;
 const BLINK_DURATION_MS = 120;
+const NOISE_SIZE = 180;
+const NOISE_FRAME_MS = 1000 / 30;
+const NOISE_ALPHA = 0.05; // tiny white noise overlay
+
+const noiseCanvas = document.createElement('canvas');
+noiseCanvas.width = NOISE_SIZE;
+noiseCanvas.height = NOISE_SIZE;
+const noiseCtx = noiseCanvas.getContext('2d');
+
+if (!noiseCtx) {
+  throw new Error('Noise 2D context not available');
+}
 let ledOn = false;
 let blinkTimeout: number | undefined;
+let lastNoiseFrame = 0;
+let noiseRaf = 0;
 
 function drawFrame() {
   if (!renderState.width || !renderState.height || !state.naturalWidth || !state.naturalHeight) return;
@@ -75,19 +89,30 @@ function drawFrame() {
 
   ctx.drawImage(baseImage, 0, 0, renderState.width, renderState.height);
 
-  if (!ledOn) return;
+  // LED overlay
+  if (ledOn) {
+    const scale = renderState.width / state.naturalWidth;
+    const ledRadius = (LED_DIAMETER / 2) * scale;
+    const ledX = LED_POSITION.x * scale;
+    const ledY = LED_POSITION.y * scale;
 
-  const scale = renderState.width / state.naturalWidth;
-  const ledRadius = (LED_DIAMETER / 2) * scale;
-  const ledX = LED_POSITION.x * scale;
-  const ledY = LED_POSITION.y * scale;
+    ctx.save();
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(ledX, ledY, ledRadius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
 
-  ctx.save();
-  ctx.fillStyle = '#ffffff';
-  ctx.beginPath();
-  ctx.arc(ledX, ledY, ledRadius, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
+  // White noise overlay
+  const pattern = ctx.createPattern(noiseCanvas, 'repeat');
+  if (pattern) {
+    ctx.save();
+    ctx.globalAlpha = NOISE_ALPHA;
+    ctx.fillStyle = pattern;
+    ctx.fillRect(0, 0, renderState.width, renderState.height);
+    ctx.restore();
+  }
 }
 
 function queueBlink() {
@@ -101,6 +126,34 @@ function queueBlink() {
       queueBlink();
     }, BLINK_DURATION_MS);
   }, delay);
+}
+
+function generateNoise() {
+  const imageData = noiseCtx.createImageData(NOISE_SIZE, NOISE_SIZE);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const value = Math.floor(Math.random() * 256);
+    data[i] = value;
+    data[i + 1] = value;
+    data[i + 2] = value;
+    data[i + 3] = 255;
+  }
+  noiseCtx.putImageData(imageData, 0, 0);
+}
+
+function animateNoise(timestamp: number) {
+  if (!state.naturalWidth || !state.naturalHeight) {
+    noiseRaf = window.requestAnimationFrame(animateNoise);
+    return;
+  }
+
+  if (timestamp - lastNoiseFrame >= NOISE_FRAME_MS) {
+    generateNoise();
+    drawFrame();
+    lastNoiseFrame = timestamp;
+  }
+
+  noiseRaf = window.requestAnimationFrame(animateNoise);
 }
 
 function applyLayout() {
@@ -284,6 +337,12 @@ function handleImageReady() {
     blinkTimeout = undefined;
   }
   queueBlink();
+  generateNoise();
+  if (noiseRaf) {
+    window.cancelAnimationFrame(noiseRaf);
+  }
+  lastNoiseFrame = 0;
+  noiseRaf = window.requestAnimationFrame(animateNoise);
 }
 
 // Mouse parallax: move image opposite to cursor up to 0.5% of width/height for half-screen travel.
