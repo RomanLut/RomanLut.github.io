@@ -74,6 +74,7 @@ const renderState: RenderState = {
   height: 0,
   dpr: window.devicePixelRatio || 1
 };
+const layoutOffset = { left: 0, top: 0 };
 
 const TOP_RATIO = 0.2;
 const BOTTOM_RATIO = 0.1;
@@ -402,6 +403,8 @@ function applyLayout() {
     renderState.width = bufferedWidth;
     renderState.height = bufferedHeight;
     renderState.dpr = dpr;
+    layoutOffset.left = bufferedLeft;
+    layoutOffset.top = bufferedTop;
 
     canvas.width = Math.max(1, Math.round(bufferedWidth * dpr));
     canvas.height = Math.max(1, Math.round(bufferedHeight * dpr));
@@ -583,7 +586,11 @@ function computeStartTarget() {
   const regionRenderedHeight = regionHeight * baseScaleY;
   const extraScale = vw >= vh ? vh / regionRenderedHeight : vw / regionRenderedWidth;
   const adjustedScale = extraScale / 1.5; // reduce final zoom
-  const targetX = NB_TARGET_CENTER.x * baseScaleX;
+  const cropLeftPx = Math.max(0, -layoutOffset.left);
+  const cropRatio = Math.min(1, cropLeftPx / renderState.width);
+  const shiftViewPx = cropRatio * 700;
+  const shiftSourcePx = shiftViewPx / baseScaleX;
+  const targetX = (NB_TARGET_CENTER.x + shiftSourcePx) * baseScaleX;
   const targetY = NB_TARGET_CENTER.y * baseScaleY;
   const desiredX = vw / 2;
   const desiredY = vh / 2;
