@@ -102,6 +102,10 @@ const MONITOR_REGION = { width: 992 - 550, height: 501 - 231 };
 const MONITOR_FALLBACK_SIZE = { width: MONITOR_REGION.width, height: MONITOR_REGION.height };
 const MONITOR_NOISE_ALPHA = 0.01;
 const MONITOR_NOISE_BLOCK_SIZE = 12;
+const NB_REGION = { x1: 226, y1: 444, x2: 532, y2: 573 };
+const NB_TARGET_CENTER = { x: 305, y: 510 };
+const START_ANIM_DURATION_MS = 3000;
+const START_ANIM_ROTATE_DEG = 6; // clockwise to level the notebook
 const NB_SCREEN_SRC = nbscreenUrl;
 const MONITOR_SRC = mscreenUrl;
 
@@ -133,6 +137,18 @@ let noiseRaf = 0;
 let baseLoaded = false;
 let notebookLoaded = false;
 let monitorLoaded = false;
+let parallaxEnabled = true;
+let parallax = { translateX: 0, translateY: 0, rotateX: 0, rotateY: 0, originX: 0, originY: 0 };
+let camera = { translateX: 0, translateY: 0, scale: 1, rotateDeg: 0 };
+let startAnim = {
+  active: false,
+  start: 0,
+  duration: START_ANIM_DURATION_MS,
+  from: { tx: 0, ty: 0, scale: 1, rot: 0 },
+  to: { tx: 0, ty: 0, scale: 1, rot: 0 },
+  origin: { x: 0, y: 0 },
+  raf: 0
+};
 
 function wireImage(
   image: HTMLImageElement,
@@ -237,6 +253,28 @@ function composeBackgroundLayers() {
   compositionCtx.drawImage(baseImage, 0, 0, state.naturalWidth, state.naturalHeight);
 }
 
+function applyCanvasTransform() {
+  const transforms: string[] = [];
+  transforms.push(
+    `translate(${camera.translateX}px, ${camera.translateY}px) scale(${camera.scale}) rotate(${camera.rotateDeg}deg)`
+  );
+
+  if (parallaxEnabled) {
+    transforms.push(
+      `translate(${parallax.translateX}px, ${parallax.translateY}px) rotateX(${parallax.rotateX}deg) rotateY(${parallax.rotateY}deg)`
+    );
+  }
+
+  if (!parallax.originX && !parallax.originY) {
+    const rect = canvas.getBoundingClientRect();
+    parallax.originX = rect.width / 2;
+    parallax.originY = rect.height / 2;
+  }
+
+  canvas.style.transformOrigin = `${parallax.originX}px ${parallax.originY}px`;
+  canvas.style.transform = transforms.join(' ');
+}
+
 function drawFrame() {
   if (!renderState.width || !renderState.height || !state.naturalWidth || !state.naturalHeight) return;
 
@@ -272,6 +310,8 @@ function drawFrame() {
     ctx.fillRect(0, 0, renderState.width, renderState.height);
     ctx.restore();
   }
+
+  applyCanvasTransform();
 }
 
 function queueBlink() {
@@ -372,8 +412,11 @@ function applyLayout() {
     canvas.style.left = `${bufferedLeft}px`;
     canvas.style.top = `${bufferedTop}px`;
     canvas.style.transform = 'none';
+    parallax.originX = bufferedWidth / 2;
+    parallax.originY = bufferedHeight / 2;
 
     drawFrame();
+    applyCanvasTransform();
   };
 
   if (heightFromWidth <= vh) {
@@ -528,11 +571,77 @@ function handleImageReady() {
   noiseRaf = window.requestAnimationFrame(animateNoise);
 }
 
+function computeStartTarget() {
+  const rect = canvas.getBoundingClientRect();
+  const vw = rect.width;
+  const vh = rect.height;
+  const regionWidth = NB_REGION.x2 - NB_REGION.x1;
+  const regionHeight = NB_REGION.y2 - NB_REGION.y1;
+  const baseScaleX = renderState.width / state.naturalWidth;
+  const baseScaleY = renderState.height / state.naturalHeight;
+  const regionRenderedWidth = regionWidth * baseScaleX;
+  const regionRenderedHeight = regionHeight * baseScaleY;
+  const extraScale = vw >= vh ? vh / regionRenderedHeight : vw / regionRenderedWidth;
+  const adjustedScale = extraScale / 1.5; // reduce final zoom
+  const targetX = NB_TARGET_CENTER.x * baseScaleX;
+  const targetY = NB_TARGET_CENTER.y * baseScaleY;
+  const desiredX = vw / 2;
+  const desiredY = vh / 2;
+  const translateX = (desiredX - targetX) / adjustedScale;
+  const translateY = (desiredY - targetY) / adjustedScale;
+  return { tx: translateX, ty: translateY, scale: adjustedScale, rot: START_ANIM_ROTATE_DEG, origin: { x: targetX, y: targetY } };
+}
+
+function stepStartAnimation(timestamp: number) {
+  const { start, duration, from, to } = startAnim;
+  const t = Math.min(1, (timestamp - start) / duration);
+  // easeInOutCubic for a softer start/finish
+  const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+  camera.translateX = from.tx + (to.tx - from.tx) * ease;
+  camera.translateY = from.ty + (to.ty - from.ty) * ease;
+  camera.scale = from.scale + (to.scale - from.scale) * ease;
+  camera.rotateDeg = from.rot + (to.rot - from.rot) * ease;
+
+  applyCanvasTransform();
+
+  if (t < 1) {
+    startAnim.raf = window.requestAnimationFrame(stepStartAnimation);
+    return;
+  }
+
+  startAnim.active = false;
+  startAnim.raf = 0;
+}
+
+function beginStartAnimation() {
+  if (startAnim.active) return;
+  startAnim.active = true;
+  parallaxEnabled = false;
+  const target = computeStartTarget();
+  parallax.originX = target.origin.x;
+  parallax.originY = target.origin.y;
+  parallax.translateX = 0;
+  parallax.translateY = 0;
+  parallax.rotateX = 0;
+  parallax.rotateY = 0;
+  startAnim.from = { tx: camera.translateX, ty: camera.translateY, scale: camera.scale, rot: camera.rotateDeg };
+  startAnim.to = { tx: target.tx, ty: target.ty, scale: target.scale, rot: target.rot };
+  startAnim.origin = target.origin;
+  startAnim.start = performance.now();
+  if (startAnim.raf) {
+    window.cancelAnimationFrame(startAnim.raf);
+  }
+  startAnim.raf = window.requestAnimationFrame(stepStartAnimation);
+}
+
 // Mouse parallax: move image opposite to cursor up to 0.5% of width/height for half-screen travel.
 const MAX_OFFSET_FACTOR = 0.005;
 const MAX_ROTATE_DEG = 1;
 
 function applyParallax(event: MouseEvent) {
+  if (!parallaxEnabled) return;
+
   const rect = canvas.getBoundingClientRect();
   const centerX = window.innerWidth / 2;
   const centerY = window.innerHeight / 2;
@@ -554,8 +663,14 @@ function applyParallax(event: MouseEvent) {
 
   const originX = centerX - rect.left;
   const originY = centerY - rect.top;
-  canvas.style.transformOrigin = `${originX}px ${originY}px`;
-  canvas.style.transform = `translate(${translateX}px, ${translateY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  parallax.originX = originX;
+  parallax.originY = originY;
+  parallax.translateX = translateX;
+  parallax.translateY = translateY;
+  parallax.rotateX = rotateX;
+  parallax.rotateY = rotateY;
+
+  applyCanvasTransform();
 }
 
 window.addEventListener('mousemove', applyParallax);
@@ -573,5 +688,6 @@ const startButton = document.querySelector<HTMLButtonElement>('.intro__start');
 if (startButton && landing) {
   startButton.addEventListener('click', () => {
     landing.classList.add('intro-dismissed');
+    beginStartAnimation();
   });
 }
