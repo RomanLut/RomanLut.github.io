@@ -7,5 +7,4 @@ if (!app) {
   throw new Error('Root container #app not found');
 }
 
-// Initialize the landing experience.
 new Landing(app);

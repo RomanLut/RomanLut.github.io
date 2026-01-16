@@ -100,8 +100,8 @@ The viewport is covered by a fixed wallpaper layer:
 
 ## 6. Global state
 
-The applicaiton shoould have two global states:
-- Landing. Landing page is shown.
+The applicaiton should have two global states:
+- Landing: Landing page is shown.
 - PC emulation : PC Emulation is shown.
 
 Starting state is Landing.

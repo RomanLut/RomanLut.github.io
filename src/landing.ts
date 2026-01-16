@@ -1,6 +1,7 @@
 import roomUrl from './assets/room.png';
 import nbscreenUrl from './assets/nbscreen.jpg';
 import mscreenUrl from './assets/mscreen.jpg';
+import { BlockedScreen } from './blockedScreen';
 
 type ImageDimensions = { naturalWidth: number; naturalHeight: number };
 type RenderState = { width: number; height: number; dpr: number };
@@ -11,33 +12,31 @@ export class Landing {
       throw new Error('Root container not provided');
     }
 
-    root.innerHTML = `
-      <div class="pc" aria-hidden="true">
-        <div class="wallpaper__image"></div>
-        <div class="wallpaper__clock">
-          <span class="wallpaper__time" id="wallpaper-time"></span>
-          <span class="wallpaper__date" id="wallpaper-date"></span>
-        </div>
-      </div>
-      <main class="landing" aria-label="Illustrated room landing">
-        <canvas id="landing-canvas" aria-label="Illustrated room"></canvas>
-        <section class="intro" aria-label="Introduction overlay">
-          <div class="intro__card">
-            <div class="intro__content">
-              <div class="intro__text">
-                <p class="intro__lead">Welcome to the personal page of Roman Lut.</p>
-                <p class="intro__body">
-                  Due to the large amount of material, everything is organized using a Windows-style user interface. Feel free to explore the folders and read the documents.
-                  <br />
-                  For the best experience, fullscreen mode is recommended (press F11).
-                </p>
+    new BlockedScreen(root);
+
+    root.insertAdjacentHTML(
+      'beforeend',
+      `
+        <main class="landing" aria-label="Illustrated room landing">
+          <canvas id="landing-canvas" aria-label="Illustrated room"></canvas>
+          <section class="intro" aria-label="Introduction overlay">
+            <div class="intro__card">
+              <div class="intro__content">
+                <div class="intro__text">
+                  <p class="intro__lead">Welcome to the personal page of Roman Lut.</p>
+                  <p class="intro__body">
+                    Due to the large amount of material, everything is organized using a Windows-style user interface. Feel free to explore the folders and read the documents.
+                    <br />
+                    For the best experience, fullscreen mode is recommended (press F11).
+                  </p>
+                </div>
+                <button type="button" class="intro__start">Start</button>
               </div>
-              <button type="button" class="intro__start">Start</button>
             </div>
-          </div>
-        </section>
-      </main>
-    `;
+          </section>
+        </main>
+      `
+    );
 
     const landing = root.querySelector<HTMLElement>('.landing');
     const canvas = root.querySelector<HTMLCanvasElement>('#landing-canvas');
@@ -77,8 +76,6 @@ export class Landing {
       dpr: window.devicePixelRatio || 1
     };
     const layoutOffset = { left: 0, top: 0 };
-    const wallpaperTimeEl = root.querySelector<HTMLSpanElement>('#wallpaper-time');
-    const wallpaperDateEl = root.querySelector<HTMLSpanElement>('#wallpaper-date');
 
     const TOP_RATIO = 0.2;
     const BOTTOM_RATIO = 0.1;
@@ -580,11 +577,6 @@ export class Landing {
       noiseRaf = window.requestAnimationFrame(animateNoise);
     }
 
-    function tickWallpaperClock() {
-      if (wallpaperTimeEl) wallpaperTimeEl.textContent = getClockText();
-      if (wallpaperDateEl) wallpaperDateEl.textContent = getDateText();
-    }
-
     function computeStartTarget() {
       const rect = canvas.getBoundingClientRect();
       const vw = rect.width;
@@ -709,9 +701,5 @@ export class Landing {
         beginStartAnimation();
       });
     }
-
-    // Wallpaper clock ticks every 5 seconds.
-    tickWallpaperClock();
-    window.setInterval(tickWallpaperClock, 5000);
   }
 }
