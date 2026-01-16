@@ -37,7 +37,6 @@ if (!compositionCtx) {
 const baseImage = new Image();
 baseImage.src = roomUrl;
 baseImage.decoding = 'async';
-baseImage.loading = 'lazy';
 baseImage.addEventListener('error', () => {
   console.error('Failed to load base image', roomUrl);
 });
@@ -85,52 +84,81 @@ const NB_FALLBACK_SIZE = { width: 320, height: 200 };
 const MONITOR_POS = { x: 550, y: 231 };
 const MONITOR_REGION = { width: 992 - 550, height: 501 - 231 };
 const MONITOR_FALLBACK_SIZE = { width: MONITOR_REGION.width, height: MONITOR_REGION.height };
-const MONITOR_NOISE_ALPHA = 0.08;
+const MONITOR_NOISE_ALPHA = 0.01;
+const MONITOR_NOISE_BLOCK_SIZE = 12;
 const NB_SCREEN_SRC = nbscreenUrl;
 const MONITOR_SRC = mscreenUrl;
 
 const noiseCanvas = document.createElement('canvas');
 noiseCanvas.width = NOISE_SIZE;
 noiseCanvas.height = NOISE_SIZE;
+const monitorNoiseCanvas = document.createElement('canvas');
+monitorNoiseCanvas.width = NOISE_SIZE;
+monitorNoiseCanvas.height = NOISE_SIZE;
 const noiseCtx = noiseCanvas.getContext('2d');
+const monitorNoiseCtx = monitorNoiseCanvas.getContext('2d');
 
 if (!noiseCtx) {
   throw new Error('Noise 2D context not available');
 }
+if (!monitorNoiseCtx) {
+  throw new Error('Monitor noise 2D context not available');
+}
 
 const notebookScreen = new Image();
 notebookScreen.decoding = 'async';
-notebookScreen.loading = 'lazy';
 
 const monitorScreen = new Image();
 monitorScreen.decoding = 'async';
-monitorScreen.loading = 'lazy';
 let ledOn = false;
 let blinkTimeout: number | undefined;
 let lastNoiseFrame = 0;
 let noiseRaf = 0;
+let baseLoaded = false;
 let notebookLoaded = false;
 let monitorLoaded = false;
 
-notebookScreen.src = NB_SCREEN_SRC;
-notebookScreen.addEventListener('load', () => {
-  notebookLoaded = true;
-  drawFrame();
-});
-notebookScreen.addEventListener('error', () => {
-  notebookLoaded = false;
-  console.warn('Notebook screen failed to load', NB_SCREEN_SRC);
-});
+function wireImage(
+  image: HTMLImageElement,
+  src: string,
+  onLoad: () => void,
+  onError: (err?: unknown) => void
+) {
+  image.addEventListener('load', onLoad);
+  image.addEventListener('error', onError);
+  image.src = src;
+  if (image.complete && image.naturalWidth) {
+    onLoad();
+  } else if ('decode' in image && typeof image.decode === 'function') {
+    image.decode().then(onLoad).catch(onError);
+  }
+}
 
-monitorScreen.src = MONITOR_SRC;
-monitorScreen.addEventListener('load', () => {
-  monitorLoaded = true;
-  drawFrame();
-});
-monitorScreen.addEventListener('error', () => {
-  monitorLoaded = false;
-  console.warn('Monitor screen failed to load', MONITOR_SRC);
-});
+wireImage(
+  notebookScreen,
+  NB_SCREEN_SRC,
+  () => {
+    notebookLoaded = true;
+    drawFrame();
+  },
+  (err) => {
+    notebookLoaded = false;
+    console.warn('Notebook screen failed to load', NB_SCREEN_SRC, err);
+  }
+);
+
+wireImage(
+  monitorScreen,
+  MONITOR_SRC,
+  () => {
+    monitorLoaded = true;
+    drawFrame();
+  },
+  (err) => {
+    monitorLoaded = false;
+    console.warn('Monitor screen failed to load', MONITOR_SRC, err);
+  }
+);
 
 function getClockText() {
   const now = new Date();
@@ -180,7 +208,7 @@ function composeBackgroundLayers() {
   }
 
   // Monitor noise
-  const monitorNoisePattern = compositionCtx.createPattern(noiseCanvas, 'repeat');
+  const monitorNoisePattern = compositionCtx.createPattern(monitorNoiseCanvas, 'repeat');
   if (monitorNoisePattern) {
     compositionCtx.save();
     compositionCtx.globalAlpha = MONITOR_NOISE_ALPHA;
@@ -244,16 +272,38 @@ function queueBlink() {
 }
 
 function generateNoise() {
-  const imageData = noiseCtx.createImageData(NOISE_SIZE, NOISE_SIZE);
-  const data = imageData.data;
-  for (let i = 0; i < data.length; i += 4) {
+  // Global film grain: per-pixel random grayscale.
+  const globalImageData = noiseCtx.createImageData(NOISE_SIZE, NOISE_SIZE);
+  const globalData = globalImageData.data;
+  for (let i = 0; i < globalData.length; i += 4) {
     const value = Math.floor(Math.random() * 256);
-    data[i] = value;
-    data[i + 1] = value;
-    data[i + 2] = value;
-    data[i + 3] = 255;
+    globalData[i] = value;
+    globalData[i + 1] = value;
+    globalData[i + 2] = value;
+    globalData[i + 3] = 255;
   }
-  noiseCtx.putImageData(imageData, 0, 0);
+  noiseCtx.putImageData(globalImageData, 0, 0);
+
+  // Monitor noise: blocky grayscale to mimic JPEG macroblocks.
+  const monitorImageData = monitorNoiseCtx.createImageData(NOISE_SIZE, NOISE_SIZE);
+  const monitorData = monitorImageData.data;
+  for (let y = 0; y < NOISE_SIZE; y += MONITOR_NOISE_BLOCK_SIZE) {
+    for (let x = 0; x < NOISE_SIZE; x += MONITOR_NOISE_BLOCK_SIZE) {
+      const value = Math.floor(Math.random() * 256);
+      for (let by = 0; by < MONITOR_NOISE_BLOCK_SIZE; by++) {
+        for (let bx = 0; bx < MONITOR_NOISE_BLOCK_SIZE; bx++) {
+          const px = x + bx;
+          const py = y + by;
+          const idx = (py * NOISE_SIZE + px) * 4;
+          monitorData[idx] = value;
+          monitorData[idx + 1] = value;
+          monitorData[idx + 2] = value;
+          monitorData[idx + 3] = 255;
+        }
+      }
+    }
+  }
+  monitorNoiseCtx.putImageData(monitorImageData, 0, 0);
 }
 
 function animateNoise(timestamp: number) {
@@ -444,6 +494,8 @@ function applyLayout() {
 }
 
 function handleImageReady() {
+  if (baseLoaded) return;
+  baseLoaded = true;
   state.naturalWidth = baseImage.naturalWidth;
   state.naturalHeight = baseImage.naturalHeight;
   applyLayout();
@@ -492,9 +544,11 @@ function applyParallax(event: MouseEvent) {
 
 window.addEventListener('mousemove', applyParallax);
 
-baseImage.addEventListener('load', handleImageReady, { once: true });
-if (baseImage.complete && baseImage.naturalWidth) {
-  handleImageReady();
-}
+wireImage(
+  baseImage,
+  roomUrl,
+  handleImageReady,
+  (err) => console.error('Failed to load base image', roomUrl, err)
+);
 
 window.addEventListener('resize', applyLayout);

@@ -57,7 +57,7 @@ Layers (draw order top to bottom):
 - Notebook screen: `nbscreen.jpg` at (218, 415) when loaded.
 - Notebook clock/date: translated to (253, 547), rotated -6°, draws HH:MM in white 22px Space Grotesk, then the date below in white 14px (26px vertical offset); textBaseline is `top`.
 - Monitor screen: `mscreen.jpg` at (550, 231) when loaded.
-- Monitor noise: tiled 180px white-noise texture over the monitor region (550, 231) sized 442×270 with global alpha 0.08.
+- Monitor noise: tiled 180px texture made of 6×6 grayscale blocks (JPEG-like macroblocks) over the monitor region (550, 231) sized 442×270 with global alpha 0.02.
 - Frame: `room.png` covering the full natural size.
 
 
