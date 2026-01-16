@@ -67,6 +67,24 @@ Layers (draw order top to bottom):
 *   LED details: 2px diameter (source pixels) at source coordinates (409, 737), scaling with the rendered image. It blinks on for ~120ms at random intervals between 0.1–5 seconds to simulate a notebook HDD indicator.
 *   Background noise: A subtle white-noise overlay (tiled, low-res texture) is refreshed at ~30 FPS with low opacity to add slight film grain to the scene.
 
+### 5.1.4 Introduction text
+
+```
+Above image, introduction text and "Start" button are shown:
+
+Roman Lut - Personal Page
+
+Welcome to the personal page of Roman Lut.
+
+Due to the large amount of material, everything is organized using a Windows-style user interface. Feel free to explore the folders and read the documents. For the best experience, fullscreen mode is recommended (press F11).
+
+[Start]
+```
+
+
+
+
+
 
 ## Glossary
 

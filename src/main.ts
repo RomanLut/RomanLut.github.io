@@ -12,9 +12,25 @@ if (!app) {
 app.innerHTML = `
   <main class="landing" aria-label="Illustrated room landing">
     <canvas id="landing-canvas" aria-label="Illustrated room"></canvas>
+    <section class="intro" aria-label="Introduction overlay">
+      <div class="intro__card">
+        <div class="intro__content">
+          <div class="intro__text">
+            <p class="intro__lead">Welcome to the personal page of Roman Lut.</p>
+            <p class="intro__body">
+              Due to the large amount of material, everything is organized using a Windows-style user interface. Feel free to explore the folders and read the documents.
+              <br />
+              For the best experience, fullscreen mode is recommended (press F11).
+            </p>
+          </div>
+          <button type="button" class="intro__start">Start</button>
+        </div>
+      </div>
+    </section>
   </main>
 `;
 
+const landing = document.querySelector<HTMLElement>('.landing');
 const canvas = document.querySelector<HTMLCanvasElement>('#landing-canvas');
 
 if (!canvas) {
@@ -552,3 +568,10 @@ wireImage(
 );
 
 window.addEventListener('resize', applyLayout);
+
+const startButton = document.querySelector<HTMLButtonElement>('.intro__start');
+if (startButton && landing) {
+  startButton.addEventListener('click', () => {
+    landing.classList.add('intro-dismissed');
+  });
+}
