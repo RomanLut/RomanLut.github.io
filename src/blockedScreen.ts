@@ -9,10 +9,15 @@ export class BlockedScreen {
     this.element.className = 'pc';
     this.element.setAttribute('aria-hidden', 'true');
     this.element.innerHTML = `
-      <div class="wallpaper__image"></div>
+      <div class="blocked_screen"></div>
       <div class="wallpaper__clock">
         <span class="wallpaper__time"></span>
         <span class="wallpaper__date"></span>
+      </div>
+      <div class="lock-ui">
+        <div class="lock-avatar" aria-hidden="true"></div>
+        <div class="lock-user" aria-label="User name">user</div>
+        <button class="lock-login" type="button">Login</button>
       </div>
     `;
 
