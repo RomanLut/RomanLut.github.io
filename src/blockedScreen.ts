@@ -15,7 +15,19 @@ export class BlockedScreen {
         <span class="wallpaper__date"></span>
       </div>
       <div class="lock-ui">
-        <div class="lock-avatar" aria-hidden="true"></div>
+        <div class="lock-avatar" aria-hidden="true">
+          <svg viewBox="0 0 96 96" role="img" aria-hidden="true" class="lock-avatar__icon">
+            <circle cx="48" cy="48" r="48" fill="rgba(255,255,255,0.3)" />
+            <g transform="translate(0,-8)">
+              <circle cx="48" cy="38" r="16" fill="#ffffff" />
+              <path
+                d="M24 78c0-13 10.7-23.6 24-23.6S72 65 72 78v6H24z"
+                fill="#ffffff"
+                opacity="0.95"
+              />
+            </g>
+          </svg>
+        </div>
         <div class="lock-user" aria-label="User name">user</div>
         <button class="lock-login" type="button">Login</button>
       </div>

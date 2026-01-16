@@ -1,7 +1,7 @@
 import roomUrl from './assets/room.png';
 import nbscreenUrl from './assets/nbscreen.jpg';
 import mscreenUrl from './assets/mscreen.jpg';
-import { BlockedScreen } from './blockedScreen';
+import type { BlockedScreen } from './blockedScreen';
 
 type ImageDimensions = { naturalWidth: number; naturalHeight: number };
 type RenderState = { width: number; height: number; dpr: number };
@@ -13,7 +13,7 @@ export class Landing {
       throw new Error('Root container not provided');
     }
 
-    const blockedScreen = new BlockedScreen(root);
+    const pcElement = root.querySelector<HTMLElement>('.pc');
 
     root.insertAdjacentHTML(
       'beforeend',
@@ -617,12 +617,13 @@ export class Landing {
 
       applyCanvasTransform();
 
-      // Fade in blocked screen in the last 300ms of the zoom.
+      // Fade in PC overlay in the last FADE_DURATION_MS of the zoom.
       const fadeStart = duration - FADE_DURATION_MS;
       if (fadeStart > 0) {
         const fadeProgress = Math.max(0, Math.min(1, (timestamp - (start + fadeStart)) / FADE_DURATION_MS));
-        if (fadeProgress > 0) {
-          blockedScreen.show(fadeProgress);
+        if (fadeProgress > 0 && pcElement) {
+          pcElement.style.display = 'block';
+          pcElement.style.opacity = String(fadeProgress);
         }
       }
 
@@ -633,7 +634,10 @@ export class Landing {
 
       startAnim.active = false;
       startAnim.raf = 0;
-      blockedScreen.show(1);
+      if (pcElement) {
+        pcElement.style.display = 'block';
+        pcElement.style.opacity = '1';
+      }
       teardownLanding();
     }
 
@@ -726,17 +730,24 @@ export class Landing {
     if (startButton && landing) {
       startButton.addEventListener('click', () => {
         landing.classList.add('intro-dismissed');
-        blockedScreen.hide();
+        if (pcElement) {
+          pcElement.style.display = 'block';
+          pcElement.style.opacity = '0';
+        }
         beginStartAnimation();
       });
     }
 
     if (initialState === 'pc' && landing) {
       landing.classList.add('intro-dismissed');
-      blockedScreen.show(1);
+      if (pcElement) {
+        pcElement.style.display = 'block';
+        pcElement.style.opacity = '0';
+      }
       beginStartAnimation();
-    } else {
-      blockedScreen.hide();
+    } else if (pcElement) {
+      pcElement.style.display = 'none';
+      pcElement.style.opacity = '0';
     }
   }
 }
