@@ -1,5 +1,7 @@
 import './style.scss';
-import roomUrl from '../public/room.png';
+import roomUrl from './assets/room.png';
+import nbscreenUrl from './assets/nbscreen.jpg';
+import mscreenUrl from './assets/mscreen.jpg';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
@@ -23,6 +25,13 @@ const ctx = canvas.getContext('2d');
 
 if (!ctx) {
   throw new Error('2D context not available');
+}
+
+const compositionCanvas = document.createElement('canvas');
+const compositionCtx = compositionCanvas.getContext('2d');
+
+if (!compositionCtx) {
+  throw new Error('Composition 2D context not available');
 }
 
 const baseImage = new Image();
@@ -66,6 +75,19 @@ const BLINK_DURATION_MS = 120;
 const NOISE_SIZE = 180;
 const NOISE_FRAME_MS = 1000 / 30;
 const NOISE_ALPHA = 0.05; // tiny white noise overlay
+const NB_SCREEN_POS = { x: 218, y: 415 };
+const NB_CLOCK_POS = { x: 253, y: 547 };
+const NB_CLOCK_ROTATION = (-6 * Math.PI) / 180;
+const NB_CLOCK_FONT = '22px "Space Grotesk", "Segoe UI", system-ui, sans-serif';
+const NB_DATE_FONT = '14px "Space Grotesk", "Segoe UI", system-ui, sans-serif';
+const NB_DATE_OFFSET_Y = 26;
+const NB_FALLBACK_SIZE = { width: 320, height: 200 };
+const MONITOR_POS = { x: 550, y: 231 };
+const MONITOR_REGION = { width: 992 - 550, height: 501 - 231 };
+const MONITOR_FALLBACK_SIZE = { width: MONITOR_REGION.width, height: MONITOR_REGION.height };
+const MONITOR_NOISE_ALPHA = 0.08;
+const NB_SCREEN_SRC = nbscreenUrl;
+const MONITOR_SRC = mscreenUrl;
 
 const noiseCanvas = document.createElement('canvas');
 noiseCanvas.width = NOISE_SIZE;
@@ -75,10 +97,101 @@ const noiseCtx = noiseCanvas.getContext('2d');
 if (!noiseCtx) {
   throw new Error('Noise 2D context not available');
 }
+
+const notebookScreen = new Image();
+notebookScreen.decoding = 'async';
+notebookScreen.loading = 'lazy';
+
+const monitorScreen = new Image();
+monitorScreen.decoding = 'async';
+monitorScreen.loading = 'lazy';
 let ledOn = false;
 let blinkTimeout: number | undefined;
 let lastNoiseFrame = 0;
 let noiseRaf = 0;
+let notebookLoaded = false;
+let monitorLoaded = false;
+
+notebookScreen.src = NB_SCREEN_SRC;
+notebookScreen.addEventListener('load', () => {
+  notebookLoaded = true;
+  drawFrame();
+});
+notebookScreen.addEventListener('error', () => {
+  notebookLoaded = false;
+  console.warn('Notebook screen failed to load', NB_SCREEN_SRC);
+});
+
+monitorScreen.src = MONITOR_SRC;
+monitorScreen.addEventListener('load', () => {
+  monitorLoaded = true;
+  drawFrame();
+});
+monitorScreen.addEventListener('error', () => {
+  monitorLoaded = false;
+  console.warn('Monitor screen failed to load', MONITOR_SRC);
+});
+
+function getClockText() {
+  const now = new Date();
+  const hh = String(now.getHours());
+  const mm = String(now.getMinutes()).padStart(2, '0');
+  return `${hh}:${mm}`;
+}
+
+function getDateText() {
+  const now = new Date();
+  const weekday = now.toLocaleString('en-US', { weekday: 'long' });
+  const month = now.toLocaleString('en-US', { month: 'long' });
+  const day = now.getDate();
+  return `${weekday}, ${month} ${day}`;
+}
+
+function composeBackgroundLayers() {
+  if (!state.naturalWidth || !state.naturalHeight) return;
+
+  if (compositionCanvas.width !== state.naturalWidth || compositionCanvas.height !== state.naturalHeight) {
+    compositionCanvas.width = state.naturalWidth;
+    compositionCanvas.height = state.naturalHeight;
+  }
+
+  compositionCtx.clearRect(0, 0, compositionCanvas.width, compositionCanvas.height);
+
+  // Notebook screen
+  if (notebookLoaded) {
+    compositionCtx.drawImage(notebookScreen, NB_SCREEN_POS.x, NB_SCREEN_POS.y);
+  }
+
+  // Notebook clock text
+  compositionCtx.save();
+  compositionCtx.translate(NB_CLOCK_POS.x, NB_CLOCK_POS.y);
+  compositionCtx.rotate(NB_CLOCK_ROTATION);
+  compositionCtx.font = NB_CLOCK_FONT;
+  compositionCtx.fillStyle = '#ffffff';
+  compositionCtx.textBaseline = 'top';
+  compositionCtx.fillText(getClockText(), 0, 0);
+  compositionCtx.font = NB_DATE_FONT;
+  compositionCtx.fillText(getDateText(), 0, NB_DATE_OFFSET_Y);
+  compositionCtx.restore();
+
+  // Monitor screen
+  if (monitorLoaded) {
+    compositionCtx.drawImage(monitorScreen, MONITOR_POS.x, MONITOR_POS.y);
+  }
+
+  // Monitor noise
+  const monitorNoisePattern = compositionCtx.createPattern(noiseCanvas, 'repeat');
+  if (monitorNoisePattern) {
+    compositionCtx.save();
+    compositionCtx.globalAlpha = MONITOR_NOISE_ALPHA;
+    compositionCtx.fillStyle = monitorNoisePattern;
+    compositionCtx.fillRect(MONITOR_POS.x, MONITOR_POS.y, MONITOR_REGION.width, MONITOR_REGION.height);
+    compositionCtx.restore();
+  }
+
+  // Frame
+  compositionCtx.drawImage(baseImage, 0, 0, state.naturalWidth, state.naturalHeight);
+}
 
 function drawFrame() {
   if (!renderState.width || !renderState.height || !state.naturalWidth || !state.naturalHeight) return;
@@ -87,7 +200,9 @@ function drawFrame() {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, renderState.width, renderState.height);
 
-  ctx.drawImage(baseImage, 0, 0, renderState.width, renderState.height);
+  composeBackgroundLayers();
+
+  ctx.drawImage(compositionCanvas, 0, 0, renderState.width, renderState.height);
 
   // LED overlay
   if (ledOn) {
