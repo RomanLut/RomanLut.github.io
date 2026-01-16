@@ -25,12 +25,14 @@ export class BlockedScreen {
     this.intervalId = window.setInterval(() => this.tick(), 5000);
   }
 
-  show() {
+  show(opacity = 1) {
     this.element.style.display = 'block';
+    this.element.style.opacity = String(opacity);
   }
 
   hide() {
     this.element.style.display = 'none';
+    this.element.style.opacity = '0';
   }
 
   private tick() {

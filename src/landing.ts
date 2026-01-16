@@ -77,6 +77,7 @@ export class Landing {
       dpr: window.devicePixelRatio || 1
     };
     const layoutOffset = { left: 0, top: 0 };
+    const FADE_DURATION_MS = 500;
 
     const TOP_RATIO = 0.2;
     const BOTTOM_RATIO = 0.1;
@@ -616,6 +617,15 @@ export class Landing {
 
       applyCanvasTransform();
 
+      // Fade in blocked screen in the last 300ms of the zoom.
+      const fadeStart = duration - FADE_DURATION_MS;
+      if (fadeStart > 0) {
+        const fadeProgress = Math.max(0, Math.min(1, (timestamp - (start + fadeStart)) / FADE_DURATION_MS));
+        if (fadeProgress > 0) {
+          blockedScreen.show(fadeProgress);
+        }
+      }
+
       if (t < 1) {
         startAnim.raf = window.requestAnimationFrame(stepStartAnimation);
         return;
@@ -623,6 +633,8 @@ export class Landing {
 
       startAnim.active = false;
       startAnim.raf = 0;
+      blockedScreen.show(1);
+      teardownLanding();
     }
 
     function beginStartAnimation() {
@@ -644,6 +656,21 @@ export class Landing {
         window.cancelAnimationFrame(startAnim.raf);
       }
       startAnim.raf = window.requestAnimationFrame(stepStartAnimation);
+    }
+
+    function teardownLanding() {
+      parallaxEnabled = false;
+      window.removeEventListener('mousemove', applyParallax);
+      window.removeEventListener('resize', applyLayout);
+      if (blinkTimeout !== undefined) {
+        window.clearTimeout(blinkTimeout);
+        blinkTimeout = undefined;
+      }
+      if (noiseRaf) {
+        window.cancelAnimationFrame(noiseRaf);
+        noiseRaf = 0;
+      }
+      landing?.style.setProperty('display', 'none');
     }
 
     // Mouse parallax: move image opposite to cursor up to 0.5% of width/height for half-screen travel.
@@ -699,15 +726,17 @@ export class Landing {
     if (startButton && landing) {
       startButton.addEventListener('click', () => {
         landing.classList.add('intro-dismissed');
-        blockedScreen.show();
+        blockedScreen.hide();
         beginStartAnimation();
       });
     }
 
     if (initialState === 'pc' && landing) {
       landing.classList.add('intro-dismissed');
-      blockedScreen.show();
+      blockedScreen.show(1);
       beginStartAnimation();
+    } else {
+      blockedScreen.hide();
     }
   }
 }

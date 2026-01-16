@@ -86,7 +86,7 @@ Due to the large amount of material, everything is organized using a Windows-sty
 After user clicks [start] button, animation starts. Duration is 2 seconds. Background is zoomed so notebook screen region fits the screen.
 For lanscape screen aspect raio, it fits by heigh. For portait, it fits by width.
 Notebook region on the room.png image is 226,444 - 532,573. Animation is translation and rotation. As notebook screen is rotated on the room.png, animation should rotate image cw to make it horisontal at he end.
-
+At last 300 ms image is faded to blocked screen(5.2.1).
 
 
 ### 5.2 Windows PC emulation page
