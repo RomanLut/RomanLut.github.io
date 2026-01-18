@@ -2,10 +2,11 @@ import roomUrl from './assets/room.png';
 import nbscreenUrl from './assets/nbscreen.jpg';
 import mscreenUrl from './assets/mscreen.jpg';
 import type { BlockedScreen } from './blockedScreen';
+import { setStartParam } from './urlState';
 
 type ImageDimensions = { naturalWidth: number; naturalHeight: number };
 type RenderState = { width: number; height: number; dpr: number };
-type AppState = 'landing' | 'pc';
+type AppState = 'landing' | 'pc-blocked' | 'pc-desktop';
 
 export class Landing {
   constructor(root: HTMLElement, initialState: AppState = 'landing') {
@@ -638,6 +639,7 @@ export class Landing {
         pcElement.style.display = 'block';
         pcElement.style.opacity = '1';
       }
+      setStartParam('1');
       teardownLanding();
     }
 
@@ -738,13 +740,25 @@ export class Landing {
       });
     }
 
-    if (initialState === 'pc' && landing) {
-      landing.classList.add('intro-dismissed');
+    if (initialState === 'pc-blocked' || initialState === 'pc-desktop') {
+      landing?.classList.add('intro-dismissed');
       if (pcElement) {
         pcElement.style.display = 'block';
-        pcElement.style.opacity = '0';
+        pcElement.style.opacity = '1';
+        if (initialState === 'pc-blocked') {
+          setStartParam('1');
+        } else if (initialState === 'pc-desktop') {
+          setStartParam('2');
+        }
+        if (initialState === 'pc-desktop') {
+          const blockedLayer = pcElement.querySelector<HTMLElement>('.blocked-layer');
+          if (blockedLayer) {
+            blockedLayer.style.display = 'none';
+            blockedLayer.style.opacity = '0';
+          }
+        }
       }
-      beginStartAnimation();
+      teardownLanding();
     } else if (pcElement) {
       pcElement.style.display = 'none';
       pcElement.style.opacity = '0';

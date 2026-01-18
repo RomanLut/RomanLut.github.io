@@ -105,6 +105,13 @@ The div is below blocked screen.
 The viewport is covered by a fixed wallpaper layer:
 - Background: `wallpaper2.jpg` from `public/`, scaled with `cover`
 
+#### 5.2.3 Destop screen taskbar
+
+Desktop screen should contain taskbar at bottom, which visually looks like Windows 11 taskbar.
+There is Windows logo button at the left border.
+There are a  clock and date at the right border.
+There are dummy battery, volume and wifi indicators at tray area.
+
 
 
 ## 6. Global state

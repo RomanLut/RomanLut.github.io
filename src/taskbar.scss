@@ -1,0 +1,77 @@
+.desktop .taskbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 51.2px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), rgba(20, 20, 20, 0.55);
+  backdrop-filter: blur(16px);
+  border-radius: 0;
+  color: #f7f7f7;
+  font-family: 'Segoe UI', 'Space Grotesk', system-ui, sans-serif;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.desktop .taskbar__start {
+  pointer-events: auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f2f2f2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.desktop .taskbar__start:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.desktop .taskbar__start svg {
+  width: 22px;
+  height: 22px;
+}
+
+.desktop .taskbar__spacer {
+  flex: 1;
+}
+
+.desktop .taskbar__tray {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.9;
+}
+
+.desktop .tray-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.desktop .taskbar__clock {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  font-weight: 600;
+  min-width: 96px;
+}
+
+.desktop .taskbar__time {
+  font-size: 16px;
+}
+
+.desktop .taskbar__date {
+  font-size: 12px;
+  opacity: 0.85;
+}

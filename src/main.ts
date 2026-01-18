@@ -9,7 +9,15 @@ if (!app) {
 }
 
 const params = new URLSearchParams(window.location.search);
-const initialState = params.get('start') === '1' ? 'pc' : 'landing';
+const startParam = params.get('start');
+const initialState = startParam === '1' ? 'pc-blocked' : startParam === '2' ? 'pc-desktop' : 'landing';
 
-new PC(app);
+const pc = new PC(app);
+
+if (initialState === 'pc-blocked') {
+  pc.showBlocked();
+} else if (initialState === 'pc-desktop') {
+  pc.showDesktop();
+}
+
 new Landing(app, initialState);
