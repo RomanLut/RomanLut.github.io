@@ -1,6 +1,6 @@
 import { BlockedScreen } from './blockedScreen';
 import { Desktop } from './desktop';
-import { setStartParam } from './urlState';
+import { setStartParam } from './util';
 
 export class PC {
   private blockedScreen: BlockedScreen;

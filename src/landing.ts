@@ -2,7 +2,7 @@ import roomUrl from './assets/room.png';
 import nbscreenUrl from './assets/nbscreen.jpg';
 import mscreenUrl from './assets/mscreen.jpg';
 import type { BlockedScreen } from './blockedScreen';
-import { setStartParam } from './urlState';
+import { setStartParam, setFullscreenParam } from './util';
 
 type ImageDimensions = { naturalWidth: number; naturalHeight: number };
 type RenderState = { width: number; height: number; dpr: number };
@@ -15,6 +15,10 @@ export class Landing {
     }
 
     const pcElement = root.querySelector<HTMLElement>('.pc');
+    const params = new URLSearchParams(window.location.search);
+    let shouldRequestFullscreen = params.get('fullscreen') === '1';
+    let fullscreenRequested = false;
+    let fullscreenPending = false;
 
     root.insertAdjacentHTML(
       'beforeend',
@@ -23,21 +27,27 @@ export class Landing {
           <canvas id="landing-canvas" aria-label="Illustrated room"></canvas>
           <section class="intro" aria-label="Introduction overlay">
             <div class="intro__card">
-              <div class="intro__content">
-                <div class="intro__text">
-                  <p class="intro__lead">Welcome to the personal page of Roman Lut.</p>
-                  <p class="intro__body">
-                    Due to the large amount of material, everything is organized using a Windows-style user interface. Feel free to explore the folders and read the documents.
-                    <br />
-                    For the best experience, fullscreen mode is recommended (press F11).
-                  </p>
-                </div>
+            <div class="intro__content">
+              <div class="intro__text">
+                <p class="intro__lead">Welcome to the personal page of Roman Lut.</p>
+                <p class="intro__body">
+                  Due to the large amount of material, everything is organized using a Desktop-style user interface. Feel free to explore the folders and read the documents.
+                  <br />
+                  For the best experience, fullscreen mode is recommended.
+                </p>
+              </div>
+              <div class="intro__actions">
                 <button type="button" class="intro__start">Start</button>
+                <label class="intro__checkbox">
+                  <input type="checkbox" class="intro__fullscreen" checked />
+                  <span>Fullscreen</span>
+                </label>
               </div>
             </div>
-          </section>
-        </main>
-      `
+          </div>
+        </section>
+      </main>
+    `
     );
 
     const landing = root.querySelector<HTMLElement>('.landing');
@@ -580,6 +590,12 @@ export class Landing {
       noiseRaf = window.requestAnimationFrame(animateNoise);
     }
 
+    document.addEventListener('fullscreenchange', () => {
+      const active = Boolean(document.fullscreenElement);
+      fullscreenRequested = active;
+      fullscreenPending = false;
+    });
+
     function computeStartTarget() {
       const rect = canvas.getBoundingClientRect();
       const vw = rect.width;
@@ -640,6 +656,7 @@ export class Landing {
         pcElement.style.opacity = '1';
       }
       setStartParam('1');
+      requestFullscreenIfNeeded();
       teardownLanding();
     }
 
@@ -677,6 +694,38 @@ export class Landing {
         noiseRaf = 0;
       }
       landing?.style.setProperty('display', 'none');
+    }
+
+    function requestFullscreenIfNeeded(force = false) {
+      if (fullscreenRequested || (!shouldRequestFullscreen && !force)) return;
+      const el = document.documentElement;
+      if (!el.requestFullscreen) return;
+
+      const attempt = () => {
+        el.requestFullscreen()
+          .then(() => {
+            fullscreenRequested = true;
+            fullscreenPending = false;
+          })
+          .catch((err) => {
+            console.warn('Fullscreen request failed', err);
+            if (!fullscreenPending) {
+              fullscreenPending = true;
+              ['click', 'keydown'].forEach((evt) =>
+                window.addEventListener(
+                  evt,
+                  () => {
+                    fullscreenPending = false;
+                    requestFullscreenIfNeeded(force);
+                  },
+                  { once: true }
+                )
+              );
+            }
+          });
+      };
+
+      attempt();
     }
 
     // Mouse parallax: move image opposite to cursor up to 0.5% of width/height for half-screen travel.
@@ -729,8 +778,32 @@ export class Landing {
     window.addEventListener('resize', applyLayout);
 
     const startButton = root.querySelector<HTMLButtonElement>('.intro__start');
+    const fullscreenCheckbox = root.querySelector<HTMLInputElement>('.intro__fullscreen');
+    if (fullscreenCheckbox) {
+      fullscreenCheckbox.checked = shouldRequestFullscreen;
+      fullscreenCheckbox.addEventListener('change', () => {
+        const checked = fullscreenCheckbox.checked;
+        shouldRequestFullscreen = checked;
+        setFullscreenParam(checked);
+        if (checked) {
+          requestFullscreenIfNeeded(true);
+        } else if (document.fullscreenElement && document.exitFullscreen) {
+          document
+            .exitFullscreen()
+            .then(() => {
+              fullscreenRequested = false;
+              fullscreenPending = false;
+            })
+            .catch((err) => console.warn('Exit fullscreen failed', err));
+        } else {
+          fullscreenRequested = false;
+          fullscreenPending = false;
+        }
+      });
+    }
     if (startButton && landing) {
       startButton.addEventListener('click', () => {
+        shouldRequestFullscreen = fullscreenCheckbox ? fullscreenCheckbox.checked : shouldRequestFullscreen;
         landing.classList.add('intro-dismissed');
         if (pcElement) {
           pcElement.style.display = 'block';
@@ -758,10 +831,16 @@ export class Landing {
           }
         }
       }
+      requestFullscreenIfNeeded();
       teardownLanding();
     } else if (pcElement) {
       pcElement.style.display = 'none';
       pcElement.style.opacity = '0';
+    }
+
+    if (shouldRequestFullscreen) {
+      requestFullscreenIfNeeded();
+      setFullscreenParam(true);
     }
   }
 }

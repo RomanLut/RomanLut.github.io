@@ -76,10 +76,14 @@ Roman Lut - Personal Page
 
 Welcome to the personal page of Roman Lut.
 
-Due to the large amount of material, everything is organized using a Windows-style user interface. Feel free to explore the folders and read the documents. For the best experience, fullscreen mode is recommended (press F11).
+Due to the large amount of material, everything is organized using a Desktop-style user interface. Feel free to explore the folders and read the documents. For the best experience, fullscreen mode is recommended.
 
 [Start]
 ```
+
+Below Start button there should be checkbox named "Fullscreen" checked by default.
+If Fullscreen checkbox is cheched, than when user clicks "Start", &fulscreen=1 url parameter should be added.
+
 
 ### 5.1.5 Starting animation
 
@@ -87,6 +91,9 @@ After user clicks [start] button, animation starts. Duration is 2 seconds. Backg
 For lanscape screen aspect raio, it fits by heigh. For portait, it fits by width.
 Notebook region on the room.png image is 226,444 - 532,573. Animation is translation and rotation. As notebook screen is rotated on the room.png, animation should rotate image cw to make it horisontal at he end.
 At last 300 ms image is faded to blocked screen(5.2.1).
+
+If &fullscreen=1 url parameter is present, the page should switch to fulscreen mode after fading to blocked screen.
+
 
 
 ### 5.2 Windows PC emulation page
@@ -123,6 +130,7 @@ The applicaiton should have two global states:
 Starting state is Landing.
 If ?start=1 query parameter is specified, then starting state is PC emulation, blocked screen
 If ?start=2 query parameter is specified, then starting state is PC emulation, desktop screen.
+If &fullscreen=1 parameter is present, page should switch to fulscreen.
 
 
 

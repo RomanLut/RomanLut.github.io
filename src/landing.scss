@@ -32,8 +32,8 @@
 }
 
 .intro__card {
-  max-width: 779px;
-  width: min(779px, 100%);
+  max-width: 857px;
+  width: min(857px, 100%);
   padding: 14px 32px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -47,6 +47,13 @@
   display: flex;
   gap: 32px;
   align-items: center;
+}
+
+.intro__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .intro__text {
@@ -93,6 +100,22 @@
   transform: translateY(0);
   box-shadow: 0 10px 24px rgba(61, 139, 255, 0.35);
   filter: brightness(0.95);
+}
+
+.intro__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(245, 245, 245, 0.9);
+  user-select: none;
+}
+
+.intro__checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: #3c82ff;
+  cursor: pointer;
 }
 
 .landing.intro-dismissed .intro {

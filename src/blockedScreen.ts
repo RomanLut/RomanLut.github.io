@@ -1,4 +1,4 @@
-import { setStartParam } from './urlState';
+import { setStartParam } from './util';
 
 export class BlockedScreen {
   private timeEl: HTMLSpanElement | null = null;
