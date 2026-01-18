@@ -5,6 +5,7 @@ export class Taskbar {
   private timeEl: HTMLSpanElement | null = null;
   private dateEl: HTMLSpanElement | null = null;
   private windowsEl: HTMLElement | null = null;
+  private startHandlers: Array<() => void> = [];
 
   constructor() {
     this.element = document.createElement('div');
@@ -45,11 +46,18 @@ export class Taskbar {
     this.timeEl = this.element.querySelector('.taskbar__time');
     this.dateEl = this.element.querySelector('.taskbar__date');
     this.windowsEl = this.element.querySelector('.taskbar__windows');
+
+    const startBtn = this.element.querySelector<HTMLButtonElement>('.taskbar__start');
+    startBtn?.addEventListener('click', () => this.startHandlers.forEach((cb) => cb()));
   }
 
   updateClock(now: Date = new Date()) {
     if (this.timeEl) this.timeEl.textContent = formatTime(now);
     if (this.dateEl) this.dateEl.textContent = formatDateShort(now);
+  }
+
+  onStart(handler: () => void) {
+    this.startHandlers.push(handler);
   }
 
   addWindowButton(id: string, title: string, iconSvg?: string, onClick?: () => void) {

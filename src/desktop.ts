@@ -5,6 +5,7 @@ export class Desktop {
   readonly element: HTMLElement;
   private taskbar: Taskbar;
   private intervalId: number | undefined;
+  private windowCount = 0;
 
   constructor(root: HTMLElement) {
     this.element = document.createElement('div');
@@ -15,6 +16,7 @@ export class Desktop {
     this.element.appendChild(this.taskbar.element);
 
     this.spawnTestWindow();
+    this.taskbar.onStart(() => this.spawnTestWindow());
 
     root.prepend(this.element);
 
@@ -35,13 +37,12 @@ export class Desktop {
   }
 
   private spawnTestWindow() {
-    for (let i = 1; i <= 20; i++) {
-      const win = new AppWindow(this.element, this.taskbar, `Welcome to personal page ${i}`);
-      const body = document.createElement('div');
-      body.textContent = 'Welcome to personal page';
-      win.setContent(body);
-      win.element.style.top = `${40 + i * 6}px`;
-      win.element.style.left = `${40 + i * 6}px`;
-    }
+    const i = ++this.windowCount;
+    const win = new AppWindow(this.element, this.taskbar, `Welcome to personal page ${i}`);
+    const body = document.createElement('div');
+    body.textContent = 'Welcome to personal page';
+    win.setContent(body);
+    win.element.style.top = `${40 + i * 6}px`;
+    win.element.style.left = `${40 + i * 6}px`;
   }
 }

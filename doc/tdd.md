@@ -122,14 +122,13 @@ There are dummy battery, volume and wifi indicators at tray area.
 
 #### 5.2.4 Destop screen generic window
 
-There should be reusable class AppWindow. 
-It should emulate application window with app icon, close, minimize and maximize buttons.
-Window should be dragable like window in windows os.
-MAximize button should enlarge window to full deskop area.
-Minimize button should hide window to taskbar.
-clicking on taskbar area should restore window.
-Multiple windows should be supported.
-It should be possible to resize widnow by dragging sized an cornders. Cursor should adjust accordingly.
+Reusable class `AppWindow` renders desktop windows with:
+- Header: app icon, title, close/minimize/maximize buttons (hover states; no pointer cursor), double-click header toggles maximize/restore. Drag header to move; z-order focuses.
+- Resize: grab edges/corners (resize cursors) with min sizes; text selection disabled during resize.
+- Maximize: fills desktop height above the 44px taskbar; restore returns to last bounds.
+- Minimize: hides the window; its taskbar button remains and restores on click. Active window is highlighted; clicking active button minimizes, clicking inactive focuses.
+- Taskbar buttons show the window icon + title, shrink and clip when space is tight; tray stays visible.
+- Windows spawn: one test window on load, additional windows when the taskbar Start button is clicked. Multiple windows are supported.
 
 
 
