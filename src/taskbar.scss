@@ -52,9 +52,13 @@
 }
 
 .desktop .tray-icon {
-  width: 22px;
-  height: 22px;
+  width: 25.08px;
+  height: 25.08px;
   display: block;
+}
+
+.desktop .tray-icon--wifi {
+  transform: translateY(-20%);
 }
 
 .desktop .taskbar__clock {
