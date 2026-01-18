@@ -1,5 +1,6 @@
 import { Taskbar } from './taskbar';
 import { Notepad } from './notepad';
+import { DesktopIcon } from './desktopIcon';
 
 export class Desktop {
   readonly element: HTMLElement;
@@ -14,6 +15,7 @@ export class Desktop {
     this.taskbar = new Taskbar();
     this.element.appendChild(this.taskbar.element);
 
+    this.spawnIcons();
     this.spawnNotepad();
     this.taskbar.onStart(() => this.spawnNotepad());
 
@@ -39,5 +41,11 @@ export class Desktop {
     const win = new Notepad(this.element, this.taskbar);
     win.element.style.top = `60px`;
     win.element.style.left = `60px`;
+  }
+
+  private spawnIcons() {
+    new DesktopIcon(this.element, 'folder', 'Folder', { x: 16, y: 16 });
+    new DesktopIcon(this.element, 'notepad', 'Notepad', { x: 16, y: 112 });
+    new DesktopIcon(this.element, 'word', 'Word document', { x: 16, y: 208 });
   }
 }

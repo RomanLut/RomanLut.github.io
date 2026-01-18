@@ -1,8 +1,10 @@
 .pc .desktop {
-  position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   background: #000 url('./wallpaper2.jpg') center center / cover no-repeat;
   overflow: hidden;
+  position: absolute;
 }
 
 .pc .desktop::after {

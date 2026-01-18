@@ -1,0 +1,32 @@
+.pc .desktop__icon {
+  position: absolute;
+  width: 91.2px;
+  padding: 9.6px 4.8px;
+  text-align: center;
+  color: #f8f8f8;
+  font-size: 13px;
+  cursor: default;
+  user-select: none;
+}
+
+.pc .desktop__icon-image {
+  width: 57.6px;
+  height: 57.6px;
+  margin: 0 auto 7.2px;
+}
+
+.pc .desktop__icon-image svg {
+  width: 57.6px;
+  height: 57.6px;
+  display: block;
+}
+
+.pc .desktop__icon-label {
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.pc .desktop__icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+}
