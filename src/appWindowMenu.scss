@@ -73,8 +73,23 @@
   padding: 6px 12px;
   height: auto;
   border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 180px;
 }
 
 .desktop .app-window__menu-sub .app-window__menu-item:hover {
   background: #c0c0c0;
+}
+
+.desktop .app-window__menu-item-label {
+  flex: 1 1 auto;
+}
+
+.desktop .app-window__menu-item-shortcut {
+  flex: 0 0 auto;
+  color: #444;
+  font-size: 12px;
 }

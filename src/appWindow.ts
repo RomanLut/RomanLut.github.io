@@ -216,7 +216,7 @@ export class AppWindow {
     this.maximize();
   }
 
-  private close() {
+  protected close() {
     this.element.remove();
     if (this.taskbarButton) {
       this.taskbarButton.remove();
