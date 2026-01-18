@@ -1,11 +1,10 @@
 import { Taskbar } from './taskbar';
-import { AppWindow } from './appWindow';
+import { Notepad } from './notepad';
 
 export class Desktop {
   readonly element: HTMLElement;
   private taskbar: Taskbar;
   private intervalId: number | undefined;
-  private windowCount = 0;
 
   constructor(root: HTMLElement) {
     this.element = document.createElement('div');
@@ -15,8 +14,8 @@ export class Desktop {
     this.taskbar = new Taskbar();
     this.element.appendChild(this.taskbar.element);
 
-    this.spawnTestWindow();
-    this.taskbar.onStart(() => this.spawnTestWindow());
+    this.spawnNotepad();
+    this.taskbar.onStart(() => this.spawnNotepad());
 
     root.prepend(this.element);
 
@@ -36,13 +35,9 @@ export class Desktop {
     this.element.remove();
   }
 
-  private spawnTestWindow() {
-    const i = ++this.windowCount;
-    const win = new AppWindow(this.element, this.taskbar, `Welcome to personal page ${i}`);
-    const body = document.createElement('div');
-    body.textContent = 'Welcome to personal page';
-    win.setContent(body);
-    win.element.style.top = `${40 + i * 6}px`;
-    win.element.style.left = `${40 + i * 6}px`;
+  private spawnNotepad() {
+    const win = new Notepad(this.element, this.taskbar);
+    win.element.style.top = `60px`;
+    win.element.style.left = `60px`;
   }
 }

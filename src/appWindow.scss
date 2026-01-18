@@ -52,6 +52,87 @@
   white-space: nowrap;
 }
 
+.desktop .app-window__menu {
+  margin: 0;
+  padding: 0 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f6f6f7;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.desktop .app-window__menu-root {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.desktop .app-window__menu-item {
+  position: relative;
+  font-size: 13px;
+  color: #222;
+  cursor: default;
+  user-select: none;
+  padding: 4px 8px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  height: 22px;
+}
+
+.desktop .app-window__menu-item > ul {
+  display: none;
+}
+
+.desktop .app-window__menu-item:hover {
+  color: #000;
+  background: #dddddd;
+}
+
+.desktop .app-window__menu-item.has-children {
+  position: relative;
+}
+
+.desktop .app-window__menu-item.has-children.is-open > .app-window__menu-sub {
+  display: block;
+}
+
+.desktop .app-window__menu-sub {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 4px 0 0;
+  padding: 6px 0;
+  list-style: none;
+  background: #d0d0d0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+  min-width: 160px;
+  z-index: 10;
+  border-radius: 5px;
+}
+
+.desktop .app-window__menu-separator {
+  height: 1px;
+  margin: 4px 0;
+  background: rgba(0, 0, 0, 0.18);
+  list-style: none;
+}
+
+.desktop .app-window__menu-sub .app-window__menu-item {
+  padding: 6px 12px;
+  height: auto;
+  border-radius: 0;
+}
+
+.desktop .app-window__menu-sub .app-window__menu-item:hover {
+  background: #c8c8c8;
+}
+
 .desktop .app-window__actions {
   display: inline-flex;
   gap: 6px;
@@ -85,6 +166,108 @@
   background: #e96c6c;
   border-color: #d84f4f;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Windows 11–like scrollbars inside app windows */
+.desktop .app-window * {
+  scrollbar-width: thin;
+  scrollbar-color: #c7c7c7 transparent;
+}
+
+.desktop .app-window *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.desktop .app-window textarea {
+  overflow: auto;
+}
+
+.desktop .app-window *::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+  border: 0;
+}
+
+.desktop .app-window textarea::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+  border: 0;
+}
+
+.desktop .app-window *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.desktop .app-window *::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.desktop .app-window *::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+  background-clip: padding-box;
+}
+
+.desktop .app-window__toolbar {
+  height: 26px;
+  background: #f3f3f5;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 10px;
+  color: #333;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.desktop .app-window__toolbar-text {
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: left;
+}
+
+.desktop .app-window__toolbar-divider {
+  flex: 0 0 1px;
+  height: 18px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.desktop .app-window__toolbar-extra {
+  white-space: nowrap;
+  opacity: 0.9;
+  min-width: 100px;
+}
+
+.desktop .app-window__toolbar-mode {
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+.desktop .app-window__toolbar-eol,
+.desktop .app-window__toolbar-encoding {
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+.desktop .app-window__toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.desktop .app-window__toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .desktop .app-window__btn--min::before {
@@ -130,8 +313,8 @@
 .desktop .app-window__body {
   flex: 1 1 auto;
   background: #fff;
-  padding: 16px;
-  overflow: auto;
+  padding: 0;
+  overflow: hidden;
   color: #222;
 }
 

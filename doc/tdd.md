@@ -131,6 +131,10 @@ Reusable class `AppWindow` renders desktop windows with:
 - Windows spawn: one test window on load, additional windows when the taskbar Start button is clicked. Multiple windows are supported.
 
 
+Reusable class appWindowToolbar simulates toolbar at the bottom of window. 
+
+Reusable class appWindowMenu simulates menu below window header.
+
 
 
 

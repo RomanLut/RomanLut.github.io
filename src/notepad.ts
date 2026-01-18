@@ -1,0 +1,75 @@
+import { AppWindow } from './appWindow';
+import { Taskbar } from './taskbar';
+import { AppWindowToolbar } from './appWindowToolbar';
+import { AppWindowMenu, type MenuItem } from './appWindowMenu';
+
+export class Notepad extends AppWindow {
+  private toolbar: AppWindowToolbar;
+  private textarea: HTMLTextAreaElement;
+
+  constructor(desktop: HTMLElement, taskbar: Taskbar, title = 'Notepad') {
+    super(
+      desktop,
+      taskbar,
+      title,
+      `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="#2d7df6"/><path d="M7 7h10v1H7zm0 4h10v1H7zm0 4h6v1H7z" fill="#ffffff"/></svg>`
+    );
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.height = '100%';
+
+    const menuItems: MenuItem[] = [
+      {
+        label: 'File',
+        children: [{ label: 'Open' }, { label: 'Save' }, { label: 'Print' }, { label: '-' }, { label: 'Exit' }]
+      },
+      {
+        label: 'Edit',
+        children: [{ label: 'Undo' }, { label: '-' }, { label: 'Cut' }, { label: 'Copy' }, { label: 'Paste' }, { label: 'Delete' }]
+      }
+    ];
+    const menu = new AppWindowMenu(menuItems);
+
+    this.textarea = document.createElement('textarea');
+    this.textarea.className = 'notepad__input';
+    this.textarea.spellcheck = false;
+    this.textarea.style.width = '100%';
+    this.textarea.style.height = '100%';
+    this.textarea.style.border = 'none';
+    this.textarea.style.outline = 'none';
+    this.textarea.style.resize = 'none';
+    this.textarea.style.fontFamily = 'Consolas, "Courier New", monospace';
+    this.textarea.style.fontSize = '14px';
+    this.textarea.style.padding = '12px';
+    this.textarea.style.background = '#ffffff';
+    this.textarea.style.color = '#000000';
+    this.textarea.style.overflow = 'auto';
+    this.textarea.style.boxSizing = 'border-box';
+    this.textarea.style.flex = '1 1 auto';
+
+    this.toolbar = new AppWindowToolbar('ln 1, col 1', '0 characters');
+
+    this.textarea.addEventListener('input', () => this.updateCaret());
+    this.textarea.addEventListener('click', () => this.updateCaret());
+    this.textarea.addEventListener('keyup', () => this.updateCaret());
+    this.textarea.addEventListener('mouseup', () => this.updateCaret());
+
+    container.appendChild(menu.element);
+    container.appendChild(this.textarea);
+    container.appendChild(this.toolbar.element);
+
+    this.setContent(container);
+    this.updateCaret();
+  }
+
+  private updateCaret() {
+    const pos = this.textarea.selectionStart || 0;
+    const textUpToPos = this.textarea.value.slice(0, pos);
+    const lines = textUpToPos.split('\n');
+    const line = lines.length;
+    const col = lines[lines.length - 1].length + 1;
+    this.toolbar.setText(`ln ${line}, col ${col}`);
+    this.toolbar.setExtra(`${this.textarea.value.length} characters`);
+  }
+}
