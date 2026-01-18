@@ -34,7 +34,8 @@ export function formatDateLong(now: Date = new Date()): string {
 }
 
 export function formatDateShort(now: Date = new Date()): string {
-  const month = now.toLocaleString('en-US', { month: 'long' });
-  const day = now.getDate();
-  return `${month} ${day}`;
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const year = now.getFullYear();
+  return `${day}.${month}.${year}`;
 }

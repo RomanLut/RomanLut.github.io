@@ -8,6 +8,7 @@ type ResizeDir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 
 export class AppWindow {
   readonly element: HTMLElement;
+  private desktop: HTMLElement;
   private headerEl: HTMLElement;
   private contentEl: HTMLElement;
   private closeBtn: HTMLButtonElement;
@@ -31,6 +32,7 @@ export class AppWindow {
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, title: string, icon?: string) {
     this.taskbar = taskbar;
+    this.desktop = desktop;
     this.element = document.createElement('div');
     this.element.className = 'app-window';
     this.element.setAttribute('role', 'dialog');
@@ -90,6 +92,13 @@ export class AppWindow {
       document.addEventListener('mousemove', this.handleDrag);
       document.addEventListener('mouseup', this.stopDrag);
     });
+    this.headerEl.addEventListener('dblclick', () => {
+      if (this.state === 'maximized') {
+        this.restoreFromMax();
+      } else {
+        this.maximize();
+      }
+    });
 
     const resizeZones = this.element.querySelectorAll<HTMLElement>('[data-resize]');
     resizeZones.forEach((zone) => {
@@ -109,7 +118,7 @@ export class AppWindow {
     });
 
     this.minBtn.addEventListener('click', () => this.minimize());
-    this.maxBtn.addEventListener('click', () => this.toggleMaximize(desktop));
+    this.maxBtn.addEventListener('click', () => this.toggleMaximize());
     this.closeBtn.addEventListener('click', () => this.close());
   }
 
@@ -178,44 +187,33 @@ export class AppWindow {
 
   private focus() {
     this.element.style.zIndex = String(++zCounter);
-    if (this.taskbarButton) this.taskbarButton.setActive(true);
+    this.setActiveState(true);
+    AppWindow.activeWindows.forEach((win) => {
+      if (win !== this) {
+        win.deactivate();
+      }
+    });
   }
 
   private minimize() {
     if (this.state === 'minimized') return;
     this.state = 'minimized';
     this.element.style.display = 'none';
-    if (this.taskbarButton) this.taskbarButton.setActive(false);
+    this.setActiveState(false);
   }
 
   private restore() {
     this.state = 'normal';
     this.element.style.display = 'block';
     this.focus();
-    if (this.taskbarButton) this.taskbarButton.setActive(true);
   }
 
   private toggleMaximize(desktop: HTMLElement) {
     if (this.state === 'maximized') {
-      if (this.lastRect) {
-        this.element.style.left = `${this.lastRect.x}px`;
-        this.element.style.top = `${this.lastRect.y}px`;
-        this.element.style.width = `${this.lastRect.w}px`;
-        this.element.style.height = `${this.lastRect.h}px`;
-      }
-      this.state = 'normal';
-      this.element.classList.remove('is-maximized');
+      this.restoreFromMax();
       return;
     }
-    const rect = this.element.getBoundingClientRect();
-    const parentRect = desktop.getBoundingClientRect();
-    this.lastRect = { x: rect.left - parentRect.left, y: rect.top - parentRect.top, w: rect.width, h: rect.height };
-    this.element.style.left = '0px';
-    this.element.style.top = '0px';
-    this.element.style.width = '100%';
-    this.element.style.height = `calc(100% - 51.2px)`; // leave room for taskbar
-    this.state = 'maximized';
-    this.element.classList.add('is-maximized');
+    this.maximize();
   }
 
   private close() {
@@ -224,17 +222,73 @@ export class AppWindow {
       this.taskbarButton.remove();
       this.taskbarButton = null;
     }
+    AppWindow.activeWindows.delete(this);
   }
 
   private createTaskbarButton(title: string) {
     this.taskbarButton = this.taskbar.addWindowButton(this.element.dataset.winId || '', title, this.iconMarkup, () => {
-      if (this.state === 'minimized') {
-        this.restore();
-      } else {
-        this.focus();
-      }
+      this.handleTaskbarClick();
     });
     this.taskbarButton.setActive(true);
+    this.setActiveState(true);
+  }
+
+  private deactivate() {
+    if (this.taskbarButton) this.taskbarButton.setActive(false);
+    AppWindow.activeWindows.delete(this);
+  }
+
+  private static activeWindows = new Set<AppWindow>();
+
+  private setActiveState(active: boolean) {
+    if (active) {
+      AppWindow.activeWindows.add(this);
+      if (this.taskbarButton) this.taskbarButton.setActive(true);
+    } else {
+      AppWindow.activeWindows.delete(this);
+      if (this.taskbarButton) this.taskbarButton.setActive(false);
+    }
+  }
+
+  private handleTaskbarClick() {
+    if (this.state === 'minimized') {
+      this.restore();
+      return;
+    }
+    if (this.isActive()) {
+      this.minimize();
+      return;
+    }
+    this.focus();
+  }
+
+  private isActive() {
+    return AppWindow.activeWindows.has(this);
+  }
+
+  private maximize() {
+    if (this.state === 'maximized') return;
+    const rect = this.element.getBoundingClientRect();
+    const parentRect = this.desktop.getBoundingClientRect();
+    this.lastRect = { x: rect.left - parentRect.left, y: rect.top - parentRect.top, w: rect.width, h: rect.height };
+    this.element.style.left = '0px';
+    this.element.style.top = '0px';
+    this.element.style.width = '100%';
+    this.element.style.height = `calc(100% - 44px)`;
+    this.state = 'maximized';
+    this.element.classList.add('is-maximized');
+    this.setActiveState(true);
+  }
+
+  private restoreFromMax() {
+    if (this.state !== 'maximized' || !this.lastRect) return;
+    this.element.style.left = `${this.lastRect.x}px`;
+    this.element.style.top = `${this.lastRect.y}px`;
+    this.element.style.width = `${this.lastRect.w}px`;
+    this.element.style.height = `${this.lastRect.h}px`;
+    this.state = 'normal';
+    this.element.classList.remove('is-maximized');
+    this.setActiveState(true);
   }
 
   private cursorForDir(dir: ResizeDir): string {

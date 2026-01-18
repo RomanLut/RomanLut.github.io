@@ -35,9 +35,13 @@ export class Desktop {
   }
 
   private spawnTestWindow() {
-    const win = new AppWindow(this.element, this.taskbar, 'Welcome to personal page');
-    const body = document.createElement('div');
-    body.textContent = 'Welcome to personal page';
-    win.setContent(body);
+    for (let i = 1; i <= 20; i++) {
+      const win = new AppWindow(this.element, this.taskbar, `Welcome to personal page ${i}`);
+      const body = document.createElement('div');
+      body.textContent = 'Welcome to personal page';
+      win.setContent(body);
+      win.element.style.top = `${40 + i * 6}px`;
+      win.element.style.left = `${40 + i * 6}px`;
+    }
   }
 }

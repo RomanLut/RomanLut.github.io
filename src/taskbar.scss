@@ -7,7 +7,7 @@
   padding: 0 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), rgba(20, 20, 20, 0.55);
   backdrop-filter: blur(16px);
   border-radius: 0;
@@ -15,6 +15,7 @@
   font-family: 'Segoe UI', 'Space Grotesk', system-ui, sans-serif;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   pointer-events: auto;
+  z-index: 1000;
 }
 
 .desktop .taskbar__start {
@@ -29,6 +30,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  flex-shrink: 0;
+  user-select: none;
 }
 
 .desktop .taskbar__start:hover {
@@ -43,8 +46,11 @@
 .desktop .taskbar__windows {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin-left: 6px;
+  gap: 2px;
+  margin-left: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .desktop .taskbar__winbtn {
@@ -63,6 +69,8 @@
   height: 38px;
   max-width: 170px;
   overflow: hidden;
+  flex: 0 1 170px;
+  user-select: none;
 }
 
 .desktop .taskbar__winbtn:hover {
@@ -88,13 +96,13 @@
 }
 
 .desktop .taskbar__spacer {
-  flex: 1;
+  flex: 0 0 0;
 }
 
 .desktop .taskbar__tray {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 2px;
   opacity: 0.9;
 }
 
@@ -105,7 +113,7 @@
 }
 
 .desktop .tray-icon--wifi {
-  transform: translateY(-20%);
+  transform: translateY(-18%);
 }
 
 .desktop .taskbar__clock {
@@ -113,9 +121,8 @@
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  gap: 2px;
   font-weight: 600;
-  min-width: 96px;
+  min-width: 64px;
 }
 
 .desktop .taskbar__time {
