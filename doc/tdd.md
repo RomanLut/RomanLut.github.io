@@ -94,9 +94,18 @@ At last 300 ms image is faded to blocked screen(5.2.1).
 #### 5.2.1 Blocked screen
 
 The viewport is covered by a fixed wallpaper layer:
-- Background: `wallpaper.jpg` from `public/`, scaled with `cover`; black shows if aspect ratios leave empty borders; overall opacity ~90%.
+- Background: `wallpaper.jpg` from `public/`, scaled with `cover`. 
 - Clock/date overlay: bottom-left at 64px offsets, white text with subtle shadow; time in Arial 140px bold, date in Arial 48px medium; kept in sync with the notebook clock/date.
-- Interaction: overlay ignores pointer events so the Start overlay remains clickable beneath; parallax remains disabled until Start.
+ When user clicks [Login], blocked screen fades away in 1 second, revealing Desktop screen.
+ Blocked screen should became invisible with display: none. Anmations and updates hsould be stopped.
+
+#### 5.2.2 Desktop Screen
+
+The div is below blocked screen.
+The viewport is covered by a fixed wallpaper layer:
+- Background: `wallpaper2.jpg` from `public/`, scaled with `cover`
+
+
 
 ## 6. Global state
 
@@ -105,7 +114,8 @@ The applicaiton should have two global states:
 - PC emulation : PC Emulation is shown.
 
 Starting state is Landing.
-If ?start=1 query parameter is specified, then starting state is PC emulation.
+If ?start=1 query parameter is specified, then starting state is PC emulation, blocked screen
+If ?start=2 query parameter is specified, then starting state is PC emulation, desktop screen.
 
 
 
