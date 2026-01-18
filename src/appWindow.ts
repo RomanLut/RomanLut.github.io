@@ -204,7 +204,7 @@ export class AppWindow {
 
   private restore() {
     this.state = 'normal';
-    this.element.style.display = 'block';
+    this.element.style.display = 'flex';
     this.focus();
   }
 
