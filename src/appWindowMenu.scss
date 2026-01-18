@@ -1,0 +1,80 @@
+.desktop .app-window__menu {
+  margin: 0;
+  padding: 0 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f6f6f7;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.desktop .app-window__menu-root {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 12px;
+}
+
+.desktop .app-window__menu-item {
+  position: relative;
+  font-size: 13px;
+  color: #222;
+  cursor: default;
+  user-select: none;
+  padding: 4px 8px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  height: 22px;
+}
+
+.desktop .app-window__menu-item > ul {
+  display: none;
+}
+
+.desktop .app-window__menu-item:hover {
+  color: #000;
+  background: #dddddd;
+}
+
+.desktop .app-window__menu-item.has-children {
+  position: relative;
+}
+
+.desktop .app-window__menu-item.has-children.is-open > .app-window__menu-sub {
+  display: block;
+}
+
+.desktop .app-window__menu-sub {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 4px 0 0;
+  padding: 6px 0;
+  list-style: none;
+  background: #d0d0d0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+  min-width: 160px;
+  z-index: 10;
+  border-radius: 5px;
+}
+
+.desktop .app-window__menu-separator {
+  height: 1px;
+  margin: 4px 0;
+  background: rgba(0, 0, 0, 0.18);
+  list-style: none;
+}
+
+.desktop .app-window__menu-sub .app-window__menu-item {
+  padding: 6px 12px;
+  height: auto;
+  border-radius: 0;
+}
+
+.desktop .app-window__menu-sub .app-window__menu-item:hover {
+  background: #c0c0c0;
+}

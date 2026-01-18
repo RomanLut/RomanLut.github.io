@@ -15,9 +15,7 @@ export class Notepad extends AppWindow {
       `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="#2d7df6"/><path d="M7 7h10v1H7zm0 4h10v1H7zm0 4h6v1H7z" fill="#ffffff"/></svg>`
     );
     const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.height = '100%';
+    container.className = 'notepad';
 
     const menuItems: MenuItem[] = [
       {
@@ -34,19 +32,6 @@ export class Notepad extends AppWindow {
     this.textarea = document.createElement('textarea');
     this.textarea.className = 'notepad__input';
     this.textarea.spellcheck = false;
-    this.textarea.style.width = '100%';
-    this.textarea.style.height = '100%';
-    this.textarea.style.border = 'none';
-    this.textarea.style.outline = 'none';
-    this.textarea.style.resize = 'none';
-    this.textarea.style.fontFamily = 'Consolas, "Courier New", monospace';
-    this.textarea.style.fontSize = '14px';
-    this.textarea.style.padding = '12px';
-    this.textarea.style.background = '#ffffff';
-    this.textarea.style.color = '#000000';
-    this.textarea.style.overflow = 'auto';
-    this.textarea.style.boxSizing = 'border-box';
-    this.textarea.style.flex = '1 1 auto';
 
     this.statusBar = new AppWindowStatusBar('ln 1, col 1', '0 characters');
 

@@ -1,0 +1,21 @@
+.notepad {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.notepad__input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 14px;
+  padding: 12px;
+  background: #ffffff;
+  color: #000000;
+  overflow: auto;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+}
