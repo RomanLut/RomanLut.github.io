@@ -1,6 +1,7 @@
 import { Taskbar } from './taskbar';
 import { Notepad } from './notepad';
 import { DesktopIcon } from './desktopIcon';
+import { exitFullscreenAndOpen } from './util';
 
 export class Desktop {
   readonly element: HTMLElement;
@@ -48,9 +49,12 @@ export class Desktop {
     new DesktopIcon(this.element, 'word', 'About me', { x: 16, y: 16 });
     new DesktopIcon(this.element, 'word', 'Resume', { x: 120, y: 16 });
     new DesktopIcon(this.element, 'folder', 'Game development', { x: 16, y: 136 });
+    new DesktopIcon(this.element, 'folder', 'Hobby projects', { x: 136 + 120, y: 136 });
+    new DesktopIcon(this.element, 'folder', 'Electronics', { x: 136 + 120 + 120, y: 136 });
     new DesktopIcon(this.element, 'folder', 'Demoscene', { x: 136, y: 136 });
-    new DesktopIcon(this.element, 'folder', 'Electronics', { x: 136+120, y: 136 });
-    new DesktopIcon(this.element, 'folder', 'Hobby projects', { x: 136+120+120, y: 136 });
-    new DesktopIcon(this.element, 'folder', 'Publications', { x: 136+120+120+120, y: 136 });
+    new DesktopIcon(this.element, 'folder', 'Publications', { x: 136 + 120 + 120 + 120, y: 136 });
+    new DesktopIcon(this.element, 'github', 'My GitHub page', { x: 16, y: 16 + 120 + 140 }, () =>
+      exitFullscreenAndOpen('https://github.com/RomanLut')
+    );
   }
 }

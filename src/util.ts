@@ -39,3 +39,15 @@ export function formatDateShort(now: Date = new Date()): string {
   const year = now.getFullYear();
   return `${day}.${month}.${year}`;
 }
+
+export async function exitFullscreenAndOpen(url: string, target: string = '_blank') {
+  const openLink = () => window.open(url, target, 'noopener');
+  if (document.fullscreenElement && document.exitFullscreen) {
+    try {
+      await document.exitFullscreen();
+    } catch {
+      // ignore failures to exit fullscreen
+    }
+  }
+  openLink();
+}
