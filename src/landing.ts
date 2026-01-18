@@ -2,7 +2,7 @@ import roomUrl from './assets/room.png';
 import nbscreenUrl from './assets/nbscreen.jpg';
 import mscreenUrl from './assets/mscreen.jpg';
 import type { BlockedScreen } from './blockedScreen';
-import { setStartParam, setFullscreenParam } from './util';
+import { setStartParam, setFullscreenParam, formatTime, formatDateLong } from './util';
 
 type ImageDimensions = { naturalWidth: number; naturalHeight: number };
 type RenderState = { width: number; height: number; dpr: number };
@@ -207,23 +207,6 @@ export class Landing {
       }
     );
 
-    function getClockText() {
-      const now = new Date();
-      const hh = String(now.getHours());
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      const time = `${hh}:${mm}`;
-      return time;
-    }
-
-    function getDateText() {
-      const now = new Date();
-      const weekday = now.toLocaleString('en-US', { weekday: 'long' });
-      const month = now.toLocaleString('en-US', { month: 'long' });
-      const day = now.getDate();
-      const date = `${weekday}, ${month} ${day}`;
-      return date;
-    }
-
     function composeBackgroundLayers() {
       if (!state.naturalWidth || !state.naturalHeight) return;
 
@@ -246,9 +229,10 @@ export class Landing {
       compositionCtx.font = NB_CLOCK_FONT;
       compositionCtx.fillStyle = '#ffffff';
       compositionCtx.textBaseline = 'top';
-      compositionCtx.fillText(getClockText(), 0, 0);
+      const now = new Date();
+      compositionCtx.fillText(formatTime(now), 0, 0);
       compositionCtx.font = NB_DATE_FONT;
-      compositionCtx.fillText(getDateText(), 0, NB_DATE_OFFSET_Y);
+      compositionCtx.fillText(formatDateLong(now), 0, NB_DATE_OFFSET_Y);
       compositionCtx.restore();
 
       // Monitor screen

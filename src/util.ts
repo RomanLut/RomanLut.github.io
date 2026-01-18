@@ -19,3 +19,22 @@ export function setFullscreenParam(enabled: boolean) {
   }
   history.replaceState(null, '', url.toString());
 }
+
+export function formatTime(now: Date = new Date()): string {
+  const hh = String(now.getHours());
+  const mm = String(now.getMinutes()).padStart(2, '0');
+  return `${hh}:${mm}`;
+}
+
+export function formatDateLong(now: Date = new Date()): string {
+  const weekday = now.toLocaleString('en-US', { weekday: 'long' });
+  const month = now.toLocaleString('en-US', { month: 'long' });
+  const day = now.getDate();
+  return `${weekday}, ${month} ${day}`;
+}
+
+export function formatDateShort(now: Date = new Date()): string {
+  const month = now.toLocaleString('en-US', { month: 'long' });
+  const day = now.getDate();
+  return `${month} ${day}`;
+}

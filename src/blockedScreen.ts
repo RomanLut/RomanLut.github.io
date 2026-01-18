@@ -1,4 +1,4 @@
-import { setStartParam } from './util';
+import { setStartParam, formatTime, formatDateLong } from './util';
 
 export class BlockedScreen {
   private timeEl: HTMLSpanElement | null = null;
@@ -114,14 +114,8 @@ export class BlockedScreen {
 
   private tick() {
     const now = new Date();
-    const hh = String(now.getHours());
-    const mm = String(now.getMinutes()).padStart(2, '0');
-    const weekday = now.toLocaleString('en-US', { weekday: 'long' });
-    const month = now.toLocaleString('en-US', { month: 'long' });
-    const day = now.getDate();
-
-    if (this.timeEl) this.timeEl.textContent = `${hh}:${mm}`;
-    if (this.dateEl) this.dateEl.textContent = `${weekday}, ${month} ${day}`;
+    if (this.timeEl) this.timeEl.textContent = formatTime(now);
+    if (this.dateEl) this.dateEl.textContent = formatDateLong(now);
   }
 
   private stopTimers() {
