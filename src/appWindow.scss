@@ -215,7 +215,7 @@
   background-clip: padding-box;
 }
 
-.desktop .app-window__toolbar {
+.desktop .app-window__statusbar {
   height: 26px;
   background: #f3f3f5;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
@@ -229,42 +229,42 @@
   gap: 12px;
 }
 
-.desktop .app-window__toolbar-text {
+.desktop .app-window__statusbar-text {
   white-space: nowrap;
   min-width: 80px;
   text-align: left;
 }
 
-.desktop .app-window__toolbar-divider {
+.desktop .app-window__statusbar-divider {
   flex: 0 0 1px;
   height: 18px;
   background: rgba(0, 0, 0, 0.1);
 }
 
-.desktop .app-window__toolbar-extra {
+.desktop .app-window__statusbar-extra {
   white-space: nowrap;
   opacity: 0.9;
   min-width: 100px;
 }
 
-.desktop .app-window__toolbar-mode {
+.desktop .app-window__statusbar-mode {
   white-space: nowrap;
   opacity: 0.9;
 }
 
-.desktop .app-window__toolbar-eol,
-.desktop .app-window__toolbar-encoding {
+.desktop .app-window__statusbar-eol,
+.desktop .app-window__statusbar-encoding {
   white-space: nowrap;
   opacity: 0.9;
 }
 
-.desktop .app-window__toolbar-left {
+.desktop .app-window__statusbar-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.desktop .app-window__toolbar-right {
+.desktop .app-window__statusbar-right {
   display: flex;
   align-items: center;
   gap: 12px;

@@ -1,10 +1,10 @@
 import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
-import { AppWindowToolbar } from './appWindowToolbar';
+import { AppWindowStatusBar } from './appWindowStatusBar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
 
 export class Notepad extends AppWindow {
-  private toolbar: AppWindowToolbar;
+  private statusBar: AppWindowStatusBar;
   private textarea: HTMLTextAreaElement;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, title = 'Notepad') {
@@ -48,7 +48,7 @@ export class Notepad extends AppWindow {
     this.textarea.style.boxSizing = 'border-box';
     this.textarea.style.flex = '1 1 auto';
 
-    this.toolbar = new AppWindowToolbar('ln 1, col 1', '0 characters');
+    this.statusBar = new AppWindowStatusBar('ln 1, col 1', '0 characters');
 
     this.textarea.addEventListener('input', () => this.updateCaret());
     this.textarea.addEventListener('click', () => this.updateCaret());
@@ -57,7 +57,7 @@ export class Notepad extends AppWindow {
 
     container.appendChild(menu.element);
     container.appendChild(this.textarea);
-    container.appendChild(this.toolbar.element);
+    container.appendChild(this.statusBar.element);
 
     this.setContent(container);
     this.updateCaret();
@@ -69,7 +69,7 @@ export class Notepad extends AppWindow {
     const lines = textUpToPos.split('\n');
     const line = lines.length;
     const col = lines[lines.length - 1].length + 1;
-    this.toolbar.setText(`ln ${line}, col ${col}`);
-    this.toolbar.setExtra(`${this.textarea.value.length} characters`);
+    this.statusBar.setText(`ln ${line}, col ${col}`);
+    this.statusBar.setExtra(`${this.textarea.value.length} characters`);
   }
 }
