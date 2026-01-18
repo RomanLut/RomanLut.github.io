@@ -120,6 +120,21 @@ There are a  clock and date at the right border.
 There are dummy battery, volume and wifi indicators at tray area.
 
 
+#### 5.2.4 Destop screen generic window
+
+There should be reusable class AppWindow. 
+It should emulate application window with app icon, close, minimize and maximize buttons.
+Window should be dragable like window in windows os.
+MAximize button should enlarge window to full deskop area.
+Minimize button should hide window to taskbar.
+clicking on taskbar area should restore window.
+Multiple windows should be supported.
+It should be possible to resize widnow by dragging sized an cornders. Cursor should adjust accordingly.
+
+
+
+
+
 
 ## 6. Global state
 

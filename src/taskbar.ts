@@ -4,6 +4,7 @@ export class Taskbar {
   readonly element: HTMLElement;
   private timeEl: HTMLSpanElement | null = null;
   private dateEl: HTMLSpanElement | null = null;
+  private windowsEl: HTMLElement | null = null;
 
   constructor() {
     this.element = document.createElement('div');
@@ -14,6 +15,7 @@ export class Taskbar {
           <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z" fill="currentColor" />
         </svg>
       </button>
+      <div class="taskbar__windows"></div>
       <div class="taskbar__spacer"></div>
       <div class="taskbar__tray">
         <svg class="tray-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -42,10 +44,31 @@ export class Taskbar {
 
     this.timeEl = this.element.querySelector('.taskbar__time');
     this.dateEl = this.element.querySelector('.taskbar__date');
+    this.windowsEl = this.element.querySelector('.taskbar__windows');
   }
 
   updateClock(now: Date = new Date()) {
     if (this.timeEl) this.timeEl.textContent = formatTime(now);
     if (this.dateEl) this.dateEl.textContent = formatDateShort(now);
+  }
+
+  addWindowButton(id: string, title: string, iconSvg?: string, onClick?: () => void) {
+    if (!this.windowsEl)
+      return {
+        remove: () => undefined,
+        setActive: (_active: boolean) => undefined
+      };
+    const btn = document.createElement('button');
+    btn.className = 'taskbar__winbtn';
+    btn.innerHTML = `${iconSvg ? iconSvg : ''}<span class="taskbar__winbtn-title">${title}</span>`;
+    btn.dataset.winId = id;
+    if (onClick) {
+      btn.addEventListener('click', () => onClick());
+    }
+    this.windowsEl.appendChild(btn);
+    return {
+      remove: () => btn.remove(),
+      setActive: (active: boolean) => btn.classList.toggle('is-active', active)
+    };
   }
 }

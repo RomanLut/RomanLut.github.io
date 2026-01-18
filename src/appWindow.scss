@@ -1,0 +1,185 @@
+.desktop .app-window {
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  width: 520px;
+  height: 360px;
+  background: #f4f4f6;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.desktop .app-window.is-maximized {
+  border-radius: 0;
+}
+
+.desktop .app-window__header {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 4.8px 12px;
+  background: linear-gradient(180deg, #e7e7ea, #d6d6da);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: default;
+  user-select: none;
+  z-index: 6;
+}
+
+.desktop .app-window__icon img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.desktop .app-window__icon svg {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+.desktop .app-window__title {
+  font-weight: 600;
+  color: #1b1b1d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.desktop .app-window__actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.desktop .app-window__btn {
+  width: 28px;
+  height: 28px;
+  border: 0.8px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  background: #ebebee;
+  cursor: pointer;
+  position: relative;
+}
+
+.desktop .app-window__btn--min::before {
+  content: '';
+  position: absolute;
+  inset: 50% 8px auto 8px;
+  height: 2px;
+  background: #333;
+  transform: translateY(-50%);
+}
+
+.desktop .app-window__btn--max::before {
+  content: '';
+  position: absolute;
+  inset: 7px 7px 7px 7px;
+  border: 2px solid #333;
+  border-radius: 4px;
+}
+
+.desktop .app-window__btn--close {
+  background: #e05656;
+  border-color: #d03e3e;
+}
+
+.desktop .app-window__btn--close::before {
+  content: '';
+  position: absolute;
+  inset: 50% 8px auto 8px;
+  height: 2px;
+  background: #fff;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.desktop .app-window__btn--close::after {
+  content: '';
+  position: absolute;
+  inset: 50% 8px auto 8px;
+  height: 2px;
+  background: #fff;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+.desktop .app-window__body {
+  flex: 1 1 auto;
+  background: #fff;
+  padding: 16px;
+  overflow: auto;
+  color: #222;
+}
+
+.desktop .app-window__resize {
+  position: absolute;
+  z-index: 8;
+}
+
+.desktop .app-window__resize--n,
+.desktop .app-window__resize--s {
+  left: 0;
+  right: 0;
+  height: 10px;
+  cursor: ns-resize;
+}
+
+.desktop .app-window__resize--n {
+  top: -5px;
+}
+
+.desktop .app-window__resize--s {
+  bottom: -5px;
+}
+
+.desktop .app-window__resize--e,
+.desktop .app-window__resize--w {
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.desktop .app-window__resize--e {
+  right: -4px;
+}
+
+.desktop .app-window__resize--w {
+  left: -4px;
+}
+
+.desktop .app-window__resize--ne,
+.desktop .app-window__resize--nw,
+.desktop .app-window__resize--se,
+.desktop .app-window__resize--sw {
+  width: 12px;
+  height: 12px;
+}
+
+.desktop .app-window__resize--ne {
+  top: -6px;
+  right: -6px;
+  cursor: nesw-resize;
+}
+
+.desktop .app-window__resize--nw {
+  top: -6px;
+  left: -6px;
+  cursor: nwse-resize;
+}
+
+.desktop .app-window__resize--se {
+  bottom: -6px;
+  right: -6px;
+  cursor: nwse-resize;
+}
+
+.desktop .app-window__resize--sw {
+  bottom: -6px;
+  left: -6px;
+  cursor: nesw-resize;
+}

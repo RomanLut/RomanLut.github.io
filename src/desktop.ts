@@ -1,4 +1,5 @@
 import { Taskbar } from './taskbar';
+import { AppWindow } from './appWindow';
 
 export class Desktop {
   readonly element: HTMLElement;
@@ -12,6 +13,8 @@ export class Desktop {
 
     this.taskbar = new Taskbar();
     this.element.appendChild(this.taskbar.element);
+
+    this.spawnTestWindow();
 
     root.prepend(this.element);
 
@@ -29,5 +32,12 @@ export class Desktop {
       this.intervalId = undefined;
     }
     this.element.remove();
+  }
+
+  private spawnTestWindow() {
+    const win = new AppWindow(this.element, this.taskbar, 'Welcome to personal page');
+    const body = document.createElement('div');
+    body.textContent = 'Welcome to personal page';
+    win.setContent(body);
   }
 }
