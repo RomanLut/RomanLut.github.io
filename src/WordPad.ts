@@ -186,6 +186,10 @@ export class WordPad extends AppWindow {
         void this.openFile();
         return;
       }
+      if (normalized === 'save') {
+        void this.saveFile();
+        return;
+      }
       if (normalized === 'print') {
         this.printContent();
         return;
@@ -219,6 +223,13 @@ export class WordPad extends AppWindow {
       openItem.addEventListener('click', (e) => {
         e.stopPropagation();
         void this.openFile();
+      });
+    }
+    const saveItem = menu.element.querySelector('.app-window__menu-item[data-label="Save"]') as HTMLElement | null;
+    if (saveItem) {
+      saveItem.addEventListener('click', (e) => {
+        e.stopPropagation();
+        void this.saveFile();
       });
     }
     const printItem = menu.element.querySelector('.app-window__menu-item[data-label="Print"]') as HTMLElement | null;
@@ -408,6 +419,84 @@ export class WordPad extends AppWindow {
     }
   }
 
+  private async saveFile() {
+    this.closeMenus();
+    const html = await this.buildSelfContainedHtml();
+    const filename =
+      `${(this.element.getAttribute('aria-label') || 'document').trim().replace(/\s+/g, '_') || 'document'}.html`;
+    const picker = (window as any).showSaveFilePicker;
+    if (typeof picker === 'function') {
+      try {
+        const handle = await picker({
+          suggestedName: filename,
+          types: [{ description: 'HTML', accept: { 'text/html': ['.html', '.htm'] } }]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(html);
+        await writable.close();
+        return;
+      } catch (err: any) {
+        if (err && (err.name === 'AbortError' || err.name === 'SecurityError')) {
+          return;
+        }
+      }
+    }
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  private async buildSelfContainedHtml() {
+    const clone = this.contentArea.cloneNode(true) as HTMLElement;
+    await this.inlineImages(clone);
+    const body = clone.innerHTML;
+    return `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>${escapeHtml(this.element.getAttribute('aria-label') || 'Document')}</title>
+    <style>
+      body { margin: 24px auto; width: auto; max-width: ${WordPad.MAX_WIDTH}px; font-family: 'Cambria', 'Georgia', 'Times New Roman', serif; font-size: 16px; line-height: 1.6; color: #1b1b1b; }
+      img { max-width: 100%; height: auto; }
+      pre { overflow: visible; white-space: pre-wrap; }
+      code { font-family: Consolas, 'Courier New', monospace; }
+      .wordpad__plain { font-family: Consolas, 'Courier New', monospace; }
+    </style>
+  </head>
+  <body>${body}</body>
+</html>`;
+  }
+
+  private async inlineImages(container: HTMLElement) {
+    const images = Array.from(container.querySelectorAll('img'));
+    await Promise.all(
+      images.map(async (img) => {
+        const src = img.getAttribute('src');
+        if (!src || src.startsWith('data:')) return;
+        try {
+          const res = await fetch(src);
+          if (!res.ok) return;
+          const blob = await res.blob();
+          const dataUrl = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(blob);
+          });
+          img.setAttribute('src', dataUrl);
+        } catch {
+          /* ignore */
+        }
+      })
+    );
+  }
+
   private printContent() {
     const html = this.contentArea.innerHTML;
     const printWindow = window.open('', '_blank');
@@ -449,3 +538,5 @@ export class WordPad extends AppWindow {
     }, 100);
   }
 }
+
+
