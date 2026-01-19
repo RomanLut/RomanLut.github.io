@@ -2,125 +2,7 @@ import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
 import { AppWindowStatusBar } from './appWindowStatusBar';
-
-function escapeHtml(str: string) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function resolvePath(url: string, basePath: string) {
-  if (/^(https?:)?\/\//i.test(url) || url.startsWith('data:') || url.startsWith('mailto:') || url.startsWith('/')) {
-    return url;
-  }
-  if (!basePath) return url;
-  return basePath + url.replace(/^\.\//, '');
-}
-
-function applyInline(text: string, basePath: string) {
-  let t = escapeHtml(text);
-
-  const replacements: string[] = [];
-  const tokenFor = (html: string) => {
-    const idx = replacements.length;
-    replacements.push(html);
-    return `@@INLINE_${idx}@@`;
-  };
-
-  // Protect links and images so italics/strong regexes do not modify URLs.
-  t = t.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, src) =>
-    tokenFor(`<img src="${resolvePath(src, basePath)}" alt="${alt}" />`)
-  );
-  t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label, href) => {
-    const resolved = resolvePath(href, basePath);
-    return tokenFor(`<a href="${resolved}" target="_blank" rel="noreferrer noopener">${label}</a>`);
-  });
-
-  t = t.replace(/`([^`]+)`/g, (_m, code) => tokenFor(`<code>${code}</code>`));
-  t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  t = t.replace(/__([^_]+)__/g, '<strong>$1</strong>');
-  t = t.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
-  t = t.replace(/_([^_]+)_/g, '<em>$1</em>');
-
-  t = t.replace(/@@INLINE_(\d+)@@/g, (_m, idx) => replacements[Number(idx)] ?? '');
-  return t;
-}
-
-function markdownToHtml(md: string, basePath: string) {
-  const codeBlocks: string[] = [];
-  md = md.replace(/```([\s\S]*?)```/g, (_m, code) => {
-    const idx = codeBlocks.length;
-    codeBlocks.push(escapeHtml(code.trim()));
-    return `@@CODEBLOCK_${idx}@@`;
-  });
-
-  const lines = md.split(/\r?\n/);
-  const parts: string[] = [];
-  let listType: 'ul' | 'ol' | null = null;
-
-  const closeList = () => {
-    if (listType) {
-      parts.push(`</${listType}>`);
-      listType = null;
-    }
-  };
-
-  for (const rawLine of lines) {
-    const line = rawLine.trimEnd();
-    if (!line.trim()) {
-      closeList();
-      continue;
-    }
-
-    const hMatch = line.match(/^(#{1,3})\s+(.*)$/);
-    if (hMatch) {
-      closeList();
-      const level = hMatch[1].length;
-      parts.push(`<h${level}>${applyInline(hMatch[2], basePath)}</h${level}>`);
-      continue;
-    }
-
-    const blockquote = line.match(/^>\s?(.*)$/);
-    if (blockquote) {
-      closeList();
-      parts.push(`<blockquote>${applyInline(blockquote[1], basePath)}</blockquote>`);
-      continue;
-    }
-
-    const ul = line.match(/^[*-]\s+(.*)$/);
-    if (ul) {
-      if (listType !== 'ul') {
-        closeList();
-        listType = 'ul';
-        parts.push('<ul>');
-      }
-      parts.push(`<li>${applyInline(ul[1], basePath)}</li>`);
-      continue;
-    }
-
-    const ol = line.match(/^\d+\.\s+(.*)$/);
-    if (ol) {
-      if (listType !== 'ol') {
-        closeList();
-        listType = 'ol';
-        parts.push('<ol>');
-      }
-      parts.push(`<li>${applyInline(ol[1], basePath)}</li>`);
-      continue;
-    }
-
-    closeList();
-    parts.push(`<p>${applyInline(line, basePath)}</p>`);
-  }
-  closeList();
-
-  let html = parts.join('\n');
-  html = html.replace(/@@CODEBLOCK_(\d+)@@/g, (_m, idx) => `<pre><code>${codeBlocks[Number(idx)]}</code></pre>`);
-  return html;
-}
+import { applyInline, closeMenus, escapeHtml, inlineImages, markdownToHtml } from './util';
 
 const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
   <rect x="4" y="3" width="16" height="18" rx="2" fill="#ffffff" stroke="#d0d6e0" stroke-width="1"/>
@@ -350,13 +232,8 @@ export class WordPad extends AppWindow {
     super.close();
   }
 
-  private closeMenus() {
-    if (!this.menuElement) return;
-    this.menuElement.querySelectorAll('.is-open').forEach((el) => el.classList.remove('is-open'));
-  }
-
   private async openFile() {
-    this.closeMenus();
+    closeMenus(this.menuElement);
     const picker = (window as any).showOpenFilePicker;
     const processFile = async (file: File) => {
       const text = await file.text();
@@ -420,7 +297,7 @@ export class WordPad extends AppWindow {
   }
 
   private async saveFile() {
-    this.closeMenus();
+    closeMenus(this.menuElement);
     const html = await this.buildSelfContainedHtml();
     const filename =
       `${(this.element.getAttribute('aria-label') || 'document').trim().replace(/\s+/g, '_') || 'document'}.html`;
@@ -454,7 +331,7 @@ export class WordPad extends AppWindow {
 
   private async buildSelfContainedHtml() {
     const clone = this.contentArea.cloneNode(true) as HTMLElement;
-    await this.inlineImages(clone);
+    await inlineImages(clone);
     const body = clone.innerHTML;
     return `<!doctype html>
 <html>
@@ -471,30 +348,6 @@ export class WordPad extends AppWindow {
   </head>
   <body>${body}</body>
 </html>`;
-  }
-
-  private async inlineImages(container: HTMLElement) {
-    const images = Array.from(container.querySelectorAll('img'));
-    await Promise.all(
-      images.map(async (img) => {
-        const src = img.getAttribute('src');
-        if (!src || src.startsWith('data:')) return;
-        try {
-          const res = await fetch(src);
-          if (!res.ok) return;
-          const blob = await res.blob();
-          const dataUrl = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = () => reject(reader.error);
-            reader.readAsDataURL(blob);
-          });
-          img.setAttribute('src', dataUrl);
-        } catch {
-          /* ignore */
-        }
-      })
-    );
   }
 
   private printContent() {

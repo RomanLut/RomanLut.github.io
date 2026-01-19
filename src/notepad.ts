@@ -2,6 +2,7 @@ import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
+import { closeMenus, escapeHtml } from './util';
 
 export class Notepad extends AppWindow {
   private statusBar: AppWindowStatusBar;
@@ -226,10 +227,7 @@ export class Notepad extends AppWindow {
   }
 
   private printContent() {
-    const html = `<pre>${(this.textarea.value || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')}</pre>`;
+    const html = `<pre>${escapeHtml(this.textarea.value || '')}</pre>`;
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
     const printDoc = printWindow.document;
@@ -269,7 +267,7 @@ export class Notepad extends AppWindow {
   }
 
   private async saveFile() {
-    this.closeMenus();
+    closeMenus(this.menuElement);
     const text = this.textarea.value ?? '';
     const safeName = (this.docTitle || 'document').trim().replace(/\s+/g, '_');
     const filename = `${safeName || 'document'}.txt`;
@@ -309,13 +307,8 @@ export class Notepad extends AppWindow {
     URL.revokeObjectURL(url);
   }
 
-  private closeMenus() {
-    if (!this.menuElement) return;
-    this.menuElement.querySelectorAll('.is-open').forEach((el) => el.classList.remove('is-open'));
-  }
-
   private async openFile() {
-    this.closeMenus();
+    closeMenus(this.menuElement);
     const picker = (window as any).showOpenFilePicker;
     const processFile = async (file: File) => {
       const text = await file.text();
