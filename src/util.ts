@@ -104,6 +104,14 @@ export function applyInline(text: string, basePath: string) {
 }
 
 export function markdownToHtml(md: string, basePath: string) {
+  const inlineCodes: string[] = [];
+  // Handle triple-backtick inline snippets on the same line (no newlines) as inline code.
+  md = md.replace(/```([^\n`]+)```/g, (_m, code) => {
+    const idx = inlineCodes.length;
+    inlineCodes.push(escapeHtml(code));
+    return `@@INLINECODE_${idx}@@`;
+  });
+
   const codeBlocks: string[] = [];
   md = md.replace(/```([\s\S]*?)```/g, (_m, code) => {
     const idx = codeBlocks.length;
@@ -114,6 +122,8 @@ export function markdownToHtml(md: string, basePath: string) {
   const lines = md.split(/\r?\n/);
   const parts: string[] = [];
   let listType: 'ul' | 'ol' | null = null;
+  let blockQuoteActive = false;
+  let blockQuoteLines: string[] = [];
 
   const closeList = () => {
     if (listType) {
@@ -122,16 +132,26 @@ export function markdownToHtml(md: string, basePath: string) {
     }
   };
 
+  const closeBlockQuote = () => {
+    if (blockQuoteActive) {
+      parts.push(`<blockquote>${blockQuoteLines.join('<br/>')}</blockquote>`);
+      blockQuoteActive = false;
+      blockQuoteLines = [];
+    }
+  };
+
   for (const rawLine of lines) {
     const line = rawLine.trimEnd();
     if (!line.trim()) {
       closeList();
+      closeBlockQuote();
       continue;
     }
 
     const hMatch = line.match(/^(#{1,3})\s+(.*)$/);
     if (hMatch) {
       closeList();
+      closeBlockQuote();
       const level = hMatch[1].length;
       parts.push(`<h${level}>${applyInline(hMatch[2], basePath)}</h${level}>`);
       continue;
@@ -140,7 +160,8 @@ export function markdownToHtml(md: string, basePath: string) {
     const blockquote = line.match(/^>\s?(.*)$/);
     if (blockquote) {
       closeList();
-      parts.push(`<blockquote>${applyInline(blockquote[1], basePath)}</blockquote>`);
+      blockQuoteActive = true;
+      blockQuoteLines.push(applyInline(blockquote[1], basePath));
       continue;
     }
 
@@ -148,6 +169,7 @@ export function markdownToHtml(md: string, basePath: string) {
     if (ul) {
       if (listType !== 'ul') {
         closeList();
+        closeBlockQuote();
         listType = 'ul';
         parts.push('<ul>');
       }
@@ -159,6 +181,7 @@ export function markdownToHtml(md: string, basePath: string) {
     if (ol) {
       if (listType !== 'ol') {
         closeList();
+        closeBlockQuote();
         listType = 'ol';
         parts.push('<ol>');
       }
@@ -167,12 +190,15 @@ export function markdownToHtml(md: string, basePath: string) {
     }
 
     closeList();
+    closeBlockQuote();
     parts.push(`<p>${applyInline(line, basePath)}</p>`);
   }
   closeList();
+  closeBlockQuote();
 
   let html = parts.join('\n');
   html = html.replace(/@@CODEBLOCK_(\d+)@@/g, (_m, idx) => `<pre><code>${codeBlocks[Number(idx)]}</code></pre>`);
+  html = html.replace(/@@INLINECODE_(\d+)@@/g, (_m, idx) => `<code>${inlineCodes[Number(idx)]}</code>`);
   return html;
 }
 

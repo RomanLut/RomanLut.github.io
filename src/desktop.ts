@@ -28,6 +28,7 @@ export class Desktop {
       '/filesystem/Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910_ programmer_for_AVR_microcontrollers.md',
       'Opto-isolated AVR910'
     );
+    new WordPad(this.element, this.taskbar, '/filesystem/test/markdown_test.md', 'Markdown Test');
     //new Browser(this.element, this.taskbar, 'https://www.google.com/?igu=1');
 
 
