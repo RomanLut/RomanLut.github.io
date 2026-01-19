@@ -131,6 +131,7 @@ const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
 </svg>`;
 
 export class WordPad extends AppWindow {
+  private static readonly MAX_WIDTH = 830;
   private static readonly STORAGE_KEY = 'wordpadLimitWidth';
   private static limitArticleWidth: boolean | null = null;
   private static instances = new Set<WordPad>();
@@ -219,7 +220,8 @@ export class WordPad extends AppWindow {
     this.loadFile(filePath);
     this.contentArea.addEventListener('scroll', () => this.updateStatus());
 
-    this.element.style.width = '880px';
+    // Target ~830px readable content area (padding + borders + scrollbar allowance).
+    this.element.style.width = `${WordPad.MAX_WIDTH + 68}px`;
     this.element.style.height = '80vh';
 
     WordPad.instances.add(this);
