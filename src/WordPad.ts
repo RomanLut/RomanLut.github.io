@@ -131,11 +131,20 @@ const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
 </svg>`;
 
 export class WordPad extends AppWindow {
+  private static readonly STORAGE_KEY = 'wordpadLimitWidth';
+  private static limitArticleWidth: boolean | null = null;
+  private static instances = new Set<WordPad>();
+
   private status: AppWindowStatusBar;
   private contentArea: HTMLElement;
+  private container: HTMLElement;
+  private scrollArea: HTMLElement;
+  private limitLabelEl: HTMLElement | null = null;
+  private limitItemEl: HTMLElement | null = null;
   private markdownText = '';
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, filePath: string, title?: string) {
+    WordPad.ensureLimitPref();
     super(
       desktop,
       taskbar,
@@ -145,10 +154,55 @@ export class WordPad extends AppWindow {
 
     const container = document.createElement('div');
     container.className = 'wordpad';
+    this.container = container;
 
-    const menuItems: MenuItem[] = [{ label: 'File' }, { label: 'View' }, { label: 'Help' }];
+    const menuItems: MenuItem[] = [
+      {
+        label: 'File',
+        children: [
+          { label: 'Open', shortcut: 'Ctrl+O' },
+          { label: 'Save', shortcut: 'Ctrl+S' },
+          { label: 'Print', shortcut: 'Ctrl+P' },
+          { label: '-' },
+          { label: 'Exit', shortcut: 'Alt+F4' }
+        ]
+      },
+      {
+        label: 'View',
+        children: [{ label: 'Limit Article Width' }]
+      }
+    ];
     const menu = new AppWindowMenu(menuItems);
+    const handleSelect = (label: string) => {
+      const normalized = label.trim().toLowerCase();
+      if (normalized === 'exit') {
+        this.close();
+        return;
+      }
+    };
+    menu.onSelect(handleSelect);
+    menu.element.addEventListener('menu-select', (e: Event) => {
+      const detail = (e as CustomEvent<{ label: string }>).detail;
+      if (detail?.label) {
+        handleSelect(detail.label);
+      }
+    });
     menu.element.classList.add('wordpad__menu');
+    this.limitLabelEl = menu.element.querySelector(
+      '.app-window__menu-item[data-label="Limit Article Width"] .app-window__menu-item-label'
+    ) as HTMLElement | null;
+    this.limitItemEl = menu.element.querySelector(
+      '.app-window__menu-item[data-label="Limit Article Width"]'
+    ) as HTMLElement | null;
+    if (this.limitItemEl) {
+      this.limitItemEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        WordPad.setLimitWidth(!(WordPad.limitArticleWidth ?? true));
+      });
+    }
+
+    this.scrollArea = document.createElement('div');
+    this.scrollArea.className = 'wordpad__scroll';
 
     this.contentArea = document.createElement('div');
     this.contentArea.className = 'wordpad__content';
@@ -157,7 +211,8 @@ export class WordPad extends AppWindow {
     this.status.element.classList.add('wordpad__status');
 
     container.appendChild(menu.element);
-    container.appendChild(this.contentArea);
+    this.scrollArea.appendChild(this.contentArea);
+    container.appendChild(this.scrollArea);
     container.appendChild(this.status.element);
 
     this.setContent(container);
@@ -166,11 +221,59 @@ export class WordPad extends AppWindow {
 
     this.element.style.width = '880px';
     this.element.style.height = '80vh';
+
+    WordPad.instances.add(this);
+    this.applyLimitWidth(WordPad.limitArticleWidth ?? true);
+    this.syncLimitLabel();
   }
 
   private static titleFromPath(path: string) {
     const clean = path.split('/').pop() || path;
     return clean;
+  }
+
+  private static ensureLimitPref() {
+    if (WordPad.limitArticleWidth !== null) return;
+    try {
+      const stored = localStorage.getItem(WordPad.STORAGE_KEY);
+      if (stored === '0') {
+        WordPad.limitArticleWidth = false;
+        return;
+      }
+      if (stored === '1') {
+        WordPad.limitArticleWidth = true;
+        return;
+      }
+    } catch {
+      /* ignore */
+    }
+    WordPad.limitArticleWidth = true;
+  }
+
+  private static setLimitWidth(flag: boolean) {
+    WordPad.limitArticleWidth = flag;
+    try {
+      localStorage.setItem(WordPad.STORAGE_KEY, flag ? '1' : '0');
+    } catch {
+      /* ignore */
+    }
+    WordPad.instances.forEach((inst) => {
+      inst.applyLimitWidth(flag);
+      inst.syncLimitLabel();
+    });
+  }
+
+  private applyLimitWidth(flag: boolean) {
+    if (flag) {
+      this.container.classList.add('wordpad--limited');
+    } else {
+      this.container.classList.remove('wordpad--limited');
+    }
+  }
+
+  private syncLimitLabel() {
+    if (!this.limitLabelEl) return;
+    this.limitLabelEl.textContent = `${WordPad.limitArticleWidth ? '☑' : '☐'} Limit Article Width`;
   }
 
   private async loadFile(path: string) {
@@ -200,5 +303,10 @@ export class WordPad extends AppWindow {
     const ratio = scrollable > 0 ? this.contentArea.scrollTop / scrollable : 0;
     const currentLine = Math.max(1, Math.floor(ratio * (totalLines - 1)) + 1);
     this.status.setText(`Line ${currentLine} / ${totalLines}`);
+  }
+
+  protected close() {
+    WordPad.instances.delete(this);
+    super.close();
   }
 }

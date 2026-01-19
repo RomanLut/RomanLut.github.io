@@ -166,7 +166,6 @@ Styling:
 - Images are responsive (max-width: 100%) with a light border radius.
 
 
-
 #### 5.2.6. Windows spawn behavior
 
 - Base spawn point is (80px, 80px) within the desktop, respecting a 16px margin.
@@ -176,6 +175,8 @@ Styling:
 - Up to 500 placement attempts are made; if no free slot is found, the window falls back near the base with a small offset derived from the number of open windows.
 - Positions are clamped to keep the full window visible inside the desktop.
 - When all windows are closed, spawning restarts from the base point.
+
+#### 5.2.7. Broser app
 
 ## 6. Global state
 
