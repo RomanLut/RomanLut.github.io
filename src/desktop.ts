@@ -28,7 +28,7 @@ export class Desktop {
       '/filesystem/Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910_ programmer_for_AVR_microcontrollers.md',
       'Opto-isolated AVR910'
     );
-    new Browser(this.element, this.taskbar, 'https://www.google.com');
+    //new Browser(this.element, this.taskbar, 'https://www.google.com/?igu=1');
 
 
     this.taskbar.onStart(() => this.spawnNotepad());

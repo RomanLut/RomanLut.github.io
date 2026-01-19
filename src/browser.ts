@@ -1,5 +1,6 @@
 import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
+import { AppWindowStatusBar } from './appWindowStatusBar';
 
 function normalizeUrl(value: string): string {
   const trimmed = value.trim();
@@ -10,9 +11,14 @@ function normalizeUrl(value: string): string {
   return `https://${trimmed}`;
 }
 
-const BROWSER_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
-  <circle cx="12" cy="12" r="10" fill="#2d7df6"/>
-  <path d="M3.5 8.5h17M3.5 15.5h17M12 2a15 15 0 0 0 0 20M12 2a15 15 0 0 1 0 20" stroke="#ffffff" stroke-width="1.4" fill="none"/>
+const BROWSER_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24">
+  <g transform="scale(0.82) translate(2.2 2.2)">
+    <circle cx="12" cy="12" r="10" fill="#fbbc04"/>
+    <path d="M12 2c-4.31 0-8 2.73-9.39 6.57L7 15l2.6-4.5L7 6h10l3.6 6.24C20.78 10.08 21 9.07 21 8c0-3.31-4.03-6-9-6Z" fill="#ea4335"/>
+    <path d="M4.22 17.42C5.8 20.3 8.69 22 12 22c4.47 0 8.2-3.07 9.63-7.28L17 9h-5l1.8 3.12L12 15l-7.78 2.42Z" fill="#34a853"/>
+    <path d="M14.4 12 12 8H7l5 9h5l3.3-5.72C18.85 9.66 15.62 8 12 8l2.4 4Z" fill="#4285f4" opacity="0.9"/>
+    <circle cx="12" cy="12" r="3" fill="#fff"/>
+  </g>
 </svg>`;
 
 export class Browser extends AppWindow {
@@ -22,9 +28,12 @@ export class Browser extends AppWindow {
   private currentUrl: string;
   private blockedOverlay: HTMLElement;
   private blockedLink: HTMLButtonElement;
+  private statusBar: AppWindowStatusBar;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, startUrl = 'https://github.com') {
     super(desktop, taskbar, 'Browser', BROWSER_ICON);
+    this.element.style.width = '880px';
+    this.element.style.height = '80vh';
 
     const container = document.createElement('div');
     container.className = 'browser';
@@ -60,11 +69,7 @@ export class Browser extends AppWindow {
       }
     });
 
-    this.statusEl = document.createElement('div');
-    this.statusEl.className = 'browser__status';
-    this.statusEl.textContent = 'Ready';
-
-    toolbar.append(backBtn, fwdBtn, reloadBtn, this.addressInput, this.statusEl);
+    toolbar.append(backBtn, fwdBtn, reloadBtn, this.addressInput);
 
     const content = document.createElement('div');
     content.className = 'browser__content';
@@ -94,7 +99,10 @@ export class Browser extends AppWindow {
     content.appendChild(this.iframe);
     content.appendChild(this.blockedOverlay);
 
-    container.append(toolbar, content);
+    this.statusBar = new AppWindowStatusBar('Ready', '');
+    this.statusBar.element.classList.add('browser__statusbar');
+
+    container.append(toolbar, content, this.statusBar.element);
     this.setContent(container);
 
     this.navigate(startUrl);
@@ -105,7 +113,7 @@ export class Browser extends AppWindow {
     if (!normalized) return;
     this.currentUrl = normalized;
     this.addressInput.value = normalized;
-    this.statusEl.textContent = 'Loading...';
+    this.statusBar.setText('Loading...');
     this.setBlocked(false);
     this.iframe.src = normalized;
   }
@@ -117,5 +125,10 @@ export class Browser extends AppWindow {
 
   private setBlocked(flag: boolean) {
     this.blockedOverlay.classList.toggle('is-visible', flag);
+    if (flag) {
+      this.statusBar.setText('Blocked or failed to load');
+    } else {
+      this.statusBar.setText('Done');
+    }
   }
 }
