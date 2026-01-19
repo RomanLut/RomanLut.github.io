@@ -8,6 +8,8 @@ export class Notepad extends AppWindow {
   private textarea: HTMLTextAreaElement;
   private history: { value: string; selection: number }[] = [];
   private historyIndex = 0;
+  private docTitle: string;
+  private menuElement: HTMLElement | null = null;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, title = 'Notepad') {
     super(
@@ -16,6 +18,7 @@ export class Notepad extends AppWindow {
       title,
       `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="#2d7df6"/><path d="M7 7h10v1H7zm0 4h10v1H7zm0 4h6v1H7z" fill="#ffffff"/></svg>`
     );
+    this.docTitle = title;
     this.element.style.width = '880px';
     this.element.style.height = '80vh';
     const container = document.createElement('div');
@@ -45,14 +48,23 @@ export class Notepad extends AppWindow {
       }
     ];
     const menu = new AppWindowMenu(menuItems);
+    this.menuElement = menu.element;
     const handleSelect = (label: string) => {
       const normalized = label.trim().toLowerCase();
       if (normalized === 'exit') {
         this.close();
         return;
       }
+      if (normalized === 'open') {
+        void this.openFile();
+        return;
+      }
       if (normalized === 'print') {
         this.printContent();
+        return;
+      }
+      if (normalized === 'save') {
+        void this.saveFile();
         return;
       }
       if (normalized === 'undo') this.undo();
@@ -73,6 +85,20 @@ export class Notepad extends AppWindow {
       printItem.addEventListener('click', (e) => {
         e.stopPropagation();
         this.printContent();
+      });
+    }
+    const saveItem = menu.element.querySelector('.app-window__menu-item[data-label="Save"]') as HTMLElement | null;
+    if (saveItem) {
+      saveItem.addEventListener('click', (e) => {
+        e.stopPropagation();
+        void this.saveFile();
+      });
+    }
+    const openItem = menu.element.querySelector('.app-window__menu-item[data-label="Open"]') as HTMLElement | null;
+    if (openItem) {
+      openItem.addEventListener('click', (e) => {
+        e.stopPropagation();
+        void this.openFile();
       });
     }
 
@@ -240,5 +266,115 @@ export class Notepad extends AppWindow {
       printWindow.print();
       printWindow.close();
     }, 100);
+  }
+
+  private async saveFile() {
+    this.closeMenus();
+    const text = this.textarea.value ?? '';
+    const safeName = (this.docTitle || 'document').trim().replace(/\s+/g, '_');
+    const filename = `${safeName || 'document'}.txt`;
+
+    const picker = (window as any).showSaveFilePicker;
+    if (typeof picker === 'function') {
+      try {
+        const handle = await picker({
+          suggestedName: filename,
+          types: [
+            {
+              description: 'Text file',
+              accept: { 'text/plain': ['.txt'] }
+            }
+          ]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(text);
+        await writable.close();
+        return;
+      } catch (err: any) {
+        if (err && (err.name === 'AbortError' || err.name === 'SecurityError')) {
+          return; // user cancelled; do nothing
+        }
+        // fall back to download below
+      }
+    }
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  private closeMenus() {
+    if (!this.menuElement) return;
+    this.menuElement.querySelectorAll('.is-open').forEach((el) => el.classList.remove('is-open'));
+  }
+
+  private async openFile() {
+    this.closeMenus();
+    const picker = (window as any).showOpenFilePicker;
+    const processFile = async (file: File) => {
+      const text = await file.text();
+      this.textarea.value = text;
+      this.recordHistory();
+      this.updateCaret();
+    };
+    if (typeof picker === 'function') {
+      try {
+        const handles = await picker({
+          multiple: false,
+          types: [
+            {
+              description: 'Text files',
+              accept: { 'text/plain': ['.txt'] }
+            }
+          ]
+        });
+        if (handles && handles[0]) {
+          const file = await handles[0].getFile();
+          await processFile(file);
+          this.updateWindowTitle(`${file.name} - Notepad`);
+          return;
+        }
+      } catch (err: any) {
+        if (err && (err.name === 'AbortError' || err.name === 'SecurityError')) {
+          return; // user cancelled
+        }
+        // fall through to fallback
+      }
+    }
+    await new Promise<void>((resolve) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.txt,text/plain';
+      input.style.display = 'none';
+      input.onchange = async () => {
+        const file = input.files?.[0];
+        if (file) {
+          await processFile(file);
+          this.updateWindowTitle(`${file.name} - Notepad`);
+        }
+        input.remove();
+        resolve();
+      };
+      document.body.appendChild(input);
+      input.click();
+    });
+  }
+
+  private updateWindowTitle(newTitle: string) {
+    this.docTitle = newTitle;
+    const titleEl = this.element.querySelector('.app-window__title');
+    if (titleEl) titleEl.textContent = newTitle;
+    this.element.setAttribute('aria-label', newTitle);
+    const winId = this.element.dataset.winId;
+    if (winId) {
+      const btn = document.querySelector(`.taskbar__winbtn[data-win-id="${winId}"] .taskbar__winbtn-title`);
+      if (btn) (btn as HTMLElement).textContent = newTitle;
+    }
   }
 }
