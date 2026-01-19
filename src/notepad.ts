@@ -46,11 +46,15 @@ export class Notepad extends AppWindow {
     ];
     const menu = new AppWindowMenu(menuItems);
     const handleSelect = (label: string) => {
-      if (label.trim().toLowerCase() === 'exit') {
+      const normalized = label.trim().toLowerCase();
+      if (normalized === 'exit') {
         this.close();
         return;
       }
-      const normalized = label.trim().toLowerCase();
+      if (normalized === 'print') {
+        this.printContent();
+        return;
+      }
       if (normalized === 'undo') this.undo();
       if (normalized === 'cut') this.cut();
       if (normalized === 'copy') this.copy();
@@ -64,6 +68,13 @@ export class Notepad extends AppWindow {
         handleSelect(detail.label);
       }
     });
+    const printItem = menu.element.querySelector('.app-window__menu-item[data-label="Print"]') as HTMLElement | null;
+    if (printItem) {
+      printItem.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.printContent();
+      });
+    }
 
     this.textarea = document.createElement('textarea');
     this.textarea.className = 'notepad__input';
@@ -186,5 +197,48 @@ export class Notepad extends AppWindow {
     }
     this.recordHistory();
     this.updateCaret();
+  }
+
+  private printContent() {
+    const html = `<pre>${(this.textarea.value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')}</pre>`;
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    const printDoc = printWindow.document;
+    printDoc.open();
+    printDoc.write(`
+      <!doctype html>
+      <html>
+        <head>
+          <title>${this.element.getAttribute('aria-label') || 'Document'}</title>
+          <style>
+            @page { size: A4; margin: 15mm 15mm 15mm 25mm; }
+            body {
+              margin: 0 auto;
+              padding: 0;
+              width: auto;
+              max-width: 180mm;
+              font-family: Consolas, 'Courier New', monospace;
+              font-size: 14px;
+              line-height: 1.4;
+              color: #000;
+            }
+            pre {
+              white-space: pre-wrap;
+              word-wrap: break-word;
+            }
+          </style>
+        </head>
+        <body>${html}</body>
+      </html>
+    `);
+    printDoc.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 100);
   }
 }
