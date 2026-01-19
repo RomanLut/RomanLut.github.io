@@ -5,6 +5,7 @@
   background: #000 url('./wallpaper2.jpg') center center / cover no-repeat;
   overflow: hidden;
   position: absolute;
+  z-index: 1;
 }
 
 .pc .desktop::after {

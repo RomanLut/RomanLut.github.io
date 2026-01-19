@@ -1,0 +1,98 @@
+.browser {
+  display: grid;
+  grid-template-rows: 44px 1fr;
+  grid-template-columns: 100%;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.browser__toolbar {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #f5f5f7, #e7e7ec);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.browser__btn {
+  width: 32px;
+  height: 28px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  background: #ffffff;
+  color: #222;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.browser__btn--disabled,
+.browser__btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.browser__address {
+  width: 100%;
+  height: 28px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.browser__status {
+  font-size: 12px;
+  color: #555;
+  padding: 0 4px;
+  white-space: nowrap;
+}
+
+.browser__content {
+  grid-row: 2;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+}
+
+.browser__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+.browser__blocked {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #222;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  padding: 20px;
+  text-align: center;
+}
+
+.browser__blocked.is-visible {
+  display: flex;
+}
+
+.browser__blocked-btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #2d7df6;
+  color: #fff;
+  cursor: pointer;
+}

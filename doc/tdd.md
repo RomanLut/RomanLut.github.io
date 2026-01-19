@@ -178,6 +178,23 @@ Styling:
 
 #### 5.2.7. Broser app
 
+- Application name: **Browser** (inherits AppWindow; no app menu).
+- Window layout: header with icon/title, toolbar/status row, address bar, content area.
+- Toolbar/status:
+  - Back, Forward (no history yet, disabled style).
+  - Reload button.
+  - URL input field showing the current address; pressing Enter loads the page.
+  - Status text area showing loading/loaded/error messages.
+- Content:
+  - Uses an `<iframe>` (or similar) to display external sites (e.g., github.com).
+  - The iframe fills the remaining window space, scrollable as needed.
+- Behavior:
+  - When a URL is entered and submitted, status shows “Loading…” then “Done” or error.
+  - External sites open in the embedded frame (subject to target site embedding/CORS policies).
+  - No top-level app menu is present; only the toolbar/status and content area.
+
+
+
 ## 6. Global state
 
 The applicaiton should have two global states:

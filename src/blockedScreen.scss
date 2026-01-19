@@ -12,6 +12,7 @@
   position: absolute;
   inset: 0;
   transition: opacity 1s ease;
+  z-index: 2000;
 }
 
 .pc .blocked_screen {

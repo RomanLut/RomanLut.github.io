@@ -3,6 +3,7 @@ import { Notepad } from './notepad';
 import { DesktopIcon } from './desktopIcon';
 import { exitFullscreenAndOpen } from './util';
 import { WordPad } from './WordPad';
+import { Browser } from './browser';
 
 export class Desktop {
   readonly element: HTMLElement;
@@ -27,6 +28,7 @@ export class Desktop {
       '/filesystem/Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910_ programmer_for_AVR_microcontrollers.md',
       'Opto-isolated AVR910'
     );
+    new Browser(this.element, this.taskbar, 'https://www.google.com');
 
 
     this.taskbar.onStart(() => this.spawnNotepad());
