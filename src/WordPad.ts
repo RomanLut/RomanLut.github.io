@@ -180,6 +180,13 @@ export class WordPad extends AppWindow {
         this.close();
         return;
       }
+      if (normalized === 'print') {
+        this.printContent();
+        return;
+      }
+      if (normalized === 'limit article width') {
+        WordPad.setLimitWidth(!(WordPad.limitArticleWidth ?? true));
+      }
     };
     menu.onSelect(handleSelect);
     menu.element.addEventListener('menu-select', (e: Event) => {
@@ -199,6 +206,13 @@ export class WordPad extends AppWindow {
       this.limitItemEl.addEventListener('click', (e) => {
         e.stopPropagation();
         WordPad.setLimitWidth(!(WordPad.limitArticleWidth ?? true));
+      });
+    }
+    const printItem = menu.element.querySelector('.app-window__menu-item[data-label="Print"]') as HTMLElement | null;
+    if (printItem) {
+      printItem.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.printContent();
       });
     }
 
@@ -310,5 +324,46 @@ export class WordPad extends AppWindow {
   protected close() {
     WordPad.instances.delete(this);
     super.close();
+  }
+
+  private printContent() {
+    const html = this.contentArea.innerHTML;
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    const printDoc = printWindow.document;
+    printDoc.open();
+    printDoc.write(`
+      <!doctype html>
+      <html>
+        <head>
+          <title>${escapeHtml(this.element.getAttribute('aria-label') || 'Document')}</title>
+          <style>
+            @page { size: A4; margin: 15mm 15mm 15mm 25mm; }
+            @media print {
+              body { margin: 0 auto; }
+            }
+            body {
+              margin: 0 auto;
+              padding: 0;
+              width: auto;
+              max-width: 180mm;
+              font-family: 'Cambria', 'Georgia', 'Times New Roman', serif;
+              font-size: 16px;
+              line-height: 1.6;
+              color: #1b1b1b;
+            }
+            img { max-width: 100%; height: auto; }
+            pre { overflow: visible; white-space: pre-wrap; }
+          </style>
+        </head>
+        <body>${html}</body>
+      </html>
+    `);
+    printDoc.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 100);
   }
 }
