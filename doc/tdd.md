@@ -120,7 +120,7 @@ There are a  clock and date at the right border.
 There are dummy battery, volume and wifi indicators at tray area.
 
 
-#### 5.2.4 Destop screen generic window
+#### 5.2.4 Desktop screen generic window
 
 Reusable class `AppWindow` renders desktop windows with:
 - Header: app icon, title, close/minimize/maximize buttons (hover states; no pointer cursor), double-click header toggles maximize/restore. Drag header to move; z-order focuses.
@@ -136,8 +136,46 @@ Reusable class appWindowToolbar simulates toolbar at the bottom of window.
 Reusable class appWindowMenu simulates menu below window header.
 
 
+#### 5.2.5. Markdown file viewer
+
+Application: **Wordpad** (inherits `AppWindow`, reuses `AppWindowMenu` and status bar).
+
+Behaviour:
+- Opens Markdown files from the virtual filesystem and renders them read-only.
+- Window title shows the file name; taskbar button shows the same icon/title.
+- Menu (File/View/Help stubs) has no functionality yet.
+- Status bar is visible on load and stays at the bottom after minimize/restore; shows scroll position as `{current line} / {total lines}`.
+- Scrolling: mouse wheel/trackpad; vertical scrollbar styled like other app windows.
+- Layout: header menu at top, preview pane fills the rest; no textarea visible.
+
+Markdown support (rendered):
+- Headings: `#`..`###` mapped to H1–H3 sizes.
+- Text: paragraphs, bold (`**`/`__`), italic (`*`/`_`), inline code (backticks).
+- Lists: unordered (`-`, `*`) and ordered (`1.`); nested lists indented.
+- Links: `[text](url)` open in a new tab.
+- Images: `![alt](path)` resolve relative to the markdown file location.
+- Code blocks: triple backticks rendered in monospace with preserved whitespace.
+- Blockquotes: `>` indented with a subtle left border.
+
+Non‑supported/other tags are rendered as plain text.
+
+Styling:
+- Body font follows desktop default; code uses monospace.
+- Content has comfortable padding (16px) and max width of 900px centered.
+- Headings use descending sizes and normal weight; links colored blue with hover underline.
+- Images are responsive (max-width: 100%) with a light border radius.
 
 
+
+#### 5.2.6. Windows spawn behavior
+
+- Base spawn point is (80px, 80px) within the desktop, respecting a 16px margin.
+- On creation a window searches for the first non-overlapping position against existing windows, shifting by +32px X and +32px Y.
+- When window no longer fits vertically, y is restored to 80 and the process continues (shifting by x and y).
+- Only origin is checked. Windows appear on top of eachother, but with shift. The only goal of this bechaviuor is to avoid spawing windows at the same point and same size.
+- Up to 500 placement attempts are made; if no free slot is found, the window falls back near the base with a small offset derived from the number of open windows.
+- Positions are clamped to keep the full window visible inside the desktop.
+- When all windows are closed, spawning restarts from the base point.
 
 ## 6. Global state
 

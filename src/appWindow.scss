@@ -36,12 +36,14 @@
   width: 20px;
   height: 20px;
   display: block;
+  filter: drop-shadow(1px 1px 1px gray);
 }
 
 .desktop .app-window__icon svg {
   width: 26px;
   height: 26px;
   display: block;
+  filter: drop-shadow(1px 1px 1px gray);
 }
 
 .desktop .app-window__title {
@@ -180,6 +182,28 @@
   padding: 0;
   overflow: hidden;
   color: #222;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.desktop .app-window__body > .wordpad {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 30px 1fr 26px;
+}
+
+.desktop .app-window__body > .notepad {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .desktop .app-window__resize {

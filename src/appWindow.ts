@@ -5,6 +5,8 @@ type WindowState = 'normal' | 'maximized' | 'minimized';
 let zCounter = 10;
 let windowId = 0;
 type ResizeDir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
+const SPAWN_BASE = { x: 80, y: 80 };
+const SPAWN_STEP = { x: 32, y: 32 };
 
 export class AppWindow {
   readonly element: HTMLElement;
@@ -29,6 +31,8 @@ export class AppWindow {
   private resizeCursor: string | null = null;
   private prevUserSelect: string | null = null;
   private iconMarkup: string | undefined;
+  private static openWindows = new Set<AppWindow>();
+  private positioned = false;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, title: string, icon?: string) {
     this.taskbar = taskbar;
@@ -71,14 +75,79 @@ export class AppWindow {
     this.minBtn = this.element.querySelector('.app-window__btn--min') as HTMLButtonElement;
 
     desktop.appendChild(this.element);
+    requestAnimationFrame(() => this.positionInitial());
     this.createTaskbarButton(title);
     this.focus();
     this.attachEvents(desktop);
+    AppWindow.openWindows.add(this);
+  }
+
+  private positionInitial() {
+    if (this.positioned) return;
+    const parentRect = this.desktop.getBoundingClientRect();
+    const rect = this.element.getBoundingClientRect();
+    if (rect.width < 10 || rect.height < 10) {
+      // Wait for layout (e.g., subclasses set width/height after super()).
+      requestAnimationFrame(() => this.positionInitial());
+      return;
+    }
+    const margin = 16;
+    const maxLeft = Math.max(margin, parentRect.width - rect.width - margin);
+    const maxTop = Math.max(margin, parentRect.height - rect.height - margin);
+    const baseX = Math.min(Math.max(SPAWN_BASE.x, margin), maxLeft);
+    const baseY = Math.min(Math.max(SPAWN_BASE.y, margin), maxTop);
+    const stepX = SPAWN_STEP.x;
+    const stepY = SPAWN_STEP.y;
+
+    const existingOrigins = Array.from(AppWindow.openWindows)
+      .filter((w) => w !== this)
+      .map((w) => {
+        const r = w.element.getBoundingClientRect();
+        return {
+          x: Math.round(r.left - parentRect.left),
+          y: Math.round(r.top - parentRect.top)
+        };
+      });
+
+    const originUsed = (x: number, y: number) =>
+      existingOrigins.some((o) => Math.abs(o.x - x) < 1 && Math.abs(o.y - y) < 1);
+
+    const cols = Math.max(1, Math.floor((maxLeft - baseX) / stepX) + 1);
+    let x = baseX;
+    let y = baseY;
+    let attempts = 0;
+    const maxAttempts = 500;
+    const rows = Math.max(1, Math.floor((maxTop - baseY) / stepY) + 1);
+    while (attempts < maxAttempts && originUsed(x, y)) {
+      attempts++;
+      x = Math.min(baseX + attempts * stepX, maxLeft);
+      const row = attempts % rows;
+      y = baseY + row * stepY;
+    }
+
+    if (originUsed(x, y)) {
+      const offset = (AppWindow.openWindows.size % 8) * 4;
+      x = Math.min(Math.max(baseX + offset, margin), maxLeft);
+      y = Math.min(Math.max(baseY + offset, margin), maxTop);
+    }
+
+    this.element.style.left = `${x}px`;
+    this.element.style.top = `${y}px`;
+    this.positioned = true;
   }
 
   setContent(node: HTMLElement) {
+    let safeNode = node;
+    if (
+      safeNode.contains(this.element) ||
+      safeNode.contains(this.contentEl) ||
+      this.element.contains(safeNode) ||
+      this.contentEl.contains(safeNode)
+    ) {
+      safeNode = safeNode.cloneNode(true) as HTMLElement;
+    }
     this.contentEl.innerHTML = '';
-    this.contentEl.appendChild(node);
+    this.contentEl.appendChild(safeNode);
   }
 
   private attachEvents(desktop: HTMLElement) {
@@ -223,6 +292,10 @@ export class AppWindow {
       this.taskbarButton = null;
     }
     AppWindow.activeWindows.delete(this);
+    AppWindow.openWindows.delete(this);
+    if (AppWindow.openWindows.size === 0) {
+      AppWindow.nextSpawn = { ...SPAWN_BASE };
+    }
   }
 
   private createTaskbarButton(title: string) {

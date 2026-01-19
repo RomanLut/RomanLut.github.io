@@ -2,6 +2,7 @@ import { Taskbar } from './taskbar';
 import { Notepad } from './notepad';
 import { DesktopIcon } from './desktopIcon';
 import { exitFullscreenAndOpen } from './util';
+import { WordPad } from './WordPad';
 
 export class Desktop {
   readonly element: HTMLElement;
@@ -17,7 +18,17 @@ export class Desktop {
     this.element.appendChild(this.taskbar.element);
 
     this.spawnIcons();
-    //this.spawnNotepad();
+    this.spawnNotepad();
+
+    // Open Markdown article on start
+    new WordPad(
+      this.element,
+      this.taskbar,
+      '/filesystem/Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910_ programmer_for_AVR_microcontrollers.md',
+      'Opto-isolated AVR910'
+    );
+
+
     this.taskbar.onStart(() => this.spawnNotepad());
 
     root.prepend(this.element);
