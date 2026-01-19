@@ -188,24 +188,6 @@
   align-items: stretch;
 }
 
-.desktop .app-window__body > .wordpad {
-  flex: 1 1 auto;
-  min-height: 0;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-rows: 30px 1fr 26px;
-}
-
-.desktop .app-window__body > .notepad {
-  flex: 1 1 auto;
-  min-height: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 .desktop .app-window__resize {
   position: absolute;
   z-index: 8;
