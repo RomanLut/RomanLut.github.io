@@ -36,6 +36,10 @@
   max-width: 830px;
 }
 
+.wordpad__plain {
+  font-family: 'Consolas', 'Courier New', monospace;
+  white-space: normal;
+}
 .wordpad__scroll {
   grid-row: 2;
   overflow: auto;

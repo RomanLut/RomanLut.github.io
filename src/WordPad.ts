@@ -142,6 +142,7 @@ export class WordPad extends AppWindow {
   private scrollArea: HTMLElement;
   private limitLabelEl: HTMLElement | null = null;
   private limitItemEl: HTMLElement | null = null;
+  private menuElement: HTMLElement | null = null;
   private markdownText = '';
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, filePath: string, title?: string) {
@@ -174,10 +175,15 @@ export class WordPad extends AppWindow {
       }
     ];
     const menu = new AppWindowMenu(menuItems);
+    this.menuElement = menu.element;
     const handleSelect = (label: string) => {
       const normalized = label.trim().toLowerCase();
       if (normalized === 'exit') {
         this.close();
+        return;
+      }
+      if (normalized === 'open') {
+        void this.openFile();
         return;
       }
       if (normalized === 'print') {
@@ -206,6 +212,13 @@ export class WordPad extends AppWindow {
       this.limitItemEl.addEventListener('click', (e) => {
         e.stopPropagation();
         WordPad.setLimitWidth(!(WordPad.limitArticleWidth ?? true));
+      });
+    }
+    const openItem = menu.element.querySelector('.app-window__menu-item[data-label="Open"]') as HTMLElement | null;
+    if (openItem) {
+      openItem.addEventListener('click', (e) => {
+        e.stopPropagation();
+        void this.openFile();
       });
     }
     const printItem = menu.element.querySelector('.app-window__menu-item[data-label="Print"]') as HTMLElement | null;
@@ -324,6 +337,75 @@ export class WordPad extends AppWindow {
   protected close() {
     WordPad.instances.delete(this);
     super.close();
+  }
+
+  private closeMenus() {
+    if (!this.menuElement) return;
+    this.menuElement.querySelectorAll('.is-open').forEach((el) => el.classList.remove('is-open'));
+  }
+
+  private async openFile() {
+    this.closeMenus();
+    const picker = (window as any).showOpenFilePicker;
+    const processFile = async (file: File) => {
+      const text = await file.text();
+      this.markdownText = text;
+      const escaped = escapeHtml(text).replace(/\r?\n/g, '<br/>');
+      this.contentArea.innerHTML = `<div class="wordpad__plain">${escaped}</div>`;
+      this.updateStatus();
+      this.updateWindowTitle(`${file.name} - WordPad`);
+    };
+
+    if (typeof picker === 'function') {
+      try {
+        const handles = await picker({
+          multiple: false,
+          types: [
+            {
+              description: 'Text files',
+              accept: { 'text/plain': ['.txt'] }
+            }
+          ]
+        });
+        if (handles && handles[0]) {
+          const file = await handles[0].getFile();
+          await processFile(file);
+          return;
+        }
+      } catch (err: any) {
+        if (err && (err.name === 'AbortError' || err.name === 'SecurityError')) {
+          return;
+        }
+      }
+    }
+
+    await new Promise<void>((resolve) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.txt,text/plain';
+      input.style.display = 'none';
+      input.onchange = async () => {
+        const file = input.files?.[0];
+        if (file) {
+          await processFile(file);
+        }
+        input.remove();
+        resolve();
+      };
+      document.body.appendChild(input);
+      input.click();
+    });
+  }
+
+  private updateWindowTitle(newTitle: string) {
+    const titleEl = this.element.querySelector('.app-window__title');
+    if (titleEl) titleEl.textContent = newTitle;
+    this.element.setAttribute('aria-label', newTitle);
+    const winId = this.element.dataset.winId;
+    if (winId) {
+      const btn = document.querySelector(`.taskbar__winbtn[data-win-id="${winId}"] .taskbar__winbtn-title`);
+      if (btn) (btn as HTMLElement).textContent = newTitle;
+    }
   }
 
   private printContent() {
