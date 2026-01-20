@@ -30,7 +30,7 @@ export class FileExplorer extends AppWindow {
   private upBtn: HTMLButtonElement | null = null;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar) {
-    super(desktop, taskbar, 'FileExporer', FILE_EXPLORER_ICON);
+    super(desktop, taskbar, 'File Exporer', FILE_EXPLORER_ICON);
     this.desktopRef = desktop;
     this.taskbarRef = taskbar;
 

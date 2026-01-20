@@ -20,20 +20,24 @@ export class Desktop {
     this.element.appendChild(this.taskbar.element);
 
     this.spawnIcons();
-    this.spawnNotepad();
 
-    // Open Markdown article on start
+    new FileExplorer(this.element, this.taskbar);
+
+//    new Notepad(this.element, this.taskbar);
+
+//    new WordPad(this.element, this.taskbar, '/filesystem/test/markdown_test.md', 'Markdown Test');
+
+//    new Browser(this.element, this.taskbar, 'https://www.google.com/?igu=1');
+
+/*
     new WordPad(
       this.element,
       this.taskbar,
       '/filesystem/Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910.md',
       'Opto-isolated AVR910'
     );
+*/    
     
-    new WordPad(this.element, this.taskbar, '/filesystem/test/markdown_test.md', 'Markdown Test');
-    
-    //new Browser(this.element, this.taskbar, 'https://www.google.com/?igu=1');
-
 /*
     new WordPad(
       this.element,
@@ -50,15 +54,14 @@ export class Desktop {
     );    
 */
 
+/*
     new WordPad(
       this.element,
       this.taskbar,
       '/filesystem/Publications/CNC/DIY_CNC1/DIY_CNC1.md',
       'CNC1.md '
     );    
-
-    new FileExplorer(this.element, this.taskbar);
-
+*/
 
     this.taskbar.onStart(() => this.spawnNotepad());
 
@@ -78,12 +81,6 @@ export class Desktop {
       this.intervalId = undefined;
     }
     this.element.remove();
-  }
-
-  private spawnNotepad() {
-    const win = new Notepad(this.element, this.taskbar);
-    win.element.style.top = `60px`;
-    win.element.style.left = `60px`;
   }
 
   private spawnIcons() {
