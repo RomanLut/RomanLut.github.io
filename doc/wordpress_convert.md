@@ -1,9 +1,9 @@
 
 # Template rule for converting wordpress article
 
-[location]=http://localhost:8080/?page_id=455
+[location]=http://localhost:8080/?page_id=429
 
-[target]=\trunk\public\filesystem\Electronics\Opto_isolated_AVR910\Opto_isolated_AVR910.md 
+[target]=\trunk\public\filesystem\CNC\DIY_CNC1\DIY_CNC1.md 
 
 Use curl. 
 
