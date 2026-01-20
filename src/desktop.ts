@@ -25,12 +25,29 @@ export class Desktop {
     new WordPad(
       this.element,
       this.taskbar,
-      '/filesystem/Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910_ programmer_for_AVR_microcontrollers.md',
+      '/filesystem/Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910.md',
       'Opto-isolated AVR910'
     );
-    new WordPad(this.element, this.taskbar, '/filesystem/test/markdown_test.md', 'Markdown Test');
+    //new WordPad(this.element, this.taskbar, '/filesystem/test/markdown_test.md', 'Markdown Test');
     //new Browser(this.element, this.taskbar, 'https://www.google.com/?igu=1');
 
+
+// Open Markdown article on start
+    new WordPad(
+      this.element,
+      this.taskbar,
+      '/filesystem/Publications/Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet.md',
+      'Using webcamera as virtual graphics tablet.md'
+    );    
+
+
+// Open Markdown article on start
+    new WordPad(
+      this.element,
+      this.taskbar,
+      '/filesystem/Publications/Driving_backlight_from_midlet/Drawing_backlight_from_midlet.md ',
+      'Drawing_backlight_from_midlet.md '
+    );    
 
     this.taskbar.onStart(() => this.spawnNotepad());
 
