@@ -11,7 +11,8 @@ import {
   loadFilesystem,
   normalizeFsPath,
   escapeHtml,
-  applyInline
+  applyInline,
+  formatSize
 } from './util';
 import { WordPad } from './WordPad';
 
@@ -25,6 +26,8 @@ export class FileExplorer extends AppWindow {
   private content: HTMLElement;
   private meta: HTMLElement;
   private list: HTMLElement;
+  private listHeader: HTMLElement;
+  private sizeHeader: HTMLElement;
   private statusBar: AppWindowStatusBar;
   private tree: FsRoot | null = null;
   private currentPath = '';
@@ -53,6 +56,18 @@ export class FileExplorer extends AppWindow {
     this.meta = document.createElement('div');
     this.meta.className = 'fileexplorer__meta';
 
+    this.listHeader = document.createElement('div');
+    this.listHeader.className = 'fileexplorer__list-header';
+    const nameHeader = document.createElement('div');
+    nameHeader.className = 'fileexplorer__list-col fileexplorer__list-col--name';
+    nameHeader.textContent = 'Name';
+
+    this.sizeHeader = document.createElement('div');
+    this.sizeHeader.className = 'fileexplorer__list-col fileexplorer__list-col--size';
+    this.sizeHeader.textContent = 'Size';
+
+    this.listHeader.append(nameHeader, this.sizeHeader);
+
     this.list = document.createElement('div');
     this.list.className = 'fileexplorer__list';
 
@@ -61,6 +76,7 @@ export class FileExplorer extends AppWindow {
 
     this.buildToolbar();
     this.content.appendChild(this.meta);
+    this.content.appendChild(this.listHeader);
     this.content.appendChild(this.list);
     container.append(this.toolbar, this.content, this.statusBar.element);
     this.setContent(container);
@@ -194,7 +210,12 @@ export class FileExplorer extends AppWindow {
       label.className = 'fileexplorer__item-name';
       label.textContent = item.name;
 
-      row.append(iconHolder, label);
+      const sizeEl = document.createElement('div');
+      sizeEl.className = 'fileexplorer__item-size';
+      sizeEl.textContent =
+        item.type === 'wordpad' && typeof (item as any).size === 'number' ? formatSize((item as any).size) : '';
+
+      row.append(iconHolder, label, sizeEl);
       row.addEventListener('dblclick', () => this.handleItemClick(item));
       this.list.appendChild(row);
     });

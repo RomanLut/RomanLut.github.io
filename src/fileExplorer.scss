@@ -146,7 +146,34 @@
 .fileexplorer__list {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 6px;
+  margin-top:10px;
+}
+
+.fileexplorer__list-header {
+  display: grid;
+  grid-template-columns: 1fr 156px;
+  padding: 6px 12px;
+  color: #4b5468;
+  font-size: 13px;
+  border-bottom: 1px solid #e4e7ef;
+}
+
+.fileexplorer__list-col {
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.fileexplorer__list-col--name {
+  padding-left: 4px;
+}
+
+.fileexplorer__list-col--size {
+  justify-content: flex-start;
+  padding-right: 8px;
+  padding-left: 8px;
+  border-left: 1px solid #e4e7ef;
 }
 
 .fileexplorer__item {
@@ -180,6 +207,16 @@
   user-select: none;
   display: flex;
   align-items: center;
+}
+
+.fileexplorer__item-size {
+  margin-left: auto;
+  min-width: 156px;
+  text-align: left;
+  color: #4b5468;
+  font-size: 12px;
+  padding-right: 8px;
+  user-select: none;
 }
 
 .fileexplorer__empty {

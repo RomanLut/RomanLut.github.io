@@ -24,6 +24,7 @@ name: displayed name
 path: path inside /filesystem folder
 image?: optional folder image name, without path (f.e. folder_image.jpg)
 desc?: optional descriptopn text of the folder
+size: size in bytes for files
 
 The /public/filesystem/filesystem.json is build automatically with script tools/update_filesystem.py
 

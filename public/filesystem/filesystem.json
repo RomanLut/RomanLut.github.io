@@ -13,7 +13,8 @@
             {
               "type": "wordpad",
               "name": "DIY CNC1",
-              "path": "CNC/DIY_CNC1/DIY_CNC1.md"
+              "path": "CNC/DIY_CNC1/DIY_CNC1.md",
+              "size": 2259
             }
           ]
         }
@@ -32,12 +33,14 @@
             {
               "type": "wordpad",
               "name": "Opto isolated AVR910",
-              "path": "Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910.md"
+              "path": "Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910.md",
+              "size": 3483
             },
             {
               "type": "wordpad",
               "name": "Оптоизолированный программатор AVR910",
-              "path": "Electronics/Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910.md"
+              "path": "Electronics/Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910.md",
+              "size": 5888
             }
           ]
         }
@@ -56,7 +59,8 @@
             {
               "type": "wordpad",
               "name": "Drawing backlight from midlet",
-              "path": "Publications/Driving_backlight_from_midlet/Drawing_backlight_from_midlet.md"
+              "path": "Publications/Driving_backlight_from_midlet/Drawing_backlight_from_midlet.md",
+              "size": 25161
             }
           ]
         },
@@ -68,7 +72,8 @@
             {
               "type": "wordpad",
               "name": "Using webcamera as virtual graphics tablet",
-              "path": "Publications/Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet.md"
+              "path": "Publications/Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet.md",
+              "size": 23635
             }
           ]
         }
@@ -84,7 +89,8 @@
         {
           "type": "wordpad",
           "name": "markdown test",
-          "path": "test/markdown_test.md"
+          "path": "test/markdown_test.md",
+          "size": 2660
         }
       ],
       "image": "folder_image.jpg",

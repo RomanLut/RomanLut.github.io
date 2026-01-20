@@ -269,6 +269,14 @@ export function formatItemCount(count: number): string {
   return `${count} item(s)`;
 }
 
+export function formatSize(bytes: number): string {
+  const kb = bytes / 1024;
+  if (kb >= 10) {
+    return `${Math.round(kb)} KB`;
+  }
+  return `${Math.round(kb * 10) / 10} KB`;
+}
+
 export function findFolder(root: FsRoot, path: string): FsItem | null {
   const clean = normalizeFsPath(path);
   if (!clean) return { type: 'folder', name: '', path: '', items: root.items };

@@ -46,11 +46,13 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
             if nested:
                 children.append(nested)
         elif entry.suffix.lower() == ".md" and entry.name != "folder.md":
+            size = entry.stat().st_size
             children.append(
                 {
                     "type": "wordpad",
                     "name": display_name(entry.name),
                     "path": rel_path.as_posix(),
+                    "size": size,
                 }
             )
     return children
