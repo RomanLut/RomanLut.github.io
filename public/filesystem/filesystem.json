@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "type": "folder",
+      "name": "CNC",
+      "path": "CNC",
+      "items": [
+        {
+          "type": "folder",
+          "name": "DIY CNC1",
+          "path": "CNC/DIY_CNC1",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "DIY CNC1",
+              "path": "CNC/DIY_CNC1/DIY_CNC1.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Electronics",
+      "path": "Electronics",
+      "items": [
+        {
+          "type": "folder",
+          "name": "Opto isolated AVR910",
+          "path": "Electronics/Opto_isolated_AVR910",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Opto isolated AVR910",
+              "path": "Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910.md"
+            },
+            {
+              "type": "wordpad",
+              "name": "Оптоизолированный программатор AVR910",
+              "path": "Electronics/Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Publications",
+      "path": "Publications",
+      "items": [
+        {
+          "type": "folder",
+          "name": "Driving backlight from midlet",
+          "path": "Publications/Driving_backlight_from_midlet",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Drawing backlight from midlet",
+              "path": "Publications/Driving_backlight_from_midlet/Drawing_backlight_from_midlet.md"
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "Using webcamera as virtual graphics tablet",
+          "path": "Publications/Using_webcamera_as_virtual_graphics_tablet",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Using webcamera as virtual graphics tablet",
+              "path": "Publications/Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet.md"
+            }
+          ]
+        }
+      ],
+      "image": "folder_image.jpg",
+      "desc": "This folder contains my publications.\nSome publications are on Russian. English translation is provided."
+    },
+    {
+      "type": "folder",
+      "name": "test",
+      "path": "test",
+      "items": [
+        {
+          "type": "wordpad",
+          "name": "markdown test",
+          "path": "test/markdown_test.md"
+        }
+      ],
+      "image": "folder_image.jpg",
+      "desc": "folder.md Markdown Rendering Test\n\nText styles\n\nNormal text with **bold**, *italic*.\n\nLinks \n\n- Link: [OpenAI](https://www.openai.com/)\n\nLong text\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    }
+  ]
+}
