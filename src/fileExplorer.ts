@@ -10,7 +10,8 @@ import {
   filesystemUrl,
   loadFilesystem,
   normalizeFsPath,
-  escapeHtml
+  escapeHtml,
+  applyInline
 } from './util';
 import { WordPad } from './WordPad';
 
@@ -165,9 +166,9 @@ export class FileExplorer extends AppWindow {
         .split(/\n{2,}/)
         .map((p) => p.trim())
         .filter(Boolean)
-        .map((p) => `<p>${escapeHtml(p)}</p>`)
+        .map((p) => `<p>${applyInline(p, '')}</p>`)
         .join('');
-      descWrap.innerHTML = paragraphs || `<p>${escapeHtml(folder.desc)}</p>`;
+      descWrap.innerHTML = paragraphs || `<p>${applyInline(folder.desc, '')}</p>`;
       this.meta.appendChild(descWrap);
     }
   }
