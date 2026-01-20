@@ -1,0 +1,170 @@
+.fileexplorer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #0f121a;
+  color: #e6e9f0;
+}
+
+.fileexplorer__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #1f2430;
+  background: linear-gradient(180deg, #141926, #0f121a);
+}
+
+.fileexplorer__btn {
+  background: #1f2533;
+  color: #e6e9f0;
+  border: 1px solid #252c3c;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.fileexplorer__btn:hover:not(.is-disabled) {
+  background: #2b3345;
+  border-color: #3a4763;
+}
+
+.fileexplorer__btn.is-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.fileexplorer__crumbs-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.fileexplorer__crumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #c4cad5;
+  overflow: hidden;
+}
+
+.fileexplorer__crumb {
+  background: none;
+  border: none;
+  color: #e6e9f0;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.fileexplorer__crumb:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.fileexplorer__crumb-sep {
+  color: #6c7690;
+}
+
+.fileexplorer__content {
+  flex: 1;
+  overflow: auto;
+  padding: 12px;
+}
+
+.fileexplorer__meta {
+  display: none;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  padding: 12px;
+  border: 1px solid #1f2430;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: #111623;
+}
+
+.fileexplorer__meta.is-visible {
+  display: grid;
+}
+
+.fileexplorer__meta-image img {
+  display: block;
+  max-width: 240px;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid #1f2430;
+}
+
+.fileexplorer__meta-desc {
+  white-space: pre-wrap;
+  color: #d5d9e3;
+  line-height: 1.5;
+}
+
+.fileexplorer__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fileexplorer__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.fileexplorer__item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: #1f2430;
+}
+
+.fileexplorer__item-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.fileexplorer__item-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.fileexplorer__item-name {
+  color: #e6e9f0;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.fileexplorer__empty {
+  text-align: center;
+  color: #6c7690;
+  padding: 16px;
+  border: 1px dashed #1f2430;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.fileexplorer__error {
+  color: #ffb4a2;
+  padding: 12px;
+}
+
+.fileexplorer__status {
+  border-top: 1px solid #1f2430;
+}
+
+.fileexplorer__status .app-window__statusbar-right {
+  display: none;
+}
+
+.fileexplorer__status .app-window__statusbar-divider,
+.fileexplorer__status .app-window__statusbar-extra {
+  display: none;
+}

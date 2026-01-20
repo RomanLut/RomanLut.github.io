@@ -4,6 +4,7 @@ import { DesktopIcon } from './desktopIcon';
 import { exitFullscreenAndOpen } from './util';
 import { WordPad } from './WordPad';
 import { Browser } from './browser';
+import { FileExplorer } from './fileExplorer';
 
 export class Desktop {
   readonly element: HTMLElement;
@@ -55,6 +56,8 @@ export class Desktop {
       '/filesystem/Publications/CNC/DIY_CNC1/DIY_CNC1.md',
       'CNC1.md '
     );    
+
+    new FileExplorer(this.element, this.taskbar);
 
 
     this.taskbar.onStart(() => this.spawnNotepad());

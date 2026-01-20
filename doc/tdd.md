@@ -195,6 +195,32 @@ Styling:
   - No top-level app menu is present; only the toolbar/status and content area.
 
 
+#### 5.2.8. FileExplorer  app
+
+Allow browsing virtual filesystem defied in /public/filesystem/filesystem.json.
+
+- Application name: **FileExporer** (inherits AppWindow; no app menu). 
+- Data source: `/public/filesystem/filesystem.json`. No client-side sorting; preserve the order from JSON.
+- Initial path: root (top-level items).
+- Layout: header with icon/title, toolbar/status row, path bar, content area.
+- Toolbar/status row:
+  - Back, Forward buttons (no history yet) rendered disabled style.
+  - Up folder button; disabled at root.
+  - Read-only breadcrumb; each segment is a button with hover and click to jump to that ancestor. Format: `> CNC > DIY CNC1`.
+  - Root breadcrumb is empty or `>` followed by first segment; clicking the first segment returns to root.
+  Status bar at the bottom of window:
+  - `"{n} item(s)"`, updates when folder changes.
+- Content area:
+  - Optional header block if folder has `image` or `desc`: left column shows folder image (full image size); right column shows description text; vertical divider between.
+  - Below, a list of items in JSON order. Each row has icon + name; desktop icons reused at 30% scale.
+  - Rows have hover highlight and click target covering icon + label.
+  - Empty folders show a centered “Empty folder” placeholder and still update the status count.
+- Behavior:
+  - Double Click folder row to navigate into that folder.
+  - Double Click wordpad row to open WordPad for that `path`.
+  - File paths are relative to `/filesystem/` base when opening.
+  - Navigation updates breadcrumbs and status immediately; no history stack needed yet.
+
 
 ## 6. Global state
 

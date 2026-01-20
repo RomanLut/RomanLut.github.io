@@ -239,3 +239,55 @@ export async function inlineImages(container: HTMLElement) {
     })
   );
 }
+
+// Filesystem helpers
+export type FsItemType = 'folder' | 'wordpad';
+
+export interface FsItem {
+  type: FsItemType;
+  name: string;
+  path: string;
+  image?: string;
+  desc?: string;
+  items?: FsItem[];
+}
+
+export interface FsRoot {
+  items: FsItem[];
+}
+
+export function normalizeFsPath(path: string): string {
+  return path.replace(/^\/+/, '').replace(/\/+$/, '');
+}
+
+export function filesystemUrl(path: string): string {
+  const clean = normalizeFsPath(path);
+  return `/filesystem/${clean}`;
+}
+
+export function formatItemCount(count: number): string {
+  return `${count} item(s)`;
+}
+
+export function findFolder(root: FsRoot, path: string): FsItem | null {
+  const clean = normalizeFsPath(path);
+  if (!clean) return { type: 'folder', name: '', path: '', items: root.items };
+  const segments = clean.split('/');
+  let current: FsItem | null = { type: 'folder', name: '', path: '', items: root.items };
+  for (const segment of segments) {
+    const next = current?.items?.find(
+      (child) => child.type === 'folder' && normalizeFsPath(child.path).split('/').pop() === segment
+    );
+    if (!next) return null;
+    current = next;
+  }
+  return current;
+}
+
+export async function loadFilesystem(url = '/filesystem/filesystem.json'): Promise<FsRoot> {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Failed to load filesystem: HTTP ${res.status}`);
+  }
+  return (await res.json()) as FsRoot;
+}

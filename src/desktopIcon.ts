@@ -1,4 +1,4 @@
-type IconType = 'folder' | 'notepad' | 'word' | 'github' | 'wordpad' | 'youtube';
+export type IconType = 'folder' | 'notepad' | 'word' | 'github' | 'wordpad' | 'youtube';
 
 const ICON_SVGS: Record<IconType, string> = {
   folder: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.172a1.5 1.5 0 0 1 1.06.44l1.12 1.12H19.5A1.5 1.5 0 0 1 21 8.06V17.5A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5Z" fill="#f6c344" stroke="#d9a320" stroke-width="1"/></svg>`,
@@ -27,6 +27,10 @@ const ICON_SVGS: Record<IconType, string> = {
     </g>
   </svg>`
 };
+
+export function getIconSvg(type: IconType): string {
+  return ICON_SVGS[type];
+}
 
 export class DesktopIcon {
   readonly element: HTMLElement;
