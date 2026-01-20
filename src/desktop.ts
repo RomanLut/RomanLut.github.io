@@ -33,7 +33,7 @@ export class Desktop {
     
     //new Browser(this.element, this.taskbar, 'https://www.google.com/?igu=1');
 
-
+/*
     new WordPad(
       this.element,
       this.taskbar,
@@ -44,9 +44,18 @@ export class Desktop {
     new WordPad(
       this.element,
       this.taskbar,
-      '/filesystem/Publications/Driving_backlight_from_midlet/Drawing_backlight_from_midlet.md ',
+      '/filesystem/Publications/Driving_backlight_from_midlet/Drawing_backlight_from_midlet.md',
       'Drawing_backlight_from_midlet.md '
     );    
+*/
+
+    new WordPad(
+      this.element,
+      this.taskbar,
+      '/filesystem/Publications/CNC/DIY_CNC1/DIY_CNC1.md',
+      'CNC1.md '
+    );    
+
 
     this.taskbar.onStart(() => this.spawnNotepad());
 
@@ -78,13 +87,24 @@ export class Desktop {
     //new DesktopIcon(this.element, 'notepad', 'Notepad', { x: 16, y: 136 });
     new DesktopIcon(this.element, 'word', 'About me', { x: 16, y: 16 });
     new DesktopIcon(this.element, 'word', 'Resume', { x: 120, y: 16 });
+    new DesktopIcon(this.element, 'word', 'Competitions', { x: 120+200, y: 16 });
+
+
     new DesktopIcon(this.element, 'folder', 'Game development', { x: 16, y: 136 });
     new DesktopIcon(this.element, 'folder', 'Hobby projects', { x: 136 + 120, y: 136 });
     new DesktopIcon(this.element, 'folder', 'Electronics', { x: 136 + 120 + 120, y: 136 });
     new DesktopIcon(this.element, 'folder', 'Demoscene', { x: 136, y: 136 });
     new DesktopIcon(this.element, 'folder', 'Publications', { x: 136 + 120 + 120 + 120, y: 136 });
-    new DesktopIcon(this.element, 'github', 'My GitHub page', { x: 16, y: 16 + 120 + 140 }, () =>
+
+    new DesktopIcon(this.element, 'folder', 'CNC', { x: 16, y: 136  + 120 });
+
+    new DesktopIcon(this.element, 'github', 'My GitHub page', { x: 16, y: 16 + 120 + 120 + 140 }, () =>
       exitFullscreenAndOpen('https://github.com/RomanLut')
     );
+
+    new DesktopIcon(this.element, 'youtube', 'My Youtube Channel', { x: 16 +120, y: 16 + 120 + 120 + 140 }, () =>
+      exitFullscreenAndOpen('https://www.youtube.com/@RomanLutHax')
+    );
+
   }
 }
