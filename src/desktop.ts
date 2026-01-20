@@ -28,11 +28,12 @@ export class Desktop {
       '/filesystem/Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910.md',
       'Opto-isolated AVR910'
     );
-    //new WordPad(this.element, this.taskbar, '/filesystem/test/markdown_test.md', 'Markdown Test');
+    
+    new WordPad(this.element, this.taskbar, '/filesystem/test/markdown_test.md', 'Markdown Test');
+    
     //new Browser(this.element, this.taskbar, 'https://www.google.com/?igu=1');
 
 
-// Open Markdown article on start
     new WordPad(
       this.element,
       this.taskbar,
@@ -40,8 +41,6 @@ export class Desktop {
       'Using webcamera as virtual graphics tablet.md'
     );    
 
-
-// Open Markdown article on start
     new WordPad(
       this.element,
       this.taskbar,

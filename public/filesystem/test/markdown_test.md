@@ -7,12 +7,16 @@ Normal text with **bold**, *italic*, and ```inline code```.
 - Link: [OpenAI](https://www.openai.com/)
 - Image (relative): ![Test Image](/wallpaper2.jpg)
 
+## Youtube videos
+ [Watch sample video](https://www.youtube.com/watch?v=pnqxeROW-kw)
+
 ## Lists
 - Unordered item 1
 - Unordered item 2
 
 1. Ordered item one
 2. Ordered item two
+
 
 ## Blockquote
 > This is a blockquote line to check indent and styling.
@@ -34,5 +38,14 @@ greet('world');
 
 
 ## Long text (2000 chars)
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, c
+Единство формы и содержания является фундаментальным принципом эстетики и философии искусства. Эта концепция утверждает, что форма произведения искусства неотделима от его содержания, и они взаимно определяют друг друга. В классической философии Гегеля эта идея проявляется в диалектическом единстве, где форма и содержание развиваются вместе в историческом процессе.
 
+В искусстве единство формы и содержания означает, что художественные средства выражения должны соответствовать внутреннему смыслу произведения. Например, в поэзии ритм и рифма не являются просто декоративными элементами, а служат для усиления эмоционального воздействия текста. Композитор выбирает музыкальную форму, которая наиболее точно передает настроение и идеи произведения.
+
+Эта концепция имеет важное значение в литературной критике. Анализ произведения должен учитывать, как автор использует языковые средства для передачи своих идей. Стилистические особенности текста - метафоры, аллегории, синтаксис - не случайны, а органически связаны с тематикой и мировоззрением автора.
+
+В современной культуре единство формы и содержания проявляется в различных видах искусства. В кино режиссер подбирает визуальный стиль, который соответствует сюжету и персонажам. В архитектуре функциональность здания должна гармонировать с его эстетическим обликом. Даже в дизайне интерфейсов форма должна способствовать эффективному взаимодействию пользователя с содержанием.
+
+Философское значение этой концепции заключается в понимании искусства как целостного явления. Разделение формы и содержания приводит к упрощению восприятия произведения. Истинное искусство достигает гармонии, где каждый элемент формы служит раскрытию содержания, а содержание находит адекватное воплощение в форме.
+
+В истории искусства можно найти примеры, когда нарушение единства формы и содержания приводило к неудачным произведениям. И наоборот, великие шедевры демонстрируют идеальную гармонию между внешним обликом и внутренним смыслом. Эта концепция остается актуальной и сегодня, помогая оценивать качество художественных произведений и понимать их глубинный смысл.

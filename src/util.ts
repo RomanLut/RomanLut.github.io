@@ -74,6 +74,15 @@ export function resolvePath(url: string, basePath: string) {
   return basePath + url.replace(/^\.\//, '');
 }
 
+function getYouTubeEmbed(href: string): string | null {
+  const match = href.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (match) {
+    const videoId = match[1];
+    return `<iframe width="779" height="438" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  }
+  return null;
+}
+
 export function applyInline(text: string, basePath: string) {
   let t = escapeHtml(text);
 
@@ -90,7 +99,12 @@ export function applyInline(text: string, basePath: string) {
   );
   t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label, href) => {
     const resolved = resolvePath(href, basePath);
-    return tokenFor(`<a href="${resolved}" target="_blank" rel="noreferrer noopener">${label}</a>`);
+    const embed = getYouTubeEmbed(resolved);
+    if (embed) {
+      return tokenFor(embed);
+    } else {
+      return tokenFor(`<a href="${resolved}" target="_blank" rel="noreferrer noopener">${label}</a>`);
+    }
   });
 
   t = t.replace(/`([^`]+)`/g, (_m, code) => tokenFor(`<code>${code}</code>`));

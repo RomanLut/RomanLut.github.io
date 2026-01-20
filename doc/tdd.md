@@ -151,9 +151,10 @@ Behaviour:
 Markdown support (rendered):
 - Headings: `#`..`###` mapped to H1–H3 sizes.
 - Text: paragraphs, bold (`**`/`__`), italic (`*`/`_`), inline code (backticks).
-- Lists: unordered (`-`, `*`) and ordered (`1.`); nested lists indented.
+- Lists: unordered (`-`) and ordered (`1.`).
 - Links: `[text](url)` open in a new tab.
 - Images: `![alt](path)` resolve relative to the markdown file location.
+- Youtuve videos: `![alt](path)` ambedded as miniplayer.
 - Code blocks: triple backticks rendered in monospace with preserved whitespace.
 - Blockquotes: `>` indented with a subtle left border.
 
