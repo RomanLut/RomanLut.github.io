@@ -101,7 +101,9 @@ export class FileExplorer extends AppWindow {
   private makeButton(label: string, title: string, disabled = false) {
     const btn = document.createElement('button');
     btn.className = 'fileexplorer__btn';
-    btn.textContent = label;
+    const span = document.createElement('span');
+    span.textContent = label;
+    btn.appendChild(span);
     btn.title = title;
     btn.disabled = disabled;
     if (disabled) btn.classList.add('is-disabled');
