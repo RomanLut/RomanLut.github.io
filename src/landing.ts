@@ -19,6 +19,7 @@ export class Landing {
     let shouldRequestFullscreen = params.get('fullscreen') === '1';
     let fullscreenRequested = false;
     let fullscreenPending = false;
+    let landingActive = initialState === 'landing';
 
     root.insertAdjacentHTML(
       'beforeend',
@@ -279,6 +280,8 @@ export class Landing {
     function drawFrame() {
       if (!renderState.width || !renderState.height || !state.naturalWidth || !state.naturalHeight) return;
 
+      if (!landingActive) return;
+
       const dpr = renderState.dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, renderState.width, renderState.height);
@@ -316,11 +319,14 @@ export class Landing {
     }
 
     function queueBlink() {
+      if (!landingActive) return;
       const delay = BLINK_MIN_MS + Math.random() * (BLINK_MAX_MS - BLINK_MIN_MS);
       blinkTimeout = window.setTimeout(() => {
+        if (!landingActive) return;
         ledOn = true;
         drawFrame();
         blinkTimeout = window.setTimeout(() => {
+          if (!landingActive) return;
           ledOn = false;
           drawFrame();
           queueBlink();
@@ -364,6 +370,11 @@ export class Landing {
     }
 
     const animateNoise = (timestamp: number) => {
+      if (!landingActive) {
+        noiseRaf = 0;
+        return;
+      }
+
       if (!state.naturalWidth || !state.naturalHeight) {
         noiseRaf = window.requestAnimationFrame(animateNoise);
         return;
@@ -375,7 +386,9 @@ export class Landing {
         lastNoiseFrame = timestamp;
       }
 
-      noiseRaf = window.requestAnimationFrame(animateNoise);
+      if (landingActive) {
+        noiseRaf = window.requestAnimationFrame(animateNoise);
+      }
     };
 
     function applyLayout() {
@@ -556,7 +569,8 @@ export class Landing {
     }
 
     function handleImageReady() {
-      if (baseLoaded) return;
+      if (!landingActive) return;
+      if (baseLoaded || !landingActive) return;
       baseLoaded = true;
       state.naturalWidth = baseImage.naturalWidth;
       state.naturalHeight = baseImage.naturalHeight;
@@ -571,7 +585,9 @@ export class Landing {
         window.cancelAnimationFrame(noiseRaf);
       }
       lastNoiseFrame = 0;
-      noiseRaf = window.requestAnimationFrame(animateNoise);
+      if (landingActive) {
+        noiseRaf = window.requestAnimationFrame(animateNoise);
+      }
     }
 
     document.addEventListener('fullscreenchange', () => {
@@ -645,8 +661,9 @@ export class Landing {
     }
 
     function beginStartAnimation() {
-      if (startAnim.active) return;
+      if (startAnim.active || !landingActive) return;
       startAnim.active = true;
+      landingActive = false;
       parallaxEnabled = false;
       const target = computeStartTarget();
       parallax.originX = target.origin.x;
