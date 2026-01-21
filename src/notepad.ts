@@ -2,7 +2,7 @@ import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
-import { closeMenus, escapeHtml, responsiveWidth } from './util';
+import { closeMenus, escapeHtml, responsiveWidth, responsiveHeight } from './util';
 
 export class Notepad extends AppWindow {
   private statusBar: AppWindowStatusBar;
@@ -21,7 +21,9 @@ export class Notepad extends AppWindow {
     );
     this.docTitle = title;
     this.element.style.width = `${responsiveWidth(880)}px`;
-    this.element.style.height = '80vh';
+    const taskbarHeight = this.taskbar.element.getBoundingClientRect().height || 0;
+    const baseHeight = Math.floor(window.innerHeight * 0.7);
+    this.element.style.height = `${responsiveHeight(baseHeight, taskbarHeight)}px`;
     const container = document.createElement('div');
     container.className = 'notepad';
 

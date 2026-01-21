@@ -281,6 +281,11 @@ export function responsiveWidth(base: number, ratio = 0.45): number {
   return Math.max(base, Math.floor(window.innerWidth * ratio));
 }
 
+export function responsiveHeight(basePx: number, taskbarHeight: number, spawnY = 80, ratio = 0.9): number {
+  const available = Math.floor(window.innerHeight * ratio - taskbarHeight - spawnY);
+  return Math.max(basePx, available);
+}
+
 export function findFolder(root: FsRoot, path: string): FsItem | null {
   const clean = normalizeFsPath(path);
   if (!clean) return { type: 'folder', name: '', path: '', items: root.items };

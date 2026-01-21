@@ -12,7 +12,8 @@ import {
   normalizeFsPath,
   applyInline,
   formatSize,
-  responsiveWidth
+  responsiveWidth,
+  responsiveHeight
 } from './util';
 import { WordPad } from './WordPad';
 
@@ -44,7 +45,9 @@ export class FileExplorer extends AppWindow {
 
     const baseWidth = 898;
     this.element.style.width = `${responsiveWidth(baseWidth)}px`;
-    this.element.style.height = '80vh';
+    const taskbarHeight = this.taskbarRef.element.getBoundingClientRect().height || 0;
+    const baseHeight = Math.floor(window.innerHeight * 0.7);
+    this.element.style.height = `${responsiveHeight(baseHeight, taskbarHeight)}px`;
 
     const container = document.createElement('div');
     container.className = 'fileexplorer';
