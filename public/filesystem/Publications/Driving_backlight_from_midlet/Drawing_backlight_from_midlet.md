@@ -544,10 +544,8 @@ classes.zip
 
 1. Исходный код класса TLightController, пример, бинарные файлы
    [http://www.deep-shadows.com/hax/downloads/BacklightControl.zip](https://web.archive.org/web/20180303115709/http://www.deep-shadows.com/hax/downloads/BacklightControl.zip)
-
 2. Препроцессор JEnable
    [http://www.sosnoski.com/opensrc/jenable/](https://web.archive.org/web/20180303115709/http://www.sosnoski.com/opensrc/jenable/)
-
 3. Forum Nokia
    [http://forum.nokia.com/](https://web.archive.org/web/20180303115709/http://forum.nokia.com/)
 

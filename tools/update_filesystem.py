@@ -33,8 +33,8 @@ def find_folder_image(folder: Path) -> Optional[str]:
 
 def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     children: List[Dict[str, Any]] = []
-    # Sort to keep deterministic output (folders first, then files).
-    entries = sorted(folder.iterdir(), key=lambda p: (p.is_file(), p.name.lower()))
+    # Sort alphabetically by display name to keep deterministic output.
+    entries = sorted(folder.iterdir(), key=lambda p: display_name(p.name).lower())
     for entry in entries:
         if entry.name == "filesystem.json":
             continue
@@ -50,6 +50,16 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
             children.append(
                 {
                     "type": "wordpad",
+                    "name": display_name(entry.name),
+                    "path": rel_path.as_posix(),
+                    "size": size,
+                }
+            )
+        elif entry.suffix.lower() == ".txt":
+            size = entry.stat().st_size
+            children.append(
+                {
+                    "type": "notepad",
                     "name": display_name(entry.name),
                     "path": rel_path.as_posix(),
                     "size": size,

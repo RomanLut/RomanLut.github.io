@@ -90,7 +90,13 @@
           "type": "wordpad",
           "name": "markdown test",
           "path": "test/markdown_test.md",
-          "size": 2660
+          "size": 6709
+        },
+        {
+          "type": "notepad",
+          "name": "Text file",
+          "path": "test/Text_file.txt",
+          "size": 3850
         }
       ],
       "image": "folder_image.jpg",

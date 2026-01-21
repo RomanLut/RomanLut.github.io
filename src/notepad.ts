@@ -12,7 +12,7 @@ export class Notepad extends AppWindow {
   private docTitle: string;
   private menuElement: HTMLElement | null = null;
 
-  constructor(desktop: HTMLElement, taskbar: Taskbar, title = 'Notepad') {
+  constructor(desktop: HTMLElement, taskbar: Taskbar, title = 'Notepad', fileUrl?: string) {
     super(
       desktop,
       taskbar,
@@ -132,6 +132,9 @@ export class Notepad extends AppWindow {
     this.setContent(container);
     this.recordHistory();
     this.updateCaret();
+    if (fileUrl) {
+      void this.loadFile(fileUrl);
+    }
   }
 
   private updateCaret() {
@@ -307,6 +310,26 @@ export class Notepad extends AppWindow {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  private async loadFile(url: string) {
+    try {
+      this.statusBar.setExtra('Loading...');
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const text = await res.text();
+      this.textarea.value = text;
+      this.recordHistory();
+      this.updateCaret();
+      this.statusBar.setExtra(`${this.textarea.value.length} characters`);
+    } catch (err) {
+      this.textarea.value = `Failed to load file: ${escapeHtml(String(err))}`;
+      this.recordHistory();
+      this.updateCaret();
+      this.statusBar.setExtra('Load failed');
+    }
   }
 
   private async openFile() {

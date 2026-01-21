@@ -151,7 +151,7 @@ Behaviour:
 Markdown support (rendered):
 - Headings: `#`..`###` mapped to H1–H3 sizes.
 - Text: paragraphs, bold (`**`/`__`), italic (`*`/`_`), inline code (backticks).
-- Lists: unordered (`-`) and ordered (`1.`).
+- Lists: unordered (`-`). Ordered lists are not supported.
 - Links: `[text](url)` open in a new tab.
 - Images: `![alt](path)` resolve relative to the markdown file location.
 - Youtuve videos: `![alt](path)` ambedded as miniplayer.
@@ -201,6 +201,7 @@ Allow browsing virtual filesystem defied in /public/filesystem/filesystem.json.
 
 - Application name: **FileExporer** (inherits AppWindow; no app menu). 
 - Data source: `/public/filesystem/filesystem.json`. No client-side sorting; preserve the order from JSON.
+- Generator sorts items alphabetically by display name; FileExplorer shows them in that order.
 - Initial path: root (top-level items).
 - Layout: header with icon/title, toolbar/status row, path bar, content area.
 - Toolbar/status row:

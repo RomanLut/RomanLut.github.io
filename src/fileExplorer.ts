@@ -16,6 +16,7 @@ import {
   responsiveHeight
 } from './util';
 import { WordPad } from './WordPad';
+import { Notepad } from './notepad';
 
 const FILE_EXPLORER_ICON = getIconSvg('folder');
 
@@ -236,7 +237,7 @@ export class FileExplorer extends AppWindow {
       row.className = 'fileexplorer__item';
       const iconHolder = document.createElement('div');
       iconHolder.className = 'fileexplorer__item-icon';
-      const iconType: IconType = item.type === 'folder' ? 'folder' : 'wordpad';
+      const iconType: IconType = item.type === 'folder' ? 'folder' : item.type === 'notepad' ? 'notepad' : 'wordpad';
       iconHolder.innerHTML = getIconSvg(iconType);
 
       const label = document.createElement('div');
@@ -260,7 +261,11 @@ export class FileExplorer extends AppWindow {
       return;
     }
     const url = filesystemUrl(item.path);
-    new WordPad(this.desktopRef, this.taskbarRef, url, item.name);
+    if (item.type === 'notepad') {
+      new Notepad(this.desktopRef, this.taskbarRef, item.name, url);
+    } else {
+      new WordPad(this.desktopRef, this.taskbarRef, url, item.name);
+    }
   }
 
   private navigateUp() {

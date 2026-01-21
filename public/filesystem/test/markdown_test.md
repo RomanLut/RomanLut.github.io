@@ -14,9 +14,6 @@ Normal text with **bold**, *italic*, and ```inline code```.
 - Unordered item 1
 - Unordered item 2
 
-1. Ordered item one
-2. Ordered item two
-
 ## Blockquote
 > This is a blockquote line to check indent and styling.
 > This is second line.

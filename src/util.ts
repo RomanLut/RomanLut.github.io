@@ -135,7 +135,7 @@ export function markdownToHtml(md: string, basePath: string) {
 
   const lines = md.split(/\r?\n/);
   const parts: string[] = [];
-  let listType: 'ul' | 'ol' | null = null;
+  let listType: 'ul' | null = null;
   let blockQuoteActive = false;
   let blockQuoteLines: string[] = [];
 
@@ -191,18 +191,6 @@ export function markdownToHtml(md: string, basePath: string) {
       continue;
     }
 
-    const ol = line.match(/^\d+\.\s+(.*)$/);
-    if (ol) {
-      if (listType !== 'ol') {
-        closeList();
-        closeBlockQuote();
-        listType = 'ol';
-        parts.push('<ol>');
-      }
-      parts.push(`<li>${applyInline(ol[1], basePath)}</li>`);
-      continue;
-    }
-
     closeList();
     closeBlockQuote();
     parts.push(`<p>${applyInline(line, basePath)}</p>`);
@@ -241,7 +229,7 @@ export async function inlineImages(container: HTMLElement) {
 }
 
 // Filesystem helpers
-export type FsItemType = 'folder' | 'wordpad';
+export type FsItemType = 'folder' | 'wordpad' | 'notepad';
 
 export interface FsItem {
   type: FsItemType;
