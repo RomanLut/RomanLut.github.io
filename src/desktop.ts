@@ -87,16 +87,27 @@ export class Desktop {
     //new DesktopIcon(this.element, 'notepad', 'Notepad', { x: 16, y: 136 });
     new DesktopIcon(this.element, 'word', 'About me', { x: 16, y: 16 });
     new DesktopIcon(this.element, 'word', 'Resume', { x: 120, y: 16 });
-    new DesktopIcon(this.element, 'word', 'Competitions', { x: 120+200, y: 16 });
+    new DesktopIcon(this.element, 'word', 'Competitions', { x: 120 + 200, y: 16 });
 
+    new DesktopIcon(this.element, 'folder', 'Game development', { x: 16, y: 136 }, () =>
+      new FileExplorer(this.element, this.taskbar, 'Demoscene')
+    );
+    new DesktopIcon(this.element, 'folder', 'Hobby projects', { x: 136 + 120, y: 136 }, () =>
+      new FileExplorer(this.element, this.taskbar, 'Hobby_projects')
+    );
+    new DesktopIcon(this.element, 'folder', 'Electronics', { x: 136 + 120 + 120, y: 136 }, () =>
+      new FileExplorer(this.element, this.taskbar, 'Electronics')
+    );
+    new DesktopIcon(this.element, 'folder', 'Demoscene', { x: 136, y: 136 }, () =>
+      new FileExplorer(this.element, this.taskbar, 'Demoscene')
+    );
+    new DesktopIcon(this.element, 'folder', 'Publications', { x: 136 + 120 + 120 + 120, y: 136 }, () =>
+      new FileExplorer(this.element, this.taskbar, 'Publications')
+    );
 
-    new DesktopIcon(this.element, 'folder', 'Game development', { x: 16, y: 136 });
-    new DesktopIcon(this.element, 'folder', 'Hobby projects', { x: 136 + 120, y: 136 });
-    new DesktopIcon(this.element, 'folder', 'Electronics', { x: 136 + 120 + 120, y: 136 });
-    new DesktopIcon(this.element, 'folder', 'Demoscene', { x: 136, y: 136 });
-    new DesktopIcon(this.element, 'folder', 'Publications', { x: 136 + 120 + 120 + 120, y: 136 });
-
-    new DesktopIcon(this.element, 'folder', 'CNC', { x: 16, y: 136  + 120 });
+    new DesktopIcon(this.element, 'folder', 'CNC', { x: 16, y: 136 + 120 }, () =>
+      new FileExplorer(this.element, this.taskbar, 'CNC')
+    );
 
     new DesktopIcon(this.element, 'github', 'My GitHub page', { x: 16, y: 16 + 120 + 120 + 140 }, () =>
       exitFullscreenAndOpen('https://github.com/RomanLut')

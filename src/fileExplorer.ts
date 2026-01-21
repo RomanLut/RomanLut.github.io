@@ -10,7 +10,6 @@ import {
   filesystemUrl,
   loadFilesystem,
   normalizeFsPath,
-  escapeHtml,
   applyInline,
   formatSize
 } from './util';
@@ -28,12 +27,16 @@ export class FileExplorer extends AppWindow {
   private list: HTMLElement;
   private listHeader: HTMLElement;
   private sizeHeader: HTMLElement;
+  private backBtn: HTMLButtonElement;
+  private fwdBtn: HTMLButtonElement;
   private statusBar: AppWindowStatusBar;
   private tree: FsRoot | null = null;
   private currentPath = '';
   private upBtn: HTMLButtonElement | null = null;
+  private history: string[] = [''];
+  private historyIndex = 0;
 
-  constructor(desktop: HTMLElement, taskbar: Taskbar) {
+  constructor(desktop: HTMLElement, taskbar: Taskbar, startPath = '') {
     super(desktop, taskbar, 'File Exporer', FILE_EXPLORER_ICON);
     this.desktopRef = desktop;
     this.taskbarRef = taskbar;
@@ -81,12 +84,14 @@ export class FileExplorer extends AppWindow {
     container.append(this.toolbar, this.content, this.statusBar.element);
     this.setContent(container);
 
-    void this.loadTree();
+    void this.loadTree(startPath);
   }
 
   private buildToolbar() {
-    const backBtn = this.makeButton('←', 'Back (disabled)', true);
-    const fwdBtn = this.makeButton('→', 'Forward (disabled)', true);
+    this.backBtn = this.makeButton('←', 'Back', true);
+    this.fwdBtn = this.makeButton('→', 'Forward', true);
+    this.backBtn.addEventListener('click', () => this.goBack());
+    this.fwdBtn.addEventListener('click', () => this.goForward());
 
     this.upBtn = this.makeButton('↑', 'Up folder');
     this.upBtn.addEventListener('click', () => this.navigateUp());
@@ -95,12 +100,15 @@ export class FileExplorer extends AppWindow {
     crumbsWrapper.className = 'fileexplorer__crumbs-wrapper';
     crumbsWrapper.appendChild(this.breadcrumb);
 
-    this.toolbar.append(backBtn, fwdBtn, this.upBtn, crumbsWrapper);
+    this.toolbar.append(this.backBtn, this.fwdBtn, this.upBtn, crumbsWrapper);
   }
 
   private makeButton(label: string, title: string, disabled = false) {
     const btn = document.createElement('button');
     btn.className = 'fileexplorer__btn';
+    if (label === '↑') {
+      btn.classList.add('up');
+    }
     const span = document.createElement('span');
     span.textContent = label;
     btn.appendChild(span);
@@ -110,30 +118,48 @@ export class FileExplorer extends AppWindow {
     return btn;
   }
 
-  private async loadTree() {
+  private async loadTree(startPath: string) {
     try {
       this.statusBar.setText('Loading...');
       this.tree = await loadFilesystem();
-      this.setFolder('');
+      const initial = normalizeFsPath(startPath);
+      this.history = [initial];
+      this.historyIndex = 0;
+      if (!this.setFolder(initial, false)) {
+        this.history = [''];
+        this.historyIndex = 0;
+        this.setFolder('', false);
+      }
     } catch (err) {
       this.statusBar.setText('Failed to load filesystem');
       this.list.innerHTML = `<div class="fileexplorer__error">${(err as Error).message}</div>`;
     }
   }
 
-  private setFolder(path: string) {
-    if (!this.tree) return;
+  private setFolder(path: string, pushHistory = true) {
+    if (!this.tree) return false;
     const folder = findFolder(this.tree, path);
     if (!folder || !folder.items) {
       this.statusBar.setText('Folder not found');
-      return;
+      return false;
     }
-    this.currentPath = normalizeFsPath(path);
+    const clean = normalizeFsPath(path);
+    if (pushHistory) {
+      if (clean === this.currentPath) {
+        return true;
+      }
+      this.history = this.history.slice(0, this.historyIndex + 1);
+      this.history.push(clean);
+      this.historyIndex = this.history.length - 1;
+    }
+    this.currentPath = clean;
     this.renderBreadcrumb();
     this.renderMeta(folder);
     this.renderItems(folder.items);
     this.statusBar.setText(formatItemCount(folder.items.length));
     this.updateUpButtonState();
+    this.updateNavButtons();
+    return true;
   }
 
   private renderBreadcrumb() {
@@ -245,5 +271,30 @@ export class FileExplorer extends AppWindow {
     const disabled = !this.currentPath;
     upBtn.disabled = disabled;
     upBtn.classList.toggle('is-disabled', disabled);
+  }
+
+  private goBack() {
+    if (this.historyIndex <= 0) return;
+    this.historyIndex -= 1;
+    const target = this.history[this.historyIndex];
+    this.setFolder(target, false);
+    this.updateNavButtons();
+  }
+
+  private goForward() {
+    if (this.historyIndex >= this.history.length - 1) return;
+    this.historyIndex += 1;
+    const target = this.history[this.historyIndex];
+    this.setFolder(target, false);
+    this.updateNavButtons();
+  }
+
+  private updateNavButtons() {
+    const canBack = this.historyIndex > 0;
+    const canFwd = this.historyIndex < this.history.length - 1;
+    this.backBtn.disabled = !canBack;
+    this.fwdBtn.disabled = !canFwd;
+    this.backBtn.classList.toggle('is-disabled', !canBack);
+    this.fwdBtn.classList.toggle('is-disabled', !canFwd);
   }
 }

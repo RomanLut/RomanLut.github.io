@@ -17,7 +17,7 @@
 
 .fileexplorer__btn {
   background: #ffffff;
-  color: #1f2430;
+  color: #505050;
   border: 1px solid #cdd2dc;
   border-radius: 8px;
   width: 36px;
@@ -26,17 +26,21 @@
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 26px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
-  font-family: 'Arial Unicode MS', 'Segoe UI Symbol', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Consolas', 'Segoe UI Symbol', 'Segoe UI', system-ui, sans-serif;
 }
 
 .fileexplorer__btn span {
   display: inline-block;
-  transform: translateY(-10%);
+  transform: translateY(-3%);
+}
+
+.fileexplorer__btn.up span {
+  transform: translateY(2%);
 }
 
 .fileexplorer__btn:hover:not(.is-disabled) {
