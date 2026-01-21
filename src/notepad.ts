@@ -2,7 +2,7 @@ import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
-import { closeMenus, escapeHtml } from './util';
+import { closeMenus, escapeHtml, responsiveWidth } from './util';
 
 export class Notepad extends AppWindow {
   private statusBar: AppWindowStatusBar;
@@ -20,7 +20,7 @@ export class Notepad extends AppWindow {
       `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="#2d7df6"/><path d="M7 7h10v1H7zm0 4h10v1H7zm0 4h6v1H7z" fill="#ffffff"/></svg>`
     );
     this.docTitle = title;
-    this.element.style.width = '880px';
+    this.element.style.width = `${responsiveWidth(880)}px`;
     this.element.style.height = '80vh';
     const container = document.createElement('div');
     container.className = 'notepad';

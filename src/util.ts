@@ -277,6 +277,10 @@ export function formatSize(bytes: number): string {
   return `${Math.round(kb * 10) / 10} KB`;
 }
 
+export function responsiveWidth(base: number, ratio = 0.45): number {
+  return Math.max(base, Math.floor(window.innerWidth * ratio));
+}
+
 export function findFolder(root: FsRoot, path: string): FsItem | null {
   const clean = normalizeFsPath(path);
   if (!clean) return { type: 'folder', name: '', path: '', items: root.items };

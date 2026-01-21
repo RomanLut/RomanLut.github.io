@@ -1,6 +1,7 @@
 import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowStatusBar } from './appWindowStatusBar';
+import { responsiveWidth } from './util';
 
 function normalizeUrl(value: string): string {
   const trimmed = value.trim();
@@ -32,7 +33,7 @@ export class Browser extends AppWindow {
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, startUrl = 'https://github.com') {
     super(desktop, taskbar, 'Browser', BROWSER_ICON);
-    this.element.style.width = '880px';
+    this.element.style.width = `${responsiveWidth(880)}px`;
     this.element.style.height = '80vh';
 
     const container = document.createElement('div');

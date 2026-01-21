@@ -2,7 +2,7 @@ import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
 import { AppWindowStatusBar } from './appWindowStatusBar';
-import { applyInline, closeMenus, escapeHtml, inlineImages, markdownToHtml } from './util';
+import { applyInline, closeMenus, escapeHtml, inlineImages, markdownToHtml, responsiveWidth } from './util';
 
 const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
   <rect x="4" y="3" width="16" height="18" rx="2" fill="#ffffff" stroke="#d0d6e0" stroke-width="1"/>
@@ -141,7 +141,7 @@ export class WordPad extends AppWindow {
     this.contentArea.addEventListener('scroll', () => this.updateStatus());
 
     // Target ~830px readable content area (padding + borders + scrollbar allowance).
-    this.element.style.width = `${WordPad.MAX_WIDTH + 68}px`;
+    this.element.style.width = `${responsiveWidth(WordPad.MAX_WIDTH + 68)}px`;
     this.element.style.height = '80vh';
 
     WordPad.instances.add(this);
