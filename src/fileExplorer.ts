@@ -17,6 +17,7 @@ import {
 } from './util';
 import { WordPad } from './WordPad';
 import { Notepad } from './notepad';
+import { DosBox } from './dosbox';
 
 const FILE_EXPLORER_ICON = getIconSvg('folder');
 
@@ -270,7 +271,13 @@ export class FileExplorer extends AppWindow {
     if (item.type === 'notepad') {
       new Notepad(this.desktopRef, this.taskbarRef, item.name, url);
     } else if (item.type === 'archive') {
-      this.downloadFile(url, item.path);
+      const isZip = item.path.toLowerCase().endsWith('.zip');
+      if (isZip) {
+        const exeName = DosBox.guessExeName(item.path);
+        new DosBox(this.desktopRef, this.taskbarRef, item.path, exeName);
+      } else {
+        this.downloadFile(url, item.path);
+      }
     } else {
       new WordPad(this.desktopRef, this.taskbarRef, url, item.name);
     }

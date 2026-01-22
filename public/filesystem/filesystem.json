@@ -22,6 +22,49 @@
     },
     {
       "type": "folder",
+      "name": "Demoscene",
+      "path": "Demoscene",
+      "items": [
+        {
+          "type": "archive",
+          "name": "BEER",
+          "path": "Demoscene/BEER.ZIP",
+          "size": 60208
+        },
+        {
+          "type": "archive",
+          "name": "MBROT",
+          "path": "Demoscene/MBROT.ZIP",
+          "size": 29230
+        },
+        {
+          "type": "archive",
+          "name": "MORPH",
+          "path": "Demoscene/MORPH.zip",
+          "size": 806604
+        },
+        {
+          "type": "archive",
+          "name": "PAINTER",
+          "path": "Demoscene/PAINTER.ZIP",
+          "size": 52541
+        },
+        {
+          "type": "archive",
+          "name": "SHUDDER",
+          "path": "Demoscene/SHUDDER.ZIP",
+          "size": 876587
+        }
+      ]
+    },
+    {
+      "type": "archive",
+      "name": "DOS prompt",
+      "path": "DOS_prompt.zip",
+      "size": 684
+    },
+    {
+      "type": "folder",
       "name": "Electronics",
       "path": "Electronics",
       "items": [
@@ -38,14 +81,14 @@
             },
             {
               "type": "wordpad",
-              "name": "Opto isolated AVR910",
-              "path": "Electronics/2013-04_Opto_isolated_AVR910/Opto_isolated_AVR910.md",
+              "name": "Opto isolated AVR910 (translated to english)",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/Opto_isolated_AVR910_(translated_to_english).md",
               "size": 3483
             },
             {
               "type": "wordpad",
-              "name": "Оптоизолированный программатор AVR910",
-              "path": "Electronics/2013-04_Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910.md",
+              "name": "Оптоизолированный программатор AVR910 (russian)",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910_(russian).md",
               "size": 5888
             }
           ]
@@ -68,6 +111,12 @@
           "name": "3denginelect",
           "path": "Game_development/3denginelect.7z",
           "size": 35329345
+        },
+        {
+          "type": "archive",
+          "name": "BATTLE",
+          "path": "Game_development/BATTLE.zip",
+          "size": 208381
         }
       ]
     },
