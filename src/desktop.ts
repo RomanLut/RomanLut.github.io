@@ -6,6 +6,7 @@ import { WordPad } from './WordPad';
 import { Browser } from './browser';
 import { FileExplorer } from './fileExplorer';
 import { DosBox } from './dosbox';
+import { Browser } from './browser';
 
 export class Desktop {
   readonly element: HTMLElement;
@@ -118,9 +119,13 @@ export class Desktop {
       exitFullscreenAndOpen('https://www.youtube.com/@RomanLutHax')
     );
 
-    // HTML5 sample icon opening browser to local index
-    new DesktopIcon(this.element, 'html', 'HTML5', { x: 16 + 240, y: 16 + 120 + 120 + 140 }, () =>
-      new Browser(this.element, this.taskbar, '/')
+    // HTML5 demo: JS1k - Lost In A Cave
+    new DesktopIcon(
+      this.element,
+      'html',
+      'JS1k - Lost In A Cave',
+      { x: 16 + 240*6, y: 16  },
+      () => new Browser(this.element, this.taskbar, '/filesystem/Demoscene/2019-03_JS1k_Lost_In_A_Cave/Lost_In_A_Cave.html')
     );
 
     // Test MS-DOS launcher (executable type)

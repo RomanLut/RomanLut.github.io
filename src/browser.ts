@@ -76,6 +76,10 @@ export class Browser extends AppWindow {
     this.addressInput = document.createElement('input');
     this.addressInput.type = 'text';
     this.addressInput.className = 'browser__address';
+    this.addressInput.addEventListener('focus', (e) => {
+      const target = e.target as HTMLInputElement;
+      target.select();
+    });
     this.addressInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();

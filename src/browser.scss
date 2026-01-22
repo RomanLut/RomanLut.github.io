@@ -9,32 +9,49 @@
 }
 
 .browser__toolbar {
-  display: grid;
-  grid-template-columns: auto auto auto 1fr auto;
+  display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
-  background: linear-gradient(180deg, #f5f5f7, #e7e7ec);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  box-sizing: border-box;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, #ffffff, #f0f2f7);
+  border-bottom: 1px solid #d6d9e0;
 }
 
 .browser__btn {
-  width: 32px;
-  height: 28px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
+  width: 36px;
+  height: 32px;
+  border: 1px solid #cdd2dc;
+  border-radius: 8px;
   background: #ffffff;
-  color: #222;
+  color: #505050;
   cursor: pointer;
-  font-size: 14px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  font-weight: 700;
+  font-size: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   line-height: 1;
+  font-family: 'Consolas', 'Segoe UI Symbol', 'Segoe UI', system-ui, sans-serif;
+  user-select: none;
 }
 
 .browser__btn--disabled,
 .browser__btn:disabled {
-  opacity: 0.4;
+  opacity: 0.45;
   cursor: default;
+}
+
+.browser__btn span {
+  display: inline-block;
+  transform: translateY(-3%);
+  user-select: none;
+}
+
+.browser__btn:hover:not(.browser__btn--disabled):not(:disabled) {
+  background: #eef1f7;
+  border-color: #b7becb;
+  color: #3a3a3a;
 }
 
 .browser__address {
@@ -45,6 +62,9 @@
   padding: 0 10px;
   font-size: 13px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #ffffff;
+  color: #000000;
+  caret-color: #000000;
 }
 
 .browser__content {
