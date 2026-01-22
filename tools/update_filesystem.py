@@ -76,13 +76,12 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
             )
         elif entry.suffix.lower() in archive_exts:
             size = entry.stat().st_size
-            item = {
+            archive_item = {
                 "type": "archive",
                 "name": display_name(entry.name),
                 "path": rel_path.as_posix(),
                 "size": size,
             }
-            children.append(item)
             # If a zip contains a .jsdos folder, also expose it as an executable item.
             if entry.suffix.lower() == ".zip":
                 has_jsdos = False
@@ -92,14 +91,17 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
                 except zipfile.BadZipFile:
                     has_jsdos = False
                 if has_jsdos:
-                    children.append(
-                        {
-                            "type": "executable",
-                            "name": display_name(entry.name),
-                            "path": rel_path.as_posix(),
-                            "size": size,
-                        }
-                    )
+                    exec_item = {
+                        "type": "executable",
+                        "name": display_name(entry.name),
+                        "path": rel_path.as_posix(),
+                        "size": size,
+                    }
+                    # Executable should appear before the plain archive entry.
+                    children.append(exec_item)
+                    children.append(archive_item)
+                    continue
+            children.append(archive_item)
     return children
 
 
