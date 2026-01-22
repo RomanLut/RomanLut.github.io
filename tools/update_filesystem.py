@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import zipfile
 from typing import Any, Dict, List, Optional
 
 
@@ -20,7 +21,11 @@ def read_desc(folder: Path) -> Optional[str]:
     desc_file = folder / "folder.md"
     if not desc_file.is_file():
         return None
-    return desc_file.read_text(encoding="utf-8").strip()
+    try:
+        return desc_file.read_text(encoding="utf-8").strip()
+    except UnicodeDecodeError:
+        # Fallback for legacy encodings; replace invalid bytes so the script never fails.
+        return desc_file.read_text(encoding="utf-8", errors="replace").strip()
 
 
 def find_folder_image(folder: Path) -> Optional[str]:
@@ -33,10 +38,13 @@ def find_folder_image(folder: Path) -> Optional[str]:
 
 def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     children: List[Dict[str, Any]] = []
-    # Sort alphabetically by display name to keep deterministic output.
-    entries = sorted(folder.iterdir(), key=lambda p: display_name(p.name).lower())
+    # Split into folders/files, then sort each group alphabetically by display name.
+    entries = list(folder.iterdir())
+    folders = sorted([p for p in entries if p.is_dir()], key=lambda p: display_name(p.name).lower())
+    files = sorted([p for p in entries if p.is_file()], key=lambda p: display_name(p.name).lower())
+    ordered = folders + files
     archive_exts = {".zip", ".rar", ".7z"}
-    for entry in entries:
+    for entry in ordered:
         if entry.name == "filesystem.json":
             continue
         if entry.name.startswith("."):
@@ -68,14 +76,30 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
             )
         elif entry.suffix.lower() in archive_exts:
             size = entry.stat().st_size
-            children.append(
-                {
-                    "type": "archive",
-                    "name": display_name(entry.name),
-                    "path": rel_path.as_posix(),
-                    "size": size,
-                }
-            )
+            item = {
+                "type": "archive",
+                "name": display_name(entry.name),
+                "path": rel_path.as_posix(),
+                "size": size,
+            }
+            children.append(item)
+            # If a zip contains a .jsdos folder, also expose it as an executable item.
+            if entry.suffix.lower() == ".zip":
+                has_jsdos = False
+                try:
+                    with zipfile.ZipFile(entry) as zf:
+                        has_jsdos = any(name.lower().startswith(".jsdos/") for name in zf.namelist())
+                except zipfile.BadZipFile:
+                    has_jsdos = False
+                if has_jsdos:
+                    children.append(
+                        {
+                            "type": "executable",
+                            "name": display_name(entry.name),
+                            "path": rel_path.as_posix(),
+                            "size": size,
+                        }
+                    )
     return children
 
 

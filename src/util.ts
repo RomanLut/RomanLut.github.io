@@ -229,7 +229,7 @@ export async function inlineImages(container: HTMLElement) {
 }
 
 // Filesystem helpers
-export type FsItemType = 'folder' | 'wordpad' | 'notepad' | 'archive';
+export type FsItemType = 'folder' | 'wordpad' | 'notepad' | 'archive' | 'executable';
 
 export interface FsItem {
   type: FsItemType;

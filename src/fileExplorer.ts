@@ -245,6 +245,8 @@ export class FileExplorer extends AppWindow {
           ? 'notepad'
           : item.type === 'archive'
           ? 'archive'
+          : item.type === 'executable'
+          ? 'msdos'
           : 'wordpad';
       iconHolder.innerHTML = getIconSvg(iconType);
 
@@ -268,18 +270,28 @@ export class FileExplorer extends AppWindow {
       return;
     }
     const url = filesystemUrl(item.path);
-    if (item.type === 'notepad') {
-      new Notepad(this.desktopRef, this.taskbarRef, item.name, url);
-    } else if (item.type === 'archive') {
-      const isZip = item.path.toLowerCase().endsWith('.zip');
-      if (isZip) {
+    switch (item.type) {
+      case 'notepad':
+        new Notepad(this.desktopRef, this.taskbarRef, item.name, url);
+        return;
+      case 'archive': {
+        const isZip = item.path.toLowerCase().endsWith('.zip');
+        if (isZip) {
+          const exeName = DosBox.guessExeName(item.path);
+          new DosBox(this.desktopRef, this.taskbarRef, item.path, exeName);
+        } else {
+          this.downloadFile(url, item.path);
+        }
+        return;
+      }
+      case 'executable': {
         const exeName = DosBox.guessExeName(item.path);
         new DosBox(this.desktopRef, this.taskbarRef, item.path, exeName);
-      } else {
-        this.downloadFile(url, item.path);
+        return;
       }
-    } else {
-      new WordPad(this.desktopRef, this.taskbarRef, url, item.name);
+      default:
+        new WordPad(this.desktopRef, this.taskbarRef, url, item.name);
+        return;
     }
   }
 

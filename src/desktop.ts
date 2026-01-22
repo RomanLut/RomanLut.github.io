@@ -5,6 +5,7 @@ import { exitFullscreenAndOpen } from './util';
 import { WordPad } from './WordPad';
 import { Browser } from './browser';
 import { FileExplorer } from './fileExplorer';
+import { DosBox } from './dosbox';
 
 export class Desktop {
   readonly element: HTMLElement;
@@ -117,5 +118,9 @@ export class Desktop {
       exitFullscreenAndOpen('https://www.youtube.com/@RomanLutHax')
     );
 
+    // Test MS-DOS launcher (executable type)
+    new DesktopIcon(this.element, 'msdos', 'MS-DOS', { x: 16, y: 16 + 120 + 120 + 140 + 120 }, () =>
+      new DosBox(this.element, this.taskbar, 'Demoscene/PAINTER.zip', 'PAINTER.exe')
+    );
   }
 }

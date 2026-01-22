@@ -22,10 +22,12 @@
   margin: 0 auto 7.2px;
 }
 
-.pc .desktop__icon-image svg {
+.pc .desktop__icon-image svg,
+.pc .desktop__icon-image img {
   width: 57.6px;
   height: 57.6px;
   display: block;
+  object-fit: contain;
 }
 
 .pc .desktop__icon-label {
@@ -58,4 +60,17 @@
   height: 57.6px;
   transform: scale(0.7);
   transform-origin: center;
+}
+
+.pc .desktop__icon.desktop__icon--msdos .desktop__icon-image {
+  width: 38.88px;   /* 43.2px * 0.9 */
+  height: 38.88px;
+  margin: 15.6px auto 7.2px; /* shift further downward */
+}
+
+.pc .desktop__icon.desktop__icon--msdos .desktop__icon-image svg,
+.pc .desktop__icon.desktop__icon--msdos .desktop__icon-image img {
+  width: 38.88px;
+  height: 38.88px;
+  transform: none;
 }

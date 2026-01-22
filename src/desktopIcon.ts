@@ -1,4 +1,13 @@
-export type IconType = 'folder' | 'notepad' | 'word' | 'github' | 'wordpad' | 'youtube' | 'archive';
+export type IconType =
+  | 'folder'
+  | 'notepad'
+  | 'word'
+  | 'github'
+  | 'wordpad'
+  | 'youtube'
+  | 'archive'
+  | 'executable'
+  | 'msdos';
 
 const ICON_SVGS: Record<IconType, string> = {
   folder: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.172a1.5 1.5 0 0 1 1.06.44l1.12 1.12H19.5A1.5 1.5 0 0 1 21 8.06V17.5A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5Z" fill="#f6c344" stroke="#d9a320" stroke-width="1"/></svg>`,
@@ -26,7 +35,9 @@ const ICON_SVGS: Record<IconType, string> = {
       <polygon points="10,8 16,12 10,16" fill="#ffffff"/>
     </g>
   </svg>`,
-  archive: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" fill="#f6b352" stroke="#d48a2c" stroke-width="1"/><path d="M4 9h16" stroke="#d48a2c" stroke-width="1"/><rect x="10" y="11" width="4" height="6" rx="1" fill="#fff2db" stroke="#d48a2c" stroke-width="1"/><path d="M11.5 7h1" stroke="#d48a2c" stroke-width="1.2"/><path d="M11.5 13h1" stroke="#d48a2c" stroke-width="1.2"/></svg>`
+  archive: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" fill="#f6b352" stroke="#d48a2c" stroke-width="1"/><path d="M4 9h16" stroke="#d48a2c" stroke-width="1"/><rect x="10" y="11" width="4" height="6" rx="1" fill="#fff2db" stroke="#d48a2c" stroke-width="1"/><path d="M11.5 7h1" stroke="#d48a2c" stroke-width="1.2"/><path d="M11.5 13h1" stroke="#d48a2c" stroke-width="1.2"/></svg>`,
+  executable: `<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\" fill=\"#4c8bf5\" stroke=\"#2f63c7\" stroke-width=\"1\"/><path d=\"M6 7h12v2H6z\" fill=\"#e8f0ff\"/><rect x=\"6.5\" y=\"11\" width=\"5\" height=\"5\" rx=\"0.8\" fill=\"#e8f0ff\" stroke=\"#2f63c7\" stroke-width=\"0.8\"/><path d=\"M14 11.5l4 2.5-4 2.5z\" fill=\"#e8f0ff\" stroke=\"#2f63c7\" stroke-width=\"0.8\"/></svg>`,
+  msdos: `<img src="/icons/msdos.svg" width="32" height="32" alt="MS-DOS logo" />`
 };
 
 export function getIconSvg(type: IconType): string {
