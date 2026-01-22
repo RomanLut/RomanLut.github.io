@@ -88,9 +88,9 @@ export class DosBox extends AppWindow {
     this.statusArchive.textContent = `Archive: ${this.archivePath}`;
     container.appendChild(this.statusBar);
     this.setContent(container);
-    // Give the window enough room for a 640x400 emulator plus chrome.
-    this.element.style.width = '720px';
-    this.element.style.height = '520px';
+    // Size window so the screen area is exactly 960x600 (accounting for chrome).
+    this.element.style.width = '962px';
+    this.element.style.height = '688px';
 
     void this.launch();
   }
@@ -292,6 +292,10 @@ export class DosBox extends AppWindow {
       wdosboxWasmUrl,
       wasmUrl: wdosboxWasmUrl,
       pathPrefix: '/',
+      style: 'none', // hide sidebar/control bar
+      noSideBar: true,
+      noSocialLinks: true,
+      noFullscreen: true,
       clickToStart: false, // avoid overlay that blocks rendering
       autolock: false,
       keyboardDiv: this.host,
@@ -339,6 +343,10 @@ export class DosBox extends AppWindow {
         wdosboxWasmUrl,
         wasmUrl: wdosboxWasmUrl,
         pathPrefix: '/',
+        style: 'none',
+        noSideBar: true,
+        noSocialLinks: true,
+        noFullscreen: true,
         locateFile,
         onStdout: (t: string) => this.pushLog(t),
         onStderr: (t: string) => this.pushLog(`[err] ${t}`)
@@ -359,6 +367,10 @@ export class DosBox extends AppWindow {
           wdosboxWasmUrl,
           wasmUrl: wdosboxWasmUrl,
           pathPrefix: '/',
+          style: 'none',
+          noSideBar: true,
+          noSocialLinks: true,
+          noFullscreen: true,
           locateFile,
           onStdout: runOpts.onStdout,
           onStderr: runOpts.onStderr
