@@ -87,6 +87,13 @@
   display: block;
   flex: 0 0 36px;
 }
+.desktop .taskbar__winbtn img {
+  width: 27px;  /* 36px * 0.75 */
+  height: 27px;
+  display: block;
+  flex: 0 0 27px;
+  object-fit: contain;
+}
 
 .desktop .taskbar__winbtn-title {
   display: inline-block;

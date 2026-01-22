@@ -61,18 +61,30 @@
               "type": "archive",
               "name": "BEER",
               "path": "Demoscene/Beer/BEER.ZIP",
-              "size": 60208
+              "size": 60207
             },
             {
               "type": "executable",
               "name": "BEER",
               "path": "Demoscene/Beer/BEER.ZIP",
-              "size": 60208
+              "size": 60207
             }
           ]
         },
         {
           "type": "archive",
+          "name": "fields",
+          "path": "Demoscene/fields.zip",
+          "size": 3264400
+        },
+        {
+          "type": "executable",
+          "name": "fields",
+          "path": "Demoscene/fields.zip",
+          "size": 3264400
+        },
+        {
+          "type": "archive",
           "name": "MBROT",
           "path": "Demoscene/MBROT.ZIP",
           "size": 29230
@@ -109,6 +121,12 @@
         },
         {
           "type": "archive",
+          "name": "SANITY",
+          "path": "Demoscene/SANITY.ZIP",
+          "size": 63556
+        },
+        {
+          "type": "archive",
           "name": "SHUDDER",
           "path": "Demoscene/SHUDDER.ZIP",
           "size": 876586
@@ -118,6 +136,12 @@
           "name": "SHUDDER",
           "path": "Demoscene/SHUDDER.ZIP",
           "size": 876586
+        },
+        {
+          "type": "archive",
+          "name": "SNOW",
+          "path": "Demoscene/SNOW.ZIP",
+          "size": 74011
         }
       ]
     },

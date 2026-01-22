@@ -275,13 +275,8 @@ export class FileExplorer extends AppWindow {
         new Notepad(this.desktopRef, this.taskbarRef, item.name, url);
         return;
       case 'archive': {
-        const isZip = item.path.toLowerCase().endsWith('.zip');
-        if (isZip) {
-          const exeName = DosBox.guessExeName(item.path);
-          new DosBox(this.desktopRef, this.taskbarRef, item.path, exeName);
-        } else {
-          this.downloadFile(url, item.path);
-        }
+        // Archives are download-only; even ZIPs should trigger save dialog.
+        this.downloadFile(url, item.path);
         return;
       }
       case 'executable': {
