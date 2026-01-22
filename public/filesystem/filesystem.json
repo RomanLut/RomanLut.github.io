@@ -50,7 +50,26 @@
             }
           ],
           "image": "folder_image.png",
-          "desc": "**Painter**\n64k intro\n80286, CGA, Adlib\nIdea,Code,Gfx **├┼AX**\nMusic **Autor unknown**\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in emulator by double clicking on MSDOS icon."
+          "desc": "**Painter**\n64k intro\n80286, CGA, Adlib\nIdea,Code,Gfx: **├┼AX**\nMusic: **Autor unknown**\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in emulator by double clicking on MSDOS icon."
+        },
+        {
+          "type": "folder",
+          "name": "2019-03 JS1k Lost In A Cave",
+          "path": "Demoscene/2019-03_JS1k_Lost_In_A_Cave",
+          "items": [
+            {
+              "type": "html",
+              "name": "Lost In A Cave",
+              "path": "Demoscene/2019-03_JS1k_Lost_In_A_Cave/Lost_In_A_Cave.html",
+              "size": 1917
+            },
+            {
+              "type": "notepad",
+              "name": "Lost In A Cave SRC",
+              "path": "Demoscene/2019-03_JS1k_Lost_In_A_Cave/Lost_In_A_Cave_SRC.txt",
+              "size": 1024
+            }
+          ]
         },
         {
           "type": "folder",
@@ -279,6 +298,12 @@
       "name": "test",
       "path": "test",
       "items": [
+        {
+          "type": "html",
+          "name": "html test",
+          "path": "test/html_test.html",
+          "size": 343584
+        },
         {
           "type": "wordpad",
           "name": "markdown test",

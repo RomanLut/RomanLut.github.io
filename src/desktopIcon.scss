@@ -20,6 +20,9 @@
   width: 57.6px;
   height: 57.6px;
   margin: 0 auto 7.2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pc .desktop__icon-image svg,
@@ -70,6 +73,13 @@
 
 .pc .desktop__icon.desktop__icon--msdos .desktop__icon-image svg,
 .pc .desktop__icon.desktop__icon--msdos .desktop__icon-image img {
+  width: 38.88px;
+  height: 38.88px;
+  transform: none;
+}
+
+.pc .desktop__icon.desktop__icon--html .desktop__icon-image img,
+.pc .desktop__icon.desktop__icon--html .desktop__icon-image svg {
   width: 38.88px;
   height: 38.88px;
   transform: none;

@@ -19,7 +19,7 @@ The structure is a graph of items,
 
 Eaach item, can have the following properties:
 
-type: folder, wordpad, notepad, archive, executable
+type: folder, wordpad, notepad, archive, executable, html
 name: displayed name
 path: path inside /filesystem folder
 image?: optional folder image name, without path (f.e. folder_image.jpg)
@@ -43,3 +43,5 @@ Files with .zip, .rar, .7z extension are added as "archive" type items.
 If archive contains .jsdos folder, anothet item is created with same name but type "executable". Executable is placed first.
 
 Executable archives open in the DOSBox app; other archive types trigger a File Save dialog when double-clicked. DOSBox archives must contain a `.jsdos/dosbox.conf` with an `autoexec` section.
+
+.html files have type html. html files are executed in the browser app

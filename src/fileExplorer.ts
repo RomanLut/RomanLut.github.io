@@ -18,6 +18,7 @@ import {
 import { WordPad } from './WordPad';
 import { Notepad } from './notepad';
 import { DosBox } from './dosbox';
+import { Browser } from './browser';
 
 const FILE_EXPLORER_ICON = getIconSvg('folder');
 
@@ -247,6 +248,8 @@ export class FileExplorer extends AppWindow {
           ? 'archive'
           : item.type === 'executable'
           ? 'msdos'
+          : item.type === 'html'
+          ? 'html'
           : 'wordpad';
       iconHolder.innerHTML = getIconSvg(iconType);
 
@@ -282,6 +285,10 @@ export class FileExplorer extends AppWindow {
       case 'executable': {
         const exeName = DosBox.guessExeName(item.path);
         new DosBox(this.desktopRef, this.taskbarRef, item.path, exeName);
+        return;
+      }
+      case 'html': {
+        new Browser(this.desktopRef, this.taskbarRef, url);
         return;
       }
       default:

@@ -44,6 +44,7 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     files = sorted([p for p in entries if p.is_file()], key=lambda p: display_name(p.name).lower())
     ordered = folders + files
     archive_exts = {".zip", ".rar", ".7z"}
+    html_exts = {".html", ".htm"}
     for entry in ordered:
         if entry.name == "filesystem.json":
             continue
@@ -64,7 +65,7 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
                     "size": size,
                 }
             )
-        elif entry.suffix.lower() == ".txt":
+        elif entry.suffix.lower() in {".txt", ".js"}:
             size = entry.stat().st_size
             children.append(
                 {
@@ -102,6 +103,16 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
                     children.append(archive_item)
                     continue
             children.append(archive_item)
+        elif entry.suffix.lower() in html_exts:
+            size = entry.stat().st_size
+            children.append(
+                {
+                    "type": "html",
+                    "name": display_name(entry.name),
+                    "path": rel_path.as_posix(),
+                    "size": size,
+                }
+            )
     return children
 
 

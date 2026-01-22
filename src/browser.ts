@@ -9,6 +9,18 @@ function normalizeUrl(value: string): string {
   if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
     return trimmed;
   }
+  if (trimmed.startsWith('/')) {
+    // Absolute path on current origin (e.g., /filesystem/...)
+    return `${window.location.origin}${trimmed}`;
+  }
+  if (trimmed.startsWith('./') || trimmed.startsWith('../')) {
+    try {
+      return new URL(trimmed, window.location.href).toString();
+    } catch {
+      return trimmed;
+    }
+  }
+  // Fallback: assume https URL if no scheme provided.
   return `https://${trimmed}`;
 }
 

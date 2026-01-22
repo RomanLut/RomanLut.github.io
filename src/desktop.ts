@@ -118,6 +118,11 @@ export class Desktop {
       exitFullscreenAndOpen('https://www.youtube.com/@RomanLutHax')
     );
 
+    // HTML5 sample icon opening browser to local index
+    new DesktopIcon(this.element, 'html', 'HTML5', { x: 16 + 240, y: 16 + 120 + 120 + 140 }, () =>
+      new Browser(this.element, this.taskbar, '/')
+    );
+
     // Test MS-DOS launcher (executable type)
     new DesktopIcon(this.element, 'msdos', 'MS-DOS', { x: 16, y: 16 + 120 + 120 + 140 + 120 }, () =>
       new DosBox(this.element, this.taskbar, 'Demoscene/PAINTER.zip', 'PAINTER.exe')
