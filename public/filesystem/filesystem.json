@@ -301,6 +301,18 @@
       "path": "test",
       "items": [
         {
+          "type": "executable",
+          "name": "DOS prompt",
+          "path": "test/DOS_prompt.zip",
+          "size": 646
+        },
+        {
+          "type": "archive",
+          "name": "DOS prompt",
+          "path": "test/DOS_prompt.zip",
+          "size": 646
+        },
+        {
           "type": "html",
           "name": "html test",
           "path": "test/html_test.html",
@@ -321,18 +333,6 @@
       ],
       "image": "folder_image.jpg",
       "desc": "folder.md Markdown Rendering Test\n\nText styles\nNormal text with **bold**, *italic*.\n\nLinks \n- Link: [OpenAI](https://www.openai.com/)\n\nLong text\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    },
-    {
-      "type": "executable",
-      "name": "DOS prompt",
-      "path": "DOS_prompt.zip",
-      "size": 646
-    },
-    {
-      "type": "archive",
-      "name": "DOS prompt",
-      "path": "DOS_prompt.zip",
-      "size": 646
     }
   ]
 }
