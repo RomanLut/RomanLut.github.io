@@ -27,22 +27,47 @@
       "items": [
         {
           "type": "folder",
-          "name": "Opto isolated AVR910",
-          "path": "Electronics/Opto_isolated_AVR910",
+          "name": "2013-04 Opto isolated AVR910",
+          "path": "Electronics/2013-04_Opto_isolated_AVR910",
           "items": [
+            {
+              "type": "archive",
+              "name": "AVR910Optoisolated",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/AVR910Optoisolated.zip",
+              "size": 42601
+            },
             {
               "type": "wordpad",
               "name": "Opto isolated AVR910",
-              "path": "Electronics/Opto_isolated_AVR910/Opto_isolated_AVR910.md",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/Opto_isolated_AVR910.md",
               "size": 3483
             },
             {
               "type": "wordpad",
               "name": "Оптоизолированный программатор AVR910",
-              "path": "Electronics/Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910.md",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910.md",
               "size": 5888
             }
           ]
+        },
+        {
+          "type": "archive",
+          "name": "Lighter2",
+          "path": "Electronics/Lighter2.rar",
+          "size": 38754
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Game development",
+      "path": "Game_development",
+      "items": [
+        {
+          "type": "archive",
+          "name": "3denginelect",
+          "path": "Game_development/3denginelect.7z",
+          "size": 35329345
         }
       ]
     },
@@ -53,33 +78,51 @@
       "items": [
         {
           "type": "folder",
-          "name": "Driving backlight from midlet",
-          "path": "Publications/Driving_backlight_from_midlet",
+          "name": "2005-10 Using webcamera as virtual graphics tablet",
+          "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet",
           "items": [
             {
               "type": "wordpad",
-              "name": "Drawing backlight from midlet",
-              "path": "Publications/Driving_backlight_from_midlet/Drawing_backlight_from_midlet.md",
-              "size": 25161
+              "name": "Using webcamera as virtual graphics tablet (translated to english)",
+              "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet_(translated_to_english).md",
+              "size": 14130
+            },
+            {
+              "type": "wordpad",
+              "name": "Изготавливаем графический планшет из вебкамеры своими руками (russian)",
+              "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet/Изготавливаем_графический_планшет_из_вебкамеры_своими_руками_(russian).md",
+              "size": 23606
             }
           ]
         },
         {
           "type": "folder",
-          "name": "Using webcamera as virtual graphics tablet",
-          "path": "Publications/Using_webcamera_as_virtual_graphics_tablet",
+          "name": "2006-05 Driving backlight from midlet",
+          "path": "Publications/2006-05_Driving_backlight_from_midlet",
           "items": [
             {
+              "type": "archive",
+              "name": "BacklightControl",
+              "path": "Publications/2006-05_Driving_backlight_from_midlet/BacklightControl.zip",
+              "size": 11612
+            },
+            {
               "type": "wordpad",
-              "name": "Using webcamera as virtual graphics tablet",
-              "path": "Publications/Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet.md",
-              "size": 23635
+              "name": "Drawing backlight from midlet (translated to english)",
+              "path": "Publications/2006-05_Driving_backlight_from_midlet/Drawing_backlight_from_midlet_(translated_to_english).md",
+              "size": 19495
+            },
+            {
+              "type": "wordpad",
+              "name": "Управление подсветкой экрана из мидлета (russian)",
+              "path": "Publications/2006-05_Driving_backlight_from_midlet/Управление_подсветкой_экрана_из_мидлета_(russian).md",
+              "size": 25157
             }
           ]
         }
       ],
       "image": "folder_image.jpg",
-      "desc": "This folder contains my publications.\nSome publications are on Russian. English translation is provided."
+      "desc": "This folder contains my publications.\n\nSome publications are on Russian. English translation is provided."
     },
     {
       "type": "folder",
@@ -90,7 +133,7 @@
           "type": "wordpad",
           "name": "markdown test",
           "path": "test/markdown_test.md",
-          "size": 6709
+          "size": 6668
         },
         {
           "type": "notepad",

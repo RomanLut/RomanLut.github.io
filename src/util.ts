@@ -229,7 +229,7 @@ export async function inlineImages(container: HTMLElement) {
 }
 
 // Filesystem helpers
-export type FsItemType = 'folder' | 'wordpad' | 'notepad';
+export type FsItemType = 'folder' | 'wordpad' | 'notepad' | 'archive';
 
 export interface FsItem {
   type: FsItemType;
@@ -238,6 +238,7 @@ export interface FsItem {
   image?: string;
   desc?: string;
   items?: FsItem[];
+  size?: number;
 }
 
 export interface FsRoot {

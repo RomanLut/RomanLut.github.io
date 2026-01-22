@@ -237,7 +237,14 @@ export class FileExplorer extends AppWindow {
       row.className = 'fileexplorer__item';
       const iconHolder = document.createElement('div');
       iconHolder.className = 'fileexplorer__item-icon';
-      const iconType: IconType = item.type === 'folder' ? 'folder' : item.type === 'notepad' ? 'notepad' : 'wordpad';
+      const iconType: IconType =
+        item.type === 'folder'
+          ? 'folder'
+          : item.type === 'notepad'
+          ? 'notepad'
+          : item.type === 'archive'
+          ? 'archive'
+          : 'wordpad';
       iconHolder.innerHTML = getIconSvg(iconType);
 
       const label = document.createElement('div');
@@ -246,8 +253,7 @@ export class FileExplorer extends AppWindow {
 
       const sizeEl = document.createElement('div');
       sizeEl.className = 'fileexplorer__item-size';
-      sizeEl.textContent =
-        item.type === 'wordpad' && typeof (item as any).size === 'number' ? formatSize((item as any).size) : '';
+      sizeEl.textContent = typeof (item as any).size === 'number' ? formatSize((item as any).size) : '';
 
       row.append(iconHolder, label, sizeEl);
       row.addEventListener('dblclick', () => this.handleItemClick(item));
@@ -263,9 +269,22 @@ export class FileExplorer extends AppWindow {
     const url = filesystemUrl(item.path);
     if (item.type === 'notepad') {
       new Notepad(this.desktopRef, this.taskbarRef, item.name, url);
+    } else if (item.type === 'archive') {
+      this.downloadFile(url, item.path);
     } else {
       new WordPad(this.desktopRef, this.taskbarRef, url, item.name);
     }
+  }
+
+  private downloadFile(url: string, path: string) {
+    const filename = path.split('/').pop() || 'download';
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   private navigateUp() {

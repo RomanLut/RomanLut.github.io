@@ -35,6 +35,7 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     children: List[Dict[str, Any]] = []
     # Sort alphabetically by display name to keep deterministic output.
     entries = sorted(folder.iterdir(), key=lambda p: display_name(p.name).lower())
+    archive_exts = {".zip", ".rar", ".7z"}
     for entry in entries:
         if entry.name == "filesystem.json":
             continue
@@ -60,6 +61,16 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
             children.append(
                 {
                     "type": "notepad",
+                    "name": display_name(entry.name),
+                    "path": rel_path.as_posix(),
+                    "size": size,
+                }
+            )
+        elif entry.suffix.lower() in archive_exts:
+            size = entry.stat().st_size
+            children.append(
+                {
+                    "type": "archive",
                     "name": display_name(entry.name),
                     "path": rel_path.as_posix(),
                     "size": size,
