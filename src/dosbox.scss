@@ -61,3 +61,8 @@
   max-width: none;
   align-self: stretch;
 }
+
+/* Hide js-dos mobile touch button overlay */
+.dosbox .emulator-button-touch-zone {
+  display: none !important;
+}

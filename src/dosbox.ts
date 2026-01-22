@@ -21,17 +21,19 @@ export class DosBox extends AppWindow {
   private statusMsg: HTMLElement;
   private statusFps: HTMLElement;
   private statusArchive: HTMLElement;
+  private statusRes: HTMLElement;
   private stage: HTMLDivElement;
   private archivePath: string;
   private exeName: string;
   private dosInstance: any = null;
   private ci: any = null;
+  private resPoll: number | null = null;
+  private lastRes = '';
   private resetStage() {
     this.stage.innerHTML = '';
     this.stage.className = 'dosbox__stage';
   }
   private destroyed = false;
-  private runtimeUrls: { js: string; wasm: string; revoke: () => void } | null = null;
   private bundleBytes: Uint8Array | null = null;
   private fpsFrame = 0;
   private fpsTime = 0;
@@ -83,13 +85,17 @@ export class DosBox extends AppWindow {
       <div class="app-window__statusbar-right">
         <span class="app-window__statusbar-mode dosbox__status-fps">FPS: -</span>
         <span class="app-window__statusbar-divider"></span>
+        <span class="app-window__statusbar-mode dosbox__status-res"></span>
+        <span class="app-window__statusbar-divider"></span>
         <span class="app-window__statusbar-encoding dosbox__status-archive"></span>
       </div>
     `;
     this.statusMsg = this.statusBar.querySelector('.app-window__statusbar-text') as HTMLElement;
     this.statusFps = this.statusBar.querySelector('.dosbox__status-fps') as HTMLElement;
+    this.statusRes = this.statusBar.querySelector('.dosbox__status-res') as HTMLElement;
     this.statusArchive = this.statusBar.querySelector('.dosbox__status-archive') as HTMLElement;
     this.statusMsg.textContent = 'Loading emulator...';
+    this.statusRes.textContent = '640x400';
     this.statusArchive.textContent = `Archive: ${this.archivePath}`;
     container.appendChild(this.statusBar);
     this.setContent(container);
@@ -97,11 +103,18 @@ export class DosBox extends AppWindow {
     this.element.style.width = '962px';
     this.element.style.height = '688px';
 
+    // Expose for devtools debugging of the current instance
+    (window as any).__lastDosBox = this;
+
     void this.launch();
   }
 
   protected close() {
     this.destroyed = true;
+    if (this.resPoll) {
+      clearInterval(this.resPoll);
+      this.resPoll = null;
+    }
     try {
       if (this.dosInstance) {
         if (typeof this.dosInstance.stop === 'function') this.dosInstance.stop();
@@ -136,7 +149,7 @@ export class DosBox extends AppWindow {
       if (this.destroyed) return;
       this.statusMsg.textContent = `Starting ${this.exeName}...`;
 
-      const runtime = this.useCdnRuntime();
+      const runtime = { js: WDOSBOX_JS, wasm: WDOSBOX_WASM, revoke: () => {} };
       // Update globals so js-dos internals pick the blob/CDN URLs.
       (window as any).JSDOS_CONFIG = { wdosboxUrl: runtime.js, wdosboxWasmUrl: runtime.wasm };
       (window as any).JSDOS_JS = runtime.js;
@@ -251,11 +264,6 @@ export class DosBox extends AppWindow {
     this.pushLog(`[error] ${msg}`);
   }
 
-  private useCdnRuntime() {
-    this.runtimeUrls = { js: WDOSBOX_JS, wasm: WDOSBOX_WASM, revoke: () => {} };
-    return this.runtimeUrls;
-  }
-
   private async runProgram(player: any) {
     const mainFn =
       (player && typeof player.main === 'function' && player.main.bind(player)) ||
@@ -311,11 +319,27 @@ export class DosBox extends AppWindow {
       throw new Error('Failed to initialize js-dos player');
     }
     // Cache command interface for pause/resume/etc once available
+    this.ci = await player.ciPromise;
     try {
-      this.ci = await player.ciPromise;
+      const w =
+        (this.ci && typeof this.ci.width === 'function' && this.ci.width()) ||
+        this.ci?.frameWidth ||
+        640;
+      const h =
+        (this.ci && typeof this.ci.height === 'function' && this.ci.height()) ||
+        this.ci?.frameHeight ||
+        400;
+      this.updateResolution(w, h);
+      const ev =
+        (typeof this.ci?.events === 'function' && this.ci.events()) ||
+        (typeof (player as any)?.events === 'function' && (player as any).events());
+      if (ev && typeof ev.onFrameSize === 'function') {
+        ev.onFrameSize((width: number, height: number) => this.updateResolution(width, height));
+      }
     } catch {
-      this.ci = null;
+      /* ignore CI event wiring errors */
     }
+    this.startResolutionWatcher();
     try {
       player.frameSize(640, 400); // lock internal framebuffer to 640x400
     } catch {
@@ -364,10 +388,15 @@ export class DosBox extends AppWindow {
       };
       try {
         await player.run(blobUrl, runOpts);
+        if (!this.ci && player.ciPromise) {
+          this.ci = await player.ciPromise;
+        }
         this.statusMsg.textContent = 'Running';
         this.ensureFrameSize(player);
         this.hideOverlays();
         this.pushLog('run(blob) started');
+        this.startResolutionWatcher();
+        this.refreshResolution();
         cleanup();
         return;
       } catch (err) {
@@ -386,10 +415,15 @@ export class DosBox extends AppWindow {
           onStdout: runOpts.onStdout,
           onStderr: runOpts.onStderr
         });
+        if (!this.ci && player.ciPromise) {
+          this.ci = await player.ciPromise;
+        }
         this.statusMsg.textContent = 'Running';
         this.ensureFrameSize(player);
         this.hideOverlays();
         this.pushLog(`run(blob,args) started exe=${exe}`);
+        this.startResolutionWatcher();
+        this.refreshResolution();
         cleanup();
         return;
       }
@@ -405,10 +439,15 @@ export class DosBox extends AppWindow {
             } else {
               throw new Error('fs.extract missing in ready');
             }
+            if (!this.ci && (player as any)?.ciPromise) {
+              this.ci = await (player as any).ciPromise;
+            }
             await this.runProgram(main ? { main, run: main } : player);
             this.ensureFrameSize(player);
             this.hideOverlays();
             this.statusMsg.textContent = 'Running';
+            this.startResolutionWatcher();
+            this.refreshResolution();
             resolve();
           } catch (err) {
             reject(err);
@@ -421,10 +460,15 @@ export class DosBox extends AppWindow {
     if (fs && typeof fs.extract === 'function') {
       console.log('[DOSBox] Using fs.extract fallback');
       await fs.extract(blob);
+      if (!this.ci && (player as any)?.ciPromise) {
+        this.ci = await (player as any).ciPromise;
+      }
       await this.runProgram(player);
       this.ensureFrameSize(player);
       this.hideOverlays();
       this.statusMsg.textContent = 'Running';
+      this.startResolutionWatcher();
+      this.refreshResolution();
       return;
     }
 
@@ -490,6 +534,45 @@ export class DosBox extends AppWindow {
     this.statusMsg.textContent = trimmed;
   }
 
+  private updateResolution(w: number, h: number) {
+    if (!this.statusRes) return;
+    const txt = `${Math.round(w)}x${Math.round(h)}`;
+    this.lastRes = txt;
+    this.statusRes.textContent = txt;
+  }
+
+  private startResolutionWatcher() {
+    if (!this.ci) return;
+    if (this.resPoll) {
+      clearInterval(this.resPoll);
+      this.resPoll = null;
+    }
+    this.resPoll = window.setInterval(() => {
+      try {
+        const cw =
+          (typeof this.ci.width === 'function' && this.ci.width()) || (this.ci as any)?.frameWidth;
+        const ch =
+          (typeof this.ci.height === 'function' && this.ci.height()) || (this.ci as any)?.frameHeight;
+        if (cw && ch) {
+          this.updateResolution(cw, ch);
+        }
+      } catch {
+        /* ignore polling errors */
+      }
+    }, 500);
+  }
+
+  private refreshResolution() {
+    if (!this.ci) return;
+    try {
+      const w = (typeof this.ci.width === 'function' && this.ci.width()) || this.ci?.frameWidth;
+      const h = (typeof this.ci.height === 'function' && this.ci.height()) || this.ci?.frameHeight;
+      if (w && h) this.updateResolution(w, h);
+    } catch {
+      /* ignore */
+    }
+  }
+
   private async handleMenu(label: string) {
     const normalized = label.trim().toLowerCase();
     if (normalized === 'pause') {
@@ -542,9 +625,13 @@ export class DosBox extends AppWindow {
         if (typeof this.dosInstance.stop === 'function') await this.dosInstance.stop();
         if (typeof this.dosInstance.exit === 'function') await this.dosInstance.exit();
       }
+      if (this.resPoll) {
+        clearInterval(this.resPoll);
+        this.resPoll = null;
+      }
       this.resetStage();
       this.ci = null;
-      const runtime = this.runtimeUrls || this.useCdnRuntime();
+      const runtime = { js: WDOSBOX_JS, wasm: WDOSBOX_WASM, revoke: () => {} };
       const Dos = window.Dos;
       if (!Dos) throw new Error('Runtime not available for reboot');
       const player = await this.createPlayer(Dos, runtime.js, runtime.wasm);
