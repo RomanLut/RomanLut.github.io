@@ -36,7 +36,6 @@ const BROWSER_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true" width="24" hei
 
 export class Browser extends AppWindow {
   private addressInput: HTMLInputElement;
-  private statusEl: HTMLElement;
   private iframe: HTMLIFrameElement;
   private currentUrl: string;
   private blockedOverlay: HTMLElement;
@@ -90,13 +89,17 @@ export class Browser extends AppWindow {
     content.className = 'browser__content';
     this.iframe = document.createElement('iframe');
     this.iframe.className = 'browser__frame';
-    this.iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-downloads');
+    // Keep sandbox tight: no same-origin to avoid sandbox-escape warning.
+    this.iframe.setAttribute(
+      'sandbox',
+      'allow-scripts allow-forms allow-popups allow-pointer-lock allow-downloads'
+    );
     this.iframe.addEventListener('load', () => {
-      this.statusEl.textContent = 'Done';
+      this.statusBar.setText('Done');
       this.setBlocked(false);
     });
     this.iframe.addEventListener('error', () => {
-      this.statusEl.textContent = 'Blocked or failed to load';
+      this.statusBar.setText('Blocked or failed to load');
       this.setBlocked(true);
     });
     this.blockedOverlay = document.createElement('div');

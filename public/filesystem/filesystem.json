@@ -61,7 +61,7 @@
               "type": "html",
               "name": "Lost In A Cave",
               "path": "Demoscene/2019-03_JS1k_Lost_In_A_Cave/Lost_In_A_Cave.html",
-              "size": 1917
+              "size": 2211
             },
             {
               "type": "notepad",
@@ -69,7 +69,9 @@
               "path": "Demoscene/2019-03_JS1k_Lost_In_A_Cave/Lost_In_A_Cave_SRC.txt",
               "size": 1024
             }
-          ]
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**Lost In A Cave**\nJavascript 1024 bytes intro.\n**First place at JS1k 2019** [https://js1k.com/2019-x/](https://js1k.com/2019-x/)\n\n\nDouble click on javascript file to execute.\n*Unfortunatelly intro does not work on JS1k website in Chrome anymore due to API Changes in Chrome*."
         },
         {
           "type": "folder",
