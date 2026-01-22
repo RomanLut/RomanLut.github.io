@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost In A Cave</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <script>
+      // JS1K-style boot
+      a = c = document.getElementById('c');
+      b = document.body;
+      d = document;
+      onresize = () => {
+        a.width = innerWidth;
+        a.height = innerHeight;
+      };
+      onresize();
+      addEventListener('resize', onresize);
+      g = a.getContext('webgl', { antialias: true, stencil: true }) ||
+          a.getContext('experimental-webgl', { antialias: true, stencil: true });
+      // Fix for new WebGL methods overwriting short aliases used by JS1K demos
+      if (g) {
+        g.clearDepth = g.compileShader;
+        g.vertexAttrib1f = g.vertexAttrib2f = g.vertexAttrib3f = g.vertexAttrib4f = g.vertexAttribPointer;
+      }
+
+      // Packed JS1K demo code (Lost In A Cave, 2019)
+      for (_ = "i(c~ionU0,TorRunifRmQin(OmONf(M.xL.zKabs(JJfract(&dot(%vec$$3 #$4 !=y+)-))sO),).5);.0K*.zN05)+1.gl_FragCofloat2,void maO){=$4(.y)*new Date/1e3ze,~+sK	;}',s=cS(3563$3(nRmalize(cK,T-cLN2.6/%xx1sS(s,ice(saS(p,s126.,T0_K*4.fR(i Ogg[i[0]+i[6]]=g[i];with(g)p=cP(i='attribute !a;gl_PositU=a3i='precisU highp ;Q !_;!s1,05,T5n.7,.35,..43 i(#z){#i=(z-)2669+.43,0return 1.+N.2+N-JiLN-Ji.14+z+3*12%&&z*.3)zx+z*.6nyyiL/4++zK*9.)s+z}!mRd-_*)/_; a=,e=clamp(_2.9,,550.+4*#y=T.6+J5*_9+J2*)f*-e-.cos(ex.7yyx+=x#c=f+fyo=c+(mL*+m*cross(c,/.7fR(int r=0;r<98;r++)iM(e=~o*(a+=e*)<s)break;lR(-c<.98?nLyz:nwy/.8N_1.(%~+sLz	y	zyex-=c+.3)+sKwz**11)2vA(lo(p512TeV(ug(pbMx=3496cB(bD(x,Int8Array.oM-4,-4,2x+82i=,f=s=>dr(4,Q4MgMp,'_'a.width,a.height,-i,requestAnimatUFrame(f3M)"; G = /[^ '-IPSV-}]/.exec(_);) with (_.split(G)) _ = join(shift()); eval(_);
+    </script>
+</body>
+</html>
