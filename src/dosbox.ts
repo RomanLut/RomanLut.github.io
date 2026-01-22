@@ -25,6 +25,11 @@ export class DosBox extends AppWindow {
   private archivePath: string;
   private exeName: string;
   private dosInstance: any = null;
+  private ci: any = null;
+  private resetStage() {
+    this.stage.innerHTML = '';
+    this.stage.className = 'dosbox__stage';
+  }
   private destroyed = false;
   private runtimeUrls: { js: string; wasm: string; revoke: () => void } | null = null;
   private bundleBytes: Uint8Array | null = null;
@@ -58,7 +63,7 @@ export class DosBox extends AppWindow {
         label: 'Run',
         children: [
           { label: 'Pause' },
-          { label: 'Play' },
+          { label: 'Resume' },
           { label: '-' },
           { label: 'Reboot' }
         ]
@@ -305,6 +310,12 @@ export class DosBox extends AppWindow {
     if (!player) {
       throw new Error('Failed to initialize js-dos player');
     }
+    // Cache command interface for pause/resume/etc once available
+    try {
+      this.ci = await player.ciPromise;
+    } catch {
+      this.ci = null;
+    }
     try {
       player.frameSize(640, 400); // lock internal framebuffer to 640x400
     } catch {
@@ -485,7 +496,7 @@ export class DosBox extends AppWindow {
       if (!this.paused) await this.togglePause();
       return;
     }
-    if (normalized === 'play') {
+    if (normalized === 'resume') {
       if (this.paused) await this.togglePause();
       return;
     }
@@ -497,16 +508,25 @@ export class DosBox extends AppWindow {
   private async togglePause() {
     if (!this.dosInstance) return;
     try {
+      const player = this.dosInstance;
+      const ci = this.ci || (await player.ciPromise);
+      const supportsPause = ci && typeof ci.pause === 'function';
+      const supportsResume = ci && typeof ci.resume === 'function';
+
       if (this.paused) {
-        if (typeof this.dosInstance.resume === 'function') await this.dosInstance.resume();
+        if (supportsResume) await ci.resume();
         this.paused = false;
         this.statusMsg.textContent = 'Running';
+        this.pushLog('resumed');
       } else {
-        if (typeof this.dosInstance.pause === 'function') await this.dosInstance.pause();
+        if (supportsPause) await ci.pause();
+        else if (supportsResume) await ci.resume(); // fallback if only resume exists
         this.paused = true;
         this.statusMsg.textContent = 'Paused';
+        this.pushLog('paused');
       }
     } catch (err) {
+      this.pushLog('[warn] pause/resume not supported by this runtime');
       this.showError(err);
     }
   }
@@ -522,6 +542,8 @@ export class DosBox extends AppWindow {
         if (typeof this.dosInstance.stop === 'function') await this.dosInstance.stop();
         if (typeof this.dosInstance.exit === 'function') await this.dosInstance.exit();
       }
+      this.resetStage();
+      this.ci = null;
       const runtime = this.runtimeUrls || this.useCdnRuntime();
       const Dos = window.Dos;
       if (!Dos) throw new Error('Runtime not available for reboot');
