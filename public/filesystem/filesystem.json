@@ -71,7 +71,7 @@
             }
           ],
           "image": "folder_image.jpg",
-          "desc": "**Lost In A Cave**\nJavascript 1024 bytes intro.\n**First place at JS1k 2019** [https://js1k.com/2019-x/](https://js1k.com/2019-x/)\n\n\nDouble click on javascript file to execute.\n*Unfortunatelly intro does not work on JS1k website in Chrome anymore due to API Changes in Chrome*."
+          "desc": "**Lost In A Cave**\nJavascript 1024 bytes intro.\n**First place at JS1k 2019** [https://js1k.com/2019-x/](https://js1k.com/2019-x/)\n\nDouble click on javascript file to execute.\n\n*Unfortunatelly intro does not work on JS1k website in Chrome anymore due to canvas API changes in Chrome*."
         },
         {
           "type": "folder",

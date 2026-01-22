@@ -213,14 +213,24 @@ export class FileExplorer extends AppWindow {
     if (hasDesc) {
       const descWrap = document.createElement('div');
       descWrap.className = 'fileexplorer__meta-desc';
-      const paragraphs = folder.desc
-        .replace(/\r\n/g, '\n')
-        .split(/\n{2,}/)
-        .map((p) => p.trim())
-        .filter(Boolean)
-        .map((p) => `<p>${applyInline(p, '')}</p>`)
-        .join('');
-      descWrap.innerHTML = paragraphs || `<p>${applyInline(folder.desc, '')}</p>`;
+      const lines = folder.desc.replace(/\r\n/g, '\n').split('\n');
+      let html = '';
+      let first = true;
+      let prevBlank = false;
+      for (const line of lines) {
+        const isBlank = !line.trim();
+        if (isBlank) {
+          if (prevBlank) continue; // collapse multiple blank lines
+          html += '<br/>';
+          prevBlank = true;
+          continue;
+        }
+        if (!first) html += '<br/>';
+        html += applyInline(line, '');
+        first = false;
+        prevBlank = false;
+      }
+      descWrap.innerHTML = html;
       this.meta.appendChild(descWrap);
     }
   }
