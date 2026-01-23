@@ -1,0 +1,491 @@
+{$M 4092,240000,240000}
+uses dos,crt,realtime,radtpu,mode256,threed,gurofill,geomlib;
+
+type
+ laga = record
+         ofs,seg: Word;
+        end;
+const
+ repet : longint = 0;
+
+var
+ palette  : array [0..767] of byte;
+ palette3 : array [0..767] of byte;
+ i,j      : integer;
+ regs: registers;
+
+ cx,cy,sizex,sizey :longint;
+ fx_bx       : array [0..180] of longint;
+ fy_by       : array [0..180] of longint;
+ new_fx_bx   : array [0..180] of longint;
+ new_fy_by   : array [0..180] of longint;
+ transtbl    : array [1..62] of integer;
+ faza        : word;
+ oldexit     : pointer;
+
+{$F+}
+Procedure MusicData; External;
+{$L Music.obj}
+Procedure GuroData1; External;
+{$L GuroDat1}
+Procedure GuroData2; External;
+{$L GuroDat2}
+Procedure KurSiv1; External;
+{$L KurSiv1}
+Procedure KurSiv2; External;
+{$L KurSiv2}
+Procedure KurSiv3; External;
+{$L KurSiv3}
+Procedure TrnsTblp; External;
+{$L TrnsTblp}
+Procedure Palette1; External;
+{$L palette1}
+Procedure Palette2; External;
+{$L palette2}
+{$F-}
+
+{$F+}
+function getspline(p : pointer; t: longint; tmax : word): longint; external;
+{$L spline}
+
+function getniter(c_r,c_i: longint; maxmodule: word): byte; external;
+procedure drawxline(fy: longint;buf,ofs: word); external;
+procedure drawyline(fx: longint;buf,ofs: word); external;
+procedure copytonew; external;
+procedure copyfromnew; external;
+procedure drawcopy(buf1,buf2: word); external;
+procedure drawfractal(cx,cy,sizex,sizey: longint; bufseg: word); external;
+{$L mbrot}
+{$F-}
+
+
+
+procedure RotateGuro(gurodata: pointer;pausestill,endstill: longint;
+       lookrad: word);
+var
+ i  : integer;
+ colors4 : array [1..4] of word;
+ poly_3d  : array [1..4,1..3] of integer;
+ poly_2d  : array [1..4,1..2] of integer;
+ oldt     : longint;
+ koef     : real;
+ delayfactor : longint;
+
+ bufp,zbufp1,zbufp2 : Pointer;
+ ZbufSeg,bufseg: Word;
+ points3d,vid3dp,normals_p1,normals_p,cross_ref_p,points2d,colors_p : Pointer;
+ npoints,new_npoints,npolys: Word;
+ observer,observer1 : observertype;
+begin
+ getmem(bufp,64000+32);
+ BufSeg:=laga(bufp).seg+1;
+ getmem(zbufp1,64000+32);
+ ZBufSeg:=laga(Zbufp1).seg+1;
+ getmem(zbufp2,64000+32);
+
+ points3d:=gurodata;
+ inc(laga(points3d).ofs,4);
+
+ npoints:=word(gurodata^);
+ new_npoints:=laga(gurodata^).seg;
+
+ cross_ref_p:=points3d;
+ inc(laga(cross_ref_p).ofs,new_npoints*6);
+
+ normals_p:=cross_ref_p;
+ inc(laga(normals_p).ofs,npoints*2);
+
+ getmem(vid3dp,new_npoints*6);
+ getmem(normals_p1,npoints*6);
+ getmem(points2d,npoints*4);
+ getmem(colors_p,npoints*2);
+
+ npolys:=npoints div 4;
+
+ kr:=127;  kd:=120;
+ eye_k:=800; eye_hz:=198;
+ ls_normal[1]:=-63;  ls_normal[2]:=10;  ls_normal[3]:=0;
+
+ observer.alfa_rad:=0;
+ observer.beta_rad:=0;
+ observer.gama_rad:=0;
+
+ repeat
+
+  oldt:=timercounter;
+  delayfactor:=musiccounter;
+
+  SphereLook_p(addr(Observer),lookrad);
+
+  Observer1:=observer;
+  Observer1.x:=0;
+  Observer1.y:=0;
+  Observer1.z:=0;
+
+  transform(new_npoints,points3d,addr(observer),vid3dp);
+  transform(npoints,normals_p,addr(observer1),normals_p1);
+  proectpoints(new_npoints,vid3dp,points2d);
+
+  stosword(ptr(zbufseg,0),32760,320*100);
+  stosword(ptr(zbufseg+4000,0),32760,320*100);
+
+  stosword(ptr(bufseg,0),$ffff,32000);
+
+  calccolors(npoints,normals_p1,colors_p);
+
+  for i:=1 to npolys do
+    begin
+     unpackpoly(i,vid3dp,points2d,cross_ref_p,colors_p,
+         addr(poly_3d),addr(poly_2d),addr(colors4));
+     if visible(addr(poly_2d)) then
+       fillpoly4_zbuf_guro(addr(poly_3d),addr(poly_2d),
+          colors4[1],colors4[2],colors4[3],colors4[4],bufseg,zbufseg);
+    end;
+
+  movedwords(ptr(bufseg,0),ptr($a000,0),16000);
+
+  koef:=(timercounter-oldt)/100;
+  dec(delayfactor,musiccounter);
+
+  while (musiccounter+delayfactor<pausestill) and not keypressed do ;
+
+  incAngles(addr(observer),round(1144*2.5*koef),
+     round(1144*4*koef),round(1144*1*koef));
+
+  if keypressed then halt;
+
+ until musiccounter>endstill;
+
+ freemem(bufp,64000+32);
+ freemem(zbufp1,64000+32);
+ freemem(zbufp2,64000+32);
+ freemem(vid3dp,new_npoints*6);
+ freemem(normals_p1,npoints*6);
+ freemem(points2d,npoints*4);
+ freemem(colors_p,npoints*2);
+end;
+
+procedure WriteKursiv(data: pointer);
+var
+ t: longint;
+ pointsx : array [0..1000] of byte;
+ pointsy : array [0..1000] of byte;
+ tmax    : integer;
+ c,x,y: integer;
+ ch : char;
+ f: file;
+ oldt: longint;
+begin
+ tmax:=word(data^);
+ inc(laga(data).ofs,2);
+ move(data^,pointsx,tmax);
+ inc(laga(data).ofs,tmax);
+ move(data^,pointsy,tmax);
+
+ dec(tmax);
+
+ t:=0;
+ while t<longint(tmax)*65536 do
+   begin
+    oldt:=timercounter;
+    x:=round(getspline(addr(pointsx),t,tmax)/65536*1.25);
+    y:=getspline(addr(pointsy),t,tmax) div 65536;
+    pset(x,y,2,$a000);
+    pset(x+1,y,3,$a000);
+    pset(x-1,y,1,$a000);
+    while timercounter-oldt<1 do;
+    inc(t,1200);
+    if keypressed then halt;
+   end;
+end;
+
+procedure drawnewfractal(buf1,buf2: word);
+begin
+copytonew;
+
+copyfromnew;
+
+drawcopy(buf1,buf2);
+
+inc(faza);
+if faza>62 then faza:=1;
+end;
+
+procedure displaymbrot(gotime1,gotime,stoptime: longint);
+var
+ cx,cy,sizex,sizey: longint;
+ buf1,buf2   : word;
+ buf1p,buf2p : pointer;
+ t           : longint;
+ x,y         : integer;
+ tk          : longint;
+begin
+ move(addr(trnstblp)^,transtbl,62*2);
+
+ getmem(buf1p,64000+32);
+ getmem(buf2p,64000+32);
+ buf1:=laga(buf1p).seg+1;
+ buf2:=laga(buf2p).seg+1;
+
+ for t:=0 to 9 do
+  begin
+     x:=round(t*70/10);
+     y:=round(t*10/10);
+    bar(x,y,320-x-x,200-y-y,round(230+25*t/10),buf1);
+  end;
+
+ bar(70,10,181,181,50,buf1);
+
+ copytoscreen(buf1);
+
+ case random (9) of
+  1: begin
+      cx:=round(1.06*65536*16);
+      cy:=round(-0.13*65536*16);
+     end;
+  2: begin
+      cx:=round(0.0332*65536*16);
+      cy:=round(-1.5450*65536*16);
+     end;
+  3: begin
+      cx:=round(0.0332*65536*16);
+      cy:=round(-1.6455*65536*16);
+     end;
+  4: begin
+      cx:=round(0.0555*65536*16);
+      cy:=round(-1.5985*65536*16);
+     end;
+  5: begin
+      cx:=round(0.32*65536*16);
+      cy:=round(-0.702*65536*16);
+     end;
+  6: begin
+      cx:=round(-1.0448*65536*16);
+      cy:=round(-0.149*65536*16);
+     end;
+  7: begin
+      cx:=round(0.1*65536*16);
+      cy:=round(0.38*65536*16);
+     end;
+  8: begin
+      cx:=round(0.708*65536*16);
+      cy:=round(-0.36*65536*16);
+     end;
+  9: begin
+      cx:=round(-0.81*65536*16);
+      cy:=round(-0.258*65536*16);
+     end;
+  else
+    begin
+     cx:=round(0.418*65536*16);
+     cy:=round(-1.2334*65536*16);
+    end;
+ end; {case}
+
+ sizex:=round(50331648.0/4);
+ sizey:=round(44738242.0/4);
+
+ drawfractal(cx,cy,sizex,sizey,buf1);
+ while (musiccounter<gotime1) and not keypressed do;
+ copytoscreen(buf1);
+ while (musiccounter<gotime) and not keypressed do;
+
+ faza:=1;
+
+ repeat
+  tk:=timercounter;
+  drawnewfractal(buf1,buf2);
+  copybitmap(70,10,181,181,70,10,buf2,$a000);
+  while timercounter-tk<60 do;
+
+  tk:=timercounter;
+  drawnewfractal(buf2,buf1);
+  copybitmap(70,10,181,181,70,10,buf1,$a000);
+  while timercounter-tk<60 do;
+
+  if keypressed then halt;
+
+ until musiccounter>stoptime;
+
+ freemem(buf1p,64000+32);
+ freemem(buf2p,64000+32);
+end;
+
+{$F+}
+procedure myexit;
+var
+ c: char;
+ regs:registers;
+begin
+ exitproc:=oldexit;
+
+ while keypressed do c:=readkey;
+  fillchar(palette,768,0);
+
+  for i:=0 to 255 do
+   begin
+    palette3[i*3+0]:=63;
+    palette3[i*3+1]:=0;
+    palette3[i*3+2]:=0;
+   end;
+
+  oldpalette:=addr(palette3);
+  newpalette:=addr(palette);
+  maxpalettecounter:=2000;
+  palettecounter:=maxpalettecounter;
+
+  stopplay;
+
+  while palettecounter<>0 do;
+
+  settxtmode;
+
+  regs.ax:=$1017;
+  regs.bx:=0;
+  regs.cx:=256;
+  regs.es:=seg(palette3);
+  regs.dx:=ofs(palette3);
+  intr($10,regs);
+
+  regs.ax:=$1012;
+  regs.bx:=0;
+  regs.cx:=256;
+  regs.es:=seg(palette);
+  regs.dx:=ofs(palette);
+  intr($10,regs);
+
+  writeln('=============================================================================');
+  writeln('20.11.95    Intro "Realtime Mandelbrot Zoom"');
+  writeln;
+  writeln('Code,Gfx,Music by  HAX  AKA Lout Roman');
+  writeln('=============================================================================');
+  writeln;
+  writeln('Thanks to:');
+  writeln('Medvedev N.G. for explaining mathematics');
+  writeln('Shayde,Rogue,Void/Reality for Reality Adlib Player sources');
+  writeln('CodeRipper for supporting demomaking in xUSSR');
+  writeln('My friends for moral support');
+  writeln('=============================================================================');
+  writeln;
+  writeln('I don'+#39+'t know this guys by I want to send my  greetings to them:');
+  writeln;
+  writeln('CodeRipper AKA Peter Sobolev 2:5030/84@fidonet');
+  writeln('Andrew Zabolotny 2:5030/84.5@fidonet');
+  writeln('Maxime Zakharov (Article "Briefly about Fractals" in DDESIGN.FAQ) ');
+  writeln('Lenik Terenin (Source for drawind fractal in DDESIGN.FAQ) 2:5061/1@fidonet');
+  writeln('=============================================================================');
+  writeln;
+  writeln('You can write me to 2:463/586.20@fidonet, but don'+#39+'t bother me !');
+  writeln;
+
+  oldpalette:=addr(palette);
+  newpalette:=addr(palette3);
+  maxpalettecounter:=10000;
+  palettecounter:=maxpalettecounter;
+
+  while palettecounter<>0 do;
+end;
+{$F-}
+
+label l2,l1;
+
+begin
+ checkbreak:=false;
+ oldexit:=exitproc;
+ exitproc:=@myexit;
+ randomize;
+
+  regs.ax:=$1017;
+  regs.bx:=0;
+  regs.cx:=256;
+  regs.es:=seg(palette3);
+  regs.dx:=ofs(palette3);
+  intr($10,regs);
+
+  fillchar(palette,768,0);
+
+ oldpalette:=addr(palette3);
+ newpalette:=addr(palette);
+ maxpalettecounter:=5000;
+ palettecounter:=maxpalettecounter;
+
+ while palettecounter<>0 do;
+
+ setgfxmode;
+
+ StartPlay(addr(MusicData),9177,50);
+
+ oldpalette:=addr(palette);
+ newpalette:=addr(palette1);
+ maxpalettecounter:=9000;
+ palettecounter:=maxpalettecounter;
+
+ rotateguro(addr(gurodata1),448,448*3,2800);
+
+  clearvga($a000);
+
+ for i:=0 to 255 do
+   begin
+    palette[i*3+0]:=0;
+    palette[i*3+1]:=0;
+    palette[i*3+2]:=63;
+   end;
+
+ oldpalette:=addr(palette);
+ newpalette:=addr(palette1);
+ maxpalettecounter:=2000;
+ palettecounter:=maxpalettecounter;
+
+ rotateguro(addr(gurodata2),448*3+224-7-7,5*448-7-7,5500);
+
+l2:
+ clearvga($a000);
+
+  palette3[0]:=0;
+  palette3[1]:=0;
+  palette3[2]:=0;
+
+  palette3[3]:=45;
+  palette3[4]:=0;
+  palette3[5]:=30;
+
+  palette3[6]:=63;
+  palette3[7]:=0;
+  palette3[8]:=25;
+
+  palette3[9]:=40;
+  palette3[10]:=0;
+  palette3[11]:=20;
+
+ oldpalette:=addr(palette);
+ newpalette:=addr(palette3);
+ maxpalettecounter:=2000;
+ palettecounter:=maxpalettecounter;
+
+ writekursiv(addr(kursiv1));
+ writekursiv(addr(kursiv2));
+ writekursiv(addr(kursiv3));
+
+ while musiccounter<448*7+repet do if keypressed then halt;
+l1:
+ oldpalette:=addr(palette);
+ newpalette:=addr(palette2);
+ maxpalettecounter:=2000;
+ palettecounter:=maxpalettecounter;
+
+ displaymbrot(448*7+244-7-7+repet,448*8+repet,15*448+repet);
+
+ clearvga($a000);
+
+ oldpalette:=addr(palette);
+ newpalette:=addr(palette1);
+ maxpalettecounter:=2000;
+ palettecounter:=maxpalettecounter;
+
+ rotateguro(addr(gurodata1),0,17*448+repet,2800);
+
+ inc(repet,448*12);
+ goto l2;
+
+ StopPlay;
+end.

@@ -1,0 +1,536 @@
+{$G+}
+{$M 4096,128000,128000}
+uses realtime,hsctpu,u1paint,u2paint;
+
+type
+ scrarr = array [0..199,0..319] of byte;
+ xyarr = array [1..12000,1..2] of integer;
+ laga = record
+     ofs,seg: word;
+        end;
+
+const
+ xmasktable : array [0..3] of byte = (255-$c0,255-$30,255-$c,255-$3);
+ rnddata1 : word = $29D;
+ rnddata2 : word = $29F;
+
+var
+ f: file;
+ imagebuf: pointer;
+ pointsbuf1,pointsbuf2: ^xyarr;
+ i,nx,ny,x,y: integer;
+ npoints1,npoints: word;
+ alfa: integer;
+ p1,p2: pointer;
+ ytable : array [-3..199+3] of word;
+ r1,r2: integer;
+ bufseg : word;
+ fname: string;
+ pnum:integer;
+ oldtimer: longint;
+ mask : byte;
+ ofs:word;
+
+ frameofs : array [0..13] of pointer;
+
+{$F+}
+procedure emptynes; external;
+{$F-}
+{$L c:\painter\emptynes}
+
+{$F+}
+procedure installint9h; external;
+procedure deinstallint9h; external;
+{$F-}
+{$L c:\painter\painter}
+
+
+function readkey: byte; assembler;
+asm
+ mov ah,0
+ int 16h
+end;
+
+function keytouch: boolean; assembler;
+asm
+ xor ax,ax
+ mov es,ax
+ mov ax,es:[41ah]
+ sub ax,es:[41ch]
+ jz  @l1
+ mov al,true
+ @l1:
+end;
+
+procedure waitvertsync; assembler;
+asm
+ mov dx,3dah
+ @l1:
+ in al,dx
+ test al,8
+ jz @l1
+ @l1a:
+ in al,dx
+ test al,8
+ jnz @l1a
+ @l1b:
+ in al,dx
+ test al,8
+ jz @l1b
+end;
+
+procedure display(p:pointer); assembler;
+asm
+ push ds
+ mov ax,0b800h
+ mov es,ax
+ xor di,di
+ lds si,p
+ mov bl,3
+ mov dx,100
+ cld
+
+ @l3:
+ mov cx,80
+
+ @l2:
+ shl ah,2
+ lodsb
+ or al,al
+ je @l1a
+ or ah,bl
+ @l1a:
+
+ shl ah,2
+ lodsb
+ or al,al
+ je @l1b
+ or ah,bl
+ @l1b:
+
+ shl ah,2
+ lodsb
+ or al,al
+ je @l1c
+ or ah,bl
+ @l1c:
+
+ shl ah,2
+ lodsb
+ or al,al
+ je @l1d
+ or ah,bl
+ @l1d:
+
+ mov al,ah
+ stosb
+ dec cx
+ jne @l2
+
+ add di,2000h-80
+
+ mov cx,80
+
+ @l2_:
+ shl ah,2
+ lodsb
+ or al,al
+ je @l1a_
+ or ah,bl
+ @l1a_:
+
+ shl ah,2
+ lodsb
+ or al,al
+ je @l1b_
+ or ah,bl
+ @l1b_:
+
+ shl ah,2
+ lodsb
+ or al,al
+ je @l1c_
+ or ah,bl
+ @l1c_:
+
+ shl ah,2
+ lodsb
+ or al,al
+ je @l1d_
+ or ah,bl
+ @l1d_:
+
+ mov al,ah
+ stosb
+ dec cx
+ jne @l2_
+
+ sub di,2000h
+ dec dx
+ jne @l3
+
+ pop ds
+end;
+
+procedure myexit;
+begin
+ asm
+  mov ax,3
+  int 10h
+ end;
+ writeln('──────────────────────────────────────────────────────────────────────────────');
+ writeln('     ▄▄▄▄▄▄▄▄▄▄         ▄▄▄▄');
+ writeln('     █▄   ▄▄  ▀█        █  █         ▄▄▄                     Idea,');
+ writeln('      █  █▀██  █ ▄▄▄▄▄▄▄████▄▄▄▄▄▄▄▄█▀ █▄  ▄▄▄▄▄▄▄▄▄▄▄       Code,');
+ writeln('     ▄█  ██▀  ▄██▀ ▄▀ ▄█▄  █▄  ▀  ██▄  ▄█▄█▀▄  ▄  █  █       Gfx');
+ writeln('     █  ▄▄▄▄█▀▀█▀ ▄█  ██  ██  ▄█  ██  █▀▄█ ▄▀ ▄█   █▄█              ├┼AX');
+ writeln('    ▄█  █      █  █▀  ██  ██  ██  ██  █▄█  ▄▄███  █▀');
+ writeln('   █▀  ▀█      █  ▀▄ ▀▀  ▀▄  ██  ▀▄  ▀▄██▄ ▀▀▄█  ▄█          Music');
+ writeln('   ▀▀▀▀▀▀      ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀                 Unknown');
+ writeln;
+ writeln('──────────────────────────────────────────────────────────────────────────────');
+ writeln(' "It is nothing technically amazing",  just a some kind of slideshow.');
+ writeln;
+ writeln('Greetings:');
+ writeln(' CodeRipper, Mad Max, Andrew  Zabolotny, Lenik Terenin, Serguey Zefirov,');
+ writeln('Lion Rokanidi, Alex  Victorov, Dmitry Vinogradov, Ren, Eugen Babich,');
+ writeln('QMG members, Future Huckers members, Friends Software members,');
+ writeln('Nimbus Studio members, Virtual Illusions members.');
+ writeln('                                                          12.02.96');
+ writeln;
+ while keytouch do readkey;
+ deinstallint9h;
+ halt;
+end;
+
+label l1,l2,l3;
+
+begin
+ installint9h;
+ getmem(imagebuf,16535);
+ getmem(pointsbuf1,sizeof(xyarr));
+ getmem(pointsbuf2,sizeof(xyarr));
+
+ bufseg:=laga(imagebuf).seg+1;
+
+ frameofs[0]:=@title;
+ frameofs[1]:=@paint1;
+ frameofs[2]:=@paint2;
+ frameofs[3]:=@paint3;
+ frameofs[4]:=@paint4;
+ frameofs[5]:=@paint5;
+ frameofs[6]:=@paint6;
+ frameofs[7]:=@paint7;
+ frameofs[8]:=@paint8;
+ frameofs[9]:=@paint9;
+ frameofs[10]:=@paint10;
+ frameofs[11]:=@paint11;
+ frameofs[12]:=@paint12;
+ frameofs[13]:=@paint13;
+
+ for i:=0 to 99 do
+   begin
+    ytable[i*2]:=80*i;
+    ytable[i*2+1]:=80*i+$2000;
+   end;
+
+ for i:=0 to 3 do
+   begin
+    ytable[-i]:=0;
+    ytable[199+i]:=80*99+$2000;
+   end;
+
+ asm
+  mov ax,4
+  int 10h
+ end;
+
+ waitvertsync;
+ fillchar(mem[$b800:0],16384,255);
+ hscplay(@emptynes);
+
+ port[$3c8]:=23;
+ port[$3c9]:=40;
+ port[$3c9]:=40;
+ port[$3c9]:=40;
+
+ randomize;
+ pnum:=0;
+ l1:
+ imagebuf:=frameofs[pnum];
+
+ pnum:=1+random(13);
+
+ nx:=random(319);
+ ny:=random(199);
+
+   asm
+    mov npoints,0
+
+    mov ax,word ptr pointsbuf1
+    mov dx,word ptr pointsbuf1+2
+    mov word ptr p1,ax
+    mov word ptr p1+2,dx
+
+    mov ax,word ptr pointsbuf2
+    mov dx,word ptr pointsbuf2+2
+    mov word ptr p2,ax
+    mov word ptr p2+2,dx
+
+    les si,imagebuf
+    mov bl,80h
+    mov y,0
+    @l3:
+    mov x,0
+    @l2:
+
+    test byte ptr es:[si],bl
+    jne @l1
+
+    cld
+    inc npoints
+    les di,p1
+    mov ax,x
+    stosw
+    mov ax,y
+    stosw
+    mov word ptr p1,di
+
+    les di,p2
+    mov ax,nx
+    stosw
+    mov ax,ny
+    stosw
+    mov word ptr p2,di
+
+    mov es,word ptr imagebuf+2
+
+    @l1:
+    ror bl,1
+    adc si,0
+
+    inc x
+    cmp x,319
+    jna @l2
+
+    inc y
+    cmp y,199
+    jna @l3
+   end;
+
+       asm
+        @l12:
+        mov ax,word ptr pointsbuf1
+        mov dx,word ptr pointsbuf1+2
+        mov word ptr p1,ax
+        mov word ptr p1+2,dx
+
+        mov ax,word ptr pointsbuf2
+        mov dx,word ptr pointsbuf2+2
+        mov word ptr p2,ax
+        mov word ptr p2+2,dx
+
+        cld
+        mov es,bufseg
+        xor di,di
+        mov cx,8192
+        mov ax,0ffffh
+        rep stosw
+
+        mov ax,word ptr timercounter
+        mov dx,word ptr timercounter+2
+        mov word ptr oldtimer,ax
+        mov word ptr oldtimer+2,dx
+
+        mov cx,npoints
+        mov npoints1,cx
+        @l10:
+        push cx
+
+        mov si,3
+        MOV AX,rnddata1
+        MOV BX,rndDATA2
+        MOV CX,AX
+        SHL CX,3
+        ADD CH,CL
+        mov DX,CX
+        ADD DX,BX
+        SHL BX,2
+        ADD DX,BX
+        ADD DH,BL
+        SHL BX,5
+        ADD DH,BL
+        ADD AX,1
+        ADC DX,0
+        mov cx,ax
+        mov bx,dx
+        xor ax,ax
+        xchg ax,dx
+        div si
+        mov byte ptr r1,dl
+
+        mov dx,bx
+
+        MOV aX,cX
+        SHL CX,3
+        ADD cH,CL
+        mov DX,CX
+        ADD DX,BX
+        SHL BX,2
+        ADD DX,BX
+        ADD DH,BL
+        SHL BX,5
+        ADD DH,BL
+        ADD AX,1
+        ADC DX,0
+        MOV rndDATA1,AX
+        MOV rndDATA2,DX
+        xor ax,ax
+        xchg ax,dx
+        div si
+        mov byte ptr r2,dl
+
+        les si,p2
+        mov di,es:[si]
+        mov dx,es:[si+2]
+
+        les si,p1
+        mov ax,es:[si]
+        mov bx,es:[si+2]
+        add word ptr p1,4
+
+        cmp di,ax
+        je @l2
+        jng @l1
+        dec di
+        dec di
+        @l1:
+        inc di
+        @l2:
+
+        cmp dx,bx
+        je @l2a
+        @l5:
+        jng @l1a
+        dec dx
+        dec dx
+        @l1a:
+        inc dx
+        @l2a:
+
+        cmp di,ax
+        jne @l4
+        cmp dx,bx
+        jne @l4
+
+        dec npoints1
+        jmp @l8
+
+        @l4:
+
+        dec dx
+        add dx,r1
+        dec di
+        add di,r2
+        @l3:
+
+{        or di,di
+        jns @l6
+        xor di,di
+        @l6:
+
+        cmp di,319
+        jna @l6a
+        mov di,319
+        @l6a:
+
+        or dx,dx
+        jns @l7
+        xor dx,dx
+        @l7:
+
+        cmp dx,199
+        jna @l7a
+        mov dx,199
+        @l7a:}
+
+        @l8:
+
+        les si,p2
+        mov es:[si],di
+        mov es:[si+2],dx
+        add word ptr p2,4
+
+        mov es,bufseg
+
+        mov bx,di
+        and bx,3
+        shr di,2
+        mov al,byte ptr xmasktable[bx]
+
+        mov bx,dx
+        shl bx,1
+        mov bx,word ptr ytable[bx+6]
+        and byte ptr es:[di+bx],al
+
+        pop cx
+        dec cx
+        jz @l11
+        jmp @l10
+        @l11:
+
+        @l16:
+        mov ax,word ptr timercounter
+        mov dx,word ptr timercounter+2
+        sub ax,word ptr oldtimer
+        sbb dx,word ptr oldtimer+2
+        jnz @l15
+        cmp ax,55
+        ja  @l15
+
+        call waitvertsync
+        jmp @l16
+
+        @l15:
+
+     push ds
+     mov ds,bufseg
+     mov ax,0b800h
+     mov es,ax
+     xor si,si
+     xor di,di
+     cld
+     mov dx,100
+     @l1_:
+     mov cx,40
+     rep movsw
+     mov ax,2000h-80
+     add di,ax
+     add si,ax
+     mov cx,40
+     rep movsw
+     mov ax,2000h
+     sub si,ax
+     sub di,ax
+     dec dx
+     jne @l1_
+     pop ds
+
+     call keytouch
+     cmp al,true
+     jne @l13
+     call myexit;
+     @l13:
+
+     cmp npoints1,0
+     je @l14
+     jmp @l12
+     @l14:
+   end;
+
+   oldtimer:=timercounter;
+   while timercounter-oldtimer<5*1024 do if keytouch then myexit;
+
+ goto l1;
+end.
+

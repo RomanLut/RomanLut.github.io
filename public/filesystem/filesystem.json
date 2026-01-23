@@ -56,7 +56,7 @@
             }
           ],
           "image": "folder_image.png",
-          "desc": "**Mbrot**\n32k intro. Zooming into Mundelbrot fractal in realtime, music.\n80286, VGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nTurbo Pascal 5.0, 8086 Assembler\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in the emulator by double clicking on MSDOS icon."
+          "desc": "**Mbrot**\n32k intro. Zooming into Mundelbrot fractal in realtime, music.\n80286, DOS, VGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nTurbo Pascal 5.0, 8086 Assembler\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in the emulator by double clicking on MSDOS icon."
         },
         {
           "type": "folder",
@@ -89,7 +89,34 @@
             }
           ],
           "image": "folder_image.png",
-          "desc": "**Painter**\n64k intro. Images in hand-drawn style morphing in cycle, music.\n80286, CGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in the emulator by double clicking on MSDOS icon."
+          "desc": "**Painter**\n64k intro. Images in hand-drawn style morphing in cycle, music.\n8086, DOS, CGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in the emulator by double clicking on MSDOS icon."
+        },
+        {
+          "type": "folder",
+          "name": "1996-06 SHUDDER",
+          "path": "Demoscene/1996-06_SHUDDER",
+          "items": [
+            {
+              "type": "executable",
+              "name": "SHUDDER",
+              "path": "Demoscene/1996-06_SHUDDER/SHUDDER.ZIP",
+              "size": 876586
+            },
+            {
+              "type": "archive",
+              "name": "SHUDDER",
+              "path": "Demoscene/1996-06_SHUDDER/SHUDDER.ZIP",
+              "size": 876586
+            },
+            {
+              "type": "notepad",
+              "name": "SHUDDER.NFO (russian)",
+              "path": "Demoscene/1996-06_SHUDDER/SHUDDER.NFO (russian).txt",
+              "size": 14698
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "Shudder\n**PC Demo**\n80386, DOS, VGA, Speaker/Covox/Sound Blaster\nIdea,Code,Gfx: ├┼AX (Roman Lut), Music: Teque/Agression, Trashcan/s8\nTurbo Pascal 5.0,  8086 Assembler\n\nThis demo contains no original effects and mainly reproduces techniques from other demos for learning purposes. For this reason, it was not presented at any demo party.\n\nUnfortunately, the source code has been lost 😔\n\nModern PC is 1000x faster that one used to write an intro. You can execute intro in the emulator by double clicking on MSDOS icon. Please select SB 16 with default parameters using arrows and Enter key on start."
         },
         {
           "type": "folder",
@@ -100,17 +127,17 @@
               "type": "executable",
               "name": "fields",
               "path": "Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip",
-              "size": 3264505
+              "size": 3264484
             },
             {
               "type": "archive",
               "name": "fields",
               "path": "Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip",
-              "size": 3264505
+              "size": 3264484
             }
           ],
           "image": "folder_image.jpg",
-          "desc": "**Fields Of The Nephilims – PC demo**\n80386, VGA, Sound Blaster\nIdea,Code,Gfx: ├┼AX (Roman Lut), Music: (Eugene Babich)\nBorland pascal 7.0, 8086 Assembler. Source code was lost 🙁\n\nThis was the last demo released by our group. After that I lost interest to demo making and moved to game development.\n\nThis demo should have been shown at [Enlight`97](https://www.enlight.ru/enlight/) demo party. Unfortunately, due to technical reasons second day of the party has been canceled, and demo was not shown."
+          "desc": "**Fields Of The Nephilims – PC demo**\n80386, DOS, VGA, Sound Blaster\nIdea,Code,Gfx: ├┼AX (Roman Lut), Music: (Eugene Babich)\nBorland pascal 7.0, 8086 Assembler. Source code was lost 🙁\n\nThis demo should have been shown at [Enlight`97](https://www.enlight.ru/enlight/) demo party. Unfortunately, due to technical reasons second day of the party has been canceled, and demo was not shown.\n\nThis was the last demo released by our group. After that I lost interest to demo making and moved to game development.\n\nModern PC is 1000x faster that one used to write an intro. You can execute intro in the emulator by double clicking on MSDOS icon."
         },
         {
           "type": "folder",
@@ -169,18 +196,6 @@
           "name": "SANITY",
           "path": "Demoscene/SANITY.ZIP",
           "size": 63556
-        },
-        {
-          "type": "executable",
-          "name": "SHUDDER",
-          "path": "Demoscene/SHUDDER.ZIP",
-          "size": 876586
-        },
-        {
-          "type": "archive",
-          "name": "SHUDDER",
-          "path": "Demoscene/SHUDDER.ZIP",
-          "size": 876586
         },
         {
           "type": "archive",
@@ -346,7 +361,7 @@
           "type": "wordpad",
           "name": "markdown test",
           "path": "test/markdown_test.md",
-          "size": 6668
+          "size": 6886
         },
         {
           "type": "notepad",
@@ -362,7 +377,7 @@
       "type": "wordpad",
       "name": "About me",
       "path": "About_me.md",
-      "size": 1363
+      "size": 1202
     }
   ]
 }
