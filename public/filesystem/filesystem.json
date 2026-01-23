@@ -243,6 +243,33 @@
         },
         {
           "type": "folder",
+          "name": "1996-08 Nosferatu",
+          "path": "Demoscene/1996-08_Nosferatu",
+          "items": [
+            {
+              "type": "archive",
+              "name": "NOSF SRC",
+              "path": "Demoscene/1996-08_Nosferatu/NOSF_SRC.zip",
+              "size": 365507
+            },
+            {
+              "type": "executable",
+              "name": "NOSFERAT",
+              "path": "Demoscene/1996-08_Nosferatu/NOSFERAT.zip",
+              "size": 1434733
+            },
+            {
+              "type": "archive",
+              "name": "NOSFERAT",
+              "path": "Demoscene/1996-08_Nosferatu/NOSFERAT.zip",
+              "size": 1434733
+            }
+          ],
+          "image": "folder_image.png",
+          "desc": "**Nosferatu – PC demo**\n1st place at [Enlight`96](https://www.enlight.ru/enlight/96/index.html) demo party.\n80486, DOS, VGA, Sound Blaster.\nIdea,Code,Gfx: ├┼AX (Roman Lut), Music: (Eugene Babich)\nBorland pascal 7.0, 8086 Assembler.\n\nModern PC is 1000x faster that one used to write an intro. You can execute intro in the emulator by double clicking on MSDOS icon."
+        },
+        {
+          "type": "folder",
           "name": "1997-08 Fields of the Nephilims",
           "path": "Demoscene/1997-08_Fields_of_the_Nephilims",
           "items": [
@@ -260,7 +287,7 @@
             }
           ],
           "image": "folder_image.jpg",
-          "desc": "**Fields Of The Nephilims – PC demo**\n80386, DOS, VGA, Sound Blaster\nIdea,Code,Gfx: ├┼AX (Roman Lut), Music: (Eugene Babich)\nBorland pascal 7.0, 8086 Assembler. Source code was lost 🙁\n\nThis demo should have been shown at [Enlight`97](https://www.enlight.ru/enlight/) demo party. Unfortunately, due to technical reasons second day of the party has been canceled, and demo was not shown.\n\nThis was the last demo released by our group. After that I lost interest to demo making and moved to game development.\n\nModern PC is 1000x faster that one used to write an intro. You can execute intro in the emulator by double clicking on MSDOS icon."
+          "desc": "**Fields Of The Nephilims – PC demo**\nPentium-100, DOS, VGA, Sound Blaster\nIdea,Code,Gfx: ├┼AX (Roman Lut), Music: (Eugene Babich)\nBorland pascal 7.0, 8086 Assembler. Source code was lost 🙁\n\nThis demo should have been shown at [Enlight`97](https://www.enlight.ru/enlight/) demo party. Unfortunately, due to technical reasons second day of the party has been canceled, and demo was not shown.\n\nThis was the last demo released by our group. After that I lost interest to demo making and moved to game development.\n\nModern PC is 1000x faster that one used to write an intro. You can execute intro in the emulator by double clicking on MSDOS icon."
         },
         {
           "type": "folder",

@@ -1,5 +1,5 @@
 **Fields Of The Nephilims – PC demo**
-80386, DOS, VGA, Sound Blaster
+Pentium-100, DOS, VGA, Sound Blaster
 Idea,Code,Gfx: ├┼AX (Roman Lut), Music: (Eugene Babich)
 Borland pascal 7.0, 8086 Assembler. Source code was lost 🙁
 
