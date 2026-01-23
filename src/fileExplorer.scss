@@ -132,6 +132,7 @@
   text-align: justify;
   margin-right: 6px;
   min-width: 320px;
+  user-select: none;
 }
 
 .fileexplorer__meta-desc a {
@@ -153,6 +154,11 @@
 
 .fileexplorer__meta-desc p:first-child {
   margin-top: 0;
+}
+
+.fileexplorer__meta-image img {
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .fileexplorer__meta::after {

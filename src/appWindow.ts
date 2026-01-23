@@ -280,6 +280,7 @@ export class AppWindow {
   private overlayPrevStyle: { left: string; top: string; width: string; height: string } | null = null;
   private overlayKeyHandler: ((e: KeyboardEvent) => void) | null = null;
   private overlayClickHandler: ((e: MouseEvent) => void) | null = null;
+  private overlayNativeFs = false;
 
   protected toggleOverlay() {
     if (this.overlayActive) {
@@ -305,6 +306,19 @@ export class AppWindow {
     this.element.style.width = '100vw';
     this.element.style.height = '100vh';
     this.overlayActive = true;
+    this.overlayNativeFs = false;
+    if (!document.fullscreenElement && this.element.requestFullscreen) {
+      this.element
+        .requestFullscreen()
+        .then(() => {
+          this.overlayNativeFs = true;
+        })
+        .catch(() => {
+          /* ignore failure to enter native fullscreen */
+        });
+    } else if (document.fullscreenElement === this.element) {
+      this.overlayNativeFs = true;
+    }
     this.overlayKeyHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') this.exitOverlay();
     };
@@ -333,6 +347,12 @@ export class AppWindow {
     }
     this.element.classList.remove('app-window--overlay');
     this.overlayActive = false;
+    if (this.overlayNativeFs && document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {
+        /* ignore failures to exit fullscreen */
+      });
+    }
+    this.overlayNativeFs = false;
     if (this.overlayKeyHandler) window.removeEventListener('keydown', this.overlayKeyHandler);
     if (this.overlayClickHandler) this.element.removeEventListener('click', this.overlayClickHandler);
     this.unbindIframeOverlayHandlers();
