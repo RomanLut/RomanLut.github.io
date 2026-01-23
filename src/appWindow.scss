@@ -269,6 +269,11 @@
   display: none;
 }
 
+.desktop .app-window.is-resizing iframe,
+.desktop .app-window.is-resizing .browser__frame {
+  pointer-events: none;
+}
+
 .desktop .app-window__resize--ne {
   top: -6px;
   right: -6px;

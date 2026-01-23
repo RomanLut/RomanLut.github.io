@@ -198,6 +198,7 @@ export class AppWindow {
         }
         this.prevUserSelect = document.body.style.userSelect;
         document.body.style.userSelect = 'none';
+        this.element.classList.add('is-resizing');
         document.addEventListener('mousemove', this.handleResize);
         document.addEventListener('mouseup', this.stopResize);
       });
@@ -261,6 +262,7 @@ export class AppWindow {
       document.body.style.userSelect = this.prevUserSelect;
       this.prevUserSelect = null;
     }
+    this.element.classList.remove('is-resizing');
     document.removeEventListener('mousemove', this.handleResize);
     document.removeEventListener('mouseup', this.stopResize);
   };
