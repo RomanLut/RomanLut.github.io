@@ -16,6 +16,7 @@ export class AppWindow {
   private closeBtn: HTMLButtonElement;
   private maxBtn: HTMLButtonElement;
   private minBtn: HTMLButtonElement;
+  private fsBtn: HTMLButtonElement | null = null;
   private state: WindowState = 'normal';
   private taskbar: Taskbar;
   private taskbarButton:
@@ -33,8 +34,15 @@ export class AppWindow {
   private iconMarkup: string | undefined;
   private static openWindows = new Set<AppWindow>();
   private positioned = false;
+  private overlayActive = false;
+  private overlayPrevStyle: { left: string; top: string; width: string; height: string } | null = null;
+  private overlayKeyHandler: ((e: KeyboardEvent) => void) | null = null;
+  private overlayClickHandler: ((e: MouseEvent) => void) | null = null;
+  private overlayPrevOverflow: string | null = null;
+  private overlayIframeHandlers: Array<{ win: Window; click: (e: MouseEvent) => void; key: (e: KeyboardEvent) => void }> =
+    [];
 
-  constructor(desktop: HTMLElement, taskbar: Taskbar, title: string, icon?: string) {
+  constructor(desktop: HTMLElement, taskbar: Taskbar, title: string, icon?: string, showFullscreen = false) {
     this.taskbar = taskbar;
     this.desktop = desktop;
     this.element = document.createElement('div');
@@ -51,7 +59,8 @@ export class AppWindow {
           ${this.iconMarkup}
         </div>
         <div class="app-window__title">${title}</div>
-        <div class="app-window__actions">
+      <div class="app-window__actions">
+          ${showFullscreen ? '<button class="app-window__btn app-window__btn--fs" aria-label="Fullscreen"></button>' : ''}
           <button class="app-window__btn app-window__btn--min" aria-label="Minimize"></button>
           <button class="app-window__btn app-window__btn--max" aria-label="Maximize"></button>
           <button class="app-window__btn app-window__btn--close" aria-label="Close"></button>
@@ -70,6 +79,7 @@ export class AppWindow {
 
     this.headerEl = this.element.querySelector('.app-window__header') as HTMLElement;
     this.contentEl = this.element.querySelector('.app-window__body') as HTMLElement;
+    this.fsBtn = this.element.querySelector('.app-window__btn--fs') as HTMLButtonElement | null;
     this.closeBtn = this.element.querySelector('.app-window__btn--close') as HTMLButtonElement;
     this.maxBtn = this.element.querySelector('.app-window__btn--max') as HTMLButtonElement;
     this.minBtn = this.element.querySelector('.app-window__btn--min') as HTMLButtonElement;
@@ -79,6 +89,12 @@ export class AppWindow {
     this.createTaskbarButton(title);
     this.focus();
     this.attachEvents(desktop);
+    if (this.fsBtn) {
+      this.fsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.toggleOverlay();
+      });
+    }
     AppWindow.openWindows.add(this);
   }
 
@@ -172,6 +188,7 @@ export class AppWindow {
     const resizeZones = this.element.querySelectorAll<HTMLElement>('[data-resize]');
     resizeZones.forEach((zone) => {
       zone.addEventListener('mousedown', (event) => {
+        if (this.state === 'maximized' || this.overlayActive) return;
         event.stopPropagation();
         const dir = zone.dataset.resize as ResizeDir;
         this.resizing = { dir };
@@ -248,6 +265,95 @@ export class AppWindow {
     document.removeEventListener('mouseup', this.stopResize);
   };
 
+  // --- Overlay (fullscreen) support for optional fullscreen button ---
+  private overlayActive = false;
+  private overlayPrevStyle: { left: string; top: string; width: string; height: string } | null = null;
+  private overlayKeyHandler: ((e: KeyboardEvent) => void) | null = null;
+  private overlayClickHandler: ((e: MouseEvent) => void) | null = null;
+
+  protected toggleOverlay() {
+    if (this.overlayActive) {
+      this.exitOverlay();
+    } else {
+      this.enterOverlay();
+    }
+  }
+
+  private enterOverlay() {
+    if (this.overlayActive) return;
+    this.overlayPrevStyle = {
+      left: this.element.style.left,
+      top: this.element.style.top,
+      width: this.element.style.width,
+      height: this.element.style.height
+    };
+    this.overlayPrevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    this.element.classList.add('app-window--overlay');
+    this.element.style.left = '0';
+    this.element.style.top = '0';
+    this.element.style.width = '100vw';
+    this.element.style.height = '100vh';
+    this.overlayActive = true;
+    this.overlayKeyHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') this.exitOverlay();
+    };
+    this.overlayClickHandler = (evt: MouseEvent) => {
+      // ignore clicks on the fullscreen button itself to prevent immediate toggle loops
+      const target = evt.target as HTMLElement;
+      if (target && target.closest('.app-window__btn--fs')) return;
+      this.exitOverlay();
+    };
+    window.addEventListener('keydown', this.overlayKeyHandler);
+    this.element.addEventListener('click', this.overlayClickHandler);
+    this.bindIframeOverlayHandlers();
+  }
+
+  private exitOverlay() {
+    if (!this.overlayActive) return;
+    if (this.overlayPrevStyle) {
+      this.element.style.left = this.overlayPrevStyle.left;
+      this.element.style.top = this.overlayPrevStyle.top;
+      this.element.style.width = this.overlayPrevStyle.width;
+      this.element.style.height = this.overlayPrevStyle.height;
+    }
+    if (this.overlayPrevOverflow !== null) {
+      document.body.style.overflow = this.overlayPrevOverflow;
+      this.overlayPrevOverflow = null;
+    }
+    this.element.classList.remove('app-window--overlay');
+    this.overlayActive = false;
+    if (this.overlayKeyHandler) window.removeEventListener('keydown', this.overlayKeyHandler);
+    if (this.overlayClickHandler) this.element.removeEventListener('click', this.overlayClickHandler);
+    this.unbindIframeOverlayHandlers();
+    this.overlayKeyHandler = null;
+    this.overlayClickHandler = null;
+  }
+
+  private bindIframeOverlayHandlers() {
+    this.unbindIframeOverlayHandlers();
+    const iframes = Array.from(this.element.querySelectorAll('iframe'));
+    iframes.forEach((frame) => {
+      const win = frame.contentWindow;
+      if (!win) return;
+      const click = () => this.exitOverlay();
+      const key = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') this.exitOverlay();
+      };
+      win.addEventListener('click', click);
+      win.addEventListener('keydown', key);
+      this.overlayIframeHandlers.push({ win, click, key });
+    });
+  }
+
+  private unbindIframeOverlayHandlers() {
+    this.overlayIframeHandlers.forEach(({ win, click, key }) => {
+      win.removeEventListener('click', click);
+      win.removeEventListener('keydown', key);
+    });
+    this.overlayIframeHandlers = [];
+  }
+
   private stopDrag = () => {
     this.dragging = false;
     document.removeEventListener('mousemove', this.handleDrag);
@@ -286,6 +392,7 @@ export class AppWindow {
   }
 
   protected close() {
+    this.exitOverlay();
     this.element.remove();
     if (this.taskbarButton) {
       this.taskbarButton.remove();

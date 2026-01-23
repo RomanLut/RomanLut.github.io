@@ -8,6 +8,22 @@
   box-sizing: border-box;
 }
 
+.app-window--overlay .browser {
+  grid-template-rows: 1fr;
+}
+
+.app-window--overlay .browser__toolbar,
+.app-window--overlay .browser__statusbar {
+  display: none !important;
+}
+
+.app-window--overlay .browser__content {
+  grid-row: 1;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
 .browser__toolbar {
   display: flex;
   align-items: center;
@@ -84,7 +100,7 @@
   max-width: 100%;
   max-height: 100%;
   border: none;
-  background: #fff;
+  background: transparent;
   display: block;
 }
 

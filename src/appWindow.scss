@@ -17,6 +17,25 @@
 .desktop .app-window.is-maximized {
   border-radius: 0;
 }
+.desktop .app-window--overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 4000 !important;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent;
+}
+.desktop .app-window--overlay .app-window__header {
+  display: none;
+}
+.desktop .app-window--overlay .app-window__body {
+  height: 100vh;
+}
 
 .desktop .app-window__header {
   position: relative;
@@ -60,6 +79,15 @@
 .desktop .app-window__actions {
   display: inline-flex;
   gap: 6px;
+}
+
+.desktop .app-window__btn--fs::before {
+  content: '⤢';
+  font-size: 16px;
+  color: #1b1b1d;
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
 }
 
 .desktop .app-window__btn {
@@ -234,6 +262,11 @@
 .desktop .app-window__resize--sw {
   width: 12px;
   height: 12px;
+}
+
+.desktop .app-window.is-maximized .app-window__resize,
+.desktop .app-window--overlay .app-window__resize {
+  display: none;
 }
 
 .desktop .app-window__resize--ne {

@@ -54,7 +54,7 @@ export class Browser extends AppWindow {
   };
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, startUrl = 'https://github.com') {
-    super(desktop, taskbar, 'Browser', BROWSER_ICON);
+    super(desktop, taskbar, 'Browser', BROWSER_ICON, true);
     this.element.style.width = `${responsiveWidth(880)}px`;
     const taskbarHeight = taskbar.element.getBoundingClientRect().height || 0;
     const baseHeight = Math.floor(window.innerHeight * 0.7);
