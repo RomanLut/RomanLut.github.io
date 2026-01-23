@@ -94,7 +94,7 @@ export class Desktop {
     new DesktopIcon(this.element, 'word', 'Competitions', { x: 120 + 200, y: 16 });
 
     new DesktopIcon(this.element, 'folder', 'Game development', { x: 16, y: 136 }, () =>
-      new FileExplorer(this.element, this.taskbar, 'Demoscene')
+      new FileExplorer(this.element, this.taskbar, 'Game_development')
     );
     new DesktopIcon(this.element, 'folder', 'Hobby projects', { x: 136 + 120, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Hobby_projects')
