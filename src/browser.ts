@@ -9,6 +9,10 @@ function normalizeUrl(value: string): string {
   if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
     return trimmed;
   }
+  // If it contains no dot and no scheme, treat as search (handled later).
+  if (!trimmed.startsWith('/') && !trimmed.includes('.')) {
+    return trimmed;
+  }
   if (trimmed.startsWith('/')) {
     // Absolute path on current origin (e.g., /filesystem/...)
     return `${window.location.origin}${trimmed}`;
@@ -166,13 +170,33 @@ export class Browser extends AppWindow {
   }
 
   private navigate(url: string) {
-    const normalized = normalizeUrl(url);
-    if (!normalized) return;
-    this.currentUrl = normalized;
-    this.addressInput.value = normalized;
+    let normalized = normalizeUrl(url);
+    let finalUrl = normalized;
+    try {
+      // If input has no scheme and no dot, treat as search
+      const looksLikeSearch = !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(normalized) && !normalized.includes('.');
+      if (looksLikeSearch) {
+        finalUrl = `https://www.google.com/?igu=1&q=${encodeURIComponent(url)}`;
+      } else {
+        const u = new URL(normalized, window.location.href);
+        if (u.protocol === 'http:' || u.protocol === 'https:') {
+          if (u.hostname.includes('google.com') && !u.searchParams.has('igu')) {
+            u.searchParams.set('igu', '1');
+          }
+          finalUrl = u.toString();
+        } else {
+          finalUrl = `https://www.google.com/?igu=1&q=${encodeURIComponent(url)}`;
+        }
+      }
+    } catch {
+      finalUrl = `https://www.google.com/?igu=1&q=${encodeURIComponent(url)}`;
+    }
+    if (!finalUrl) return;
+    this.currentUrl = finalUrl;
+    this.addressInput.value = finalUrl;
     this.statusBar.setText('Loading...');
     this.setBlocked(false);
-    this.iframe.src = normalized;
+    this.iframe.src = finalUrl;
     this.bumpResize();
   }
 
