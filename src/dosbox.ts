@@ -60,6 +60,7 @@ export class DosBox extends AppWindow {
     this.host.className = 'dosbox__screen';
     this.host.style.width = '100%';
     this.host.style.height = '100%';
+    this.host.tabIndex = 0; // allow keyboard focus
     this.stage = document.createElement('div');
     this.stage.className = 'dosbox__stage';
     this.host.appendChild(this.stage);
@@ -105,6 +106,8 @@ export class DosBox extends AppWindow {
     // Size window so the screen area is exactly 960x600 (accounting for chrome).
     this.element.style.width = '962px';
     this.element.style.height = '688px';
+    // Give initial keyboard focus to the emulator surface.
+    queueMicrotask(() => this.host.focus());
 
     // Expose for devtools debugging of the current instance
     (window as any).__lastDosBox = this;
@@ -177,6 +180,7 @@ export class DosBox extends AppWindow {
       this.dosInstance = player;
       await this.mountAndRun(player, this.bundleBytes, runtime.js, runtime.wasm);
       this.startFpsCounter();
+      this.host.focus();
     } catch (err) {
       this.showError(err);
     }

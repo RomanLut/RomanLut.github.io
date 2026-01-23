@@ -99,7 +99,7 @@
 .fileexplorer__meta {
   display: none;
   grid-template-columns: auto 1fr;
-  gap: 16px;
+  gap: 8px;
   margin: 0 -12px 12px;
   width: calc(100% + 24px);
   background: linear-gradient(180deg, #ffffff, #f0f2f7);
@@ -133,6 +133,12 @@
   margin-right: 6px;
   min-width: 320px;
   user-select: none;
+}
+
+.fileexplorer__meta-image + .fileexplorer__meta-desc {
+  border-left: 1px solid #d6d9e0;
+  padding-left: 12px;
+  margin-left: 4px;
 }
 
 .fileexplorer__meta-desc a {

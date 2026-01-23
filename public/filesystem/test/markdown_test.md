@@ -4,15 +4,22 @@
 Normal text with **bold**, *italic*, and ```inline code```.
 
 ## Links and images
-- Link: [OpenAI](https://www.openai.com/)
-- Image (relative): ![Test Image](/wallpaper2.jpg)
+Link: [OpenAI](https://www.openai.com/)
+Image (relative): ![Test Image](/wallpaper2.jpg)
+
+Image (html tag,scaled, left aligned):
+<img src="/images/romanluthax.jpg" width="20%" align="left">
+
+Image (html tag ,scaled, right aligned):
+<img src="/images/romanluthax.jpg" width="20%" align="right">
 
 ## Youtube videos
  [Watch sample video](https://www.youtube.com/watch?v=pnqxeROW-kw)
 
 ## Lists
 - Unordered item 1
-- Unordered item 2
+- Unordered item 2. Nested text.
+  
 
 ## Blockquote
 > This is a blockquote line to check indent and styling.

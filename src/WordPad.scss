@@ -81,11 +81,19 @@
 .wordpad__content ul,
 .wordpad__content ol {
   margin: 0 0 14px 24px;
-  padding: 0;
+  padding: 0 0 0 6px;
 }
 
 .wordpad__content li {
   margin: 4px 0;
+}
+
+.wordpad__content ul {
+  list-style: disc outside;
+}
+
+.wordpad__content ol {
+  list-style: decimal outside;
 }
 
 .wordpad__content blockquote {
@@ -135,13 +143,58 @@
   text-decoration: underline;
 }
 
-.wordpad__content img {
-  max-width: 100%;
-  height: auto;
+.wordpad__content iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: 6px;
   display: block;
   margin: 12px auto;
+  background: #000;
+}
+
+.wordpad__content .wp-embed {
+  width: 100%;
+  max-width: 900px;
+  margin: 12px auto;
+}
+
+.wordpad__content .wp-img {
+  width: 100%;
+  text-align: center;
+  margin: 12px auto;
+  position: relative;
+}
+
+.wordpad__content .wp-img img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
   border-radius: 6px;
 }
+
+.wordpad__content .wp-img.align-left img {
+  float: left;
+  margin: 0 12px 12px 0;
+}
+
+.wordpad__content .wp-img.align-right img {
+  float: right;
+  margin: 0 0 12px 12px;
+}
+
+.wordpad__content .wp-img.align-center img {
+  float: none;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.wordpad__content .wp-img::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
 
 .wordpad__error {
   color: #a00;

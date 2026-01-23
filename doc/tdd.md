@@ -154,7 +154,8 @@ Markdown support (rendered):
 - Lists: unordered (`-`). Ordered lists are not supported.
 - Links: `[text](url)` open in a new tab.
 - Images: `![alt](path)` resolve relative to the markdown file location.
-- Youtuve videos: `![alt](path)` ambedded as miniplayer.
+- Images with html tag: <img src="/images/test.jpg" width="50%" align="left">
+- Youtube videos: `![alt](path)` ambedded as miniplayer.
 - Code blocks: triple backticks rendered in monospace with preserved whitespace.
 - Blockquotes: `>` indented with a subtle left border.
 

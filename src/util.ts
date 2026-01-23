@@ -84,6 +84,23 @@ function getYouTubeEmbed(href: string): string | null {
 }
 
 export function applyInline(text: string, basePath: string) {
+  // Allow raw <img> tags (with resolved paths) before escaping.
+  const rawImageTokens: string[] = [];
+  const tokenForRawImg = (html: string) => {
+    const idx = rawImageTokens.length;
+    rawImageTokens.push(html);
+    return `@@RAWIMG_${idx}@@`;
+  };
+
+  text = text.replace(/<img\s+[^>]*src\s*=\s*["']([^"']+)["'][^>]*>/gi, (match, src) => {
+    const resolved = resolvePath(src, basePath);
+    const alignMatch = match.match(/align\s*=\s*["']?\s*(left|right|center)\s*["']?/i);
+    const align = alignMatch ? alignMatch[1].toLowerCase() : '';
+    const alignClass = align ? ` align-${align}` : '';
+    const wrapped = `<div class="wp-img${alignClass}">${match.replace(src, resolved)}</div>`;
+    return tokenForRawImg(wrapped);
+  });
+
   let t = escapeHtml(text);
 
   const replacements: string[] = [];
@@ -94,9 +111,14 @@ export function applyInline(text: string, basePath: string) {
   };
 
   // Protect links and images so italics/strong regexes do not modify URLs.
-  t = t.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, src) =>
-    tokenFor(`<img src="${resolvePath(src, basePath)}" alt="${alt}" />`)
-  );
+  t = t.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, src) => {
+    const resolved = resolvePath(src, basePath);
+    const embed = getYouTubeEmbed(resolved);
+    if (embed) {
+      return tokenFor(`<div class="wp-embed">${embed}</div>`);
+    }
+    return tokenFor(`<div class="wp-img"><img src="${resolved}" alt="${alt}" /></div>`);
+  });
   t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label, href) => {
     const resolved = resolvePath(href, basePath);
     const embed = getYouTubeEmbed(resolved);
@@ -114,6 +136,7 @@ export function applyInline(text: string, basePath: string) {
   t = t.replace(/_([^_]+)_/g, '<em>$1</em>');
 
   t = t.replace(/@@INLINE_(\d+)@@/g, (_m, idx) => replacements[Number(idx)] ?? '');
+  t = t.replace(/@@RAWIMG_(\d+)@@/g, (_m, idx) => rawImageTokens[Number(idx)] ?? '');
   return t;
 }
 

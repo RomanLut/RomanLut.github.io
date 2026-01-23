@@ -87,7 +87,9 @@ export class Desktop {
 
   private spawnIcons() {
     //new DesktopIcon(this.element, 'notepad', 'Notepad', { x: 16, y: 136 });
-    new DesktopIcon(this.element, 'word', 'About me', { x: 16, y: 16 });
+    new DesktopIcon(this.element, 'word', 'About me', { x: 16, y: 16 }, () =>
+      new WordPad(this.element, this.taskbar, '/filesystem/About_me.md', 'About me')
+    );
     new DesktopIcon(this.element, 'word', 'Resume', { x: 120, y: 16 });
     new DesktopIcon(this.element, 'word', 'Competitions', { x: 120 + 200, y: 16 });
 
@@ -124,13 +126,17 @@ export class Desktop {
       this.element,
       'html',
       'JS1k - Lost In A Cave',
-      { x: 16 + 240*6, y: 16  },
+      { x: 16 + 120*12, y: 16  },
       () => new Browser(this.element, this.taskbar, '/filesystem/Demoscene/2019-03_JS1k_Lost_In_A_Cave/Lost_In_A_Cave.html')
     );
 
     // Test MS-DOS launcher (executable type)
-    new DesktopIcon(this.element, 'msdos', 'MS-DOS', { x: 16, y: 16 + 120 + 120 + 140 + 120 }, () =>
-      new DosBox(this.element, this.taskbar, 'Demoscene/PAINTER.zip', 'PAINTER.exe')
+    new DesktopIcon(
+      this.element,
+      'msdos',
+      'Fields of the Nephilims',
+      { x: 16  + 120* 13, y: 16 },
+      () => new DosBox(this.element, this.taskbar, 'Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip')
     );
   }
 }
