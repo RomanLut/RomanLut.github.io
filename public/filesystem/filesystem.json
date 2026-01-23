@@ -41,8 +41,22 @@
               "name": "MBROT",
               "path": "Demoscene/1995-11_Mbrot/MBROT.ZIP",
               "size": 29602
+            },
+            {
+              "type": "archive",
+              "name": "MBROT SRC",
+              "path": "Demoscene/1995-11_Mbrot/MBROT_SRC.zip",
+              "size": 107327
+            },
+            {
+              "type": "notepad",
+              "name": "MBROT.PAS",
+              "path": "Demoscene/1995-11_Mbrot/MBROT.PAS.txt",
+              "size": 11401
             }
-          ]
+          ],
+          "image": "folder_image.png",
+          "desc": "**Mbrot**\n32k intro. Zooming into Mundelbrot fractal in realtime, music.\n80286, VGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nTurbo Pascal 5.0, 8086 Assembler\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in the emulator by double clicking on MSDOS icon."
         },
         {
           "type": "folder",
@@ -52,24 +66,30 @@
             {
               "type": "executable",
               "name": "PAINTER",
-              "path": "Demoscene/1996-02_Painter/PAINTER.ZIP",
-              "size": 52542
+              "path": "Demoscene/1996-02_Painter/PAINTER.zip",
+              "size": 52798
             },
             {
               "type": "archive",
               "name": "PAINTER",
-              "path": "Demoscene/1996-02_Painter/PAINTER.ZIP",
-              "size": 52542
+              "path": "Demoscene/1996-02_Painter/PAINTER.zip",
+              "size": 52798
             },
             {
               "type": "archive",
-              "name": "PAINTSRC",
-              "path": "Demoscene/1996-02_Painter/PAINTSRC.RAR",
+              "name": "PAINTER SRC",
+              "path": "Demoscene/1996-02_Painter/PAINTER_SRC.RAR",
               "size": 109936
+            },
+            {
+              "type": "notepad",
+              "name": "PAINTER.PAS",
+              "path": "Demoscene/1996-02_Painter/PAINTER.PAS.txt",
+              "size": 9865
             }
           ],
           "image": "folder_image.png",
-          "desc": "**Painter**\n64k intro\n80286, CGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in emulator by double clicking on MSDOS icon."
+          "desc": "**Painter**\n64k intro. Images in hand-drawn style morphing in cycle, music.\n80286, CGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in the emulator by double clicking on MSDOS icon."
         },
         {
           "type": "folder",
@@ -88,7 +108,9 @@
               "path": "Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip",
               "size": 3264505
             }
-          ]
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**Fields Of The Nephilims – PC demo**\n80386, VGA, Sound Blaster\nIdea,Code,Gfx: ├┼AX (Roman Lut), Music: (Eugene Babich)\nBorland pascal 7.0, 8086 Assembler. Source code was lost 🙁\n\nThis was the last demo released by our group. After that I lost interest to demo making and moved to game development.\nThis demo should have been shown at [Enlight`97](https://www.enlight.ru/enlight/) demo party. Unfortunately, due to technical reasons second day of the party has been canceled, and demo was not shown."
         },
         {
           "type": "folder",
@@ -141,18 +163,6 @@
           "name": "MORPH",
           "path": "Demoscene/MORPH.zip",
           "size": 806604
-        },
-        {
-          "type": "executable",
-          "name": "PAINTER",
-          "path": "Demoscene/PAINTER.ZIP",
-          "size": 52542
-        },
-        {
-          "type": "archive",
-          "name": "PAINTER",
-          "path": "Demoscene/PAINTER.ZIP",
-          "size": 52542
         },
         {
           "type": "archive",
@@ -347,6 +357,12 @@
       ],
       "image": "folder_image.jpg",
       "desc": "folder.md Markdown Rendering Test\n\nText styles\nNormal text with **bold**, *italic*.\n\nLinks \n- Link: [OpenAI](https://www.openai.com/)\n\nLong text\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    },
+    {
+      "type": "wordpad",
+      "name": "About me",
+      "path": "About_me.md",
+      "size": 1363
     }
   ]
 }
