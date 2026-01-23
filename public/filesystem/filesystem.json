@@ -27,6 +27,25 @@
       "items": [
         {
           "type": "folder",
+          "name": "1995-11 Mbrot",
+          "path": "Demoscene/1995-11_Mbrot",
+          "items": [
+            {
+              "type": "executable",
+              "name": "MBROT",
+              "path": "Demoscene/1995-11_Mbrot/MBROT.ZIP",
+              "size": 29602
+            },
+            {
+              "type": "archive",
+              "name": "MBROT",
+              "path": "Demoscene/1995-11_Mbrot/MBROT.ZIP",
+              "size": 29602
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "1996-02 Painter",
           "path": "Demoscene/1996-02_Painter",
           "items": [
@@ -50,7 +69,26 @@
             }
           ],
           "image": "folder_image.png",
-          "desc": "**Painter**\n64k intro\n80286, CGA, Adlib\nIdea,Code,Gfx: **├┼AX**\nMusic: **Autor unknown**\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in emulator by double clicking on MSDOS icon."
+          "desc": "**Painter**\n64k intro\n80286, CGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in emulator by double clicking on MSDOS icon."
+        },
+        {
+          "type": "folder",
+          "name": "1997-08 Fields of the Nephilims",
+          "path": "Demoscene/1997-08_Fields_of_the_Nephilims",
+          "items": [
+            {
+              "type": "executable",
+              "name": "fields",
+              "path": "Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip",
+              "size": 3264505
+            },
+            {
+              "type": "archive",
+              "name": "fields",
+              "path": "Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip",
+              "size": 3264505
+            }
+          ]
         },
         {
           "type": "folder",
@@ -91,30 +129,6 @@
               "size": 60207
             }
           ]
-        },
-        {
-          "type": "executable",
-          "name": "fields",
-          "path": "Demoscene/fields.zip",
-          "size": 3264400
-        },
-        {
-          "type": "archive",
-          "name": "fields",
-          "path": "Demoscene/fields.zip",
-          "size": 3264400
-        },
-        {
-          "type": "executable",
-          "name": "MBROT",
-          "path": "Demoscene/MBROT.ZIP",
-          "size": 29230
-        },
-        {
-          "type": "archive",
-          "name": "MBROT",
-          "path": "Demoscene/MBROT.ZIP",
-          "size": 29230
         },
         {
           "type": "executable",

@@ -15,6 +15,15 @@
   padding: 0;
 }
 
+.dosbox.app-window--overlay .app-window__menu,
+.dosbox.app-window--overlay .dosbox__status {
+  display: none;
+}
+
+.dosbox.app-window--overlay .dosbox__screen {
+  height: 100%;
+}
+
 .dosbox .app-window__menu {
   width: 100%;
   margin: 0;

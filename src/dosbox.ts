@@ -46,7 +46,8 @@ export class DosBox extends AppWindow {
   constructor(desktop: HTMLElement, taskbar: Taskbar, archivePath: string, exeName?: string) {
     const guessedExe = DosBox.guessExeName(archivePath);
     const icon = '<img src="/icons/msdos.svg" alt="MS-DOS icon" />';
-    super(desktop, taskbar, exeName ? `DOSBox - ${exeName}` : `DOSBox - ${guessedExe}`, icon);
+    // Enable fullscreen button (same behavior as Browser)
+    super(desktop, taskbar, exeName ? `DOSBox - ${exeName}` : `DOSBox - ${guessedExe}`, icon, true);
     this.archivePath = archivePath;
     this.exeName = exeName || guessedExe;
 
