@@ -2,6 +2,7 @@ import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
 import { AppWindowStatusBar } from './appWindowStatusBar';
+import { Browser } from './browser';
 import { applyInline, closeMenus, escapeHtml, inlineImages, markdownToHtml, responsiveWidth, responsiveHeight } from './util';
 
 const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
@@ -18,6 +19,8 @@ export class WordPad extends AppWindow {
   private static limitArticleWidth: boolean | null = null;
   private static instances = new Set<WordPad>();
 
+  private desktopRef: HTMLElement;
+  private taskbarRef: Taskbar;
   private status: AppWindowStatusBar;
   private contentArea: HTMLElement;
   private container: HTMLElement;
@@ -35,6 +38,8 @@ export class WordPad extends AppWindow {
       title || WordPad.titleFromPath(filePath),
       WORDPAD_ICON
     );
+    this.desktopRef = desktop;
+    this.taskbarRef = taskbar;
 
     const container = document.createElement('div');
     container.className = 'wordpad';
@@ -139,6 +144,17 @@ export class WordPad extends AppWindow {
     this.setContent(container);
     this.loadFile(filePath);
     this.contentArea.addEventListener('scroll', () => this.updateStatus());
+    this.contentArea.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      const link = target?.closest('a') as HTMLAnchorElement | null;
+      if (!link) return;
+      const hrefAttr = link.getAttribute('href') || '';
+      if (hrefAttr.startsWith('#')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const url = hrefAttr || link.href;
+      new Browser(this.desktopRef, this.taskbarRef, url);
+    });
 
     // Target ~830px readable content area (padding + borders + scrollbar allowance).
     this.element.style.width = `${responsiveWidth(WordPad.MAX_WIDTH + 68)}px`;

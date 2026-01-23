@@ -88,6 +88,16 @@ export class Browser extends AppWindow {
     reloadBtn.title = 'Reload';
     reloadBtn.addEventListener('click', () => this.reload());
 
+    const externalBtn = document.createElement('button');
+    externalBtn.className = 'browser__btn';
+    externalBtn.textContent = '↗';
+    externalBtn.title = 'Open in new window';
+    externalBtn.addEventListener('click', () => {
+      const url = this.currentUrl || this.addressInput.value;
+      if (!url) return;
+      window.open(url, '_blank', 'noopener');
+    });
+
     this.addressInput = document.createElement('input');
     this.addressInput.type = 'text';
     this.addressInput.className = 'browser__address';
@@ -102,7 +112,7 @@ export class Browser extends AppWindow {
       }
     });
 
-    toolbar.append(backBtn, fwdBtn, reloadBtn, this.addressInput);
+    toolbar.append(backBtn, fwdBtn, reloadBtn, this.addressInput, externalBtn);
 
     const content = document.createElement('div');
     content.className = 'browser__content';
@@ -210,7 +220,7 @@ export class Browser extends AppWindow {
     if (flag) {
       this.statusBar.setText('Blocked or failed to load');
     } else {
-      this.statusBar.setText('Done');
+      this.statusBar.setText('Loaded');
     }
   }
 

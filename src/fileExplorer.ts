@@ -231,6 +231,18 @@ export class FileExplorer extends AppWindow {
         prevBlank = false;
       }
       descWrap.innerHTML = html;
+      // Open description links inside the Browser app instead of the same tab.
+      descWrap.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement | null;
+        const link = target?.closest('a') as HTMLAnchorElement | null;
+        if (!link) return;
+        const hrefAttr = link.getAttribute('href') || '';
+        if (hrefAttr.startsWith('#')) return; // allow in-page anchors
+        e.preventDefault();
+        e.stopPropagation();
+        const url = hrefAttr || link.href;
+        new Browser(this.desktopRef, this.taskbarRef, url);
+      });
       this.meta.appendChild(descWrap);
     }
   }
