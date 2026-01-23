@@ -41,6 +41,7 @@ export class DosBox extends AppWindow {
   private logLines: string[] = [];
   private maxLogLines = 40;
   private paused = false;
+  private launched = false;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, archivePath: string, exeName?: string) {
     const guessedExe = DosBox.guessExeName(archivePath);
@@ -107,7 +108,19 @@ export class DosBox extends AppWindow {
     // Expose for devtools debugging of the current instance
     (window as any).__lastDosBox = this;
 
-    void this.launch();
+    const launchWhenReady = () => {
+      this.element.removeEventListener('appwindow:maximized', launchWhenReady);
+      if (!this.launched) void this.launch();
+    };
+    this.element.addEventListener('appwindow:maximized', launchWhenReady, { once: true });
+    // If already maximized (or becomes so before the event attaches), launch immediately.
+    if (this.element.classList.contains('is-maximized')) {
+      launchWhenReady();
+    }
+    // Fallback: launch after 1s even if not maximized (to avoid never-start)
+    setTimeout(() => {
+      if (!this.launched) void this.launch();
+    }, 1000);
   }
 
   protected close() {
@@ -132,6 +145,8 @@ export class DosBox extends AppWindow {
   }
 
   private async launch() {
+    if (this.launched) return;
+    this.launched = true;
     try {
       const Dos = await this.loadRuntime();
       if (!Dos) {

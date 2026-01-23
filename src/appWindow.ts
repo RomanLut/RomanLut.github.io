@@ -41,6 +41,8 @@ export class AppWindow {
   private overlayPrevOverflow: string | null = null;
   private overlayIframeHandlers: Array<{ win: Window; click: (e: MouseEvent) => void; key: (e: KeyboardEvent) => void }> =
     [];
+  private showAnimation?: Animation;
+  private spawnedAnimated = false;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, title: string, icon?: string, showFullscreen = false) {
     this.taskbar = taskbar;
@@ -150,6 +152,10 @@ export class AppWindow {
     this.element.style.left = `${x}px`;
     this.element.style.top = `${y}px`;
     this.positioned = true;
+    if (!this.spawnedAnimated) {
+      this.spawnedAnimated = true;
+      void this.animateFromTaskbar();
+    }
   }
 
   setContent(node: HTMLElement) {
@@ -374,14 +380,18 @@ export class AppWindow {
 
   private minimize() {
     if (this.state === 'minimized') return;
-    this.state = 'minimized';
-    this.element.style.display = 'none';
-    this.setActiveState(false);
+    this.animateToTaskbar().then(() => {
+      this.state = 'minimized';
+      this.element.style.display = 'none';
+      this.setActiveState(false);
+    });
   }
 
   private restore() {
     this.state = 'normal';
     this.element.style.display = 'flex';
+    this.setActiveState(true);
+    this.animateFromTaskbar();
     this.focus();
   }
 
@@ -448,6 +458,53 @@ export class AppWindow {
     return AppWindow.activeWindows.has(this);
   }
 
+  private getTaskbarButtonEl(): HTMLElement | null {
+    const id = this.element.dataset.winId;
+    if (!id) return null;
+    return document.querySelector(`.taskbar__winbtn[data-win-id="${id}"]`) as HTMLElement | null;
+  }
+
+  private computeTaskbarDelta() {
+    const btn = this.getTaskbarButtonEl();
+    if (!btn) return { dx: 0, dy: 0 };
+    const btnRect = btn.getBoundingClientRect();
+    const winRect = this.element.getBoundingClientRect();
+    const btnCenterX = btnRect.left + btnRect.width / 2;
+    const btnCenterY = btnRect.top + btnRect.height / 2;
+    const winCenterX = winRect.left + winRect.width / 2;
+    const winCenterY = winRect.top + winRect.height / 2;
+    return { dx: btnCenterX - winCenterX, dy: btnCenterY - winCenterY };
+  }
+
+  private animateFromTaskbar(reverse = false): Promise<void> {
+    const { dx, dy } = this.computeTaskbarDelta();
+    // Use non-uniform scale so the window flattens (landscape) toward the taskbar.
+    const sx = 0.25;
+    const sy = 0.05; // flatter to resemble taskbar rectangle
+    const keyframes = reverse
+      ? [
+          { transform: 'translate(0,0) scale(1,1)', opacity: 1 },
+          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, opacity: 0 }
+        ]
+      : [
+          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, opacity: 0 },
+          { transform: 'translate(0,0) scale(1,1)', opacity: 1 }
+        ];
+    // Very slow takeoff, accelerate; total 250ms
+    const anim = this.element.animate(keyframes, {
+      duration: 250,
+      easing: 'cubic-bezier(0.02, 0.0, 0.35, 1)'
+    });
+    return anim.finished.then(() => {
+      this.element.style.transform = 'translate(0,0) scale(1)';
+      this.element.style.opacity = '';
+    });
+  }
+
+  private animateToTaskbar() {
+    return this.animateFromTaskbar(true);
+  }
+
   private maximize() {
     if (this.state === 'maximized') return;
     const rect = this.element.getBoundingClientRect();
@@ -460,6 +517,7 @@ export class AppWindow {
     this.state = 'maximized';
     this.element.classList.add('is-maximized');
     this.setActiveState(true);
+    this.element.dispatchEvent(new CustomEvent('appwindow:maximized', { detail: { win: this } }));
   }
 
   private restoreFromMax() {
@@ -471,6 +529,7 @@ export class AppWindow {
     this.state = 'normal';
     this.element.classList.remove('is-maximized');
     this.setActiveState(true);
+    this.element.dispatchEvent(new CustomEvent('appwindow:restored', { detail: { win: this } }));
   }
 
   private cursorForDir(dir: ResizeDir): string {
