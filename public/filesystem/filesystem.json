@@ -60,6 +60,33 @@
         },
         {
           "type": "folder",
+          "name": "1996-02 Cut Sanity",
+          "path": "Demoscene/1996-02_Cut_Sanity",
+          "items": [
+            {
+              "type": "executable",
+              "name": "SANITY",
+              "path": "Demoscene/1996-02_Cut_Sanity/SANITY.zip",
+              "size": 64331
+            },
+            {
+              "type": "archive",
+              "name": "SANITY",
+              "path": "Demoscene/1996-02_Cut_Sanity/SANITY.zip",
+              "size": 64331
+            },
+            {
+              "type": "archive",
+              "name": "SANITY SRC",
+              "path": "Demoscene/1996-02_Cut_Sanity/SANITY_SRC.ZIP",
+              "size": 153739
+            }
+          ],
+          "image": "folder_image.png",
+          "desc": "**Cut Sanity**\n64k intro. Trackmo, length about 1.5 minute.\n80386, DOS, VGA, PC Speaker·Covox LPT1·Covox LPT2·Covox LPT1+LPT2·SB 2.0·SB PRO\nIdea,Code,Gfx: ├┼AX (Roman Lut). Music: Scud.\nTurbo Pascal 5.0, 8086 Assembler.\nModern PC is 1000x faster that one used to write an intro. You can execute intro in the emulator by double clicking on MSDOS icon."
+        },
+        {
+          "type": "folder",
           "name": "1996-02 Painter",
           "path": "Demoscene/1996-02_Painter",
           "items": [
@@ -89,7 +116,7 @@
             }
           ],
           "image": "folder_image.png",
-          "desc": "**Painter**\n64k intro. Images in hand-drawn style morphing in cycle, music.\n8086, DOS, CGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in the emulator by double clicking on MSDOS icon."
+          "desc": "**Painter**\n64k intro. Images in hand-drawn style morphing in cycle, music.\n8086, DOS, CGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut). Music: unknown.\nTurbo Pascal 5.0, 8086 Assembler.\nModern PC is 1000x faster that one used to write an intro. You can execute intro in the emulator by double clicking on MSDOS icon."
         },
         {
           "type": "folder",
@@ -180,30 +207,14 @@
           ]
         },
         {
-          "type": "executable",
-          "name": "MORPH",
-          "path": "Demoscene/MORPH.zip",
-          "size": 806604
-        },
-        {
-          "type": "archive",
-          "name": "MORPH",
-          "path": "Demoscene/MORPH.zip",
-          "size": 806604
-        },
-        {
-          "type": "archive",
-          "name": "SANITY",
-          "path": "Demoscene/SANITY.ZIP",
-          "size": 63556
-        },
-        {
           "type": "archive",
           "name": "SNOW",
           "path": "Demoscene/SNOW.ZIP",
           "size": 74011
         }
-      ]
+      ],
+      "image": "folder_image.jpg",
+      "desc": "In 1996-1997, I, Roman Lut (aka Hax), together with Eugene Babich (aka Dem), worked as a demo group called **“The Nephilims.”** During that time, we created several demos and participated in demoscene events.\n\nToday, running these demos requires almost a “stone-age” setup, as most of them depend on pure DOS and are affected by the well-known Borland **“Runtime Error 200”** issue.\n\nFortunately, modern PCs are more than 1000 times faster than the machines we used back then. Thanks to this, the original demos can now be run directly in a web browser using a [DOS emulator](https://js-dos.com/v7/build/docs/).\n\nEnter a folder and double click on MS-DOS icon to lauch demo/intro."
     },
     {
       "type": "folder",
@@ -288,6 +299,37 @@
       "items": [
         {
           "type": "folder",
+          "name": "1997-07 Morphing images",
+          "path": "Publications/1997-07_Morphing_images",
+          "items": [
+            {
+              "type": "executable",
+              "name": "MORPH",
+              "path": "Publications/1997-07_Morphing_images/MORPH.zip",
+              "size": 805626
+            },
+            {
+              "type": "archive",
+              "name": "MORPH",
+              "path": "Publications/1997-07_Morphing_images/MORPH.zip",
+              "size": 805626
+            },
+            {
+              "type": "wordpad",
+              "name": "Morph (russian)",
+              "path": "Publications/1997-07_Morphing_images/Morph_(russian).md",
+              "size": 23273
+            },
+            {
+              "type": "wordpad",
+              "name": "Morph (translated english)",
+              "path": "Publications/1997-07_Morphing_images/Morph_(translated_english).md",
+              "size": 14626
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2005-10 Using webcamera as virtual graphics tablet",
           "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet",
           "items": [
@@ -296,6 +338,12 @@
               "name": "Using webcamera as virtual graphics tablet (translated to english)",
               "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet_(translated_to_english).md",
               "size": 14130
+            },
+            {
+              "type": "archive",
+              "name": "VTablet 0507",
+              "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet/VTablet_0507.rar",
+              "size": 65481851
             },
             {
               "type": "wordpad",
@@ -377,7 +425,7 @@
       "type": "wordpad",
       "name": "About me",
       "path": "About_me.md",
-      "size": 1202
+      "size": 1199
     }
   ]
 }
