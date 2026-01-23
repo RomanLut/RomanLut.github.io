@@ -43,6 +43,7 @@ export class AppWindow {
     [];
   private showAnimation?: Animation;
   private spawnedAnimated = false;
+  private spawnOrigin: { x: number; y: number } | null = null;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, title: string, icon?: string, showFullscreen = false) {
     this.taskbar = taskbar;
@@ -117,15 +118,15 @@ export class AppWindow {
     const stepX = SPAWN_STEP.x;
     const stepY = SPAWN_STEP.y;
 
+    const getOrigin = (w: AppWindow) => {
+      if (w.spawnOrigin) return { ...w.spawnOrigin };
+      const r = w.element.getBoundingClientRect();
+      return { x: Math.round(r.left - parentRect.left), y: Math.round(r.top - parentRect.top) };
+    };
+
     const existingOrigins = Array.from(AppWindow.openWindows)
       .filter((w) => w !== this)
-      .map((w) => {
-        const r = w.element.getBoundingClientRect();
-        return {
-          x: Math.round(r.left - parentRect.left),
-          y: Math.round(r.top - parentRect.top)
-        };
-      });
+      .map((w) => getOrigin(w));
 
     const originUsed = (x: number, y: number) =>
       existingOrigins.some((o) => Math.abs(o.x - x) < 1 && Math.abs(o.y - y) < 1);
@@ -151,10 +152,11 @@ export class AppWindow {
 
     this.element.style.left = `${x}px`;
     this.element.style.top = `${y}px`;
+    this.spawnOrigin = { x, y };
     this.positioned = true;
     if (!this.spawnedAnimated) {
       this.spawnedAnimated = true;
-      void this.animateFromTaskbar();
+      void this.animateSpawn();
     }
   }
 
@@ -478,19 +480,11 @@ export class AppWindow {
 
   private animateFromTaskbar(reverse = false): Promise<void> {
     const { dx, dy } = this.computeTaskbarDelta();
-    // Use non-uniform scale so the window flattens (landscape) toward the taskbar.
-    const sx = 0.25;
-    const sy = 0.05; // flatter to resemble taskbar rectangle
-    const keyframes = reverse
-      ? [
-          { transform: 'translate(0,0) scale(1,1)', opacity: 1 },
-          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, opacity: 0 }
-        ]
-      : [
-          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, opacity: 0 },
-          { transform: 'translate(0,0) scale(1,1)', opacity: 1 }
-        ];
-    // Very slow takeoff, accelerate; total 250ms
+    const taskbarKeyframes = [
+      { transform: `translate(${dx}px, ${dy}px) scale(0.25, 0.05)`, opacity: 0 },
+      { transform: 'translate(0,0) scale(1,1)', opacity: 1 }
+    ];
+    const keyframes = reverse ? [...taskbarKeyframes].reverse() : taskbarKeyframes;
     const anim = this.element.animate(keyframes, {
       duration: 250,
       easing: 'cubic-bezier(0.02, 0.0, 0.35, 1)'
@@ -503,6 +497,21 @@ export class AppWindow {
 
   private animateToTaskbar() {
     return this.animateFromTaskbar(true);
+  }
+
+  private animateSpawn(): Promise<void> {
+    const spawnKeyframes = [
+      { transform: 'scale(0.6)', opacity: 0 },
+      { transform: 'scale(1)', opacity: 1 }
+    ];
+    const anim = this.element.animate(spawnKeyframes, {
+      duration: 250,
+      easing: 'cubic-bezier(0.02, 0.0, 0.35, 1)'
+    });
+    return anim.finished.then(() => {
+      this.element.style.transform = 'translate(0,0) scale(1)';
+      this.element.style.opacity = '';
+    });
   }
 
   private maximize() {
