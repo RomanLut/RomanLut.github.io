@@ -20,14 +20,16 @@
       a = c = document.getElementById('c');
       b = document.body;
       d = document;
+      g = a.getContext('webgl', { antialias: true, stencil: true }) ||
+          a.getContext('experimental-webgl', { antialias: true, stencil: true });
       onresize = () => {
         a.width = innerWidth;
         a.height = innerHeight;
+        if (g) g.viewport(0, 0, a.width, a.height);
       };
       onresize();
       addEventListener('resize', onresize);
-      g = a.getContext('webgl', { antialias: true, stencil: true }) ||
-          a.getContext('experimental-webgl', { antialias: true, stencil: true });
+      if (g) g.viewport(0, 0, a.width, a.height);
       // Fix for new WebGL methods overwriting short aliases used by JS1K demos
       if (g) {
         g.clearDepth = g.compileShader;

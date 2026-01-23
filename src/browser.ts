@@ -41,6 +41,17 @@ export class Browser extends AppWindow {
   private blockedOverlay: HTMLElement;
   private blockedLink: HTMLButtonElement;
   private statusBar: AppWindowStatusBar;
+  private resizeObserver: ResizeObserver | null = null;
+  private bumpResize = () => {
+    const win = this.iframe?.contentWindow;
+    if (win) {
+      try {
+        win.dispatchEvent(new Event('resize'));
+      } catch {
+        /* ignore cross-origin */
+      }
+    }
+  };
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, startUrl = 'https://github.com') {
     super(desktop, taskbar, 'Browser', BROWSER_ICON);
@@ -93,19 +104,43 @@ export class Browser extends AppWindow {
     content.className = 'browser__content';
     this.iframe = document.createElement('iframe');
     this.iframe.className = 'browser__frame';
-    // Keep sandbox tight: no same-origin to avoid sandbox-escape warning.
+    // Allow same-origin so we can dispatch resize into the iframe for canvas demos.
     this.iframe.setAttribute(
       'sandbox',
-      'allow-scripts allow-forms allow-popups allow-pointer-lock allow-downloads'
+      'allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-downloads'
     );
     this.iframe.addEventListener('load', () => {
       this.statusBar.setText('Done');
       this.setBlocked(false);
+      this.bumpResize();
     });
     this.iframe.addEventListener('error', () => {
       this.statusBar.setText('Blocked or failed to load');
       this.setBlocked(true);
     });
+    // Propagate size changes to the iframe content (helps canvas/WebGL demos resize)
+    if ('ResizeObserver' in window) {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.bumpResize();
+      });
+      this.resizeObserver.observe(this.iframe);
+    } else {
+      // Fallback: poll size changes
+      let lastW = this.iframe.clientWidth;
+      let lastH = this.iframe.clientHeight;
+      const tick = () => {
+        const w = this.iframe.clientWidth;
+        const h = this.iframe.clientHeight;
+        if (w !== lastW || h !== lastH) {
+          lastW = w;
+          lastH = h;
+          this.bumpResize();
+        }
+        this.resizeObserver = requestAnimationFrame(tick) as unknown as ResizeObserver;
+      };
+      this.resizeObserver = requestAnimationFrame(tick) as unknown as ResizeObserver;
+    }
+    window.addEventListener('resize', this.bumpResize);
     this.blockedOverlay = document.createElement('div');
     this.blockedOverlay.className = 'browser__blocked';
     const blockedText = document.createElement('div');
@@ -138,6 +173,7 @@ export class Browser extends AppWindow {
     this.statusBar.setText('Loading...');
     this.setBlocked(false);
     this.iframe.src = normalized;
+    this.bumpResize();
   }
 
   private reload() {
@@ -152,5 +188,18 @@ export class Browser extends AppWindow {
     } else {
       this.statusBar.setText('Done');
     }
+  }
+
+  protected close(): void {
+    if (this.resizeObserver) {
+      if (typeof (this.resizeObserver as any).disconnect === 'function') {
+        (this.resizeObserver as any).disconnect();
+      } else if (typeof cancelAnimationFrame === 'function') {
+        cancelAnimationFrame(this.resizeObserver as unknown as number);
+      }
+      this.resizeObserver = null;
+    }
+    window.removeEventListener('resize', this.bumpResize);
+    super.close();
   }
 }
