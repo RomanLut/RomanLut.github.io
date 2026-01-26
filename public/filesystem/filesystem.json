@@ -309,6 +309,70 @@
           ],
           "image": "folder_image.jpg",
           "desc": "**Lost In A Cave**\nJavascript 1024 bytes intro.\n**First place at JS1k 2019** [https://js1k.com/2019-x/](https://js1k.com/2019-x/)\n\nDouble click on javascript file to execute.\n\n*Unfortunatelly intro does not work on JS1k website in Chrome anymore due to canvas API changes in Chrome*."
+        },
+        {
+          "type": "folder",
+          "name": "Demos that inspared me",
+          "path": "Demoscene/Demos_that_inspared_me",
+          "items": [
+            {
+              "type": "folder",
+              "name": "Into The Shadows",
+              "path": "Demoscene/Demos_that_inspared_me/Into_The_Shadows",
+              "items": [
+                {
+                  "type": "executable",
+                  "name": "Into The Shadows",
+                  "path": "Demoscene/Demos_that_inspared_me/Into_The_Shadows/Into_The_Shadows.zip",
+                  "size": 3443703
+                },
+                {
+                  "type": "archive",
+                  "name": "Into The Shadows",
+                  "path": "Demoscene/Demos_that_inspared_me/Into_The_Shadows/Into_The_Shadows.zip",
+                  "size": 3443703
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "Machines Of Madness",
+              "path": "Demoscene/Demos_that_inspared_me/Machines_Of_Madness",
+              "items": [
+                {
+                  "type": "executable",
+                  "name": "Machines Of Madness",
+                  "path": "Demoscene/Demos_that_inspared_me/Machines_Of_Madness/Machines_Of_Madness.zip",
+                  "size": 3880975
+                },
+                {
+                  "type": "archive",
+                  "name": "Machines Of Madness",
+                  "path": "Demoscene/Demos_that_inspared_me/Machines_Of_Madness/Machines_Of_Madness.zip",
+                  "size": 3880975
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "Second Reality",
+              "path": "Demoscene/Demos_that_inspared_me/Second_Reality",
+              "items": [
+                {
+                  "type": "executable",
+                  "name": "Second Reality",
+                  "path": "Demoscene/Demos_that_inspared_me/Second_Reality/Second_Reality.zip",
+                  "size": 2085987
+                },
+                {
+                  "type": "archive",
+                  "name": "Second Reality",
+                  "path": "Demoscene/Demos_that_inspared_me/Second_Reality/Second_Reality.zip",
+                  "size": 2085987
+                }
+              ]
+            }
+          ]
         }
       ],
       "image": "folder_image.jpg",
@@ -523,7 +587,7 @@
       "type": "wordpad",
       "name": "About me",
       "path": "About_me.md",
-      "size": 1199
+      "size": 987
     }
   ]
 }

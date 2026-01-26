@@ -2,12 +2,6 @@
 
 <img src="/images/romanluthax.jpg" width="20%" align="right">
 
->–  Только вы мне особенно увлекаться не давайте.
->– Чем?
->– Да, собственно говоря, всем.
-> князь Мышкин, Даун Хаус
-
-
 Let me introduce myself. My name is Roman Lut. I was born in Ukraine in 1975.
 
 I am a programmer with over 25 years of experience in the game development industry. For more details, please see my portfolio.
