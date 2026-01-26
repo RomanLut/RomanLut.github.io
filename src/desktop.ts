@@ -138,5 +138,10 @@ export class Desktop {
       { x: 16  + 120* 13, y: 16 },
       () => new DosBox(this.element, this.taskbar, 'Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip')
     );
+
+    new DesktopIcon(this.element, 'youtube', 'INAV HITL', { x: 16 +120*14, y: 16 }, () =>
+      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=krTDi1tXGX8')
+    );
+
   }
 }

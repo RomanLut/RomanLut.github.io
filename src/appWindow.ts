@@ -33,14 +33,17 @@ export class AppWindow {
   private prevUserSelect: string | null = null;
   private iconMarkup: string | undefined;
   private static openWindows = new Set<AppWindow>();
+  private static fsWatcherInit = false;
   private positioned = false;
   private overlayActive = false;
-  private overlayPrevStyle: { left: string; top: string; width: string; height: string } | null = null;
   private overlayKeyHandler: ((e: KeyboardEvent) => void) | null = null;
   private overlayClickHandler: ((e: MouseEvent) => void) | null = null;
   private overlayPrevOverflow: string | null = null;
+  private overlayPrevBox: { left: number; top: number; width: number; height: number } | null = null;
+  private overlayPrevInline: { left: string; top: string; width: string; height: string; right: string; bottom: string } | null = null;
   private overlayIframeHandlers: Array<{ win: Window; click: (e: MouseEvent) => void; key: (e: KeyboardEvent) => void }> =
     [];
+  private overlayFsHandler: ((e: Event) => void) | null = null;
   private showAnimation?: Animation;
   private spawnedAnimated = false;
   private spawnOrigin: { x: number; y: number } | null = null;
@@ -99,6 +102,7 @@ export class AppWindow {
       });
     }
     AppWindow.openWindows.add(this);
+    AppWindow.ensureFsWatcher();
   }
 
   private positionInitial() {
@@ -292,11 +296,21 @@ export class AppWindow {
 
   private enterOverlay() {
     if (this.overlayActive) return;
-    this.overlayPrevStyle = {
+    const parentRect = this.desktop.getBoundingClientRect();
+    const rect = this.element.getBoundingClientRect();
+    this.overlayPrevBox = {
+      left: rect.left - parentRect.left,
+      top: rect.top - parentRect.top,
+      width: rect.width,
+      height: rect.height
+    };
+    this.overlayPrevInline = {
       left: this.element.style.left,
       top: this.element.style.top,
       width: this.element.style.width,
-      height: this.element.style.height
+      height: this.element.style.height,
+      right: this.element.style.right,
+      bottom: this.element.style.bottom
     };
     this.overlayPrevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -328,19 +342,44 @@ export class AppWindow {
       if (target && target.closest('.app-window__btn--fs')) return;
       this.exitOverlay();
     };
+    this.overlayFsHandler = () => {
+      // If native fullscreen was exited (e.g., user pressed Esc), restore window size.
+      if (this.overlayActive && this.overlayNativeFs && document.fullscreenElement !== this.element) {
+        this.exitOverlay();
+      }
+    };
     window.addEventListener('keydown', this.overlayKeyHandler);
     this.element.addEventListener('click', this.overlayClickHandler);
+    document.addEventListener('fullscreenchange', this.overlayFsHandler);
     this.bindIframeOverlayHandlers();
+  }
+
+  private applyOverlayRestore() {
+    // Clear overlay-specific inline props that could keep the window stretched.
+    this.element.style.right = '';
+    this.element.style.bottom = '';
+    this.element.style.transform = 'translate(0,0)';
+    if (this.overlayPrevBox) {
+      this.element.style.left = `${this.overlayPrevBox.left}px`;
+      this.element.style.top = `${this.overlayPrevBox.top}px`;
+      this.element.style.width = `${this.overlayPrevBox.width}px`;
+      this.element.style.height = `${this.overlayPrevBox.height}px`;
+    } else if (this.overlayPrevInline) {
+      this.element.style.left = this.overlayPrevInline.left;
+      this.element.style.top = this.overlayPrevInline.top;
+      this.element.style.width = this.overlayPrevInline.width;
+      this.element.style.height = this.overlayPrevInline.height;
+      this.element.style.right = this.overlayPrevInline.right;
+      this.element.style.bottom = this.overlayPrevInline.bottom;
+    }
   }
 
   private exitOverlay() {
     if (!this.overlayActive) return;
-    if (this.overlayPrevStyle) {
-      this.element.style.left = this.overlayPrevStyle.left;
-      this.element.style.top = this.overlayPrevStyle.top;
-      this.element.style.width = this.overlayPrevStyle.width;
-      this.element.style.height = this.overlayPrevStyle.height;
-    }
+    this.applyOverlayRestore();
+    // Apply again on next frame and shortly after to override late layout writes from native fullscreen.
+    requestAnimationFrame(() => this.applyOverlayRestore());
+    setTimeout(() => this.applyOverlayRestore(), 50);
     if (this.overlayPrevOverflow !== null) {
       document.body.style.overflow = this.overlayPrevOverflow;
       this.overlayPrevOverflow = null;
@@ -355,9 +394,13 @@ export class AppWindow {
     this.overlayNativeFs = false;
     if (this.overlayKeyHandler) window.removeEventListener('keydown', this.overlayKeyHandler);
     if (this.overlayClickHandler) this.element.removeEventListener('click', this.overlayClickHandler);
+    if (this.overlayFsHandler) document.removeEventListener('fullscreenchange', this.overlayFsHandler);
     this.unbindIframeOverlayHandlers();
     this.overlayKeyHandler = null;
     this.overlayClickHandler = null;
+    this.overlayFsHandler = null;
+    this.overlayPrevBox = null;
+    this.overlayPrevInline = null;
   }
 
   private bindIframeOverlayHandlers() {
@@ -453,6 +496,18 @@ export class AppWindow {
   }
 
   private static activeWindows = new Set<AppWindow>();
+  private static ensureFsWatcher() {
+    if (AppWindow.fsWatcherInit) return;
+    AppWindow.fsWatcherInit = true;
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) return;
+      AppWindow.openWindows.forEach((win) => {
+        if ((win as any).overlayActive) {
+          win.exitOverlay();
+        }
+      });
+    });
+  }
 
   private setActiveState(active: boolean) {
     if (active) {

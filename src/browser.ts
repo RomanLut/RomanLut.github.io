@@ -182,6 +182,7 @@ export class Browser extends AppWindow {
   private navigate(url: string) {
     let normalized = normalizeUrl(url);
     let finalUrl = normalized;
+    let iframeUrl = finalUrl;
     try {
       // If input has no scheme and no dot, treat as search
       const looksLikeSearch = !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(normalized) && !normalized.includes('.');
@@ -194,19 +195,32 @@ export class Browser extends AppWindow {
             u.searchParams.set('igu', '1');
           }
           finalUrl = u.toString();
+          // If this is a YouTube watch URL, load an embeddable URL in the iframe but keep the address bar as-is.
+          if (u.hostname.includes('youtube.com') && u.pathname === '/watch' && u.searchParams.has('v')) {
+            const videoId = u.searchParams.get('v');
+            // Preserve start time if present as t or start.
+            const t = u.searchParams.get('t') || u.searchParams.get('start');
+            const embed = new URL(`https://www.youtube.com/embed/${videoId}`);
+            if (t) embed.searchParams.set('start', t.replace(/s$/i, ''));
+            iframeUrl = embed.toString();
+          } else {
+            iframeUrl = finalUrl;
+          }
         } else {
           finalUrl = `https://www.google.com/?igu=1&q=${encodeURIComponent(url)}`;
+          iframeUrl = finalUrl;
         }
       }
     } catch {
       finalUrl = `https://www.google.com/?igu=1&q=${encodeURIComponent(url)}`;
+      iframeUrl = finalUrl;
     }
     if (!finalUrl) return;
     this.currentUrl = finalUrl;
     this.addressInput.value = finalUrl;
     this.statusBar.setText('Loading...');
     this.setBlocked(false);
-    this.iframe.src = finalUrl;
+    this.iframe.src = iframeUrl;
     this.bumpResize();
   }
 
