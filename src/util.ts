@@ -93,13 +93,19 @@ function getYouTubeEmbed(href: string): string | null {
   return null;
 }
 
+// Use dash-delimited placeholders that won't be touched by emphasis regexes.
+const INLINE_TOKEN = (idx: number) => `@@INLINE-${idx}@@`;
+const RAWIMG_TOKEN = (idx: number) => `@@RAWIMG-${idx}@@`;
+const INLINECODE_TOKEN = (idx: number) => `@@INLINECODE-${idx}@@`;
+const CODEBLOCK_TOKEN = (idx: number) => `@@CODEBLOCK-${idx}@@`;
+
 export function applyInline(text: string, basePath: string) {
   // Allow raw <img> tags (with resolved paths) before escaping.
   const rawImageTokens: string[] = [];
   const tokenForRawImg = (html: string) => {
     const idx = rawImageTokens.length;
     rawImageTokens.push(html);
-    return `@@RAWIMG_${idx}@@`;
+    return RAWIMG_TOKEN(idx);
   };
 
   text = text.replace(/<img\s+[^>]*src\s*=\s*["']([^"']+)["'][^>]*>/gi, (match, src) => {
@@ -117,7 +123,7 @@ export function applyInline(text: string, basePath: string) {
   const tokenFor = (html: string) => {
     const idx = replacements.length;
     replacements.push(html);
-    return `@@INLINE_${idx}@@`;
+    return INLINE_TOKEN(idx);
   };
 
   // Protect links and images so italics/strong regexes do not modify URLs.
@@ -147,8 +153,8 @@ export function applyInline(text: string, basePath: string) {
   t = t.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
   t = t.replace(/_([^_]+)_/g, '<em>$1</em>');
 
-  t = t.replace(/@@INLINE_(\d+)@@/g, (_m, idx) => replacements[Number(idx)] ?? '');
-  t = t.replace(/@@RAWIMG_(\d+)@@/g, (_m, idx) => rawImageTokens[Number(idx)] ?? '');
+  t = t.replace(/@@INLINE-(\d+)@@/g, (_m, idx) => replacements[Number(idx)] ?? '');
+  t = t.replace(/@@RAWIMG-(\d+)@@/g, (_m, idx) => rawImageTokens[Number(idx)] ?? '');
   return t;
 }
 
@@ -158,14 +164,14 @@ export function markdownToHtml(md: string, basePath: string) {
   md = md.replace(/```([^\n`]+)```/g, (_m, code) => {
     const idx = inlineCodes.length;
     inlineCodes.push(escapeHtml(code));
-    return `@@INLINECODE_${idx}@@`;
+    return INLINECODE_TOKEN(idx);
   });
 
   const codeBlocks: string[] = [];
   md = md.replace(/```([\s\S]*?)```/g, (_m, code) => {
     const idx = codeBlocks.length;
     codeBlocks.push(escapeHtml(code.trim()));
-    return `@@CODEBLOCK_${idx}@@`;
+    return CODEBLOCK_TOKEN(idx);
   });
 
   const lines = md.split(/\r?\n/);
@@ -234,8 +240,11 @@ export function markdownToHtml(md: string, basePath: string) {
   closeBlockQuote();
 
   let html = parts.join('\n');
-  html = html.replace(/@@CODEBLOCK_(\d+)@@/g, (_m, idx) => `<pre><code>${codeBlocks[Number(idx)]}</code></pre>`);
-  html = html.replace(/@@INLINECODE_(\d+)@@/g, (_m, idx) => `<code>${inlineCodes[Number(idx)]}</code>`);
+  html = html.replace(/@@CODEBLOCK-(\d+)@@/g, (_m, idx) => `<pre><code>${codeBlocks[Number(idx)]}</code></pre>`);
+  html = html.replace(/@@INLINECODE-(\d+)@@/g, (_m, idx) => `<code>${inlineCodes[Number(idx)]}</code>`);
+  // Safety net: if any inline placeholders survive (shouldn't), drop them so users don't see tokens.
+  html = html.replace(/@@INLINE-(\d+)@@/g, '');
+  html = html.replace(/@@RAWIMG-(\d+)@@/g, '');
   return html;
 }
 
