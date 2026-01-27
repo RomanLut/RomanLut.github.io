@@ -1,5 +1,4 @@
 import { AppWindow } from './appWindow';
-import { AppWindowStatusBar } from './appWindowStatusBar';
 import { getIconSvg } from './desktopIcon';
 import { Taskbar } from './taskbar';
 import { responsiveHeight, responsiveWidth } from './util';
@@ -14,7 +13,6 @@ const SOUND_ICON = getIconSvg('sound');
 
 export class SoundPlayer extends AppWindow {
   private audio: HTMLAudioElement;
-  private status: AppWindowStatusBar;
   private listEl: HTMLElement;
   private nowEl: HTMLElement;
   private tracks: SoundTrack[];
@@ -42,10 +40,6 @@ export class SoundPlayer extends AppWindow {
     this.listEl = document.createElement('div');
     this.listEl.className = 'sound__list';
     container.appendChild(this.listEl);
-
-    this.status = new AppWindowStatusBar('', '');
-    this.status.element.classList.add('sound__status');
-    container.appendChild(this.status.element);
 
     this.setContent(container);
 
@@ -122,13 +116,15 @@ export class SoundPlayer extends AppWindow {
       duration && duration > 0
         ? `${this.formatTime(time)} / ${this.formatTime(duration)}`
         : this.formatTime(time);
-    this.status.setText(`${prefix} — ${suffix}`);
+    const title = this.tracks[this.activeIndex]?.title ?? '';
+    this.nowEl.textContent = `${prefix}: ${title}${suffix ? ` — ${suffix}` : ''}`;
   }
 
   private updateStatus(message: string) {
     const duration = Number.isFinite(this.audio.duration) ? this.audio.duration : null;
     const suffix = duration && duration > 0 ? this.formatTime(duration) : '';
-    this.status.setText(`${message}${suffix ? ` — ${suffix}` : ''}`);
+    const title = this.tracks[this.activeIndex]?.title ?? '';
+    this.nowEl.textContent = `${message}: ${title}${suffix ? ` — ${suffix}` : ''}`;
   }
 
   private formatTime(value: number) {
