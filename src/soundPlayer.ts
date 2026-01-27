@@ -128,15 +128,9 @@ export class SoundPlayer extends AppWindow {
   }
 
   private updateProgress() {
-    const duration = Number.isFinite(this.audio.duration) ? this.audio.duration : null;
-    const time = Number.isFinite(this.audio.currentTime) ? this.audio.currentTime : 0;
     const prefix = !this.audio.paused ? 'Playing' : 'Paused';
-    const suffix =
-      duration && duration > 0
-        ? `${this.formatTime(time)} / ${this.formatTime(duration)}`
-        : this.formatTime(time);
     const title = this.tracks[this.activeIndex]?.title ?? '';
-    this.nowEl.textContent = `${prefix}: ${title}${suffix ? ` — ${suffix}` : ''}`;
+    this.nowEl.textContent = `${prefix}: ${title}`;
   }
 
   private updateStatus(message: string) {
