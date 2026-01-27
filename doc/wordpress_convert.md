@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2007-07_HXGRID_Distributed_Computing_In_Small_Office\article.md 
+[target]=\trunk\public\filesystem\Publications\2006-04_3ds_max export_plugin_nuances\article.md 
 
 Read the article [location] fully.
 
