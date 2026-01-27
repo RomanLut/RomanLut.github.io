@@ -20,7 +20,7 @@ export class SoundPlayer extends AppWindow {
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, tracks?: SoundTrack[]) {
     super(desktop, taskbar, 'Sound Player', SOUND_ICON);
-    this.element.style.width = '780px';
+    this.element.style.width = '660px';
     this.element.style.height = '280px';
 
     this.tracks = tracks?.length ? tracks : SoundPlayer.defaultTracks();
@@ -42,6 +42,25 @@ export class SoundPlayer extends AppWindow {
     container.appendChild(this.listEl);
 
     this.setContent(container);
+
+    // Compact single-track mode: hide list, shrink window, and remove resizing/maximize affordances.
+    if (this.tracks.length === 1) {
+      this.element.style.width = '660px';
+      this.element.style.height = '150px';
+      this.element.style.minHeight = '150px';
+      this.element.style.maxHeight = '150px';
+      this.listEl.style.display = 'none';
+      // Hide maximize button and resize handles.
+      const maxBtn = this.element.querySelector<HTMLButtonElement>('.app-window__btn--max');
+      if (maxBtn) maxBtn.style.display = 'none';
+      this.element.querySelectorAll<HTMLElement>('.app-window__resize').forEach((el) => {
+        const dir = el.dataset.resize || '';
+        // Keep only pure east/west handles to allow horizontal resize.
+        if (dir.includes('n') || dir.includes('s') || (dir.includes('e') && dir.includes('w'))) {
+          el.remove();
+        }
+      });
+    }
 
     this.audio.addEventListener('ended', () => this.playNext());
     this.audio.addEventListener('play', () => this.updateStatus('Playing'));
