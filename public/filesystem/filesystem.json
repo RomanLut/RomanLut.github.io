@@ -598,6 +598,49 @@
         },
         {
           "type": "folder",
+          "name": "2007-07 HXGRID Distributed Computing In Small Office",
+          "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Distributed Computing in Small and Medium Offices (translated to english)",
+              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/Distributed_Computing_in_Small_and_Medium_Offices_(translated_to_english).md",
+              "size": 27725
+            },
+            {
+              "type": "archive",
+              "name": "hxgrid agent setup",
+              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/hxgrid_agent_setup.zip",
+              "size": 572298
+            },
+            {
+              "type": "archive",
+              "name": "hxgrid ATI NormalMapper setup",
+              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/hxgrid_ATI_NormalMapper_setup.zip",
+              "size": 1914722
+            },
+            {
+              "type": "archive",
+              "name": "hxgrid coordinator setup",
+              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/hxgrid_coordinator_setup.zip",
+              "size": 525362
+            },
+            {
+              "type": "archive",
+              "name": "hxgrid src",
+              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/hxgrid_src.7z",
+              "size": 9957146
+            },
+            {
+              "type": "wordpad",
+              "name": "Распределённые вычисления в малом и среднем офисе (russian)",
+              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/Распределённые_вычисления_в_малом_и_среднем_офисе_(russian).md",
+              "size": 43927
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2008-06 DVD Streaming",
           "path": "Publications/2008-06_DVD_Streaming",
           "items": [

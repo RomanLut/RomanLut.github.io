@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2007-04-Modern_3D_Game_Engine_Architecture\article.md 
+[target]=\trunk\public\filesystem\Publications\2007-07_HXGRID_Distributed_Computing_In_Small_Office\article.md 
 
 Read the article [location] fully.
 
