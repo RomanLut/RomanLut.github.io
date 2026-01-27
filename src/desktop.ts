@@ -90,7 +90,7 @@ export class Desktop {
       new WordPad(this.element, this.taskbar, '/filesystem/About_me.md', 'About me')
     );
     new DesktopIcon(this.element, 'word', 'Resume', { x: 120, y: 16 });
-    new DesktopIcon(this.element, 'word', 'Competitions', { x: 120 + 200, y: 16 });
+    new DesktopIcon(this.element, 'word', 'Competitions and Events', { x: 120 + 200, y: 16 });
 
     new DesktopIcon(this.element, 'folder', 'Game development', { x: 16, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Game_development')
@@ -119,8 +119,20 @@ export class Desktop {
     new DesktopIcon(this.element, 'youtube', 'My Youtube Channel', { x: 16 +120, y: 16 + 120 + 120 + 140 }, () =>
       exitFullscreenAndOpen('https://www.youtube.com/@RomanLutHax')
     );
-    new DesktopIcon(this.element, 'sound', 'Sound Player', { x: 16 + 120 * 2, y: 16 + 120 + 120 + 140 }, () =>
-      new SoundPlayer(this.element, this.taskbar)
+
+    new DesktopIcon(
+      this.element,
+      'sound',
+      'Sound Player',
+      { x: 16 + 120 * 2, y: 16 + 120 + 120 + 140 },
+      () =>
+        new SoundPlayer(this.element, this.taskbar, [
+          {
+            title: 'Suno AI track',
+            detail: 'Streaming mp3',
+            url: 'https://cdn1.suno.ai/0b88c092-f093-4486-aac8-94b035118c4d.mp3'
+          }
+        ])
     );
 
     // HTML5 demo: JS1k - Lost In A Cave

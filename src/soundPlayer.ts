@@ -69,7 +69,7 @@ export class SoundPlayer extends AppWindow {
     this.audio.addEventListener('timeupdate', () => this.updateProgress());
 
     this.renderList();
-    this.loadTrack(this.activeIndex, false);
+    this.loadTrack(this.activeIndex, true);
   }
 
   private static defaultTracks(): SoundTrack[] {

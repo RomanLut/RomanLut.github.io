@@ -542,31 +542,56 @@
         },
         {
           "type": "folder",
-          "name": "2008-06-DVD Streaming",
-          "path": "Publications/2008-06-DVD_Streaming",
+          "name": "2007-03 Plugins based on COM interfaces",
+          "path": "Publications/2007-03_Plugins_based_on_COM_interfaces",
+          "items": [
+            {
+              "type": "archive",
+              "name": "cominterface",
+              "path": "Publications/2007-03_Plugins_based_on_COM_interfaces/cominterface.rar",
+              "size": 628244
+            },
+            {
+              "type": "wordpad",
+              "name": "Plugins based on COM interfaces (translated to english)",
+              "path": "Publications/2007-03_Plugins_based_on_COM_interfaces/Plugins_based_on_COM_interfaces_(translated_to_english).md",
+              "size": 15768
+            },
+            {
+              "type": "wordpad",
+              "name": "Плагины на основе COM интерфейсов (russian)",
+              "path": "Publications/2007-03_Plugins_based_on_COM_interfaces/Плагины_на_основе_COM_интерфейсов_(russian).md",
+              "size": 21517
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "2008-06 DVD Streaming",
+          "path": "Publications/2008-06_DVD_Streaming",
           "items": [
             {
               "type": "archive",
               "name": "DVDReading",
-              "path": "Publications/2008-06-DVD_Streaming/DVDReading.7z",
+              "path": "Publications/2008-06_DVD_Streaming/DVDReading.7z",
               "size": 4114219
             },
             {
               "type": "sound",
               "name": "KRI 2008 Programming 20apr saturn 04 Lut Roman Deep Shadows",
-              "path": "Publications/2008-06-DVD_Streaming/KRI_2008_Programming_20apr_saturn_04_Lut_Roman_Deep_Shadows.ogg",
+              "path": "Publications/2008-06_DVD_Streaming/KRI_2008_Programming_20apr_saturn_04_Lut_Roman_Deep_Shadows.ogg",
               "size": 11163262
             },
             {
               "type": "wordpad",
               "name": "Streaming and effective reading from DVD disk (translated to english)",
-              "path": "Publications/2008-06-DVD_Streaming/Streaming_and_effective_reading_from_DVD_disk_(translated_to_english).md",
+              "path": "Publications/2008-06_DVD_Streaming/Streaming_and_effective_reading_from_DVD_disk_(translated_to_english).md",
               "size": 19079
             },
             {
               "type": "wordpad",
               "name": "Стриминг и эффективное чтение с DVD диска (russian)",
-              "path": "Publications/2008-06-DVD_Streaming/Стриминг_и_эффективное_чтение_с_DVD_диска_(russian).md",
+              "path": "Publications/2008-06_DVD_Streaming/Стриминг_и_эффективное_чтение_с_DVD_диска_(russian).md",
               "size": 31224
             }
           ]

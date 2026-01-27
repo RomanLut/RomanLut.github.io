@@ -137,7 +137,7 @@ export function applyInline(text: string, basePath: string) {
     return tokenFor(`<div class="wp-img"><img src="${resolved}" alt="${alt}" /></div>`);
   });
   // Links: same idea—stop at the closing '](' sequence to allow ']' inside label.
-  t = t.replace(/\[([\s\S]*?)\]\(([^)]+)\)/g, (_m, label, href) => {
+  t = t.replace(/\[([^\[]*)\]\(([^)]+)\)/g, (_m, label, href) => {
     const resolved = resolvePath(href, basePath);
     const embed = getYouTubeEmbed(resolved);
     if (embed) {

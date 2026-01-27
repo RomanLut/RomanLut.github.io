@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2008-06-DVD_Streaming\DVD_Stereaming.md 
+[target]=\trunk\public\filesystem\Publications\2007-03-Plugins_based_on_COM_interfaces\article.md 
 
 Read the article [location] fully.
 
@@ -13,12 +13,12 @@ place images into /images subfolder. use relative path like images/01.jpg in .md
 
 Make sure links are converted as links and code is displayed as code blocks.
 
-do not use script to covnert article. Read and undestand it.
+Do not use script to convert article. Read and undestand it.
 
 Try to preserve original formating.
-preserve inndentation is code blocks.
+Preserve indentation in code blocks.
 Apply nice styling  - heading, indentation in .md file. 
-links should appear as links
+Links should appear as links.
 
 Do not install aditional nodejs/python packages.
 
