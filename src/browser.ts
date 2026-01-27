@@ -87,6 +87,32 @@ export class Browser extends AppWindow {
     return false;
   }
 
+  private isSlideShare(url: string): boolean {
+    try {
+      const host = new URL(url).hostname.toLowerCase();
+      return host === 'www.slideshare.net' || host === 'slideshare.net';
+    } catch {
+      return false;
+    }
+  }
+
+  private async resolveSlideShareEmbed(pageUrl: string): Promise<string> {
+    if (/slideshare\.net\/slideshow\/embed_code\//i.test(pageUrl)) {
+      return pageUrl;
+    }
+    // Heuristic: if the path ends with a numeric slide ID, try embed_code/{id}
+    try {
+      const path = new URL(pageUrl).pathname;
+      const m = path.match(/(\d+)(?:\/)?$/);
+      if (m?.[1]) {
+        return `https://www.slideshare.net/slideshow/embed_code/${m[1]}`;
+      }
+    } catch {
+      /* ignore */
+    }
+    return pageUrl;
+  }
+
   private bumpResize = () => {
     const win = this.iframe?.contentWindow;
     if (win) {
@@ -225,7 +251,7 @@ export class Browser extends AppWindow {
     this.navigate(startUrl);
   }
 
-  private navigate(url: string) {
+  private async navigate(url: string) {
     let normalized = normalizeUrl(url);
     let finalUrl = normalized;
     let iframeUrl = finalUrl;
@@ -261,6 +287,10 @@ export class Browser extends AppWindow {
     } catch {
       finalUrl = `https://www.google.com/?igu=1&q=${encodeURIComponent(url)}`;
       iframeUrl = finalUrl;
+    }
+    // Slideshare: resolve to embeddable iframe via oEmbed but keep address bar as original URL.
+    if (this.isSlideShare(finalUrl)) {
+      iframeUrl = await this.resolveSlideShareEmbed(finalUrl);
     }
     if (!finalUrl) return;
     this.currentUrl = finalUrl;
