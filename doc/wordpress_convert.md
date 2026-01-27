@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2007-03-Plugins_based_on_COM_interfaces\article.md 
+[target]=\trunk\public\filesystem\Publications\2007-04-Modern_3D_Game_Engine_Architecture\article.md 
 
 Read the article [location] fully.
 

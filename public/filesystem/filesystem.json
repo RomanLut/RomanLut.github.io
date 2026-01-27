@@ -567,6 +567,37 @@
         },
         {
           "type": "folder",
+          "name": "2007-04 Architecture of a Modern 3D Engine",
+          "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine",
+          "items": [
+            {
+              "type": "archive",
+              "name": "3denginelect",
+              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/3denginelect.zip",
+              "size": 35262327
+            },
+            {
+              "type": "wordpad",
+              "name": "Architecture of a Modern 3D Engine (translated to english)",
+              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/Architecture_of_a_Modern_3D_Engine_(translated_to english).md",
+              "size": 17831
+            },
+            {
+              "type": "sound",
+              "name": "KRI 2007 Programming 08apr neptun 03 Lut Roman DeepShadows",
+              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/KRI_2007_Programming_08apr_neptun_03_Lut_Roman_DeepShadows.ogg",
+              "size": 13160020
+            },
+            {
+              "type": "wordpad",
+              "name": "Архитектура современного 3D движка (russian)",
+              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/Архитектура_современного_3D_движка_(russian).md",
+              "size": 29986
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2008-06 DVD Streaming",
           "path": "Publications/2008-06_DVD_Streaming",
           "items": [
