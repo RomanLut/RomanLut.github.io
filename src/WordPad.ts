@@ -4,7 +4,7 @@ import { AppWindowMenu, type MenuItem } from './appWindowMenu';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { Browser } from './browser';
 import { SoundPlayer } from './soundPlayer';
-import { applyInline, closeMenus, escapeHtml, inlineImages, markdownToHtml, responsiveWidth, responsiveHeight } from './util';
+import { applyInline, closeMenus, escapeHtml, inlineImages, isDownloadUrl, markdownToHtml, responsiveWidth, responsiveHeight } from './util';
 
 const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
   <rect x="4" y="3" width="16" height="18" rx="2" fill="#ffffff" stroke="#d0d6e0" stroke-width="1"/>
@@ -157,6 +157,13 @@ export class WordPad extends AppWindow {
       if (hrefAttr.toLowerCase().endsWith('.ogg')) {
         const filename = hrefAttr.split('/').pop() || 'Audio';
         new SoundPlayer(this.desktopRef, this.taskbarRef, [{ title: filename, url: hrefAttr }]);
+      } else if (isDownloadUrl(url)) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       } else {
         new Browser(this.desktopRef, this.taskbarRef, url);
       }
@@ -338,6 +345,16 @@ export class WordPad extends AppWindow {
         a.replaceWith(wrapper);
       }
     });
+  }
+
+  private isArchiveUrl(url: string): boolean {
+    try {
+      const pathname = new URL(url).pathname;
+      const ext = pathname.split('.').pop()?.toLowerCase();
+      return ['zip', 'rar', '7z', 'tar', 'gz'].includes(ext || '');
+    } catch {
+      return false;
+    }
   }
 
   private isSlideShareLink(url: string): boolean {

@@ -319,6 +319,16 @@ export function responsiveHeight(basePx: number, taskbarHeight: number, spawnY =
   return Math.max(basePx, available);
 }
 
+export function isDownloadUrl(url: string): boolean {
+  try {
+    const pathname = new URL(url, window.location.origin).pathname;
+    const ext = pathname.split('.').pop()?.toLowerCase();
+    return ['zip', 'exe', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'rar', '7z', 'tar', 'gz', 'mp4', 'avi', 'mov', 'jpg', 'png', 'gif', 'txt', 'css', 'js'].includes(ext || '');
+  } catch {
+    return false;
+  }
+}
+
 export function findFolder(root: FsRoot, path: string): FsItem | null {
   const clean = normalizeFsPath(path);
   if (!clean) return { type: 'folder', name: '', path: '', items: root.items };

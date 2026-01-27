@@ -1,7 +1,7 @@
 import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowStatusBar } from './appWindowStatusBar';
-import { responsiveWidth, responsiveHeight } from './util';
+import { responsiveWidth, responsiveHeight, isDownloadUrl } from './util';
 
 function normalizeUrl(value: string): string {
   const trimmed = value.trim();
@@ -91,16 +91,6 @@ export class Browser extends AppWindow {
     try {
       const host = new URL(url).hostname.toLowerCase();
       return host === 'www.slideshare.net' || host === 'slideshare.net';
-    } catch {
-      return false;
-    }
-  }
-
-  private isDownloadUrl(url: string): boolean {
-    try {
-      const pathname = new URL(url).pathname;
-      const ext = pathname.split('.').pop()?.toLowerCase();
-      return ['zip', 'exe', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'rar', '7z', 'tar', 'gz', 'mp3', 'mp4', 'avi', 'mov', 'jpg', 'png', 'gif', 'txt', 'css', 'js'].includes(ext || '');
     } catch {
       return false;
     }
@@ -305,7 +295,7 @@ export class Browser extends AppWindow {
     if (!finalUrl) return;
     this.currentUrl = finalUrl;
     this.addressInput.value = finalUrl;
-    if (this.isDownloadUrl(iframeUrl)) {
+    if (isDownloadUrl(iframeUrl)) {
       this.statusBar.setText('Loaded');
       this.statusBar.setBusy(false);
       this.setBlocked(false, false);
