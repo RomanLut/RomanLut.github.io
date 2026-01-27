@@ -546,10 +546,22 @@
           "path": "Publications/2008-06-DVD_Streaming",
           "items": [
             {
+              "type": "archive",
+              "name": "DVDReading",
+              "path": "Publications/2008-06-DVD_Streaming/DVDReading.7z",
+              "size": 4114219
+            },
+            {
               "type": "wordpad",
-              "name": "DVD Stereaming",
-              "path": "Publications/2008-06-DVD_Streaming/DVD_Stereaming.md",
-              "size": 30704
+              "name": "Streaming and effective reading from DVD disk (translated to english)",
+              "path": "Publications/2008-06-DVD_Streaming/Streaming_and_effective_reading_from_DVD_disk_(translated_to_english).md",
+              "size": 19079
+            },
+            {
+              "type": "wordpad",
+              "name": "Стриминг и эффективное чтение с DVD диска (russian)",
+              "path": "Publications/2008-06-DVD_Streaming/Стриминг_и_эффективное_чтение_с_DVD_диска_(russian).md",
+              "size": 31224
             }
           ]
         }
