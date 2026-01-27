@@ -45,6 +45,7 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     ordered = folders + files
     archive_exts = {".zip", ".rar", ".7z"}
     html_exts = {".html", ".htm"}
+    sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a"}
     for entry in ordered:
         if entry.name == "filesystem.json":
             continue
@@ -108,6 +109,16 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
             children.append(
                 {
                     "type": "html",
+                    "name": display_name(entry.name),
+                    "path": rel_path.as_posix(),
+                    "size": size,
+                }
+            )
+        elif entry.suffix.lower() in sound_exts:
+            size = entry.stat().st_size
+            children.append(
+                {
+                    "type": "sound",
                     "name": display_name(entry.name),
                     "path": rel_path.as_posix(),
                     "size": size,

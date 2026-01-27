@@ -8,7 +8,8 @@ export type IconType =
   | 'archive'
   | 'executable'
   | 'msdos'
-  | 'html';
+  | 'html'
+  | 'sound';
 
 const ICON_SVGS: Record<IconType, string> = {
   folder: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.172a1.5 1.5 0 0 1 1.06.44l1.12 1.12H19.5A1.5 1.5 0 0 1 21 8.06V17.5A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5Z" fill="#f6c344" stroke="#d9a320" stroke-width="1"/></svg>`,
@@ -39,7 +40,12 @@ const ICON_SVGS: Record<IconType, string> = {
   archive: `<img src="/icons/zip-icon.svg" width="32" height="32" alt="Archive icon" />`,
   executable: `<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\" fill=\"#4c8bf5\" stroke=\"#2f63c7\" stroke-width=\"1\"/><path d=\"M6 7h12v2H6z\" fill=\"#e8f0ff\"/><rect x=\"6.5\" y=\"11\" width=\"5\" height=\"5\" rx=\"0.8\" fill=\"#e8f0ff\" stroke=\"#2f63c7\" stroke-width=\"0.8\"/><path d=\"M14 11.5l4 2.5-4 2.5z\" fill=\"#e8f0ff\" stroke=\"#2f63c7\" stroke-width=\"0.8\"/></svg>`,
   msdos: `<img src="/icons/msdos.svg" width="32" height="32" alt="MS-DOS logo" />`,
-  html: `<img src="/icons/html5-badge.svg" width="32" height="32" alt="HTML5 logo" />`
+  html: `<img src="/icons/html5-badge.svg" width="32" height="32" alt="HTML5 logo" />`,
+  sound: `<svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 9v6h4l5 4V5L8 9H4z" fill="#4c8bf5" stroke="#2f63c7" stroke-width="1" />
+    <path d="M16 8.5a3.5 3.5 0 0 1 0 7" fill="none" stroke="#4c8bf5" stroke-width="1.8" stroke-linecap="round" />
+    <path d="M18.5 7a6 6 0 0 1 0 10" fill="none" stroke="#8fb7ff" stroke-width="1.8" stroke-linecap="round" />
+  </svg>`
 };
 
 export function getIconSvg(type: IconType): string {

@@ -17,9 +17,9 @@ The structure is a graph of items,
  ]
 }
 
-Eaach item, can have the following properties:
+Each item, can have the following properties:
 
-type: folder, wordpad, notepad, archive, executable, html
+type: folder, wordpad, notepad, archive, executable, html, sound
 name: displayed name
 path: path inside /filesystem folder
 image?: optional folder image name, without path (f.e. folder_image.jpg)

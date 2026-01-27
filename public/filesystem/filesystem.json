@@ -552,6 +552,12 @@
               "size": 4114219
             },
             {
+              "type": "sound",
+              "name": "KRI 2008 Programming 20apr saturn 04 Lut Roman Deep Shadows",
+              "path": "Publications/2008-06-DVD_Streaming/KRI_2008_Programming_20apr_saturn_04_Lut_Roman_Deep_Shadows.ogg",
+              "size": 11163262
+            },
+            {
               "type": "wordpad",
               "name": "Streaming and effective reading from DVD disk (translated to english)",
               "path": "Publications/2008-06-DVD_Streaming/Streaming_and_effective_reading_from_DVD_disk_(translated_to_english).md",

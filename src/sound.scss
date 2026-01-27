@@ -1,0 +1,71 @@
+.sound {
+  background: radial-gradient(circle at 20% 20%, rgba(86, 132, 255, 0.18), rgba(9, 16, 32, 0.92)),
+    linear-gradient(135deg, #0b1224, #0c1b34);
+  color: #e9f0ff;
+  height: 100%;
+  padding: 16px 18px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sound__now {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #f6fbff;
+}
+
+.sound__audio {
+  width: 100%;
+  accent-color: #6ea8ff;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 10px 30px rgba(8, 17, 44, 0.35);
+}
+
+.sound__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  flex: 0;
+  min-height: 0;
+}
+
+.sound__track {
+  text-align: left;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px 10px;
+  color: #e7edff;
+  cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+  box-shadow: 0 8px 22px rgba(6, 14, 30, 0.25);
+}
+
+.sound__track:hover {
+  transform: translateY(-1px);
+  border-color: rgba(126, 170, 255, 0.7);
+  box-shadow: 0 10px 26px rgba(18, 37, 74, 0.35);
+}
+
+.sound__track.is-active {
+  border-color: rgba(126, 170, 255, 0.95);
+  box-shadow: 0 14px 30px rgba(41, 93, 173, 0.35);
+  background: linear-gradient(145deg, rgba(126, 170, 255, 0.22), rgba(78, 123, 221, 0.18));
+}
+
+.sound__track-title {
+  font-weight: 600;
+}
+
+.sound__track-detail {
+  font-size: 11px;
+  opacity: 0.82;
+  margin-top: 2px;
+}
+
+.sound__status {
+  margin-top: auto;
+}

@@ -19,6 +19,7 @@ import { WordPad } from './WordPad';
 import { Notepad } from './notepad';
 import { DosBox } from './dosbox';
 import { Browser } from './browser';
+import { SoundPlayer } from './soundPlayer';
 
 const FILE_EXPLORER_ICON = getIconSvg('folder');
 
@@ -272,6 +273,8 @@ export class FileExplorer extends AppWindow {
           ? 'msdos'
           : item.type === 'html'
           ? 'html'
+          : item.type === 'sound'
+          ? 'sound'
           : 'wordpad';
       iconHolder.innerHTML = getIconSvg(iconType);
 
@@ -311,6 +314,10 @@ export class FileExplorer extends AppWindow {
       }
       case 'html': {
         new Browser(this.desktopRef, this.taskbarRef, url);
+        return;
+      }
+      case 'sound': {
+        new SoundPlayer(this.desktopRef, this.taskbarRef, [{ title: item.name, url }]);
         return;
       }
       default:

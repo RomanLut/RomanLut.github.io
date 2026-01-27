@@ -44,6 +44,7 @@ export class AppWindow {
   private overlayIframeHandlers: Array<{ win: Window; click: (e: MouseEvent) => void; key: (e: KeyboardEvent) => void }> =
     [];
   private overlayFsHandler: ((e: Event) => void) | null = null;
+  private overlayNativeFs = false;
   private showAnimation?: Animation;
   private spawnedAnimated = false;
   private spawnOrigin: { x: number; y: number } | null = null;
@@ -280,12 +281,6 @@ export class AppWindow {
   };
 
   // --- Overlay (fullscreen) support for optional fullscreen button ---
-  private overlayActive = false;
-  private overlayPrevStyle: { left: string; top: string; width: string; height: string } | null = null;
-  private overlayKeyHandler: ((e: KeyboardEvent) => void) | null = null;
-  private overlayClickHandler: ((e: MouseEvent) => void) | null = null;
-  private overlayNativeFs = false;
-
   protected toggleOverlay() {
     if (this.overlayActive) {
       this.exitOverlay();

@@ -5,6 +5,7 @@ import { WordPad } from './WordPad';
 import { FileExplorer } from './fileExplorer';
 import { DosBox } from './dosbox';
 import { Browser } from './browser';
+import { SoundPlayer } from './soundPlayer';
 
 export class Desktop {
   readonly element: HTMLElement;
@@ -63,14 +64,6 @@ export class Desktop {
     );    
 */
 
-    // Auto-open the DVD Streaming article at startup so images render without extra clicks.
-    new WordPad(
-      this.element,
-      this.taskbar,
-      '/filesystem/Publications/2008-06-DVD_Streaming/DVD_Stereaming.md',
-      'DVD Streaming'
-    );
-
     this.taskbar.onStart(() => this.spawnNotepad());
 
     root.prepend(this.element);
@@ -125,6 +118,9 @@ export class Desktop {
 
     new DesktopIcon(this.element, 'youtube', 'My Youtube Channel', { x: 16 +120, y: 16 + 120 + 120 + 140 }, () =>
       exitFullscreenAndOpen('https://www.youtube.com/@RomanLutHax')
+    );
+    new DesktopIcon(this.element, 'sound', 'Sound Player', { x: 16 + 120 * 2, y: 16 + 120 + 120 + 140 }, () =>
+      new SoundPlayer(this.element, this.taskbar)
     );
 
     // HTML5 demo: JS1k - Lost In A Cave
