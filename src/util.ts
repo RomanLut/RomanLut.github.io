@@ -70,8 +70,18 @@ export function resolvePath(url: string, basePath: string) {
   if (/^(https?:)?\/\//i.test(url) || url.startsWith('data:') || url.startsWith('mailto:') || url.startsWith('/')) {
     return url;
   }
-  if (!basePath) return url;
-  return basePath + url.replace(/^\.\//, '');
+  const stripPublic = (p: string) => p.replace(/^public[\\/]/i, '');
+
+  // Normalise slashes and build a relative path against the markdown file location.
+  const normalizedBase = basePath ? stripPublic(basePath).replace(/\\/g, '/') : '';
+  let resolved = (normalizedBase || '') + url.replace(/^\.\//, '');
+  resolved = stripPublic(resolved).replace(/\\/g, '/');
+
+  // Serve from site root for in-app markdown files living under /public/.
+  if (!resolved.startsWith('/')) {
+    resolved = `/${resolved}`;
+  }
+  return resolved;
 }
 
 function getYouTubeEmbed(href: string): string | null {
@@ -111,7 +121,8 @@ export function applyInline(text: string, basePath: string) {
   };
 
   // Protect links and images so italics/strong regexes do not modify URLs.
-  t = t.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, src) => {
+  // Images: allow ']' inside alt by matching up to the closing '](' sequence.
+  t = t.replace(/!\[([\s\S]*?)\]\(([^)]+)\)/g, (_m, alt, src) => {
     const resolved = resolvePath(src, basePath);
     const embed = getYouTubeEmbed(resolved);
     if (embed) {
@@ -119,7 +130,8 @@ export function applyInline(text: string, basePath: string) {
     }
     return tokenFor(`<div class="wp-img"><img src="${resolved}" alt="${alt}" /></div>`);
   });
-  t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label, href) => {
+  // Links: same idea—stop at the closing '](' sequence to allow ']' inside label.
+  t = t.replace(/\[([\s\S]*?)\]\(([^)]+)\)/g, (_m, label, href) => {
     const resolved = resolvePath(href, basePath);
     const embed = getYouTubeEmbed(resolved);
     if (embed) {
