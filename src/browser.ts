@@ -46,6 +46,47 @@ export class Browser extends AppWindow {
   private blockedLink: HTMLButtonElement;
   private statusBar: AppWindowStatusBar;
   private resizeObserver: ResizeObserver | null = null;
+  private probeAbort: AbortController | null = null;
+  private probeState: 'idle' | 'pending' | 'ok' | 'error' = 'idle';
+  private loadSettled = false;
+  private isFrameBlankOrBlocked(): boolean {
+    try {
+      const href = this.iframe.contentWindow?.location?.href || '';
+      const doc = this.iframe.contentDocument;
+      // If we can inspect and it's truly blank, mark blocked.
+      if (!doc) return false; // cross-origin but loaded; assume ok
+      if (!href || href === 'about:blank') return true;
+      const body = doc.body;
+      if (!body) return true;
+      if (!body.childElementCount && !body.innerText?.trim()) return true;
+    } catch {
+      // Cross-origin and inaccessible; assume it loaded.
+      return false;
+    }
+    return false;
+  }
+
+  private isIframeErrorPage(): boolean {
+    try {
+      const doc = this.iframe.contentDocument;
+      const href = this.iframe.contentWindow?.location?.href || '';
+      const bodyText = doc?.body?.innerText || '';
+
+      // Browser error schemes (Chrome/Edge)
+      if (href.startsWith('chrome-error://') || href.startsWith('edge-error://')) return true;
+
+      // Some browsers land on about:blank with an error body
+      if (href === 'about:blank') {
+        if (/ERR_|This site can't be reached|DNS_PROBE_|connection|refused|not found/i.test(bodyText)) {
+          return true;
+        }
+      }
+    } catch {
+      // Cross-origin; assume ok.
+    }
+    return false;
+  }
+
   private bumpResize = () => {
     const win = this.iframe?.contentWindow;
     if (win) {
@@ -124,15 +165,18 @@ export class Browser extends AppWindow {
       'allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-downloads'
     );
     this.iframe.addEventListener('load', () => {
-      this.statusBar.setText('Done');
-      this.statusBar.setBusy(false);
-      this.setBlocked(false);
+      this.loadSettled = true;
+      const blankBlocked = this.isFrameBlankOrBlocked();
+      const pageError = this.probeState === 'error' || this.isIframeErrorPage() || blankBlocked;
+      if (pageError) {
+        this.setErrorState();
+      } else if (this.probeState === 'ok') {
+        this.setSuccessState();
+      }
       this.bumpResize();
     });
     this.iframe.addEventListener('error', () => {
-      this.statusBar.setText('Blocked or failed to load');
-      this.statusBar.setBusy(false);
-      this.setBlocked(true);
+      this.setErrorState();
     });
     // Propagate size changes to the iframe content (helps canvas/WebGL demos resize)
     if ('ResizeObserver' in window) {
@@ -190,6 +234,7 @@ export class Browser extends AppWindow {
       const looksLikeSearch = !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(normalized) && !normalized.includes('.');
       if (looksLikeSearch) {
         finalUrl = `https://www.google.com/?igu=1&q=${encodeURIComponent(url)}`;
+        iframeUrl = finalUrl;
       } else {
         const u = new URL(normalized, window.location.href);
         if (u.protocol === 'http:' || u.protocol === 'https:') {
@@ -223,6 +268,24 @@ export class Browser extends AppWindow {
     this.statusBar.setText('Loading...');
     this.statusBar.setBusy(true);
     this.setBlocked(false, false);
+    this.loadSettled = false;
+    this.probeState = 'pending';
+    if (this.probeAbort) {
+      this.probeAbort.abort();
+    }
+    this.probeAbort = new AbortController();
+    // DNS/protocol probe without timers; failure marks error state immediately.
+    fetch(iframeUrl, { mode: 'no-cors', signal: this.probeAbort.signal })
+      .then(() => {
+        if (this.currentUrl !== finalUrl) return;
+        this.probeState = 'ok';
+        if (this.loadSettled) this.setSuccessState();
+      })
+      .catch(() => {
+        if (this.currentUrl !== finalUrl) return;
+        this.probeState = 'error';
+        if (this.loadSettled) this.setErrorState();
+      });
     this.iframe.src = iframeUrl;
     this.bumpResize();
   }
@@ -230,6 +293,22 @@ export class Browser extends AppWindow {
   private reload() {
     if (!this.currentUrl) return;
     this.navigate(this.currentUrl);
+  }
+
+  private setSuccessState() {
+    this.statusBar.setText('Done');
+    this.statusBar.setBusy(false);
+    this.setBlocked(false);
+    this.probeState = 'idle';
+    this.probeAbort = null;
+  }
+
+  private setErrorState() {
+    this.statusBar.setText('Blocked or failed to load');
+    this.statusBar.setBusy(false);
+    this.setBlocked(true);
+    this.probeState = 'idle';
+    this.probeAbort = null;
   }
 
   // Optionally suppress status updates so navigation can hide the overlay without
@@ -257,3 +336,4 @@ export class Browser extends AppWindow {
     super.close();
   }
 }
+
