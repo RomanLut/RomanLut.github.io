@@ -3,6 +3,7 @@ import { Taskbar } from './taskbar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { Browser } from './browser';
+import { SoundPlayer } from './soundPlayer';
 import { applyInline, closeMenus, escapeHtml, inlineImages, markdownToHtml, responsiveWidth, responsiveHeight } from './util';
 
 const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
@@ -153,7 +154,12 @@ export class WordPad extends AppWindow {
       e.preventDefault();
       e.stopPropagation();
       const url = hrefAttr || link.href;
-      new Browser(this.desktopRef, this.taskbarRef, url);
+      if (hrefAttr.toLowerCase().endsWith('.ogg')) {
+        const filename = hrefAttr.split('/').pop() || 'Audio';
+        new SoundPlayer(this.desktopRef, this.taskbarRef, [{ title: filename, url: hrefAttr }]);
+      } else {
+        new Browser(this.desktopRef, this.taskbarRef, url);
+      }
     });
 
     // Target ~830px readable content area (padding + borders + scrollbar allowance).
