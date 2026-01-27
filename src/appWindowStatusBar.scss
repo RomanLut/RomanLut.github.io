@@ -16,7 +16,7 @@
 
 .desktop .app-window__statusbar-text {
   white-space: nowrap;
-  min-width: 80px;
+  min-width: 0;
   text-align: left;
 }
 
@@ -46,11 +46,36 @@
 .desktop .app-window__statusbar-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
 }
 
 .desktop .app-window__statusbar-right {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.desktop .app-window__statusbar-spinner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-top-color: #555;
+  animation: app-window-statusbar-spin 1s linear infinite;
+  display: none;
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+.desktop .app-window__statusbar-spinner.is-visible {
+  display: inline-block;
+}
+
+@keyframes app-window-statusbar-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

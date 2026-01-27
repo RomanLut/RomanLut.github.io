@@ -125,11 +125,13 @@ export class Browser extends AppWindow {
     );
     this.iframe.addEventListener('load', () => {
       this.statusBar.setText('Done');
+      this.statusBar.setBusy(false);
       this.setBlocked(false);
       this.bumpResize();
     });
     this.iframe.addEventListener('error', () => {
       this.statusBar.setText('Blocked or failed to load');
+      this.statusBar.setBusy(false);
       this.setBlocked(true);
     });
     // Propagate size changes to the iframe content (helps canvas/WebGL demos resize)
@@ -219,7 +221,8 @@ export class Browser extends AppWindow {
     this.currentUrl = finalUrl;
     this.addressInput.value = finalUrl;
     this.statusBar.setText('Loading...');
-    this.setBlocked(false);
+    this.statusBar.setBusy(true);
+    this.setBlocked(false, false);
     this.iframe.src = iframeUrl;
     this.bumpResize();
   }
@@ -229,8 +232,11 @@ export class Browser extends AppWindow {
     this.navigate(this.currentUrl);
   }
 
-  private setBlocked(flag: boolean) {
+  // Optionally suppress status updates so navigation can hide the overlay without
+  // prematurely marking the page as loaded.
+  private setBlocked(flag: boolean, updateStatus = true) {
     this.blockedOverlay.classList.toggle('is-visible', flag);
+    if (!updateStatus) return;
     if (flag) {
       this.statusBar.setText('Blocked or failed to load');
     } else {

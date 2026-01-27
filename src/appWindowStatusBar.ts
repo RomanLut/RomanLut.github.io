@@ -2,6 +2,7 @@ export class AppWindowStatusBar {
   readonly element: HTMLElement;
   private textEl: HTMLElement;
   private extraEl: HTMLElement;
+  private spinnerEl: HTMLElement;
 
   constructor(initialText = '', extra = '') {
     this.element = document.createElement('div');
@@ -9,6 +10,7 @@ export class AppWindowStatusBar {
     this.element.innerHTML = `
       <div class="app-window__statusbar-left">
         <span class="app-window__statusbar-text"></span>
+        <span class="app-window__statusbar-spinner" aria-hidden="true"></span>
         <span class="app-window__statusbar-divider"></span>
         <span class="app-window__statusbar-extra"></span>
       </div>
@@ -21,6 +23,7 @@ export class AppWindowStatusBar {
         <span class="app-window__statusbar-encoding">UTF-8</span>
       </div>
     `;
+    this.spinnerEl = this.element.querySelector('.app-window__statusbar-spinner') as HTMLElement;
     this.textEl = this.element.querySelector('.app-window__statusbar-text') as HTMLElement;
     this.extraEl = this.element.querySelector('.app-window__statusbar-extra') as HTMLElement;
     this.setText(initialText);
@@ -33,5 +36,9 @@ export class AppWindowStatusBar {
 
   setExtra(text: string) {
     this.extraEl.textContent = text;
+  }
+
+  setBusy(flag: boolean) {
+    this.spinnerEl.classList.toggle('is-visible', flag);
   }
 }
