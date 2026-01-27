@@ -96,6 +96,16 @@ export class Browser extends AppWindow {
     }
   }
 
+  private isDownloadUrl(url: string): boolean {
+    try {
+      const pathname = new URL(url).pathname;
+      const ext = pathname.split('.').pop()?.toLowerCase();
+      return ['zip', 'exe', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'rar', '7z', 'tar', 'gz', 'mp3', 'mp4', 'avi', 'mov', 'jpg', 'png', 'gif', 'txt', 'css', 'js'].includes(ext || '');
+    } catch {
+      return false;
+    }
+  }
+
   private async resolveSlideShareEmbed(pageUrl: string): Promise<string> {
     if (/slideshare\.net\/slideshow\/embed_code\//i.test(pageUrl)) {
       return pageUrl;
@@ -295,27 +305,35 @@ export class Browser extends AppWindow {
     if (!finalUrl) return;
     this.currentUrl = finalUrl;
     this.addressInput.value = finalUrl;
-    this.statusBar.setText('Loading...');
-    this.statusBar.setBusy(true);
-    this.setBlocked(false, false);
-    this.loadSettled = false;
-    this.probeState = 'pending';
-    if (this.probeAbort) {
-      this.probeAbort.abort();
+    if (this.isDownloadUrl(iframeUrl)) {
+      this.statusBar.setText('Loaded');
+      this.statusBar.setBusy(false);
+      this.setBlocked(false, false);
+      this.loadSettled = true;
+      this.probeState = 'idle';
+    } else {
+      this.statusBar.setText('Loading...');
+      this.statusBar.setBusy(true);
+      this.setBlocked(false, false);
+      this.loadSettled = false;
+      this.probeState = 'pending';
+      if (this.probeAbort) {
+        this.probeAbort.abort();
+      }
+      this.probeAbort = new AbortController();
+      // DNS/protocol probe without timers; failure marks error state immediately.
+      fetch(iframeUrl, { mode: 'no-cors', signal: this.probeAbort.signal })
+        .then(() => {
+          if (this.currentUrl !== finalUrl) return;
+          this.probeState = 'ok';
+          if (this.loadSettled) this.setSuccessState();
+        })
+        .catch(() => {
+          if (this.currentUrl !== finalUrl) return;
+          this.probeState = 'error';
+          if (this.loadSettled) this.setErrorState();
+        });
     }
-    this.probeAbort = new AbortController();
-    // DNS/protocol probe without timers; failure marks error state immediately.
-    fetch(iframeUrl, { mode: 'no-cors', signal: this.probeAbort.signal })
-      .then(() => {
-        if (this.currentUrl !== finalUrl) return;
-        this.probeState = 'ok';
-        if (this.loadSettled) this.setSuccessState();
-      })
-      .catch(() => {
-        if (this.currentUrl !== finalUrl) return;
-        this.probeState = 'error';
-        if (this.loadSettled) this.setErrorState();
-      });
     this.iframe.src = iframeUrl;
     this.bumpResize();
   }
