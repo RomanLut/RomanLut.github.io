@@ -539,6 +539,19 @@
               "size": 25157
             }
           ]
+        },
+        {
+          "type": "folder",
+          "name": "2008-06-DVD Streaming",
+          "path": "Publications/2008-06-DVD_Streaming",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "DVD Stereaming",
+              "path": "Publications/2008-06-DVD_Streaming/DVD_Stereaming.md",
+              "size": 30704
+            }
+          ]
         }
       ],
       "image": "folder_image.jpg",

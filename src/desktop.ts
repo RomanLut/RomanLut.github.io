@@ -1,9 +1,7 @@
 import { Taskbar } from './taskbar';
-import { Notepad } from './notepad';
 import { DesktopIcon } from './desktopIcon';
 import { exitFullscreenAndOpen } from './util';
 import { WordPad } from './WordPad';
-import { Browser } from './browser';
 import { FileExplorer } from './fileExplorer';
 import { DosBox } from './dosbox';
 import { Browser } from './browser';
@@ -64,6 +62,14 @@ export class Desktop {
       'CNC1.md '
     );    
 */
+
+    // Auto-open the DVD Streaming article at startup so images render without extra clicks.
+    new WordPad(
+      this.element,
+      this.taskbar,
+      '/filesystem/Publications/2008-06-DVD_Streaming/DVD_Stereaming.md',
+      'DVD Streaming'
+    );
 
     this.taskbar.onStart(() => this.spawnNotepad());
 
