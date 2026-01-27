@@ -226,6 +226,7 @@ export class WordPad extends AppWindow {
       const basePath = path.includes('/') ? path.slice(0, path.lastIndexOf('/') + 1) : '';
       const html = markdownToHtml(this.markdownText, basePath);
       this.contentArea.innerHTML = html;
+      this.enhanceEmbeds();
       this.updateStatus();
     } catch (err) {
       this.contentArea.innerHTML = `<div class="wordpad__error">Failed to load file: ${escapeHtml(String(err))}</div>`;
@@ -301,6 +302,63 @@ export class WordPad extends AppWindow {
       document.body.appendChild(input);
       input.click();
     });
+  }
+
+  private enhanceEmbeds() {
+    const anchors = Array.from(this.contentArea.querySelectorAll('a[href]')) as HTMLAnchorElement[];
+    anchors.forEach((a) => {
+      const href = a.getAttribute('href') || '';
+      const absolute = a.href || href;
+      if (this.isSlideShareLink(absolute)) {
+        const embedSrc = this.toSlideShareEmbed(absolute);
+        const container = document.createElement('div');
+        container.className = 'wordpad__embed';
+        const iframe = document.createElement('iframe');
+        iframe.src = embedSrc;
+        iframe.allowFullscreen = true;
+        iframe.setAttribute('frameborder', '0');
+        iframe.style.width = '100%';
+        iframe.style.height = '420px';
+        iframe.style.border = 'none';
+        container.appendChild(iframe);
+        // Keep the original link below for reference
+        const linkHolder = document.createElement('div');
+        linkHolder.className = 'wordpad__embed-link';
+        const clone = a.cloneNode(true) as HTMLElement;
+        linkHolder.appendChild(clone);
+        const wrapper = document.createElement('div');
+        wrapper.appendChild(container);
+        wrapper.appendChild(linkHolder);
+        a.replaceWith(wrapper);
+      }
+    });
+  }
+
+  private isSlideShareLink(url: string): boolean {
+    try {
+      const host = new URL(url).hostname.toLowerCase();
+      return host === 'www.slideshare.net' || host === 'slideshare.net';
+    } catch {
+      return false;
+    }
+  }
+
+  private toSlideShareEmbed(url: string): string {
+    try {
+      const u = new URL(url);
+      const path = u.pathname;
+      const directEmbed = path.match(/\/slideshow\/embed_code\/(\d+)/i);
+      if (directEmbed?.[1]) {
+        return `https://www.slideshare.net/slideshow/embed_code/${directEmbed[1]}`;
+      }
+      const idMatch = path.match(/(\d+)(?:\/)?$/);
+      if (idMatch?.[1]) {
+        return `https://www.slideshare.net/slideshow/embed_code/${idMatch[1]}`;
+      }
+    } catch {
+      /* ignore */
+    }
+    return url;
   }
 
   private updateWindowTitle(newTitle: string) {
