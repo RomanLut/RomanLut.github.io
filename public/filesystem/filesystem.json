@@ -492,6 +492,31 @@
         },
         {
           "type": "folder",
+          "name": "2004-09 3ds max export plugin advices",
+          "path": "Publications/2004-09_3ds_max export_plugin_advices",
+          "items": [
+            {
+              "type": "archive",
+              "name": "SceneMainTool",
+              "path": "Publications/2004-09_3ds_max export_plugin_advices/SceneMainTool.zip",
+              "size": 13691
+            },
+            {
+              "type": "wordpad",
+              "name": "Tips on Geometry Export Plugin Architecture (translated to english)",
+              "path": "Publications/2004-09_3ds_max export_plugin_advices/Tips_on_Geometry_Export_Plugin_Architecture_(translated_to_english).md",
+              "size": 7089
+            },
+            {
+              "type": "wordpad",
+              "name": "Советы по архитектуре плагина экспорта геометрии (russian)",
+              "path": "Publications/2004-09_3ds_max export_plugin_advices/Советы_по_архитектуре_плагина_экспорта_геометрии_(russian).md",
+              "size": 12501
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2005-10 Using webcamera as virtual graphics tablet",
           "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet",
           "items": [
