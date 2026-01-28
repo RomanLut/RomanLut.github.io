@@ -1,6 +1,12 @@
 {
   "items": [
     {
+      "type": "wordpad",
+      "name": "About me",
+      "path": "About_me.md",
+      "size": 987
+    },
+    {
       "type": "folder",
       "name": "CNC",
       "path": "CNC",
@@ -436,6 +442,43 @@
         },
         {
           "type": "folder",
+          "name": "2013-05 ESR Metter",
+          "path": "Electronics/2013-05_ESR_Metter",
+          "items": [
+            {
+              "type": "archive",
+              "name": "hxESRMeter",
+              "path": "Electronics/2013-05_ESR_Metter/hxESRMeter.rar",
+              "size": 355150
+            },
+            {
+              "type": "archive",
+              "name": "hxESRMeter1.2 src",
+              "path": "Electronics/2013-05_ESR_Metter/hxESRMeter1.2_src.zip",
+              "size": 55635
+            },
+            {
+              "type": "wordpad",
+              "name": "hxESRMetter (translated to english)",
+              "path": "Electronics/2013-05_ESR_Metter/hxESRMetter_(translated_to_english).md",
+              "size": 16526
+            },
+            {
+              "type": "archive",
+              "name": "hxESRMetter1.2.bin",
+              "path": "Electronics/2013-05_ESR_Metter/hxESRMetter1.2.bin.zip",
+              "size": 9778
+            },
+            {
+              "type": "wordpad",
+              "name": "Прибор для измерения RLC и ESR hxRLCMeter",
+              "path": "Electronics/2013-05_ESR_Metter/Прибор_для_измерения_RLC_и_ESR_hxRLCMeter.md",
+              "size": 25898
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2013-08 Roomba Pro SLA battery mod",
           "path": "Electronics/2013-08_Roomba_Pro_SLA_battery_mod",
           "items": [
@@ -525,32 +568,6 @@
       "name": "Publications",
       "path": "Publications",
       "items": [
-        {
-          "type": "folder",
-          "name": "2013-04 Opto isolated AVR910",
-          "path": "Electronics/2013-04_Opto_isolated_AVR910",
-          "items": [
-            {
-              "type": "archive",
-              "name": "AVR910Optoisolated",
-              "path": "Electronics/2013-04_Opto_isolated_AVR910/AVR910Optoisolated.zip",
-              "size": 42601
-            },
-            {
-              "type": "wordpad",
-              "name": "Opto isolated AVR910 (translated to english)",
-              "path": "Electronics/2013-04_Opto_isolated_AVR910/Opto_isolated_AVR910_(translated_to_english).md",
-              "size": 3483
-            },
-            {
-              "type": "wordpad",
-              "name": "Оптоизолированный программатор AVR910 (russian)",
-              "path": "Electronics/2013-04_Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910_(russian).md",
-              "size": 5888
-            }
-          ],
-          "reference": "Yes"
-        },
         {
           "type": "folder",
           "name": "1997-07 Morphing images",
@@ -956,6 +973,70 @@
               "size": 26982
             }
           ]
+        },
+        {
+          "type": "folder",
+          "name": "2013-04 Opto isolated AVR910",
+          "path": "Electronics/2013-04_Opto_isolated_AVR910",
+          "items": [
+            {
+              "type": "archive",
+              "name": "AVR910Optoisolated",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/AVR910Optoisolated.zip",
+              "size": 42601
+            },
+            {
+              "type": "wordpad",
+              "name": "Opto isolated AVR910 (translated to english)",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/Opto_isolated_AVR910_(translated_to_english).md",
+              "size": 3483
+            },
+            {
+              "type": "wordpad",
+              "name": "Оптоизолированный программатор AVR910 (russian)",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910_(russian).md",
+              "size": 5888
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2013-05 ESR Metter",
+          "path": "Electronics/2013-05_ESR_Metter",
+          "items": [
+            {
+              "type": "archive",
+              "name": "hxESRMeter",
+              "path": "Electronics/2013-05_ESR_Metter/hxESRMeter.rar",
+              "size": 355150
+            },
+            {
+              "type": "archive",
+              "name": "hxESRMeter1.2 src",
+              "path": "Electronics/2013-05_ESR_Metter/hxESRMeter1.2_src.zip",
+              "size": 55635
+            },
+            {
+              "type": "wordpad",
+              "name": "hxESRMetter (translated to english)",
+              "path": "Electronics/2013-05_ESR_Metter/hxESRMetter_(translated_to_english).md",
+              "size": 16526
+            },
+            {
+              "type": "archive",
+              "name": "hxESRMetter1.2.bin",
+              "path": "Electronics/2013-05_ESR_Metter/hxESRMetter1.2.bin.zip",
+              "size": 9778
+            },
+            {
+              "type": "wordpad",
+              "name": "Прибор для измерения RLC и ESR hxRLCMeter",
+              "path": "Electronics/2013-05_ESR_Metter/Прибор_для_измерения_RLC_и_ESR_hxRLCMeter.md",
+              "size": 25898
+            }
+          ],
+          "reference": "Yes"
         }
       ],
       "image": "folder_image.jpg",
@@ -999,12 +1080,6 @@
       ],
       "image": "folder_image.jpg",
       "desc": "folder.md Markdown Rendering Test\n\nText styles\nNormal text with **bold**, *italic*.\n\nLinks \n- Link: [OpenAI](https://www.openai.com/)\n\nLong text\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    },
-    {
-      "type": "wordpad",
-      "name": "About me",
-      "path": "About_me.md",
-      "size": 987
     }
   ]
 }
