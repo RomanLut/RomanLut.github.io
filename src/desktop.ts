@@ -158,6 +158,25 @@ export class Desktop {
     );
 
 
+    new DesktopIcon(this.element, 'github', 'hx_esp_now_rc', { x: 16 +120*11, y: 16 + 120 }, () =>
+      exitFullscreenAndOpen('https://github.com/RomanLut/hx_espnow_rc')
+    );
+
+    new DesktopIcon(this.element, 'github', 'hx-esp32-cam-fpv', { x: 16 +120*12, y: 16 + 120 }, () =>
+      exitFullscreenAndOpen('https://github.com/RomanLut/hx-esp32-cam-fpv')
+    );
+
+
+    new DesktopIcon(this.element, 'github', 'INAV-X-Plane-HITL', { x: 16 +120*13, y: 16 + 120 }, () =>
+      exitFullscreenAndOpen('https://github.com/RomanLut/INAV-X-Plane-HITL')
+    );
+
+
+    new DesktopIcon(this.element, 'github', 'Telemetry Viewer', { x: 16 +120*14, y: 16 + 120 }, () =>
+      exitFullscreenAndOpen('https://github.com/RomanLut/android-taranis-smartport-telemetry')
+    );
+
+
     new DesktopIcon(this.element, 'youtube', 'Venom Intro', { x: 16 +120*13, y: 16 + 120*2 }, () =>
       new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=E1SpT1WoZ5w')
     );
