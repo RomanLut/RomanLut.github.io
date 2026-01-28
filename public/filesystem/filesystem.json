@@ -1,12 +1,6 @@
 {
   "items": [
     {
-      "type": "wordpad",
-      "name": "About me",
-      "path": "About_me.md",
-      "size": 987
-    },
-    {
       "type": "folder",
       "name": "CNC",
       "path": "CNC",
@@ -493,6 +487,31 @@
               "name": "RoombaSLA",
               "path": "Electronics/2013-08_Roomba_Pro_SLA_battery_mod/RoombaSLA.rar",
               "size": 62729
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "2013-09 Midi player forAVR",
+          "path": "Electronics/2013-09_Midi_player_forAVR",
+          "items": [
+            {
+              "type": "archive",
+              "name": "AVRMusic",
+              "path": "Electronics/2013-09_Midi_player_forAVR/AVRMusic.rar",
+              "size": 3041918
+            },
+            {
+              "type": "wordpad",
+              "name": "Midi Player for AVR (translated to english)",
+              "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_for_AVR_(translated_to_english).md",
+              "size": 34004
+            },
+            {
+              "type": "wordpad",
+              "name": "Midi Player для AVR (russian)",
+              "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_для_AVR_(russian).md",
+              "size": 54937
             }
           ]
         },
@@ -1037,6 +1056,32 @@
             }
           ],
           "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2013-09 Midi player forAVR",
+          "path": "Electronics/2013-09_Midi_player_forAVR",
+          "items": [
+            {
+              "type": "archive",
+              "name": "AVRMusic",
+              "path": "Electronics/2013-09_Midi_player_forAVR/AVRMusic.rar",
+              "size": 3041918
+            },
+            {
+              "type": "wordpad",
+              "name": "Midi Player for AVR (translated to english)",
+              "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_for_AVR_(translated_to_english).md",
+              "size": 34004
+            },
+            {
+              "type": "wordpad",
+              "name": "Midi Player для AVR (russian)",
+              "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_для_AVR_(russian).md",
+              "size": 54937
+            }
+          ],
+          "reference": "Yes"
         }
       ],
       "image": "folder_image.jpg",
@@ -1080,6 +1125,12 @@
       ],
       "image": "folder_image.jpg",
       "desc": "folder.md Markdown Rendering Test\n\nText styles\nNormal text with **bold**, *italic*.\n\nLinks \n- Link: [OpenAI](https://www.openai.com/)\n\nLong text\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    },
+    {
+      "type": "wordpad",
+      "name": "About me",
+      "path": "About_me.md",
+      "size": 987
     }
   ]
 }
