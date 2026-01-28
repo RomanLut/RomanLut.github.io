@@ -3,12 +3,16 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 import zipfile
 from typing import Any, Dict, List, Optional
 
 
 ROOT = Path(__file__).resolve().parent.parent / "public" / "filesystem"
 OUTPUT_FILE = ROOT / "filesystem.json"
+
+# Track reference errors to report at the end
+reference_errors: List[str] = []
 
 
 def display_name(raw: str) -> str:
@@ -36,8 +40,98 @@ def find_folder_image(folder: Path) -> Optional[str]:
     return None
 
 
+def read_references(folder: Path) -> List[str]:
+    """Read references.txt and return list of referenced paths."""
+    ref_file = folder / "references.txt"
+    if not ref_file.is_file():
+        return []
+    try:
+        content = ref_file.read_text(encoding="utf-8").strip()
+    except UnicodeDecodeError:
+        content = ref_file.read_text(encoding="utf-8", errors="replace").strip()
+
+    paths = []
+    for line in content.splitlines():
+        line = line.strip()
+        if line:
+            # Normalize path separators and remove leading slashes
+            normalized = line.replace("\\", "/").strip("/")
+            paths.append(normalized)
+    return paths
+
+
+def build_reference_item(ref_path: str, containing_folder: Path) -> Optional[Dict[str, Any]]:
+    """Build an item for a referenced file or folder."""
+    # Remove trailing slash to determine if it's meant to be a folder
+    is_folder_ref = ref_path.endswith("/")
+    clean_path = ref_path.rstrip("/")
+
+    target = ROOT / clean_path
+
+    if not target.exists():
+        reference_errors.append(
+            f"Reference error in {containing_folder.relative_to(ROOT)}: "
+            f"'{ref_path}' does not exist"
+        )
+        return None
+
+    if target.is_dir():
+        # Build a folder reference - recursively get its contents
+        rel_path = Path(clean_path)
+        nested = build_folder(target, rel_path)
+        if nested:
+            nested["reference"] = "Yes"
+            return nested
+        return None
+    else:
+        # Build a file reference
+        return build_file_item(target, Path(clean_path), is_reference=True)
+
+
+def build_file_item(entry: Path, rel_path: Path, is_reference: bool = False) -> Optional[Dict[str, Any]]:
+    """Build an item dict for a file."""
+    archive_exts = {".zip", ".rar", ".7z"}
+    html_exts = {".html", ".htm"}
+    sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a"}
+
+    size = entry.stat().st_size
+    item: Dict[str, Any] = {
+        "name": display_name(entry.name),
+        "path": rel_path.as_posix(),
+        "size": size,
+    }
+
+    if is_reference:
+        item["reference"] = "Yes"
+
+    suffix = entry.suffix.lower()
+
+    if suffix == ".md":
+        item["type"] = "wordpad"
+    elif suffix in {".txt", ".js"}:
+        item["type"] = "notepad"
+    elif suffix in archive_exts:
+        item["type"] = "archive"
+    elif suffix in html_exts:
+        item["type"] = "html"
+    elif suffix in sound_exts:
+        item["type"] = "sound"
+    else:
+        return None
+
+    return item
+
+
 def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     children: List[Dict[str, Any]] = []
+
+    # Process references from reference.txt
+    ref_paths = read_references(folder)
+    for ref_path in ref_paths:
+        ref_item = build_reference_item(ref_path, folder)
+        if ref_item:
+            children.append(ref_item)
+
     # Split into folders/files, then sort each group alphabetically by display name.
     entries = list(folder.iterdir())
     folders = sorted([p for p in entries if p.is_dir()], key=lambda p: display_name(p.name).lower())
@@ -50,6 +144,9 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
         if entry.name == "filesystem.json":
             continue
         if entry.name.startswith("."):
+            continue
+        # Skip references.txt - it's metadata, not content
+        if entry.name == "references.txt":
             continue
         rel_path = relative / entry.name
         if entry.is_dir():
@@ -168,6 +265,13 @@ def main() -> None:
     output_path = Path(args.output)
     output_path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Wrote filesystem structure to {output_path}")
+
+    # Report any reference errors
+    if reference_errors:
+        print("\nReference errors found:", file=sys.stderr)
+        for error in reference_errors:
+            print(f"  - {error}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

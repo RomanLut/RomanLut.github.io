@@ -5,3 +5,4 @@ dist
 *.log
 .npmrc
 /.claude/settings.local.json
+/.claude/settings.json

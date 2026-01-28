@@ -232,6 +232,7 @@
   align-items: center;
   justify-content: center;
   user-select: none;
+  position: relative;
 }
 
 .fileexplorer__item-icon svg {
@@ -245,6 +246,15 @@
   height: 24.336px;
   display: block;
   object-fit: contain;
+}
+
+.fileexplorer__item-icon.has-shortcut .shortcut-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
 }
 
 .fileexplorer__item-name {

@@ -10,8 +10,8 @@ The structure is a graph of items,
    {
      "type": "folder",
      "name": "CNC",
-	   "path:" : "CNC"
-
+	   "path:" : "CNC",
+     "reference: "No",
      items: []
    }
  ]
@@ -25,6 +25,7 @@ path: path inside /filesystem folder
 image?: optional folder image name, without path (f.e. folder_image.jpg)
 desc?: optional description text of the folder
 size: size in bytes for files
+reference: Yes if this file or folder is shortcut. File Explorer will show shortcut icon ot top of normal icon.
 
 The /public/filesystem/filesystem.json is build automatically with script tools/update_filesystem.py
 
@@ -45,3 +46,8 @@ If archive contains .jsdos folder, anothet item is created with same name but ty
 Executable archives open in the DOSBox app; other archive types trigger a File Save dialog when double-clicked. DOSBox archives must contain a `.jsdos/dosbox.conf` with an `autoexec` section.
 
 .html files have type html. html files are executed in the browser app
+
+I folder contains references.txt, it has to be parsed.
+file contains a path to file or folder like "Publications/2013-04_Opto_isolated_AVR910/". Folder reference ends with slash.
+Script should verify if actual folder or file exists and show error if not.
+reference.txt itself is not added to the list.

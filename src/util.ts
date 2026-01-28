@@ -360,6 +360,7 @@ export interface FsItem {
   desc?: string;
   items?: FsItem[];
   size?: number;
+  reference?: string;
 }
 
 export interface FsRoot {

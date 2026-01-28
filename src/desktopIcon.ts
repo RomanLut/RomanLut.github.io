@@ -52,6 +52,12 @@ export function getIconSvg(type: IconType): string {
   return ICON_SVGS[type];
 }
 
+/** Windows-style shortcut arrow overlay for bottom-left corner */
+export const SHORTCUT_OVERLAY_SVG = `<svg class="shortcut-overlay" viewBox="0 0 24 24" aria-hidden="true">
+  <rect x="2" y="10" width="12" height="12" rx="1" fill="#ffffff" stroke="#000000" stroke-width="1.5"/>
+  <path d="M6 18l6-6m0 0v4m0-4h-4" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>`;
+
 export class DesktopIcon {
   readonly element: HTMLElement;
   private desktop: HTMLElement;

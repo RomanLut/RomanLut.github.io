@@ -231,6 +231,9 @@ Allow browsing virtual filesystem defied in /public/filesystem/filesystem.json.
   - Double Click wordpad row to open WordPad for that `path`.
   - File paths are relative to `/filesystem/` base when opening.
   - Navigation updates breadcrumbs and status immediately; no history stack needed yet.
+- if item is "reference: "Yes", then a shortcut icon should be drawn on top of normal icon
+
+
 
 
 ## 6. Global state

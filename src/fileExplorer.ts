@@ -1,7 +1,7 @@
 import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowStatusBar } from './appWindowStatusBar';
-import { getIconSvg, type IconType } from './desktopIcon';
+import { getIconSvg, SHORTCUT_OVERLAY_SVG, type IconType } from './desktopIcon';
 import {
   type FsItem,
   type FsRoot,
@@ -277,6 +277,12 @@ export class FileExplorer extends AppWindow {
           ? 'sound'
           : 'wordpad';
       iconHolder.innerHTML = getIconSvg(iconType);
+
+      // Add shortcut overlay for reference items
+      if (item.reference === 'Yes') {
+        iconHolder.classList.add('has-shortcut');
+        iconHolder.innerHTML += SHORTCUT_OVERLAY_SVG;
+      }
 
       const label = document.createElement('div');
       label.className = 'fileexplorer__item-name';

@@ -461,6 +461,32 @@
       "items": [
         {
           "type": "folder",
+          "name": "2013-04 Opto isolated AVR910",
+          "path": "Electronics/2013-04_Opto_isolated_AVR910",
+          "items": [
+            {
+              "type": "archive",
+              "name": "AVR910Optoisolated",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/AVR910Optoisolated.zip",
+              "size": 42601
+            },
+            {
+              "type": "wordpad",
+              "name": "Opto isolated AVR910 (translated to english)",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/Opto_isolated_AVR910_(translated_to_english).md",
+              "size": 3483
+            },
+            {
+              "type": "wordpad",
+              "name": "Оптоизолированный программатор AVR910 (russian)",
+              "path": "Electronics/2013-04_Opto_isolated_AVR910/Оптоизолированный_программатор_AVR910_(russian).md",
+              "size": 5888
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
           "name": "1997-07 Morphing images",
           "path": "Publications/1997-07_Morphing_images",
           "items": [
@@ -828,14 +854,8 @@
           "items": [
             {
               "type": "wordpad",
-              "name": "article",
-              "path": "Publications/2008-08_DIY_Home_Theater_PC/article.md",
-              "size": 16749
-            },
-            {
-              "type": "wordpad",
-              "name": "article en",
-              "path": "Publications/2008-08_DIY_Home_Theater_PC/article_en.md",
+              "name": "DIY Home Theatre PC en (translated to english)",
+              "path": "Publications/2008-08_DIY_Home_Theater_PC/DIY_Home_Theatre_PC_en_(translated_to_english).md",
               "size": 11017
             },
             {
@@ -843,6 +863,12 @@
               "name": "FunDriver",
               "path": "Publications/2008-08_DIY_Home_Theater_PC/FunDriver.rar",
               "size": 9719531
+            },
+            {
+              "type": "wordpad",
+              "name": "Home Theatre PC своими руками (russian)",
+              "path": "Publications/2008-08_DIY_Home_Theater_PC/Home_Theatre_PC_своими_руками_(russian).md",
+              "size": 16749
             }
           ]
         },
