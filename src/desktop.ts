@@ -1,6 +1,6 @@
 import { Taskbar } from './taskbar';
 import { DesktopIcon } from './desktopIcon';
-import { exitFullscreenAndOpen } from './util';
+import { exitFullscreenAndOpen, navigateToUrl } from './util';
 import { WordPad } from './WordPad';
 import { FileExplorer } from './fileExplorer';
 import { DosBox } from './dosbox';
@@ -141,7 +141,7 @@ export class Desktop {
       'html',
       'JS1k - Lost In A Cave',
       { x: 16 + 120*12, y: 16  },
-      () => new Browser(this.element, this.taskbar, '/filesystem/Demoscene/2019-03_JS1k_Lost_In_A_Cave/Lost_In_A_Cave.html')
+      () => navigateToUrl(this.element, this.taskbar, '/filesystem/Demoscene/2019-03_JS1k_Lost_In_A_Cave/Lost_In_A_Cave.html')
     );
 
     // Test MS-DOS launcher (executable type)
@@ -154,7 +154,7 @@ export class Desktop {
     );
 
     new DesktopIcon(this.element, 'youtube', 'INAV HITL', { x: 16 +120*14, y: 16 }, () =>
-      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=krTDi1tXGX8')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=krTDi1tXGX8')
     );
 
 
@@ -178,35 +178,35 @@ export class Desktop {
 
 
     new DesktopIcon(this.element, 'youtube', 'Venom Intro', { x: 16 +120*13, y: 16 + 120*2 }, () =>
-      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=E1SpT1WoZ5w')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=E1SpT1WoZ5w')
     );
 
     new DesktopIcon(this.element, 'youtube', 'Venom gameplay', { x: 16 +120*14, y: 16 + 120*2 }, () =>
-      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=9dHb_a4LRM4')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=9dHb_a4LRM4')
     );
 
     new DesktopIcon(this.element, 'youtube', 'Xenus gameplay', { x: 16 +120*12, y: 16 + 120*3 }, () =>
-      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=MBV_Fxryj3Q')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=MBV_Fxryj3Q')
     );
 
     new DesktopIcon(this.element, 'youtube', 'Xenus trailer', { x: 16 +120*13, y: 16 + 120*3 }, () =>
-      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=PJcGcuDtDY8')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=PJcGcuDtDY8')
     );
 
     new DesktopIcon(this.element, 'youtube', 'Xenus 2: White Gold', { x: 16 +120*14, y: 16 + 120*3 }, () =>
-      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=7-iWnISp4H4')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=7-iWnISp4H4')
     );
 
     new DesktopIcon(this.element, 'youtube', 'Precursors', { x: 16 +120*12, y: 16 + 120*4 }, () =>
-      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=Xt-sv4_Oe1I')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=Xt-sv4_Oe1I')
     );
 
     new DesktopIcon(this.element, 'youtube', 'Partisans prototype', { x: 16 +120*13, y: 16 + 120*4 }, () =>
-      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=aA4gW7wgmsM')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=aA4gW7wgmsM')
     );
 
     new DesktopIcon(this.element, 'youtube', 'Optimizing Xenus 2', { x: 16 +120*14, y: 16 + 120*4 }, () =>
-      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=DlsWMxvlhWE')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=DlsWMxvlhWE')
     );
 
 

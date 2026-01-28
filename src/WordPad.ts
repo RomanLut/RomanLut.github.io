@@ -4,7 +4,7 @@ import { AppWindowMenu, type MenuItem } from './appWindowMenu';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { Browser } from './browser';
 import { SoundPlayer } from './soundPlayer';
-import { applyInline, closeMenus, escapeHtml, inlineImages, isDownloadUrl, markdownToHtml, responsiveWidth, responsiveHeight } from './util';
+import { applyInline, closeMenus, escapeHtml, inlineImages, isDownloadUrl, markdownToHtml, responsiveWidth, responsiveHeight, navigateToUrl } from './util';
 
 const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
   <rect x="4" y="3" width="16" height="18" rx="2" fill="#ffffff" stroke="#d0d6e0" stroke-width="1"/>
@@ -165,7 +165,7 @@ export class WordPad extends AppWindow {
         a.click();
         document.body.removeChild(a);
       } else {
-        new Browser(this.desktopRef, this.taskbarRef, url);
+        navigateToUrl(this.desktopRef, this.taskbarRef, url);
       }
     });
 

@@ -13,7 +13,8 @@ import {
   applyInline,
   formatSize,
   responsiveWidth,
-  responsiveHeight
+  responsiveHeight,
+  navigateToUrl
 } from './util';
 import { WordPad } from './WordPad';
 import { Notepad } from './notepad';
@@ -242,7 +243,7 @@ export class FileExplorer extends AppWindow {
         e.preventDefault();
         e.stopPropagation();
         const url = hrefAttr || link.href;
-        new Browser(this.desktopRef, this.taskbarRef, url);
+        navigateToUrl(this.desktopRef, this.taskbarRef, url);
       });
       this.meta.appendChild(descWrap);
     }
@@ -319,7 +320,7 @@ export class FileExplorer extends AppWindow {
         return;
       }
       case 'html': {
-        new Browser(this.desktopRef, this.taskbarRef, url);
+        navigateToUrl(this.desktopRef, this.taskbarRef, url);
         return;
       }
       case 'sound': {

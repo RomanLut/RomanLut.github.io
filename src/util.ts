@@ -1,3 +1,5 @@
+import { Browser } from './browser';
+
 type StartParam = '1' | '2' | null;
 
 export function setStartParam(value: StartParam) {
@@ -428,4 +430,12 @@ export async function loadFilesystem(url = '/filesystem/filesystem.json'): Promi
     throw new Error(`Failed to load filesystem: HTTP ${res.status}`);
   }
   return (await res.json()) as FsRoot;
+}
+
+export function navigateToUrl(desktop: HTMLElement, taskbar: any, url: string) {
+  if (url.includes('dangerousprototypes.com') || url.includes('sparkfun.com')) {
+    window.open(url, '_blank', 'noopener');
+  } else {
+    new Browser(desktop, taskbar, url);
+  }
 }
