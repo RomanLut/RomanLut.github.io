@@ -1,6 +1,6 @@
 # Connecting Nokia 6100 LCD to AVR
 
-There are many articles in the Internet describing how to use Nokia 6100 LCD with AVR. Unfortunately most of them are using LCD with Breakout board from [Sparkfun Electronics](https://www.sparkfun.com/links). There is a little information how to connect LCD extracted from real phone, which introduces a set of problems.
+There are many articles in the Internet describing how to use Nokia 6100 LCD with AVR. Unfortunately most of them are using LCD with Breakout board from [Sparkfun Electronics](https://www.sparkfun.com/products/11062). There is a little information how to connect LCD extracted from real phone, which introduces a set of problems.
 
 ![nokialcd](images/01.jpg)
 
@@ -43,3 +43,6 @@ Oscillation frequency is 250kHz, output current is 25mA ( 6.5V). I used componen
 ![lcdsmd](images/07.jpg)
 
 Backlight can be disabled from AVR by grounding base of transistor Q2 through D3 to prevent oscillation ( light turns off when AVR outputs "0" ).
+
+
+[Schematics and CodeVisianAVR project](NokiaLCD.zip)

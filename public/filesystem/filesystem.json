@@ -462,7 +462,13 @@
               "type": "wordpad",
               "name": "Connecting Nokia 6100 LCD to AVR",
               "path": "Electronics/2015-02_Connecting_Nokia_6100_LCD_to_AVR/Connecting_Nokia_6100_LCD_to_AVR.md",
-              "size": 2891
+              "size": 2949
+            },
+            {
+              "type": "archive",
+              "name": "NokiaLCD",
+              "path": "Electronics/2015-02_Connecting_Nokia_6100_LCD_to_AVR/NokiaLCD.zip",
+              "size": 115287
             }
           ]
         },
