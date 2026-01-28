@@ -823,6 +823,31 @@
         },
         {
           "type": "folder",
+          "name": "2008-08 DIY Home Theater PC",
+          "path": "Publications/2008-08_DIY_Home_Theater_PC",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "article",
+              "path": "Publications/2008-08_DIY_Home_Theater_PC/article.md",
+              "size": 16749
+            },
+            {
+              "type": "wordpad",
+              "name": "article en",
+              "path": "Publications/2008-08_DIY_Home_Theater_PC/article_en.md",
+              "size": 11017
+            },
+            {
+              "type": "archive",
+              "name": "FunDriver",
+              "path": "Publications/2008-08_DIY_Home_Theater_PC/FunDriver.rar",
+              "size": 9719531
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2009-04 Optimizing Xenus 2 for multicore CPUs",
           "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs",
           "items": [

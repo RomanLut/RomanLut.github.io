@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2009-04_Optimizing_Xenus_2_for_multicore_CPUs\article.md
+[target]=\trunk\public\filesystem\Publications\2008-08_DIY_Home_Theater_PC\article.md
 
 Read the article [location] fully.
 
