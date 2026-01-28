@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2006-04_3ds_max export_plugin_nuances\article.md 
+[target]=\trunk\public\filesystem\Publications\2006-05_M1_What_No_One_Told_You_About_Multitasking_in_Windows\article.md
 
 Read the article [location] fully.
 
