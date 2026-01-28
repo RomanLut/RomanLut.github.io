@@ -820,6 +820,25 @@
               "size": 31224
             }
           ]
+        },
+        {
+          "type": "folder",
+          "name": "2009-04 Optimizing Xenus 2 for multicore CPUs",
+          "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Optimizing Xenus 2 for multicore CPUs (translated to english)",
+              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Optimizing_Xenus_2_for_multicore_CPUs_(translated_to_english).md",
+              "size": 16474
+            },
+            {
+              "type": "wordpad",
+              "name": "Внедрение многопоточного рендеринга в игровой движок (russian)",
+              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Внедрение_многопоточного_рендеринга_в_игровой_движок_(russian).md",
+              "size": 26982
+            }
+          ]
         }
       ],
       "image": "folder_image.jpg",

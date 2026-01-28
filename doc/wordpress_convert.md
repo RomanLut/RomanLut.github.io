@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2006-05_M5_Monitoring_Thread_Execution_in_Windows_XP_2000_Applications\article.md
+[target]=\trunk\public\filesystem\Publications\2009-04_Optimizing_Xenus_2_for_multicore_CPUs\article.md
 
 Read the article [location] fully.
 

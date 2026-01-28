@@ -205,8 +205,9 @@ export class Desktop {
       new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=aA4gW7wgmsM')
     );
 
-
-
+    new DesktopIcon(this.element, 'youtube', 'Optimizing Xenus 2', { x: 16 +120*14, y: 16 + 120*4 }, () =>
+      new Browser(this.element, this.taskbar, 'https://www.youtube.com/watch?v=DlsWMxvlhWE')
+    );
 
 
   }
