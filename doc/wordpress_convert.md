@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2008-08_DIY_Home_Theater_PC\article.md
+[target]=\trunk\public\filesystem\Electronics\2013-08_Roomba_Pro_SLA_battery_mod\2013-08_Roomba_Pro_SLA_battery_mod.md
 
 Read the article [location] fully.
 

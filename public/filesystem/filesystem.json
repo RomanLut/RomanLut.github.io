@@ -409,6 +409,25 @@
           ]
         },
         {
+          "type": "folder",
+          "name": "2013-08 Roomba Pro SLA battery mod",
+          "path": "Electronics/2013-08_Roomba_Pro_SLA_battery_mod",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "2013-08 Roomba Pro SLA battery mod",
+              "path": "Electronics/2013-08_Roomba_Pro_SLA_battery_mod/2013-08_Roomba_Pro_SLA_battery_mod.md",
+              "size": 5119
+            },
+            {
+              "type": "archive",
+              "name": "RoombaSLA",
+              "path": "Electronics/2013-08_Roomba_Pro_SLA_battery_mod/RoombaSLA.rar",
+              "size": 62729
+            }
+          ]
+        },
+        {
           "type": "archive",
           "name": "Lighter2",
           "path": "Electronics/Lighter2.rar",
