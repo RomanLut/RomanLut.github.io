@@ -211,7 +211,7 @@ Allow browsing virtual filesystem defied in /public/filesystem/filesystem.json.
 
 - Application name: **FileExporer** (inherits AppWindow; no app menu). 
 - Data source: `/public/filesystem/filesystem.json`. No client-side sorting; preserve the order from JSON.
-- Generator sorts items alphabetically by display name; FileExplorer shows them in that order.
+- Generator sorts items alphabetically by display name; FileExplorer shows them in that order. References should be sorted like normal entries.
 - Initial path: root (top-level items).
 - Layout: header with icon/title, toolbar/status row, path bar, content area.
 - Toolbar/status row:
@@ -231,7 +231,7 @@ Allow browsing virtual filesystem defied in /public/filesystem/filesystem.json.
   - Double Click wordpad row to open WordPad for that `path`.
   - File paths are relative to `/filesystem/` base when opening.
   - Navigation updates breadcrumbs and status immediately; no history stack needed yet.
-- if item is "reference: "Yes", then a shortcut icon should be drawn on top of normal icon
+- if item is "reference: "Yes", then a shortcut icon should be drawn on top of normal icon. 
 
 
 
