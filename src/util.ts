@@ -158,6 +158,58 @@ export function applyInline(text: string, basePath: string) {
   return t;
 }
 
+// Table parsing helpers
+function isTableRow(line: string): boolean {
+  const trimmed = line.trim();
+  return trimmed.startsWith('|') && trimmed.endsWith('|');
+}
+
+function isTableSeparator(line: string): boolean {
+  const trimmed = line.trim();
+  if (!trimmed.startsWith('|') || !trimmed.endsWith('|')) return false;
+  const cells = trimmed.slice(1, -1).split('|');
+  return cells.every(cell => /^[\s:-]+$/.test(cell) && cell.includes('-'));
+}
+
+function parseTableRow(row: string): string[] {
+  const trimmed = row.trim();
+  return trimmed.slice(1, -1).split('|').map(cell => cell.trim());
+}
+
+function parseTable(headerRow: string, separatorRow: string, bodyRows: string[], basePath: string): string {
+  const headerCells = parseTableRow(headerRow);
+  const separatorCells = parseTableRow(separatorRow);
+
+  // Determine alignment from separator
+  const alignments = separatorCells.map(cell => {
+    const left = cell.startsWith(':');
+    const right = cell.endsWith(':');
+    if (left && right) return 'center';
+    if (right) return 'right';
+    return 'left';
+  });
+
+  let html = '<table><thead><tr>';
+  headerCells.forEach((cell, i) => {
+    const align = alignments[i] || 'left';
+    html += `<th style="text-align:${align}">${applyInline(cell, basePath)}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  for (const row of bodyRows) {
+    const cells = parseTableRow(row);
+    html += '<tr>';
+    cells.forEach((cell, i) => {
+      const align = alignments[i] || 'left';
+      html += `<td style="text-align:${align}">${applyInline(cell, basePath)}</td>`;
+    });
+    html += '</tr>';
+  }
+
+  html += '</tbody></table>';
+  return html;
+}
+
 export function markdownToHtml(md: string, basePath: string) {
   const inlineCodes: string[] = [];
   // Handle triple-backtick inline snippets on the same line (no newlines) as inline code.
@@ -195,11 +247,32 @@ export function markdownToHtml(md: string, basePath: string) {
     }
   };
 
-  for (const rawLine of lines) {
+  let i = 0;
+  while (i < lines.length) {
+    const rawLine = lines[i];
     const line = rawLine.trimEnd();
+
     if (!line.trim()) {
       closeList();
       closeBlockQuote();
+      i++;
+      continue;
+    }
+
+    // Check for table: current line is a table row and next line is a separator
+    if (isTableRow(line) && i + 1 < lines.length && isTableSeparator(lines[i + 1])) {
+      closeList();
+      closeBlockQuote();
+      const headerRow = line;
+      const separatorRow = lines[i + 1];
+      const bodyRows: string[] = [];
+      i += 2; // Skip header and separator
+      // Collect body rows
+      while (i < lines.length && isTableRow(lines[i])) {
+        bodyRows.push(lines[i]);
+        i++;
+      }
+      parts.push(parseTable(headerRow, separatorRow, bodyRows, basePath));
       continue;
     }
 
@@ -209,6 +282,7 @@ export function markdownToHtml(md: string, basePath: string) {
       closeBlockQuote();
       const level = hMatch[1].length;
       parts.push(`<h${level}>${applyInline(hMatch[2], basePath)}</h${level}>`);
+      i++;
       continue;
     }
 
@@ -217,6 +291,7 @@ export function markdownToHtml(md: string, basePath: string) {
       closeList();
       blockQuoteActive = true;
       blockQuoteLines.push(applyInline(blockquote[1], basePath));
+      i++;
       continue;
     }
 
@@ -229,12 +304,14 @@ export function markdownToHtml(md: string, basePath: string) {
         parts.push('<ul>');
       }
       parts.push(`<li>${applyInline(ul[1], basePath)}</li>`);
+      i++;
       continue;
     }
 
     closeList();
     closeBlockQuote();
     parts.push(`<p>${applyInline(line, basePath)}</p>`);
+    i++;
   }
   closeList();
   closeBlockQuote();

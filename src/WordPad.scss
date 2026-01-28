@@ -104,6 +104,33 @@
   color: #333;
 }
 
+.wordpad__content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 15px;
+}
+
+.wordpad__content table th,
+.wordpad__content table td {
+  border: 1px solid #d0d6e0;
+  padding: 8px 12px;
+  line-height: 1.5;
+}
+
+.wordpad__content table th {
+  background: #f0f2f5;
+  font-weight: 600;
+}
+
+.wordpad__content table tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.wordpad__content table tr:hover {
+  background: #f0f4f8;
+}
+
 .wordpad__content code {
   font-family: Consolas, 'Courier New', 'Lucida Console', monospace;
   background: #f0f0f0;

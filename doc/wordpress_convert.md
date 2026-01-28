@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2006-05_M2_Multithreading_in_DirectX_Applications\article.md
+[target]=\trunk\public\filesystem\Publications\2006-05_M3_Hyperthreading\article.md
 
 Read the article [location] fully.
 

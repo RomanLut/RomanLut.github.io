@@ -158,6 +158,15 @@ Markdown support (rendered):
 - Youtube videos: `![alt](path)` ambedded as miniplayer.
 - Code blocks: triple backticks rendered in monospace with preserved whitespace.
 - Blockquotes: `>` indented with a subtle left border.
+- Tables. Example:
+| Поток 1                     |              | Поток 2                     |              |
+|-----------------------------|--------------|-----------------------------|--------------|
+| Ренедринг кадра n = m       | 12 ms * 1.56 | Расчет физики кадра m+1     | 4 ms * 1.56  |
+|                             |              | Расчет физики кадра m+2     | 4 ms * 1.56  |
+|                             |              | Расчет физики кадра m+3     | 4 ms * 1.56  |
+| Present()                   |              |                             |              |
+| **Всего**                   | **12 ms * 1.56  ~ 18.72 мс** |              |              |
+
 
 Non‑supported/other tags are rendered as plain text.
 
