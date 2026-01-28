@@ -390,9 +390,9 @@
           "items": [
             {
               "type": "wordpad",
-              "name": "2009-02 Adding LED light to jigsaw",
-              "path": "Electronics/2009-02_Adding_LED_light_to_jigsaw/2009-02_Adding_LED_light_to_jigsaw.md",
-              "size": 3133
+              "name": "Adding LED light to jigsaw",
+              "path": "Electronics/2009-02_Adding_LED_light_to_jigsaw/Adding_LED_light_to_jigsaw.md",
+              "size": 3134
             }
           ]
         },
@@ -403,8 +403,8 @@
           "items": [
             {
               "type": "wordpad",
-              "name": "2009-02 USB to RS232 TLL Optoisolated",
-              "path": "Electronics/2009-02_USB_to_RS232_TLL_Optoisolated/2009-02_USB_to_RS232_TLL_Optoisolated.md",
+              "name": "USB to RS232 TLL Optoisolated",
+              "path": "Electronics/2009-02_USB_to_RS232_TLL_Optoisolated/USB_to_RS232_TLL_Optoisolated.md",
               "size": 1917
             }
           ]
@@ -441,8 +441,8 @@
           "items": [
             {
               "type": "wordpad",
-              "name": "2013-08 Roomba Pro SLA battery mod",
-              "path": "Electronics/2013-08_Roomba_Pro_SLA_battery_mod/2013-08_Roomba_Pro_SLA_battery_mod.md",
+              "name": "Roomba Pro SLA battery mod",
+              "path": "Electronics/2013-08_Roomba_Pro_SLA_battery_mod/Roomba_Pro_SLA_battery_mod.md",
               "size": 5119
             },
             {
@@ -450,6 +450,19 @@
               "name": "RoombaSLA",
               "path": "Electronics/2013-08_Roomba_Pro_SLA_battery_mod/RoombaSLA.rar",
               "size": 62729
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "2015-02 Connecting Nokia 6100 LCD to AVR",
+          "path": "Electronics/2015-02_Connecting_Nokia_6100_LCD_to_AVR",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Connecting Nokia 6100 LCD to AVR",
+              "path": "Electronics/2015-02_Connecting_Nokia_6100_LCD_to_AVR/Connecting_Nokia_6100_LCD_to_AVR.md",
+              "size": 2891
             }
           ]
         },
@@ -940,7 +953,7 @@
         }
       ],
       "image": "folder_image.jpg",
-      "desc": "This folder contains my publications.\n\nSome publications are on Russian. English translation is provided."
+      "desc": "This folder contains my publications in digital and print media.\n\nPublications originally in Russian are accompanied by English translations."
     },
     {
       "type": "folder",

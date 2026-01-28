@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2009-02_Adding_LED_light_to_jigsaw\2009-02_Adding_LED_light_to_jigsaw.md
+[target]=\trunk\public\filesystem\Electronics\2015-02_Connecting_Nokia_6100_LCD_to_AVR\Connecting_Nokia_6100_LCD_to_AVR.md
 
 Read the article [location] fully.
 

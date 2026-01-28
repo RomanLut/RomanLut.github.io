@@ -1,3 +1,3 @@
-This folder contains my publications.
+This folder contains my publications in digital and print media.
 
-Some publications are on Russian. English translation is provided.
+Publications originally in Russian are accompanied by English translations.
