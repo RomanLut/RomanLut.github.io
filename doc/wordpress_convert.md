@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2006-05_M4_Dual_Core_CPUs\article.md
+[target]=\trunk\public\filesystem\Publications\2006-05_M5_Monitoring_Thread_Execution_in_Windows_XP_2000_Applications\article.md
 
 Read the article [location] fully.
 

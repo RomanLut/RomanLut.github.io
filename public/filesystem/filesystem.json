@@ -668,6 +668,31 @@
         },
         {
           "type": "folder",
+          "name": "2006-05 M5 Monitoring Thread Execution in Windows XP 2000 Applications",
+          "path": "Publications/2006-05_M5_Monitoring_Thread_Execution_in_Windows_XP_2000_Applications",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Monitoring Thread Execution in Windows XP 2000 (translated to english)",
+              "path": "Publications/2006-05_M5_Monitoring_Thread_Execution_in_Windows_XP_2000_Applications/Monitoring_Thread_Execution_in_Windows_XP_2000_(translated_to_english).md",
+              "size": 30009
+            },
+            {
+              "type": "archive",
+              "name": "threadstest2",
+              "path": "Publications/2006-05_M5_Monitoring_Thread_Execution_in_Windows_XP_2000_Applications/threadstest2.rar",
+              "size": 862878
+            },
+            {
+              "type": "wordpad",
+              "name": "Мониторинг исполнения потоков в приложениях Windows XP 2000 (russian)",
+              "path": "Publications/2006-05_M5_Monitoring_Thread_Execution_in_Windows_XP_2000_Applications/Мониторинг_исполнения_потоков_в_приложениях_Windows_XP_2000_(russian).md",
+              "size": 43920
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2007-03 Plugins based on COM interfaces",
           "path": "Publications/2007-03_Plugins_based_on_COM_interfaces",
           "items": [
