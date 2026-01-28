@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Publications\2006-05_M3_Hyperthreading\article.md
+[target]=\trunk\public\filesystem\Publications\2006-05_M4_Dual_Core_CPUs\article.md
 
 Read the article [location] fully.
 
@@ -25,7 +25,7 @@ Do not install aditional nodejs/python packages.
 Double check result.
 
 
-# Template rule for ranslating wordpress article
+# Template rule for translating wordpress article
 
 Translate article to english to article_en.md.
 Reread article from disk, it was changed.

@@ -649,6 +649,25 @@
         },
         {
           "type": "folder",
+          "name": "2006-05 M4 Dual Core CPUs",
+          "path": "Publications/2006-05_M4_Dual_Core_CPUs",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Dual-Core Processors (translated to english)",
+              "path": "Publications/2006-05_M4_Dual_Core_CPUs/Dual-Core_Processors_(translated_to_english).md",
+              "size": 6455
+            },
+            {
+              "type": "wordpad",
+              "name": "Dual-core процессоры (russian)",
+              "path": "Publications/2006-05_M4_Dual_Core_CPUs/Dual-core_процессоры_(russian).md",
+              "size": 9718
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2007-03 Plugins based on COM interfaces",
           "path": "Publications/2007-03_Plugins_based_on_COM_interfaces",
           "items": [
