@@ -149,7 +149,7 @@ Behaviour:
 - Layout: header menu at top, preview pane fills the rest; no textarea visible.
 
 Markdown support (rendered):
-- Headings: `#`..`###` mapped to H1–H3 sizes.
+- Headings: `#`..`####` mapped to H1–H3 sizes.
 - Text: paragraphs, bold (`**`/`__`), italic (`*`/`_`), inline code (backticks).
 - Lists: unordered (`-`). Ordered lists are not supported.
 - Links: `[text](url)` open in a new tab.

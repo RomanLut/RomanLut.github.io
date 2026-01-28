@@ -221,6 +221,8 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
                     "size": size,
                 }
             )
+    # Sort all children alphabetically by name
+    children.sort(key=lambda item: item['name'].lower())
     return children
 
 

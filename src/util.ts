@@ -278,7 +278,7 @@ export function markdownToHtml(md: string, basePath: string) {
       continue;
     }
 
-    const hMatch = line.match(/^(#{1,3})\s+(.*)$/);
+    const hMatch = line.match(/^(#{1,4})\s+(.*)$/);
     if (hMatch) {
       closeList();
       closeBlockQuote();
@@ -415,7 +415,7 @@ export function findFolder(root: FsRoot, path: string): FsItem | null {
   const segments = clean.split('/');
   let current: FsItem | null = { type: 'folder', name: '', path: '', items: root.items };
   for (const segment of segments) {
-    const next = current?.items?.find(
+    const next: FsItem | undefined = current?.items?.find(
       (child) => child.type === 'folder' && normalizeFsPath(child.path).split('/').pop() === segment
     );
     if (!next) return null;

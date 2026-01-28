@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2015-02_Connecting_Nokia_6100_LCD_to_AVR\Connecting_Nokia_6100_LCD_to_AVR.md
+[target]=\trunk\public\filesystem\Electronics\2013-05_ESR_Metter\hxESRMetter.md
 
 Read the article [location] fully.
 
