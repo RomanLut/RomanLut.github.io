@@ -590,22 +590,41 @@
           "path": "Publications/2006-05_M1_What_No_One_Told_You_About_Multitasking_in_Windows",
           "items": [
             {
-              "type": "wordpad",
-              "name": "article",
-              "path": "Publications/2006-05_M1_What_No_One_Told_You_About_Multitasking_in_Windows/article.md",
-              "size": 33912
-            },
-            {
-              "type": "wordpad",
-              "name": "article en",
-              "path": "Publications/2006-05_M1_What_No_One_Told_You_About_Multitasking_in_Windows/article_en.md",
-              "size": 19709
-            },
-            {
               "type": "archive",
               "name": "threadtest",
               "path": "Publications/2006-05_M1_What_No_One_Told_You_About_Multitasking_in_Windows/threadtest.zip",
               "size": 6430256
+            },
+            {
+              "type": "wordpad",
+              "name": "What No One Told You About Multitasking in Windows (translated to english)",
+              "path": "Publications/2006-05_M1_What_No_One_Told_You_About_Multitasking_in_Windows/What_No_One_Told_You_About_Multitasking_in_Windows_(translated_to_english).md",
+              "size": 19709
+            },
+            {
+              "type": "wordpad",
+              "name": "То что вам никто не говорил о многозадачности в Windows (russian)",
+              "path": "Publications/2006-05_M1_What_No_One_Told_You_About_Multitasking_in_Windows/То_что_вам_никто_не_говорил_о_многозадачности_в_Windows_(russian).md",
+              "size": 33912
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "2006-05 M2 Multithreading in DirectX Applications",
+          "path": "Publications/2006-05_M2_Multithreading_in_DirectX_Applications",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Multithreading in DirectX Applications (translated to english)",
+              "path": "Publications/2006-05_M2_Multithreading_in_DirectX_Applications/Multithreading_in_DirectX_Applications_(translated_to_english).md",
+              "size": 14461
+            },
+            {
+              "type": "wordpad",
+              "name": "Многопоточность в DirectX приложениях (russian)",
+              "path": "Publications/2006-05_M2_Multithreading_in_DirectX_Applications/Многопоточность_в_DirectX_приложениях_(russian).md",
+              "size": 23519
             }
           ]
         },
