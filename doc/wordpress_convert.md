@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2013-08_Roomba_Pro_SLA_battery_mod\2013-08_Roomba_Pro_SLA_battery_mod.md
+[target]=\trunk\public\filesystem\Electronics\2009-02_USB_to_RS232_TLL_Optoisolated\2009-02_USB_to_RS232_TLL_Optoisolated.md
 
 Read the article [location] fully.
 
