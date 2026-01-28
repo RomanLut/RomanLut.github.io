@@ -385,6 +385,19 @@
       "items": [
         {
           "type": "folder",
+          "name": "2009-02 Adding LED light to jigsaw",
+          "path": "Electronics/2009-02_Adding_LED_light_to_jigsaw",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "2009-02 Adding LED light to jigsaw",
+              "path": "Electronics/2009-02_Adding_LED_light_to_jigsaw/2009-02_Adding_LED_light_to_jigsaw.md",
+              "size": 3133
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2009-02 USB to RS232 TLL Optoisolated",
           "path": "Electronics/2009-02_USB_to_RS232_TLL_Optoisolated",
           "items": [
@@ -446,7 +459,9 @@
           "path": "Electronics/Lighter2.rar",
           "size": 38754
         }
-      ]
+      ],
+      "image": "folder_image.jpg",
+      "desc": "This folder contains my DIY electronics and robotics projects and publications."
     },
     {
       "type": "folder",

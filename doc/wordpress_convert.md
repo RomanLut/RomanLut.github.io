@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2009-02_USB_to_RS232_TLL_Optoisolated\2009-02_USB_to_RS232_TLL_Optoisolated.md
+[target]=\trunk\public\filesystem\Electronics\2009-02_Adding_LED_light_to_jigsaw\2009-02_Adding_LED_light_to_jigsaw.md
 
 Read the article [location] fully.
 
