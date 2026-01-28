@@ -630,6 +630,25 @@
         },
         {
           "type": "folder",
+          "name": "2006-05 M3 Hyperthreading",
+          "path": "Publications/2006-05_M3_Hyperthreading",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "HyperThreading (translated to english)",
+              "path": "Publications/2006-05_M3_Hyperthreading/HyperThreading_(translated_to_english).md",
+              "size": 10139
+            },
+            {
+              "type": "wordpad",
+              "name": "Технология HyperThreading (russian)",
+              "path": "Publications/2006-05_M3_Hyperthreading/Технология_HyperThreading_(russian).md",
+              "size": 15484
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2007-03 Plugins based on COM interfaces",
           "path": "Publications/2007-03_Plugins_based_on_COM_interfaces",
           "items": [
