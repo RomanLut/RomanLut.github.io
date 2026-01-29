@@ -714,6 +714,31 @@
               "size": 115287
             }
           ]
+        },
+        {
+          "type": "folder",
+          "name": "2015-05 PWM control of a 12V fan using discrete components",
+          "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components",
+          "items": [
+            {
+              "type": "archive",
+              "name": "FanControl",
+              "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components/FanControl.rar",
+              "size": 31101
+            },
+            {
+              "type": "wordpad",
+              "name": "PWM Control of a 12V Fan Using Discrete Components (translated to english)",
+              "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components/PWM_Control_of_a_12V_Fan_Using_Discrete_Components_(translated_to_english).md",
+              "size": 6830
+            },
+            {
+              "type": "wordpad",
+              "name": "ШИМ управление 12В вентилятором на рассыпухе (russian)",
+              "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components/ШИМ_управление_12В_вентилятором_на_рассыпухе_(russian).md",
+              "size": 10397
+            }
+          ]
         }
       ],
       "image": "folder_image.jpg",
