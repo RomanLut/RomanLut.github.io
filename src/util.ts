@@ -433,7 +433,7 @@ export async function loadFilesystem(url = '/filesystem/filesystem.json'): Promi
 }
 
 export function navigateToUrl(desktop: HTMLElement, taskbar: any, url: string) {
-  if (url.includes('dangerousprototypes.com') || url.includes('sparkfun.com')) {
+  if (url.includes('dangerousprototypes.com') || url.includes('sparkfun.com') || url.includes('cxem.net')) {
     window.open(url, '_blank', 'noopener');
   } else {
     new Browser(desktop, taskbar, url);

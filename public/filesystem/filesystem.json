@@ -624,6 +624,25 @@
         },
         {
           "type": "folder",
+          "name": "2013-12 Infrared command recognition using UART on AVR",
+          "path": "Electronics/2013-12_Infrared_command_recognition_using_UART_on_AVR",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Infrared Command Recognition Using UART on AVR (translated to english)",
+              "path": "Electronics/2013-12_Infrared_command_recognition_using_UART_on_AVR/Infrared_Command_Recognition_Using_UART_on_AVR_(translated_to_english).md",
+              "size": 8750
+            },
+            {
+              "type": "wordpad",
+              "name": "Распознавание ИК команд с помощью UART на AVR (russian)",
+              "path": "Electronics/2013-12_Infrared_command_recognition_using_UART_on_AVR/Распознавание_ИК_команд_с_помощью_UART_на_AVR_(russian).md",
+              "size": 13886
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2014-04 Humster Powerplant",
           "path": "Electronics/2014-04_Humster_Powerplant",
           "items": [
@@ -1263,6 +1282,26 @@
               "name": "Модернизация мощного фонаря на светодиод 5 Ватт (russian)",
               "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/Модернизация_мощного_фонаря_на_светодиод_5_Ватт_(russian).md",
               "size": 14869
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2013-12 Infrared command recognition using UART on AVR",
+          "path": "Electronics/2013-12_Infrared_command_recognition_using_UART_on_AVR",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Infrared Command Recognition Using UART on AVR (translated to english)",
+              "path": "Electronics/2013-12_Infrared_command_recognition_using_UART_on_AVR/Infrared_Command_Recognition_Using_UART_on_AVR_(translated_to_english).md",
+              "size": 8750
+            },
+            {
+              "type": "wordpad",
+              "name": "Распознавание ИК команд с помощью UART на AVR (russian)",
+              "path": "Electronics/2013-12_Infrared_command_recognition_using_UART_on_AVR/Распознавание_ИК_команд_с_помощью_UART_на_AVR_(russian).md",
+              "size": 13886
             }
           ],
           "reference": "Yes"
