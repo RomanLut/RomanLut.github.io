@@ -93,6 +93,7 @@ def build_file_item(entry: Path, rel_path: Path, is_reference: bool = False) -> 
     archive_exts = {".zip", ".rar", ".7z"}
     html_exts = {".html", ".htm"}
     sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a"}
+    image_exts = {".jpg", ".jpeg", ".png", ".gif"}
 
     size = entry.stat().st_size
     item: Dict[str, Any] = {
@@ -116,6 +117,8 @@ def build_file_item(entry: Path, rel_path: Path, is_reference: bool = False) -> 
         item["type"] = "html"
     elif suffix in sound_exts:
         item["type"] = "sound"
+    elif suffix in image_exts:
+        item["type"] = "image"
     else:
         return None
 
@@ -140,6 +143,7 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     archive_exts = {".zip", ".rar", ".7z"}
     html_exts = {".html", ".htm"}
     sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a"}
+    image_exts = {".jpg", ".jpeg", ".png", ".gif"}
     for entry in ordered:
         if entry.name == "filesystem.json":
             continue
@@ -148,8 +152,13 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
         # Skip references.txt - it's metadata, not content
         if entry.name == "references.txt":
             continue
+        # Skip folder_image files - they are folder metadata
+        if entry.is_file() and entry.stem == "folder_image":
+            continue
         rel_path = relative / entry.name
         if entry.is_dir():
+            if entry.name == "images":
+                continue
             nested = build_folder(entry, rel_path)
             if nested:
                 children.append(nested)
@@ -216,6 +225,16 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
             children.append(
                 {
                     "type": "sound",
+                    "name": display_name(entry.name),
+                    "path": rel_path.as_posix(),
+                    "size": size,
+                }
+            )
+        elif entry.suffix.lower() in image_exts:
+            size = entry.stat().st_size
+            children.append(
+                {
+                    "type": "image",
                     "name": display_name(entry.name),
                     "path": rel_path.as_posix(),
                     "size": size,

@@ -9,7 +9,8 @@ export type IconType =
   | 'executable'
   | 'msdos'
   | 'html'
-  | 'sound';
+  | 'sound'
+  | 'image';
 
 const ICON_SVGS: Record<IconType, string> = {
   folder: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.172a1.5 1.5 0 0 1 1.06.44l1.12 1.12H19.5A1.5 1.5 0 0 1 21 8.06V17.5A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5Z" fill="#f6c344" stroke="#d9a320" stroke-width="1"/></svg>`,
@@ -45,7 +46,8 @@ const ICON_SVGS: Record<IconType, string> = {
     <path d="M4 9v6h4l5 4V5L8 9H4z" fill="#4c8bf5" stroke="#2f63c7" stroke-width="1" />
     <path d="M16 8.5a3.5 3.5 0 0 1 0 7" fill="none" stroke="#4c8bf5" stroke-width="1.8" stroke-linecap="round" />
     <path d="M18.5 7a6 6 0 0 1 0 10" fill="none" stroke="#8fb7ff" stroke-width="1.8" stroke-linecap="round" />
-  </svg>`
+  </svg>`,
+  image: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 4C4.89543 4 4 4.89543 4 6V26C4 27.1046 4.89543 28 6 28H26C27.1046 28 28 27.1046 28 26V11L21 4H6Z" fill="#E2E8F0" stroke="#475569" stroke-width="2" stroke-linejoin="round"/><path d="M21 4V11H28" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="8" y="14" width="16" height="10" rx="1" fill="white" stroke="#475569" stroke-width="1.5"/><path d="M8 21L12 17L16 21L19 19L24 23V24H8V21Z" fill="#94A3B8" stroke="#475569" stroke-width="1" stroke-linejoin="round"/><circle cx="20" cy="17" r="1.5" fill="#F59E0B"/></svg>`
 };
 
 export function getIconSvg(type: IconType): string {

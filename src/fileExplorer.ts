@@ -276,6 +276,8 @@ export class FileExplorer extends AppWindow {
           ? 'html'
           : item.type === 'sound'
           ? 'sound'
+          : item.type === 'image'
+          ? 'image'
           : 'wordpad';
       iconHolder.innerHTML = getIconSvg(iconType);
 
@@ -325,6 +327,10 @@ export class FileExplorer extends AppWindow {
       }
       case 'sound': {
         new SoundPlayer(this.desktopRef, this.taskbarRef, [{ title: item.name, url }]);
+        return;
+      }
+      case 'image': {
+        navigateToUrl(this.desktopRef, this.taskbarRef, url);
         return;
       }
       default:
