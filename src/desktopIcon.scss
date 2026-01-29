@@ -78,6 +78,14 @@
   transform: none;
 }
 
+.pc .desktop__icon.desktop__icon--html .desktop__icon-image {
+  margin-top: 6px;
+}
+
+.pc .desktop__icon.desktop__icon--html .desktop__icon-label {
+  margin-top: -6px;
+}
+
 .pc .desktop__icon.desktop__icon--html .desktop__icon-image img,
 .pc .desktop__icon.desktop__icon--html .desktop__icon-image svg {
   width: 38.88px;
