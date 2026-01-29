@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2013-09_Midi_player_forAVR\article.md
+[target]=\trunk\public\filesystem\Electronics\2015-02_Regulated_power_source_from_ATX_PSU\Regulated_power_source_from_ATX_PSU.md
 
 Read the article [location] fully.
 

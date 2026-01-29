@@ -411,6 +411,19 @@
         },
         {
           "type": "folder",
+          "name": "2012-02 Regulated power source from ATX PSU",
+          "path": "Electronics/2012-02_Regulated_power_source_from_ATX_PSU",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Regulated power source from ATX PSU",
+              "path": "Electronics/2012-02_Regulated_power_source_from_ATX_PSU/Regulated_power_source_from_ATX_PSU.md",
+              "size": 2241
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2013-04 Opto isolated AVR910",
           "path": "Electronics/2013-04_Opto_isolated_AVR910",
           "items": [
@@ -505,13 +518,13 @@
               "type": "wordpad",
               "name": "Midi Player for AVR (translated to english)",
               "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_for_AVR_(translated_to_english).md",
-              "size": 34004
+              "size": 34081
             },
             {
               "type": "wordpad",
               "name": "Midi Player для AVR (russian)",
               "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_для_AVR_(russian).md",
-              "size": 54937
+              "size": 55049
             }
           ]
         },
@@ -1072,13 +1085,13 @@
               "type": "wordpad",
               "name": "Midi Player for AVR (translated to english)",
               "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_for_AVR_(translated_to_english).md",
-              "size": 34004
+              "size": 34081
             },
             {
               "type": "wordpad",
               "name": "Midi Player для AVR (russian)",
               "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_для_AVR_(russian).md",
-              "size": 54937
+              "size": 55049
             }
           ],
           "reference": "Yes"
