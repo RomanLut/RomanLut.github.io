@@ -826,6 +826,31 @@
               "size": 10397
             }
           ]
+        },
+        {
+          "type": "folder",
+          "name": "2016-09 Dual-channel programmable laboratory power supply",
+          "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Dual-Channel Programmable Laboratory Power Supply (translated to english)",
+              "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply/Dual-Channel_Programmable_Laboratory_Power_Supply_(translated_to_english).md",
+              "size": 42939
+            },
+            {
+              "type": "archive",
+              "name": "hxpsu",
+              "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply/hxpsu.rar",
+              "size": 6448818
+            },
+            {
+              "type": "wordpad",
+              "name": "Двухканальный управляемый лабораторный блок питания (russian)",
+              "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply/Двухканальный_управляемый_лабораторный_блок_питания_(russian).md",
+              "size": 67446
+            }
+          ]
         }
       ],
       "image": "folder_image.jpg",
@@ -1623,6 +1648,32 @@
               "name": "ШИМ управление 12В вентилятором на рассыпухе (russian)",
               "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components/ШИМ_управление_12В_вентилятором_на_рассыпухе_(russian).md",
               "size": 10397
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2016-09 Dual-channel programmable laboratory power supply",
+          "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Dual-Channel Programmable Laboratory Power Supply (translated to english)",
+              "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply/Dual-Channel_Programmable_Laboratory_Power_Supply_(translated_to_english).md",
+              "size": 42939
+            },
+            {
+              "type": "archive",
+              "name": "hxpsu",
+              "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply/hxpsu.rar",
+              "size": 6448818
+            },
+            {
+              "type": "wordpad",
+              "name": "Двухканальный управляемый лабораторный блок питания (russian)",
+              "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply/Двухканальный_управляемый_лабораторный_блок_питания_(russian).md",
+              "size": 67446
             }
           ],
           "reference": "Yes"
