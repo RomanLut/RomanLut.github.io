@@ -110,18 +110,20 @@ export class Desktop {
   }
 
   private openFileFromPath(path: string) {
-    const clean = normalizeFsPath(path);
+    const raw = path.trim();
+    if (!raw) return;
+    const isExternal = this.isExternalPath(raw);
+    const clean = isExternal ? raw : this.normalizeLocalFileValue(raw);
     if (!clean) return;
-    const segments = clean.split('/');
-    const filename = segments[segments.length - 1] || clean;
+    const filename = this.filenameFromValue(clean, isExternal);
     const ext = filename.split('.').pop()?.toLowerCase() ?? '';
-    const url = filesystemUrl(clean);
-    setFileParam(clean);
-    if (ext === 'md') {
+    const url = isExternal ? clean : filesystemUrl(clean);
+    this.setFileParamForDesktop(raw);
+    if (ext === 'md' && !isExternal) {
       new WordPad(this.element, this.taskbar, url, filename);
       return;
     }
-    if (ext === 'txt' || ext === 'js') {
+    if (!isExternal && (ext === 'txt' || ext === 'js')) {
       new Notepad(this.element, this.taskbar, filename, url);
       return;
     }
@@ -132,10 +134,75 @@ export class Desktop {
     new WordPad(this.element, this.taskbar, url, filename);
   }
 
+  private filenameFromValue(value: string, isExternal: boolean) {
+    if (!value) return '';
+    if (isExternal) {
+      try {
+        const parsed = new URL(value);
+        const name = parsed.pathname.split('/').filter(Boolean).pop();
+        return name || value;
+      } catch {
+        return value;
+      }
+    }
+    const cleaned = value.replace(/^\/+|\/+$/g, '');
+    return cleaned.split('/').pop() || cleaned;
+  }
+
+  private isExternalPath(value: string) {
+    return /^https?:\/\//i.test(value.trim());
+  }
+
+  private normalizeLocalFileValue(value: string) {
+    const trimmed = value.trim().replace(/^\/+/, '');
+    if (!trimmed) return null;
+    const lower = trimmed.toLowerCase();
+    const prefix = 'filesystem/';
+    if (lower.startsWith(prefix)) {
+      return trimmed.slice(prefix.length);
+    }
+    return trimmed;
+  }
+
+  private setFileParamForDesktop(value: string) {
+    if (!value) {
+      return;
+    }
+    if (this.isExternalPath(value)) {
+      setFileParam(value);
+      return;
+    }
+    const normalized = this.normalizeLocalFileValue(value);
+    if (normalized) {
+      setFileParam(normalized);
+    }
+  }
+
+  private openWordPadFromDesktop(path: string, title?: string) {
+    const relative = this.normalizeLocalFileValue(path);
+    if (!relative) return;
+    this.setFileParamForDesktop(relative);
+    const url = filesystemUrl(relative);
+    new WordPad(
+      this.element,
+      this.taskbar,
+      url,
+      title || this.filenameFromValue(relative, false) || 'Document'
+    );
+  }
+
+  private openSoundPlayerFromDesktop(tracks: Array<{ title: string; detail?: string; url: string }>) {
+    const firstUrl = tracks[0]?.url;
+    if (firstUrl) {
+      this.setFileParamForDesktop(firstUrl);
+    }
+    new SoundPlayer(this.element, this.taskbar, tracks);
+  }
+
   private spawnIcons() {
     //new DesktopIcon(this.element, 'notepad', 'Notepad', { x: 16, y: 136 });
     new DesktopIcon(this.element, 'word', 'About me', { x: 16, y: 16 }, () =>
-      new WordPad(this.element, this.taskbar, '/filesystem/About_me.md', 'About me')
+      this.openWordPadFromDesktop('/filesystem/About_me.md', 'About me')
     );
     new DesktopIcon(this.element, 'word', 'Resume', { x: 120, y: 16 });
     new DesktopIcon(this.element, 'word', 'Competitions and Events', { x: 120 + 200, y: 16 });
@@ -174,7 +241,7 @@ export class Desktop {
       'Sound Player',
       { x: 16 + 120 * 2, y: 16 + 120 + 120 + 140 },
       () =>
-        new SoundPlayer(this.element, this.taskbar, [
+        this.openSoundPlayerFromDesktop([
           {
             title: 'Suno AI track',
             detail: 'Streaming mp3',

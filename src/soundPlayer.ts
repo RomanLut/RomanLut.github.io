@@ -17,6 +17,8 @@ export class SoundPlayer extends AppWindow {
   private nowEl: HTMLElement;
   private tracks: SoundTrack[];
   private activeIndex = 0;
+  private autoplayRetry: (() => void) | null = null;
+  private readonly userInteractionEvents = ['click', 'keydown', 'pointerdown', 'touchstart'] as const;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, tracks?: SoundTrack[]) {
     super(desktop, taskbar, 'Sound Player', SOUND_ICON);
@@ -113,10 +115,39 @@ export class SoundPlayer extends AppWindow {
     if (autoplay) {
       void this.audio.play().catch(() => {
         this.updateStatus('Tap play to start');
+        this.queueAutoplayRetry();
       });
     } else {
       this.updateStatus('Ready');
     }
+  }
+
+  private queueAutoplayRetry() {
+    if (this.autoplayRetry) return;
+    const attempt = () => {
+      this.clearAutoplayRetry();
+      void this.audio.play().catch(() => {
+        this.updateStatus('Tap play to start');
+        this.queueAutoplayRetry();
+      });
+    };
+    this.autoplayRetry = attempt;
+    this.userInteractionEvents.forEach((event) =>
+      window.addEventListener(event, attempt, { capture: true })
+    );
+  }
+
+  private clearAutoplayRetry() {
+    if (!this.autoplayRetry) return;
+    this.userInteractionEvents.forEach((event) =>
+      window.removeEventListener(event, this.autoplayRetry!, { capture: true })
+    );
+    this.autoplayRetry = null;
+  }
+
+  protected close() {
+    this.clearAutoplayRetry();
+    super.close();
   }
 
   private playNext() {

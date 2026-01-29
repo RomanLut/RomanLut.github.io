@@ -322,16 +322,24 @@ export class Notepad extends AppWindow {
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
+      const contentType = res.headers.get('content-type') || '';
       const text = await res.text();
+      const isHtmlError =
+        contentType.includes('text/html') ||
+        (/^\s*<!doctype html/i.test(text) && text.includes('<body'));
+      if (isHtmlError) {
+        throw new Error('unexpected HTML response');
+      }
       this.textarea.value = text;
       this.recordHistory();
       this.updateCaret();
       this.statusBar.setExtra(`${this.textarea.value.length} characters`);
     } catch (err) {
-      this.textarea.value = `Failed to load file: ${escapeHtml(String(err))}`;
+      this.textarea.value = '';
       this.recordHistory();
       this.updateCaret();
-      this.statusBar.setExtra('Load failed');
+      this.statusBar.setExtra('File not found');
+      console.warn('Notepad failed to load file', url, err);
     }
   }
 

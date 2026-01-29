@@ -238,7 +238,14 @@ export class WordPad extends AppWindow {
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
+      const contentType = res.headers.get('content-type') || '';
       this.markdownText = await res.text();
+      const isHtmlError =
+        contentType.includes('text/html') ||
+        (/^\s*<!doctype html/i.test(this.markdownText) && this.markdownText.includes('<body'));
+      if (isHtmlError) {
+        throw new Error('unexpected HTML response');
+      }
       const basePath = path.includes('/') ? path.slice(0, path.lastIndexOf('/') + 1) : '';
       const html = markdownToHtml(this.markdownText, basePath);
       this.contentArea.innerHTML = html;
