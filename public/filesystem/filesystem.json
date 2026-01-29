@@ -593,6 +593,31 @@
         },
         {
           "type": "folder",
+          "name": "2014-04 Humster Powerplant",
+          "path": "Electronics/2014-04_Humster_Powerplant",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "article",
+              "path": "Electronics/2014-04_Humster_Powerplant/article.md",
+              "size": 9853
+            },
+            {
+              "type": "wordpad",
+              "name": "Muscle powered electricity generator (one humsterpower) (translated to english)",
+              "path": "Electronics/2014-04_Humster_Powerplant/Muscle_powered_electricity_generator_(one_humsterpower)_(translated_to_english).md",
+              "size": 5445
+            },
+            {
+              "type": "wordpad",
+              "name": "Биомеханическая энергия мелких грызунов как возобновляемый источник энергии (russian)",
+              "path": "Electronics/2014-04_Humster_Powerplant/Биомеханическая_энергия_мелких_грызунов_как_возобновляемый_источник энергии_(russian).md",
+              "size": 9853
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2015-02 Connecting Nokia 6100 LCD to AVR",
           "path": "Electronics/2015-02_Connecting_Nokia_6100_LCD_to_AVR",
           "items": [
@@ -1175,6 +1200,32 @@
               "name": "Midi Player для AVR (russian)",
               "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_для_AVR_(russian).md",
               "size": 55049
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2014-04 Humster Powerplant",
+          "path": "Electronics/2014-04_Humster_Powerplant",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "article",
+              "path": "Electronics/2014-04_Humster_Powerplant/article.md",
+              "size": 9853
+            },
+            {
+              "type": "wordpad",
+              "name": "Muscle powered electricity generator (one humsterpower) (translated to english)",
+              "path": "Electronics/2014-04_Humster_Powerplant/Muscle_powered_electricity_generator_(one_humsterpower)_(translated_to_english).md",
+              "size": 5445
+            },
+            {
+              "type": "wordpad",
+              "name": "Биомеханическая энергия мелких грызунов как возобновляемый источник энергии (russian)",
+              "path": "Electronics/2014-04_Humster_Powerplant/Биомеханическая_энергия_мелких_грызунов_как_возобновляемый_источник энергии_(russian).md",
+              "size": 9853
             }
           ],
           "reference": "Yes"

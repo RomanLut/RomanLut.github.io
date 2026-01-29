@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2012-08_Roomba_Wall_Unit_Mod\Roomba_Wall_Unit_Mod.md
+[target]=\trunk\public\filesystem\Electronics\2014-04_Humster_Powerplant\article.md
 
 Read the article [location] fully.
 
