@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2015-05_PWM_control_of_a_12V_fan_using_discrete_components\article.md
+[target]=\trunk\public\filesystem\Electronics\2014-04_Interactive_TV_backlight\article.md
 
 Read the article [location] fully.
 

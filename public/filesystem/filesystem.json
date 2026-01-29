@@ -698,6 +698,37 @@
         },
         {
           "type": "folder",
+          "name": "2014-04 Interactive TV backlight",
+          "path": "Electronics/2014-04_Interactive_TV_backlight",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Interactive TV Backlight (translated to english)",
+              "path": "Electronics/2014-04_Interactive_TV_backlight/Interactive_TV_Backlight_(translated_to_english).md",
+              "size": 14500
+            },
+            {
+              "type": "archive",
+              "name": "LightpackFW mod",
+              "path": "Electronics/2014-04_Interactive_TV_backlight/LightpackFW_mod.zip",
+              "size": 2129685
+            },
+            {
+              "type": "archive",
+              "name": "Schematics proteus",
+              "path": "Electronics/2014-04_Interactive_TV_backlight/Schematics_proteus.zip",
+              "size": 458334
+            },
+            {
+              "type": "wordpad",
+              "name": "Интерактивная подсветка телевизора Mood lamp Beat detector (russian)",
+              "path": "Electronics/2014-04_Interactive_TV_backlight/Интерактивная_подсветка_телевизора_Mood_lamp_Beat_detector_(russian).md",
+              "size": 22471
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2015-02 Connecting Nokia 6100 LCD to AVR",
           "path": "Electronics/2015-02_Connecting_Nokia_6100_LCD_to_AVR",
           "items": [
@@ -1383,6 +1414,64 @@
               "name": "Биомеханическая энергия мелких грызунов как возобновляемый источник энергии (russian)",
               "path": "Electronics/2014-04_Humster_Powerplant/Биомеханическая_энергия_мелких_грызунов_как_возобновляемый_источник энергии_(russian).md",
               "size": 9853
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2014-04 Interactive TV backlight",
+          "path": "Electronics/2014-04_Interactive_TV_backlight",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Interactive TV Backlight (translated to english)",
+              "path": "Electronics/2014-04_Interactive_TV_backlight/Interactive_TV_Backlight_(translated_to_english).md",
+              "size": 14500
+            },
+            {
+              "type": "archive",
+              "name": "LightpackFW mod",
+              "path": "Electronics/2014-04_Interactive_TV_backlight/LightpackFW_mod.zip",
+              "size": 2129685
+            },
+            {
+              "type": "archive",
+              "name": "Schematics proteus",
+              "path": "Electronics/2014-04_Interactive_TV_backlight/Schematics_proteus.zip",
+              "size": 458334
+            },
+            {
+              "type": "wordpad",
+              "name": "Интерактивная подсветка телевизора Mood lamp Beat detector (russian)",
+              "path": "Electronics/2014-04_Interactive_TV_backlight/Интерактивная_подсветка_телевизора_Mood_lamp_Beat_detector_(russian).md",
+              "size": 22471
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2015-05 PWM control of a 12V fan using discrete components",
+          "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components",
+          "items": [
+            {
+              "type": "archive",
+              "name": "FanControl",
+              "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components/FanControl.rar",
+              "size": 31101
+            },
+            {
+              "type": "wordpad",
+              "name": "PWM Control of a 12V Fan Using Discrete Components (translated to english)",
+              "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components/PWM_Control_of_a_12V_Fan_Using_Discrete_Components_(translated_to_english).md",
+              "size": 6830
+            },
+            {
+              "type": "wordpad",
+              "name": "ШИМ управление 12В вентилятором на рассыпухе (russian)",
+              "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components/ШИМ_управление_12В_вентилятором_на_рассыпухе_(russian).md",
+              "size": 10397
             }
           ],
           "reference": "Yes"
