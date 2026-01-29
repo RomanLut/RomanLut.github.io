@@ -449,6 +449,19 @@
         },
         {
           "type": "folder",
+          "name": "2012-08 Roomba Wall Unit Mod",
+          "path": "Electronics/2012-08_Roomba_Wall_Unit_Mod",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Roomba Wall Unit Mod",
+              "path": "Electronics/2012-08_Roomba_Wall_Unit_Mod/Roomba_Wall_Unit_Mod.md",
+              "size": 2868
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2013-04 Opto isolated AVR910",
           "path": "Electronics/2013-04_Opto_isolated_AVR910",
           "items": [
