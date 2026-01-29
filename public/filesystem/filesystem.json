@@ -678,15 +678,15 @@
           "items": [
             {
               "type": "wordpad",
-              "name": "article",
-              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/article.md",
-              "size": 3497
+              "name": "Repair of a Cheap Chinese USB Hub (translated to english)",
+              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/Repair_of_a_Cheap_Chinese_USB_Hub_(translated_to_english).md",
+              "size": 2127
             },
             {
               "type": "wordpad",
-              "name": "article en",
-              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/article_en.md",
-              "size": 2127
+              "name": "Ремонт китайского USB Hub (russian)",
+              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/Ремонт_китайского_USB_Hub_(russian).md",
+              "size": 3497
             }
           ]
         },
@@ -695,12 +695,6 @@
           "name": "2014-04 Humster Powerplant",
           "path": "Electronics/2014-04_Humster_Powerplant",
           "items": [
-            {
-              "type": "wordpad",
-              "name": "article",
-              "path": "Electronics/2014-04_Humster_Powerplant/article.md",
-              "size": 9853
-            },
             {
               "type": "wordpad",
               "name": "Muscle powered electricity generator (one humsterpower) (translated to english)",
@@ -743,6 +737,49 @@
               "name": "Интерактивная подсветка телевизора Mood lamp Beat detector (russian)",
               "path": "Electronics/2014-04_Interactive_TV_backlight/Интерактивная_подсветка_телевизора_Mood_lamp_Beat_detector_(russian).md",
               "size": 22471
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "2014-09 Digital control system for a toy railway",
+          "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Digital control system for a toy railway (translated to english)",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/Digital_control_system_for_a_toy_railway_(translated_to_english).md",
+              "size": 21339
+            },
+            {
+              "type": "archive",
+              "name": "hxRailRoad apk",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/hxRailRoad_apk.zip",
+              "size": 14471364
+            },
+            {
+              "type": "archive",
+              "name": "railway android src",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/railway_android_src.rar",
+              "size": 5707082
+            },
+            {
+              "type": "archive",
+              "name": "railway controller firmware src",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/railway_controller_firmware_src.rar",
+              "size": 16076
+            },
+            {
+              "type": "archive",
+              "name": "railway decoder firmware src",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/railway_decoder_firmware_src.rar",
+              "size": 11133
+            },
+            {
+              "type": "wordpad",
+              "name": "Оцифровка игрушечной железной дороги (russian)",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/Оцифровка_игрушечной_железной_дороги_(russian).md",
+              "size": 33829
             }
           ]
         },
@@ -831,6 +868,43 @@
           "size": 35329345
         }
       ]
+    },
+    {
+      "type": "folder",
+      "name": "Hobby projects",
+      "path": "Hobby_projects",
+      "items": [
+        {
+          "type": "github",
+          "name": "2019-06 android-taranis-smartport-telemetry",
+          "path": "Hobby_projects/2019-06_android-taranis-smartport-telemetry.url",
+          "size": 63,
+          "url": "https://github.com/RomanLut/android-taranis-smartport-telemetry"
+        },
+        {
+          "type": "github",
+          "name": "2021-07 hx espnow rc",
+          "path": "Hobby_projects/2021-07_hx_espnow_rc.url",
+          "size": 40,
+          "url": "https://github.com/RomanLut/hx_espnow_rc"
+        },
+        {
+          "type": "github",
+          "name": "2022-06 INAV-X-Plane-HITL",
+          "path": "Hobby_projects/2022-06_INAV-X-Plane-HITL.url",
+          "size": 45,
+          "url": "https://github.com/RomanLut/INAV-X-Plane-HITL"
+        },
+        {
+          "type": "github",
+          "name": "2023-01 hx-esp32-cam-fpv",
+          "path": "Hobby_projects/2023-01_hx-esp32-cam-fpv.url",
+          "size": 44,
+          "url": "https://github.com/RomanLut/hx-esp32-cam-fpv"
+        }
+      ],
+      "image": "folder_image.jpg",
+      "desc": "This folder contains my hobby projects (programming).\n\nI also maintain a number of open-source projects on Github."
     },
     {
       "type": "folder",
@@ -1418,15 +1492,15 @@
           "items": [
             {
               "type": "wordpad",
-              "name": "article",
-              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/article.md",
-              "size": 3497
+              "name": "Repair of a Cheap Chinese USB Hub (translated to english)",
+              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/Repair_of_a_Cheap_Chinese_USB_Hub_(translated_to_english).md",
+              "size": 2127
             },
             {
               "type": "wordpad",
-              "name": "article en",
-              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/article_en.md",
-              "size": 2127
+              "name": "Ремонт китайского USB Hub (russian)",
+              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/Ремонт_китайского_USB_Hub_(russian).md",
+              "size": 3497
             }
           ],
           "reference": "Yes"
@@ -1436,12 +1510,6 @@
           "name": "2014-04 Humster Powerplant",
           "path": "Electronics/2014-04_Humster_Powerplant",
           "items": [
-            {
-              "type": "wordpad",
-              "name": "article",
-              "path": "Electronics/2014-04_Humster_Powerplant/article.md",
-              "size": 9853
-            },
             {
               "type": "wordpad",
               "name": "Muscle powered electricity generator (one humsterpower) (translated to english)",
@@ -1485,6 +1553,50 @@
               "name": "Интерактивная подсветка телевизора Mood lamp Beat detector (russian)",
               "path": "Electronics/2014-04_Interactive_TV_backlight/Интерактивная_подсветка_телевизора_Mood_lamp_Beat_detector_(russian).md",
               "size": 22471
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2014-09 Digital control system for a toy railway",
+          "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Digital control system for a toy railway (translated to english)",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/Digital_control_system_for_a_toy_railway_(translated_to_english).md",
+              "size": 21339
+            },
+            {
+              "type": "archive",
+              "name": "hxRailRoad apk",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/hxRailRoad_apk.zip",
+              "size": 14471364
+            },
+            {
+              "type": "archive",
+              "name": "railway android src",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/railway_android_src.rar",
+              "size": 5707082
+            },
+            {
+              "type": "archive",
+              "name": "railway controller firmware src",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/railway_controller_firmware_src.rar",
+              "size": 16076
+            },
+            {
+              "type": "archive",
+              "name": "railway decoder firmware src",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/railway_decoder_firmware_src.rar",
+              "size": 11133
+            },
+            {
+              "type": "wordpad",
+              "name": "Оцифровка игрушечной железной дороги (russian)",
+              "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/Оцифровка_игрушечной_железной_дороги_(russian).md",
+              "size": 33829
             }
           ],
           "reference": "Yes"

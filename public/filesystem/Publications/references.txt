@@ -8,3 +8,4 @@ Electronics/2013-12_Infrared_command_recognition_using_UART_on_AVR/
 Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components/
 Electronics/2014-04_Interactive_TV_backlight/
 Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/ 
+Electronics/2014-09_Digital_control_system_for_a_toy_railway/
