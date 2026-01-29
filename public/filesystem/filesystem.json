@@ -385,6 +385,36 @@
       "items": [
         {
           "type": "folder",
+          "name": "1994-01 Tandy Sound emulator for Poisk1",
+          "path": "Electronics/1994-01_Tandy_Sound_emulator_for_Poisk1",
+          "items": [
+            {
+              "type": "archive",
+              "name": "TANDY",
+              "path": "Electronics/1994-01_Tandy_Sound_emulator_for_Poisk1/TANDY.zip",
+              "size": 9495
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**Tandy Sound Emulator**\n\nTandy Sound is a rare sound card, available on PCjr and Tandy computers. It has 3 sound channes + one noise channel. Many old games support Tandy sound. Thanks to it’s simplicity, Tandy sound can be emulated with simple hardware part, based on i8053 chip, and simple software.\n\nDate: 1994\nPlatform: DOS\nLanguage: Pure asm"
+        },
+        {
+          "type": "folder",
+          "name": "1996-01 HW Sound blaster 1 0 emulator",
+          "path": "Electronics/1996-01_HW_Sound_blaster_1_0_emulator",
+          "items": [
+            {
+              "type": "image",
+              "name": "sb large",
+              "path": "Electronics/1996-01_HW_Sound_blaster_1_0_emulator/sb_large.jpg",
+              "size": 149152
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**HW Sound blaster 1.0 emulator**\nThere was a time when Sound blaster was so high-tech and cost so much, that rare people own it. Using my knowledge of digital electronics, I developed and built Sound blaster 1.0 compatible card. It has about 30 chips (just a logical elements, no microcontroller) and emulated digital part of Sound Blaster 1.0.\n\n**Date:** 1996\n**Platform:** DOS\n*Comments: Unfortunatelly, schematics and firmware have been lost.*\n\nActually, emulating Sound Blater 1.0 is easy. There are only two output modes: immediate byte-to-DAC output and DMA output. Also care must be taken to emulate SB responce behaviour so games could detect that SB is  resent. Since all games used standart library from Creative, SB detection pattern was known and was hard-wired into emulator. By using simple trigger-switching, it was possible to emulate SB without microcontroller. I also seen microcontroller-based SB emulator  from other author somewhere in the net."
+        },
+        {
+          "type": "folder",
           "name": "2004-10 I-Cybie Robot Dog",
           "path": "Electronics/2004-10_I-Cybie_Robot_Dog",
           "items": [
