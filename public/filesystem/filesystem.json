@@ -312,24 +312,24 @@
         },
         {
           "type": "folder",
-          "name": "Demos that inspared me",
-          "path": "Demoscene/Demos_that_inspared_me",
+          "name": "Demos which inspired me",
+          "path": "Demoscene/Demos_which_inspired_me",
           "items": [
             {
               "type": "folder",
               "name": "Into The Shadows",
-              "path": "Demoscene/Demos_that_inspared_me/Into_The_Shadows",
+              "path": "Demoscene/Demos_which_inspired_me/Into_The_Shadows",
               "items": [
                 {
                   "type": "executable",
                   "name": "Into The Shadows",
-                  "path": "Demoscene/Demos_that_inspared_me/Into_The_Shadows/Into_The_Shadows.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/Into_The_Shadows/Into_The_Shadows.zip",
                   "size": 3443703
                 },
                 {
                   "type": "archive",
                   "name": "Into The Shadows",
-                  "path": "Demoscene/Demos_that_inspared_me/Into_The_Shadows/Into_The_Shadows.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/Into_The_Shadows/Into_The_Shadows.zip",
                   "size": 3443703
                 }
               ]
@@ -337,18 +337,18 @@
             {
               "type": "folder",
               "name": "Machines Of Madness",
-              "path": "Demoscene/Demos_that_inspared_me/Machines_Of_Madness",
+              "path": "Demoscene/Demos_which_inspired_me/Machines_Of_Madness",
               "items": [
                 {
                   "type": "executable",
                   "name": "Machines Of Madness",
-                  "path": "Demoscene/Demos_that_inspared_me/Machines_Of_Madness/Machines_Of_Madness.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/Machines_Of_Madness/Machines_Of_Madness.zip",
                   "size": 3880975
                 },
                 {
                   "type": "archive",
                   "name": "Machines Of Madness",
-                  "path": "Demoscene/Demos_that_inspared_me/Machines_Of_Madness/Machines_Of_Madness.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/Machines_Of_Madness/Machines_Of_Madness.zip",
                   "size": 3880975
                 }
               ]
@@ -356,18 +356,18 @@
             {
               "type": "folder",
               "name": "Second Reality",
-              "path": "Demoscene/Demos_that_inspared_me/Second_Reality",
+              "path": "Demoscene/Demos_which_inspired_me/Second_Reality",
               "items": [
                 {
                   "type": "executable",
                   "name": "Second Reality",
-                  "path": "Demoscene/Demos_that_inspared_me/Second_Reality/Second_Reality.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/Second_Reality/Second_Reality.zip",
                   "size": 2085987
                 },
                 {
                   "type": "archive",
                   "name": "Second Reality",
-                  "path": "Demoscene/Demos_that_inspared_me/Second_Reality/Second_Reality.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/Second_Reality/Second_Reality.zip",
                   "size": 2085987
                 }
               ]
@@ -383,6 +383,31 @@
       "name": "Electronics",
       "path": "Electronics",
       "items": [
+        {
+          "type": "folder",
+          "name": "2004-10 I-Cybie Robot Dog",
+          "path": "Electronics/2004-10_I-Cybie_Robot_Dog",
+          "items": [
+            {
+              "type": "archive",
+              "name": "i-cybie max",
+              "path": "Electronics/2004-10_I-Cybie_Robot_Dog/i-cybie_max.zip",
+              "size": 4218949
+            },
+            {
+              "type": "wordpad",
+              "name": "I-Cybie Robot Dog",
+              "path": "Electronics/2004-10_I-Cybie_Robot_Dog/I-Cybie_Robot_Dog.md",
+              "size": 3824
+            },
+            {
+              "type": "archive",
+              "name": "i-cybie wallp",
+              "path": "Electronics/2004-10_I-Cybie_Robot_Dog/i-cybie_wallp.zip",
+              "size": 736336
+            }
+          ]
+        },
         {
           "type": "folder",
           "name": "2009-02 Adding LED light to jigsaw",
@@ -418,7 +443,7 @@
               "type": "wordpad",
               "name": "Regulated power source from ATX PSU",
               "path": "Electronics/2012-02_Regulated_power_source_from_ATX_PSU/Regulated_power_source_from_ATX_PSU.md",
-              "size": 2241
+              "size": 2087
             }
           ]
         },

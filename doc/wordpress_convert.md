@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2015-02_Regulated_power_source_from_ATX_PSU\Regulated_power_source_from_ATX_PSU.md
+[target]=\trunk\public\filesystem\Electronics\2004-10_I_Cybie_Robot_Dog\I_Cybie_Robot_Dog.md
 
 Read the article [location] fully.
 
