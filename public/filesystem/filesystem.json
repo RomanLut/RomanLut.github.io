@@ -593,6 +593,37 @@
         },
         {
           "type": "folder",
+          "name": "2013-09 Modernization of a high-power flashlight with a 5-watt LED",
+          "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED",
+          "items": [
+            {
+              "type": "archive",
+              "name": "lighter hex",
+              "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/lighter_hex.zip",
+              "size": 2644
+            },
+            {
+              "type": "archive",
+              "name": "lighter src",
+              "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/lighter_src.zip",
+              "size": 240404
+            },
+            {
+              "type": "wordpad",
+              "name": "Modernization of a High-Power Flashlight with a 5-Watt LED (translated to english)",
+              "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/Modernization_of_a_High-Power_Flashlight_with_a_5-Watt_LED_(translated_to_english).md",
+              "size": 8860
+            },
+            {
+              "type": "wordpad",
+              "name": "Модернизация мощного фонаря на светодиод 5 Ватт (russian)",
+              "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/Модернизация_мощного_фонаря_на_светодиод_5_Ватт_(russian).md",
+              "size": 14869
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2014-04 Humster Powerplant",
           "path": "Electronics/2014-04_Humster_Powerplant",
           "items": [
@@ -1200,6 +1231,38 @@
               "name": "Midi Player для AVR (russian)",
               "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_для_AVR_(russian).md",
               "size": 55049
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2013-09 Modernization of a high-power flashlight with a 5-watt LED",
+          "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED",
+          "items": [
+            {
+              "type": "archive",
+              "name": "lighter hex",
+              "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/lighter_hex.zip",
+              "size": 2644
+            },
+            {
+              "type": "archive",
+              "name": "lighter src",
+              "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/lighter_src.zip",
+              "size": 240404
+            },
+            {
+              "type": "wordpad",
+              "name": "Modernization of a High-Power Flashlight with a 5-Watt LED (translated to english)",
+              "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/Modernization_of_a_High-Power_Flashlight_with_a_5-Watt_LED_(translated_to_english).md",
+              "size": 8860
+            },
+            {
+              "type": "wordpad",
+              "name": "Модернизация мощного фонаря на светодиод 5 Ватт (russian)",
+              "path": "Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/Модернизация_мощного_фонаря_на_светодиод_5_Ватт_(russian).md",
+              "size": 14869
             }
           ],
           "reference": "Yes"

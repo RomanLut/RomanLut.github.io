@@ -3,3 +3,4 @@ Electronics/2013-05_ESR_Metter/
 Electronics/2013-09_Midi_player_forAVR/
 Electronics/2013-07_DIY_1W_LED_Flashlight/
 Electronics/2014-04_Humster_Powerplant/
+Electronics/2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED/

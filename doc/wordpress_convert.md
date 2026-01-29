@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2014-04_Humster_Powerplant\article.md
+[target]=\trunk\public\filesystem\Electronics\2013-09_Modernization_of_a_high-power_flashlight_with_a_5-watt_LED\article.md
 
 Read the article [location] fully.
 
