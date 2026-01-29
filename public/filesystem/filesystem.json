@@ -511,6 +511,31 @@
         },
         {
           "type": "folder",
+          "name": "2013-07 DIY 1W LED Flashlight",
+          "path": "Electronics/2013-07_DIY_1W_LED_Flashlight",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "DIY 1W LED Flashlight (translated to english)",
+              "path": "Electronics/2013-07_DIY_1W_LED_Flashlight/DIY_1W_LED_Flashlight_(translated_to_english).md",
+              "size": 6827
+            },
+            {
+              "type": "archive",
+              "name": "Lighter2",
+              "path": "Electronics/2013-07_DIY_1W_LED_Flashlight/Lighter2.rar",
+              "size": 38754
+            },
+            {
+              "type": "wordpad",
+              "name": "Самодельный светодиодный фонарик 1Вт (russian)",
+              "path": "Electronics/2013-07_DIY_1W_LED_Flashlight/Самодельный_светодиодный_фонарик_1Вт_(russian).md",
+              "size": 9696
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2013-08 Roomba Pro SLA battery mod",
           "path": "Electronics/2013-08_Roomba_Pro_SLA_battery_mod",
           "items": [
@@ -571,12 +596,6 @@
               "size": 115287
             }
           ]
-        },
-        {
-          "type": "archive",
-          "name": "Lighter2",
-          "path": "Electronics/Lighter2.rar",
-          "size": 38754
         }
       ],
       "image": "folder_image.jpg",
@@ -1091,6 +1110,32 @@
               "name": "Прибор для измерения RLC и ESR hxRLCMeter",
               "path": "Electronics/2013-05_ESR_Metter/Прибор_для_измерения_RLC_и_ESR_hxRLCMeter.md",
               "size": 25898
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2013-07 DIY 1W LED Flashlight",
+          "path": "Electronics/2013-07_DIY_1W_LED_Flashlight",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "DIY 1W LED Flashlight (translated to english)",
+              "path": "Electronics/2013-07_DIY_1W_LED_Flashlight/DIY_1W_LED_Flashlight_(translated_to_english).md",
+              "size": 6827
+            },
+            {
+              "type": "archive",
+              "name": "Lighter2",
+              "path": "Electronics/2013-07_DIY_1W_LED_Flashlight/Lighter2.rar",
+              "size": 38754
+            },
+            {
+              "type": "wordpad",
+              "name": "Самодельный светодиодный фонарик 1Вт (russian)",
+              "path": "Electronics/2013-07_DIY_1W_LED_Flashlight/Самодельный_светодиодный_фонарик_1Вт_(russian).md",
+              "size": 9696
             }
           ],
           "reference": "Yes"
