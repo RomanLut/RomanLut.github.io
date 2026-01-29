@@ -246,6 +246,17 @@ Starting state is Landing.
 If ?start=1 query parameter is specified, then starting state is PC emulation, blocked screen
 If ?start=2 query parameter is specified, then starting state is PC emulation, desktop screen.
 If &fullscreen=1 parameter is present, page should switch to fulscreen.
+If &folder=path parameter is present, folder should be opened in file explorer app.
+If &file=path parameter is present, file should be opened with corresponding application on desktop screen.
+
+If folder is opened in file explorer, &folder query parameter should be set to path. &folder patamter should be updated during navigaton in file explorer.
+If file explorer is closed, &file query parameter should be removed.
+
+When file is opened in WordPad, Sound Player or Notepad, the path of the file should be set in &file query parameter, replacing.
+When WordPad, Sound Player or Notepad app is closed, &file query parameter should be removed.
+
+File explorer should be spawned before apps, so that app appear on top of File Exploer app.
+
 
 
 

@@ -673,6 +673,25 @@
         },
         {
           "type": "folder",
+          "name": "2014-02 Repair of cheap Chinese USB hub",
+          "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "article",
+              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/article.md",
+              "size": 3497
+            },
+            {
+              "type": "wordpad",
+              "name": "article en",
+              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/article_en.md",
+              "size": 2127
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2014-04 Humster Powerplant",
           "path": "Electronics/2014-04_Humster_Powerplant",
           "items": [
@@ -1388,6 +1407,26 @@
               "name": "Распознавание ИК команд с помощью UART на AVR (russian)",
               "path": "Electronics/2013-12_Infrared_command_recognition_using_UART_on_AVR/Распознавание_ИК_команд_с_помощью_UART_на_AVR_(russian).md",
               "size": 13886
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2014-02 Repair of cheap Chinese USB hub",
+          "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "article",
+              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/article.md",
+              "size": 3497
+            },
+            {
+              "type": "wordpad",
+              "name": "article en",
+              "path": "Electronics/2014-02_Repair_of_cheap_Chinese_USB_hub/article_en.md",
+              "size": 2127
             }
           ],
           "reference": "Yes"
