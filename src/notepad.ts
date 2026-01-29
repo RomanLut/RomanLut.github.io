@@ -35,7 +35,7 @@ export class Notepad extends AppWindow {
           { label: 'Save', shortcut: 'Ctrl+S' },
           { label: 'Print', shortcut: 'Ctrl+P' },
           { label: '-' },
-          { label: 'Exit', shortcut: 'Alt+F4' }
+          { label: 'Exit'}
         ]
       },
       {
