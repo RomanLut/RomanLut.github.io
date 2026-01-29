@@ -2,24 +2,37 @@ import { Browser } from './browser';
 
 type StartParam = '1' | '2' | null;
 
-export function setStartParam(value: StartParam) {
+function updateQueryParam(name: string, value: string | null) {
   const url = new URL(window.location.href);
   if (value) {
-    url.searchParams.set('start', value);
+    url.searchParams.set(name, value);
   } else {
-    url.searchParams.delete('start');
+    url.searchParams.delete(name);
   }
   history.replaceState(null, '', url.toString());
 }
 
+function normalizeParamPath(value: string | null | undefined) {
+  if (!value) return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  return trimmed.replace(/^\/+|\/+$/g, '');
+}
+
+export function setStartParam(value: StartParam) {
+  updateQueryParam('start', value);
+}
+
 export function setFullscreenParam(enabled: boolean) {
-  const url = new URL(window.location.href);
-  if (enabled) {
-    url.searchParams.set('fullscreen', '1');
-  } else {
-    url.searchParams.delete('fullscreen');
-  }
-  history.replaceState(null, '', url.toString());
+  updateQueryParam('fullscreen', enabled ? '1' : null);
+}
+
+export function setFolderParam(path: string | null) {
+  updateQueryParam('folder', normalizeParamPath(path));
+}
+
+export function setFileParam(path: string | null) {
+  updateQueryParam('file', normalizeParamPath(path));
 }
 
 export function formatTime(now: Date = new Date()): string {
@@ -352,12 +365,23 @@ export async function inlineImages(container: HTMLElement) {
 }
 
 // Filesystem helpers
-export type FsItemType = 'folder' | 'wordpad' | 'notepad' | 'archive' | 'executable' | 'html' | 'sound' | 'image';
+export type FsItemType =
+  | 'folder'
+  | 'wordpad'
+  | 'notepad'
+  | 'archive'
+  | 'executable'
+  | 'html'
+  | 'sound'
+  | 'image'
+  | 'github'
+  | 'youtube';
 
 export interface FsItem {
   type: FsItemType;
   name: string;
   path: string;
+  url?: string;
   image?: string;
   desc?: string;
   items?: FsItem[];
@@ -387,7 +411,9 @@ export function formatSize(bytes: number): string {
   if (kb >= 10) {
     return `${Math.round(kb)} KB`;
   }
-  return `${Math.round(kb * 10) / 10} KB`;
+  const rounded = Math.round(kb * 10) / 10;
+  const normalized = rounded > 0 ? rounded : 0.1;
+  return `${normalized.toFixed(1)} KB`;
 }
 
 export function responsiveWidth(base: number, ratio = 0.45): number {

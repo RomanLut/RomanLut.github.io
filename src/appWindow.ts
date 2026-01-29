@@ -45,6 +45,7 @@ export class AppWindow {
     [];
   private overlayFsHandler: ((e: Event) => void) | null = null;
   private overlayNativeFs = false;
+  private closeHandlers: Array<() => void> = [];
   private showAnimation?: Animation;
   private spawnedAnimated = false;
   private spawnOrigin: { x: number; y: number } | null = null;
@@ -464,6 +465,16 @@ export class AppWindow {
   }
 
   protected close() {
+    if (this.closeHandlers.length) {
+      this.closeHandlers.forEach((handler) => {
+        try {
+          handler();
+        } catch {
+          /* ignore */
+        }
+      });
+      this.closeHandlers = [];
+    }
     this.exitOverlay();
     this.element.remove();
     if (this.taskbarButton) {
@@ -475,6 +486,10 @@ export class AppWindow {
     if (AppWindow.openWindows.size === 0) {
       AppWindow.nextSpawn = { ...SPAWN_BASE };
     }
+  }
+
+  protected registerCloseHandler(handler: () => void) {
+    this.closeHandlers.push(handler);
   }
 
   private createTaskbarButton(title: string) {

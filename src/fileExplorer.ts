@@ -14,7 +14,9 @@ import {
   formatSize,
   responsiveWidth,
   responsiveHeight,
-  navigateToUrl
+  navigateToUrl,
+  setFolderParam,
+  setFileParam
 } from './util';
 import { WordPad } from './WordPad';
 import { Notepad } from './notepad';
@@ -93,6 +95,9 @@ export class FileExplorer extends AppWindow {
     this.content.appendChild(this.list);
     container.append(this.toolbar, this.content, this.statusBar.element);
     this.setContent(container);
+    this.registerCloseHandler(() => {
+      setFolderParam(null);
+    });
 
     void this.loadTree(startPath);
   }
@@ -163,6 +168,7 @@ export class FileExplorer extends AppWindow {
       this.historyIndex = this.history.length - 1;
     }
     this.currentPath = clean;
+    setFolderParam(clean);
     this.renderBreadcrumb();
     this.renderMeta(folder);
     this.renderItems(folder.items);
@@ -278,6 +284,10 @@ export class FileExplorer extends AppWindow {
           ? 'sound'
           : item.type === 'image'
           ? 'image'
+          : item.type === 'github'
+          ? 'github'
+          : item.type === 'youtube'
+          ? 'youtube'
           : 'wordpad';
       iconHolder.innerHTML = getIconSvg(iconType);
 
@@ -306,9 +316,11 @@ export class FileExplorer extends AppWindow {
       this.setFolder(item.path);
       return;
     }
-    const url = filesystemUrl(item.path);
+    const normalizedPath = normalizeFsPath(item.path);
+    const url = filesystemUrl(normalizedPath);
     switch (item.type) {
       case 'notepad':
+        setFileParam(normalizedPath);
         new Notepad(this.desktopRef, this.taskbarRef, item.name, url);
         return;
       case 'archive': {
@@ -322,10 +334,18 @@ export class FileExplorer extends AppWindow {
         return;
       }
       case 'html': {
-        navigateToUrl(this.desktopRef, this.taskbarRef, url);
+        const targetUrl = item.url || url;
+        navigateToUrl(this.desktopRef, this.taskbarRef, targetUrl);
+        return;
+      }
+      case 'github':
+      case 'youtube': {
+        const targetUrl = item.url || filesystemUrl(item.path);
+        navigateToUrl(this.desktopRef, this.taskbarRef, targetUrl);
         return;
       }
       case 'sound': {
+        setFileParam(normalizedPath);
         new SoundPlayer(this.desktopRef, this.taskbarRef, [{ title: item.name, url }]);
         return;
       }
@@ -334,6 +354,7 @@ export class FileExplorer extends AppWindow {
         return;
       }
       default:
+        setFileParam(normalizedPath);
         new WordPad(this.desktopRef, this.taskbarRef, url, item.name);
         return;
     }

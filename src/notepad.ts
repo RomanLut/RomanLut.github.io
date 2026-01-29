@@ -2,7 +2,7 @@ import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
-import { closeMenus, escapeHtml, responsiveWidth, responsiveHeight } from './util';
+import { closeMenus, escapeHtml, responsiveWidth, responsiveHeight, setFileParam } from './util';
 
 export class Notepad extends AppWindow {
   private statusBar: AppWindowStatusBar;
@@ -130,6 +130,9 @@ export class Notepad extends AppWindow {
     container.appendChild(this.statusBar.element);
 
     this.setContent(container);
+    this.registerCloseHandler(() => {
+      setFileParam(null);
+    });
     this.recordHistory();
     this.updateCaret();
     if (fileUrl) {

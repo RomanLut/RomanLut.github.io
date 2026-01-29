@@ -1,16 +1,20 @@
 import { Taskbar } from './taskbar';
 import { DesktopIcon } from './desktopIcon';
-import { exitFullscreenAndOpen, navigateToUrl } from './util';
+import { exitFullscreenAndOpen, navigateToUrl, normalizeFsPath, filesystemUrl, setFileParam } from './util';
 import { WordPad } from './WordPad';
 import { FileExplorer } from './fileExplorer';
 import { DosBox } from './dosbox';
 import { Browser } from './browser';
 import { SoundPlayer } from './soundPlayer';
+import { Notepad } from './notepad';
+
+const SOUND_EXTENSIONS = new Set(['mp3', 'ogg', 'wav', 'flac', 'm4a']);
 
 export class Desktop {
   readonly element: HTMLElement;
   private taskbar: Taskbar;
   private intervalId: number | undefined;
+  private queryParamsHandled = false;
 
   constructor(root: HTMLElement) {
     this.element = document.createElement('div');
@@ -22,7 +26,7 @@ export class Desktop {
 
     this.spawnIcons();
 
-    new FileExplorer(this.element, this.taskbar);
+//    new FileExplorer(this.element, this.taskbar);
 
 //    new Notepad(this.element, this.taskbar);
 
@@ -68,6 +72,7 @@ export class Desktop {
 
     root.prepend(this.element);
 
+    this.applyQueryParams();
     this.updateClock();
     this.intervalId = window.setInterval(() => this.updateClock(), 5000);
   }
@@ -82,6 +87,49 @@ export class Desktop {
       this.intervalId = undefined;
     }
     this.element.remove();
+  }
+
+  private applyQueryParams() {
+    if (this.queryParamsHandled) return;
+    this.queryParamsHandled = true;
+    const params = new URLSearchParams(window.location.search);
+    const folderParam = params.get('folder');
+    if (folderParam) {
+      this.openExplorerForFolder(folderParam);
+    }
+    const fileParam = params.get('file');
+    if (fileParam) {
+      this.openFileFromPath(fileParam);
+    }
+  }
+
+  private openExplorerForFolder(path: string) {
+    const clean = normalizeFsPath(path);
+    if (!clean) return;
+    new FileExplorer(this.element, this.taskbar, clean);
+  }
+
+  private openFileFromPath(path: string) {
+    const clean = normalizeFsPath(path);
+    if (!clean) return;
+    const segments = clean.split('/');
+    const filename = segments[segments.length - 1] || clean;
+    const ext = filename.split('.').pop()?.toLowerCase() ?? '';
+    const url = filesystemUrl(clean);
+    setFileParam(clean);
+    if (ext === 'md') {
+      new WordPad(this.element, this.taskbar, url, filename);
+      return;
+    }
+    if (ext === 'txt' || ext === 'js') {
+      new Notepad(this.element, this.taskbar, filename, url);
+      return;
+    }
+    if (SOUND_EXTENSIONS.has(ext)) {
+      new SoundPlayer(this.element, this.taskbar, [{ title: filename, url }]);
+      return;
+    }
+    new WordPad(this.element, this.taskbar, url, filename);
   }
 
   private spawnIcons() {

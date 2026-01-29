@@ -1,7 +1,7 @@
 import { AppWindow } from './appWindow';
 import { getIconSvg } from './desktopIcon';
 import { Taskbar } from './taskbar';
-import { responsiveHeight, responsiveWidth } from './util';
+import { responsiveHeight, responsiveWidth, setFileParam } from './util';
 
 type SoundTrack = {
   title: string;
@@ -42,6 +42,9 @@ export class SoundPlayer extends AppWindow {
     container.appendChild(this.listEl);
 
     this.setContent(container);
+    this.registerCloseHandler(() => {
+      setFileParam(null);
+    });
 
     // Compact single-track mode: hide list, shrink window, and remove resizing/maximize affordances.
     if (this.tracks.length === 1) {

@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import zipfile
 from typing import Any, Dict, List, Optional
+from urllib.parse import urlparse
 
 
 ROOT = Path(__file__).resolve().parent.parent / "public" / "filesystem"
@@ -38,6 +39,38 @@ def find_folder_image(folder: Path) -> Optional[str]:
         if candidate.is_file():
             return candidate.name
     return None
+
+
+def read_url_target(file_path: Path) -> Optional[str]:
+    try:
+        content = file_path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+    for line in content.splitlines():
+        cleaned = line.strip()
+        if not cleaned or cleaned.startswith("["):
+            continue
+        if cleaned.lower().startswith("url="):
+            target = cleaned.split("=", 1)[1].strip()
+            if target:
+                return target
+            continue
+        if cleaned.lower().startswith("http://") or cleaned.lower().startswith("https://"):
+            return cleaned
+    return None
+
+
+def classify_external_url(target: str) -> str:
+    parsed = urlparse(target)
+    hostname = (parsed.netloc or "").lower()
+    hostname = hostname.split(":", 1)[0]
+    if hostname.startswith("www."):
+        hostname = hostname[4:]
+    if "github.com" in hostname:
+        return "github"
+    if hostname.endswith("youtube.com") or hostname.endswith("youtu.be"):
+        return "youtube"
+    return "html"
 
 
 def read_references(folder: Path) -> List[str]:
@@ -115,6 +148,12 @@ def build_file_item(entry: Path, rel_path: Path, is_reference: bool = False) -> 
         item["type"] = "archive"
     elif suffix in html_exts:
         item["type"] = "html"
+    elif suffix == ".url":
+        link = read_url_target(entry)
+        if not link:
+            return None
+        item["type"] = classify_external_url(link)
+        item["url"] = link
     elif suffix in sound_exts:
         item["type"] = "sound"
     elif suffix in image_exts:
@@ -218,6 +257,20 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
                     "name": display_name(entry.name),
                     "path": rel_path.as_posix(),
                     "size": size,
+                }
+            )
+        elif entry.suffix.lower() == ".url":
+            link = read_url_target(entry)
+            if not link:
+                continue
+            size = entry.stat().st_size
+            children.append(
+                {
+                    "type": classify_external_url(link),
+                    "name": display_name(entry.name),
+                    "path": rel_path.as_posix(),
+                    "size": size,
+                    "url": link,
                 }
             )
         elif entry.suffix.lower() in sound_exts:

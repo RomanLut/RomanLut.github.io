@@ -4,7 +4,7 @@ import { AppWindowMenu, type MenuItem } from './appWindowMenu';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { Browser } from './browser';
 import { SoundPlayer } from './soundPlayer';
-import { applyInline, closeMenus, escapeHtml, inlineImages, isDownloadUrl, markdownToHtml, responsiveWidth, responsiveHeight, navigateToUrl } from './util';
+import { applyInline, closeMenus, escapeHtml, inlineImages, isDownloadUrl, markdownToHtml, responsiveWidth, responsiveHeight, navigateToUrl, setFileParam } from './util';
 
 const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
   <rect x="4" y="3" width="16" height="18" rx="2" fill="#ffffff" stroke="#d0d6e0" stroke-width="1"/>
@@ -143,6 +143,9 @@ export class WordPad extends AppWindow {
     container.appendChild(this.status.element);
 
     this.setContent(container);
+    this.registerCloseHandler(() => {
+      setFileParam(null);
+    });
     this.loadFile(filePath);
     this.contentArea.addEventListener('scroll', () => this.updateStatus());
     this.contentArea.addEventListener('click', (e) => {
@@ -242,8 +245,11 @@ export class WordPad extends AppWindow {
       this.enhanceEmbeds();
       this.updateStatus();
     } catch (err) {
-      this.contentArea.innerHTML = `<div class="wordpad__error">Failed to load file: ${escapeHtml(String(err))}</div>`;
-      this.status.setText('Error');
+      this.markdownText = '';
+      this.contentArea.innerHTML = '';
+      this.updateStatus();
+      this.status.setText('Empty document');
+      console.warn('WordPad failed to load file', path, err);
     }
   }
 

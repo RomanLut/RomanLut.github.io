@@ -10,7 +10,17 @@ if (!app) {
 
 const params = new URLSearchParams(window.location.search);
 const startParam = params.get('start');
-const initialState = startParam === '1' ? 'pc-blocked' : startParam === '2' ? 'pc-desktop' : 'landing';
+const folderParam = params.get('folder')?.trim() || '';
+const fileParam = params.get('file')?.trim() || '';
+const shouldShowDesktop = Boolean(folderParam || fileParam);
+const initialState =
+  startParam === '1'
+    ? 'pc-blocked'
+    : startParam === '2'
+    ? 'pc-desktop'
+    : shouldShowDesktop
+    ? 'pc-desktop'
+    : 'landing';
 
 const pc = new PC(app);
 
