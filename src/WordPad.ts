@@ -30,6 +30,13 @@ export class WordPad extends AppWindow {
   private limitItemEl: HTMLElement | null = null;
   private menuElement: HTMLElement | null = null;
   private markdownText = '';
+  private imageOverlay: HTMLElement;
+  private overlayImage: HTMLImageElement;
+  private overlayCloseBtn: HTMLButtonElement;
+  private overlayKeyHandler: ((e: KeyboardEvent) => void) | null = null;
+  private overlayResizeHandler: (() => void) | null = null;
+  private overlayResizeObserver: ResizeObserver | null = null;
+  private scrollState: { overflow: string; top: number; left: number } | null = null;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, filePath: string, title?: string) {
     WordPad.ensureLimitPref();
@@ -133,6 +140,7 @@ export class WordPad extends AppWindow {
 
     this.contentArea = document.createElement('div');
     this.contentArea.className = 'wordpad__content';
+    this.setupImageOverlay();
 
     this.status = new AppWindowStatusBar('Line 1 / 1', '');
     this.status.element.classList.add('wordpad__status');
@@ -143,34 +151,11 @@ export class WordPad extends AppWindow {
     container.appendChild(this.status.element);
 
     this.setContent(container);
-    this.registerCloseHandler(() => {
-      setFileParam(null);
-    });
+    this.registerCloseHandler(() => setFileParam(null));
+    this.registerCloseHandler(() => this.removeImageOverlay());
     this.loadFile(filePath);
     this.contentArea.addEventListener('scroll', () => this.updateStatus());
-    this.contentArea.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement | null;
-      const link = target?.closest('a') as HTMLAnchorElement | null;
-      if (!link) return;
-      const hrefAttr = link.getAttribute('href') || '';
-      if (hrefAttr.startsWith('#')) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const url = hrefAttr || link.href;
-      if (hrefAttr.toLowerCase().endsWith('.ogg')) {
-        const filename = hrefAttr.split('/').pop() || 'Audio';
-        new SoundPlayer(this.desktopRef, this.taskbarRef, [{ title: filename, url: hrefAttr }]);
-      } else if (isDownloadUrl(url)) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = '';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      } else {
-        navigateToUrl(this.desktopRef, this.taskbarRef, url);
-      }
-    });
+    this.contentArea.addEventListener('click', (e) => this.handleContentClick(e as MouseEvent));
 
     // Target ~830px readable content area (padding + borders + scrollbar allowance).
     this.element.style.width = `${responsiveWidth(WordPad.MAX_WIDTH + 68)}px`;
@@ -250,14 +235,197 @@ export class WordPad extends AppWindow {
       const html = markdownToHtml(this.markdownText, basePath);
       this.contentArea.innerHTML = html;
       this.enhanceEmbeds();
+      this.appendImageOverlay();
       this.updateStatus();
     } catch (err) {
       this.markdownText = '';
       this.contentArea.innerHTML = '';
+      this.appendImageOverlay();
       this.updateStatus();
       this.status.setText('Empty document');
       console.warn('WordPad failed to load file', path, err);
+      }
+  }
+
+  private setupImageOverlay() {
+    this.imageOverlay = document.createElement('div');
+    this.imageOverlay.className = 'wordpad__image-overlay';
+    this.imageOverlay.tabIndex = -1;
+    const frame = document.createElement('div');
+    frame.className = 'wordpad__image-overlay__frame';
+    this.overlayImage = document.createElement('img');
+    this.overlayImage.className = 'wordpad__image-overlay__img';
+    this.overlayImage.addEventListener('load', () => this.updateOverlayImageSize());
+    frame.appendChild(this.overlayImage);
+    this.overlayCloseBtn = document.createElement('button');
+    this.overlayCloseBtn.type = 'button';
+    this.overlayCloseBtn.className = 'wordpad__image-overlay__close';
+    this.overlayCloseBtn.setAttribute('aria-label', 'Close preview');
+    this.overlayCloseBtn.textContent = '×';
+    this.imageOverlay.appendChild(frame);
+    this.imageOverlay.appendChild(this.overlayCloseBtn);
+    this.imageOverlay.addEventListener('click', (evt) => {
+      if (evt.target === this.imageOverlay) {
+        this.hideImageOverlay();
+      }
+    });
+    this.overlayCloseBtn.addEventListener('click', (evt) => {
+      evt.stopPropagation();
+      this.hideImageOverlay();
+    });
+    if (this.scrollArea && !this.scrollArea.contains(this.imageOverlay)) {
+      this.scrollArea.appendChild(this.imageOverlay);
     }
+  }
+
+  private appendImageOverlay() {
+    if (!this.imageOverlay || !this.scrollArea) return;
+    if (!this.scrollArea.contains(this.imageOverlay)) {
+      this.scrollArea.appendChild(this.imageOverlay);
+    }
+  }
+
+  private removeImageOverlay() {
+    this.hideImageOverlay();
+    if (this.imageOverlay && this.imageOverlay.parentElement) {
+      this.imageOverlay.parentElement.removeChild(this.imageOverlay);
+    }
+  }
+
+  private handleContentClick(event: MouseEvent) {
+    if (this.imageOverlay.contains(event.target as Node)) {
+      return;
+    }
+    const target = event.target as HTMLElement | null;
+    const imageEl = target?.closest('.wp-img img') as HTMLImageElement | null;
+    if (imageEl) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.showImageOverlay(imageEl.src, imageEl.getAttribute('alt') || imageEl.title || '');
+      return;
+    }
+    const link = target?.closest('a') as HTMLAnchorElement | null;
+    if (!link) return;
+    const hrefAttr = link.getAttribute('href') || '';
+    if (hrefAttr.startsWith('#')) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const url = hrefAttr || link.href;
+    if (hrefAttr.toLowerCase().endsWith('.ogg')) {
+      const filename = hrefAttr.split('/').pop() || 'Audio';
+      new SoundPlayer(this.desktopRef, this.taskbarRef, [{ title: filename, url: hrefAttr }]);
+    } else if (isDownloadUrl(url)) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } else {
+      navigateToUrl(this.desktopRef, this.taskbarRef, url);
+    }
+  }
+
+  private showImageOverlay(src: string, alt?: string) {
+    if (!src) return;
+    this.overlayImage.src = src;
+    this.overlayImage.alt = alt || '';
+    this.appendImageOverlay();
+    this.freezeScroll();
+    this.imageOverlay.classList.add('is-visible');
+    this.setupResizeHandler();
+    this.ensureResizeObserver();
+    this.overlayKeyHandler = (event) => {
+      if (event.key === 'Escape') {
+        this.hideImageOverlay();
+      }
+    };
+    document.addEventListener('keydown', this.overlayKeyHandler);
+  }
+
+  private hideImageOverlay() {
+    if (!this.imageOverlay || !this.imageOverlay.classList.contains('is-visible')) return;
+    this.imageOverlay.classList.remove('is-visible');
+    this.overlayImage.src = '';
+    this.overlayImage.style.width = '';
+    this.overlayImage.style.height = '';
+    if (this.overlayKeyHandler) {
+      document.removeEventListener('keydown', this.overlayKeyHandler);
+      this.overlayKeyHandler = null;
+    }
+    this.teardownResizeHandler();
+    this.teardownResizeObserver();
+    this.restoreScroll();
+  }
+
+  private freezeScroll() {
+    if (!this.scrollArea) return;
+    if (this.scrollState) return;
+    this.scrollState = {
+      overflow: this.scrollArea.style.overflow,
+      top: this.scrollArea.scrollTop,
+      left: this.scrollArea.scrollLeft
+    };
+    this.scrollArea.style.overflow = 'hidden';
+    this.scrollArea.scrollTop = 0;
+    this.scrollArea.scrollLeft = 0;
+    this.scrollArea.classList.add('wordpad__scroll--frozen');
+  }
+
+  private restoreScroll() {
+    if (!this.scrollArea || !this.scrollState) return;
+    this.scrollArea.style.overflow = this.scrollState.overflow;
+    this.scrollArea.scrollTop = this.scrollState.top;
+    this.scrollArea.scrollLeft = this.scrollState.left;
+    this.scrollArea.classList.remove('wordpad__scroll--frozen');
+    this.scrollState = null;
+  }
+
+  private setupResizeHandler() {
+    if (this.overlayResizeHandler) return;
+    this.overlayResizeHandler = () => this.updateOverlayImageSize();
+    window.addEventListener('resize', this.overlayResizeHandler);
+    this.updateOverlayImageSize();
+  }
+
+  private teardownResizeHandler() {
+    if (!this.overlayResizeHandler) return;
+    window.removeEventListener('resize', this.overlayResizeHandler);
+    this.overlayResizeHandler = null;
+  }
+
+  private ensureResizeObserver() {
+    if (this.overlayResizeObserver) return;
+    if (typeof ResizeObserver === 'function') {
+      this.overlayResizeObserver = new ResizeObserver(() => this.updateOverlayImageSize());
+      if (this.scrollArea) {
+        this.overlayResizeObserver.observe(this.scrollArea);
+      }
+    }
+  }
+
+  private teardownResizeObserver() {
+    if (!this.overlayResizeObserver) return;
+    this.overlayResizeObserver.disconnect();
+    this.overlayResizeObserver = null;
+  }
+
+  private updateOverlayImageSize() {
+    if (!this.scrollArea || !this.overlayImage.naturalWidth || !this.overlayImage.naturalHeight) return;
+    const rect = this.scrollArea.getBoundingClientRect();
+    const padFactor = 0.01;
+    const availWidth = Math.max(1, rect.width * (1 - padFactor * 2));
+    const availHeight = Math.max(1, rect.height * (1 - padFactor * 2));
+    const maxScaledWidth = this.overlayImage.naturalWidth * 2;
+    const maxScaledHeight = this.overlayImage.naturalHeight * 2;
+    const widthLimit = Math.min(maxScaledWidth, availWidth);
+    const heightLimit = Math.min(maxScaledHeight, availHeight);
+    const widthScale = widthLimit / this.overlayImage.naturalWidth;
+    const heightScale = heightLimit / this.overlayImage.naturalHeight;
+    const scale = Math.min(widthScale, heightScale, 2);
+    if (!Number.isFinite(scale) || scale <= 0) return;
+    this.overlayImage.style.width = `${this.overlayImage.naturalWidth * scale}px`;
+    this.overlayImage.style.height = `${this.overlayImage.naturalHeight * scale}px`;
   }
 
   private updateStatus() {
@@ -285,6 +453,7 @@ export class WordPad extends AppWindow {
       this.markdownText = text;
       const escaped = escapeHtml(text).replace(/\r?\n/g, '<br/>');
       this.contentArea.innerHTML = `<div class="wordpad__plain">${escaped}</div>`;
+      this.appendImageOverlay();
       this.updateStatus();
       this.updateWindowTitle(`${file.name} - WordPad`);
     };
