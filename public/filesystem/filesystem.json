@@ -829,6 +829,31 @@
         },
         {
           "type": "folder",
+          "name": "2015-09 80W electronic active load",
+          "path": "Electronics/2015-09_80W_electronic_active_load",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "80W Electronic Active Load (translated to english)",
+              "path": "Electronics/2015-09_80W_electronic_active_load/80W Electronic Active Load_(translated_to_english).md",
+              "size": 32762
+            },
+            {
+              "type": "archive",
+              "name": "ActiveLoad",
+              "path": "Electronics/2015-09_80W_electronic_active_load/ActiveLoad.rar",
+              "size": 741642816
+            },
+            {
+              "type": "wordpad",
+              "name": "Электронная активная нагрузка 80Вт (russian)",
+              "path": "Electronics/2015-09_80W_electronic_active_load/Электронная_активная_нагрузка_80Вт_(russian).md",
+              "size": 50450
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2016-09 Dual-channel programmable laboratory power supply",
           "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply",
           "items": [
@@ -1648,6 +1673,32 @@
               "name": "ШИМ управление 12В вентилятором на рассыпухе (russian)",
               "path": "Electronics/2015-05_PWM_control_of_a_12V_fan_using_discrete_components/ШИМ_управление_12В_вентилятором_на_рассыпухе_(russian).md",
               "size": 10397
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2015-09 80W electronic active load",
+          "path": "Electronics/2015-09_80W_electronic_active_load",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "80W Electronic Active Load (translated to english)",
+              "path": "Electronics/2015-09_80W_electronic_active_load/80W Electronic Active Load_(translated_to_english).md",
+              "size": 32762
+            },
+            {
+              "type": "archive",
+              "name": "ActiveLoad",
+              "path": "Electronics/2015-09_80W_electronic_active_load/ActiveLoad.rar",
+              "size": 741642816
+            },
+            {
+              "type": "wordpad",
+              "name": "Электронная активная нагрузка 80Вт (russian)",
+              "path": "Electronics/2015-09_80W_electronic_active_load/Электронная_активная_нагрузка_80Вт_(russian).md",
+              "size": 50450
             }
           ],
           "reference": "Yes"

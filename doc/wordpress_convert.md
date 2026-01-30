@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2016-09_Dual-channel_programmable_laboratory_power_supply\article.md
+[target]=\trunk\public\filesystem\Electronics\2015-09_80W_electronic_active_load\article.md
 
 Read the article [location] fully.
 
