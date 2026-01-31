@@ -241,6 +241,11 @@
   display: block;
 }
 
+.fileexplorer__item-icon svg.octicon-mark-github {
+  width: 24px;
+  height: 24px;
+}
+
 .fileexplorer__item-icon img {
   width: 24.336px;  /* 30.42px * 0.8 */
   height: 24.336px;
@@ -255,6 +260,19 @@
   width: 14px;
   height: 14px;
   pointer-events: none;
+}
+.fileexplorer__item-icon-star {
+  position: absolute;
+  bottom: -1px;
+  right: 1px;
+  width: 27px;
+  height: 27px;
+  pointer-events: none;
+  z-index: 2;
+}
+.fileexplorer__item-icon-star svg {
+  width: 100%;
+  height: 100%;
 }
 
 .fileexplorer__item-name {

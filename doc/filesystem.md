@@ -26,10 +26,11 @@ image?: optional folder image name, without path (f.e. folder_image.jpg)
 desc?: optional description text of the folder
 size: size in bytes for files
 reference: Yes if this file or folder is shortcut. File Explorer will show shortcut icon ot top of normal icon.
+star: true or false
 
 The /public/filesystem/filesystem.json is build automatically with script tools/update_filesystem.py
 
-Script scans public/filesysem directory.
+Script scans public/filesystem directory.
 If folder_image.jpg  is present, it is added to folder item. No file item is created folder_image.jpg.
 If folder.md  is present, its conents are added as "desc". No file item is created folder.md.
 Items are sorted alphabetically by display name during generation. Folders are placed fisrt.
@@ -56,3 +57,8 @@ I folder contains references.txt, it has to be parsed.
 file contains a path to file or folder like "Publications/2013-04_Opto_isolated_AVR910/". Folder reference ends with slash.
 Script should verify if actual folder or file exists and show error if not.
 reference.txt itself is not added to the list.
+
+I folder contains highlight.txt, it has to be parsed.
+in each line file contains a file or folder name in current subfolder. Such files should get "star" : true property.
+Script should verify if actual folder or file exists and show error if not.
+higlhight.txt itself is not added to the list.

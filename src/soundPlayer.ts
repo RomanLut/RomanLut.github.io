@@ -23,9 +23,13 @@ export class SoundPlayer extends AppWindow {
   constructor(desktop: HTMLElement, taskbar: Taskbar, tracks?: SoundTrack[]) {
     super(desktop, taskbar, 'Sound Player', SOUND_ICON);
     this.element.style.width = '660px';
-    this.element.style.height = '280px';
 
     this.tracks = tracks?.length ? tracks : SoundPlayer.defaultTracks();
+    const hasPlaylist = this.tracks.length > 1;
+    this.element.style.height = hasPlaylist ? '512px' : '280px';
+    if (hasPlaylist) {
+      this.element.style.minHeight = '256px';
+    }
 
     const container = document.createElement('div');
     container.className = 'sound';

@@ -23,6 +23,8 @@ import { Notepad } from './notepad';
 import { DosBox } from './dosbox';
 import { Browser } from './browser';
 import { SoundPlayer } from './soundPlayer';
+// star icon for highlighted folders/files
+const STAR_ICON_SVG = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 14.5l1.9 3.8 4.2.6-3 3 0.7 4.1-3.8-2-3.8 2 0.7-4.1-3-3 4.2-.6 1.9-3.8z" stroke="white" stroke-width="3.5" stroke-linejoin="round" fill="white"/><path d="M22 14.5l1.9 3.8 4.2.6-3 3 0.7 4.1-3.8-2-3.8 2 0.7-4.1-3-3 4.2-.6 1.9-3.8z" fill="#f43f5e" stroke="#9f1239" stroke-width="0.8" stroke-linejoin="round"/></svg>`;
 
 const FILE_EXPLORER_ICON = getIconSvg('folder');
 
@@ -290,6 +292,12 @@ export class FileExplorer extends AppWindow {
           ? 'youtube'
           : 'wordpad';
       iconHolder.innerHTML = getIconSvg(iconType);
+      if (item.star) {
+        const starEl = document.createElement('div');
+        starEl.className = 'fileexplorer__item-icon-star';
+        starEl.innerHTML = STAR_ICON_SVG;
+        iconHolder.appendChild(starEl);
+      }
 
       // Add shortcut overlay for reference items
       if (item.reference === 'Yes') {

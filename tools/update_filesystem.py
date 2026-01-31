@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import sys
 import zipfile
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 from urllib.parse import urlparse
 
 
@@ -14,6 +14,7 @@ OUTPUT_FILE = ROOT / "filesystem.json"
 
 # Track reference errors to report at the end
 reference_errors: List[str] = []
+highlight_errors: List[str] = []
 
 
 def display_name(raw: str) -> str:
@@ -93,7 +94,43 @@ def read_references(folder: Path) -> List[str]:
     return paths
 
 
-def build_reference_item(ref_path: str, containing_folder: Path) -> Optional[Dict[str, Any]]:
+def read_highlights(folder: Path) -> Set[str]:
+    highlight_file = folder / "highlight.txt"
+    if not highlight_file.is_file():
+        return set()
+    try:
+        content = highlight_file.read_text(encoding="utf-8").strip()
+    except UnicodeDecodeError:
+        content = highlight_file.read_text(encoding="utf-8", errors="replace").strip()
+
+    highlighted: Set[str] = set()
+    for line in content.splitlines():
+        name = line.strip()
+        if not name:
+            continue
+        normalized = name.rstrip("/")
+        if not normalized:
+            continue
+        target = folder / normalized
+        if not target.exists():
+            highlight_errors.append(
+                f"Highlight error in {folder.relative_to(ROOT)}: '{name}' does not exist"
+            )
+            continue
+        highlighted.add(normalized)
+    return highlighted
+
+
+def apply_star_if_needed(item: Dict[str, Any], entry_name: str, highlight_lower: Set[str]) -> None:
+    if entry_name.lower() in highlight_lower:
+        item["star"] = True
+
+
+def build_reference_item(
+    ref_path: str,
+    containing_folder: Path,
+    highlight_lower: Set[str],
+) -> Optional[Dict[str, Any]]:
     """Build an item for a referenced file or folder."""
     # Remove trailing slash to determine if it's meant to be a folder
     is_folder_ref = ref_path.endswith("/")
@@ -108,17 +145,24 @@ def build_reference_item(ref_path: str, containing_folder: Path) -> Optional[Dic
         )
         return None
 
+    base_name = Path(clean_path).name
+    parent_highlights = {name.lower() for name in read_highlights(target.parent)} if target.parent else set()
+    highlight_sources = highlight_lower | parent_highlights
     if target.is_dir():
         # Build a folder reference - recursively get its contents
         rel_path = Path(clean_path)
         nested = build_folder(target, rel_path)
         if nested:
             nested["reference"] = "Yes"
+            apply_star_if_needed(nested, base_name, highlight_sources)
             return nested
         return None
     else:
         # Build a file reference
-        return build_file_item(target, Path(clean_path), is_reference=True)
+        result = build_file_item(target, Path(clean_path), is_reference=True)
+        if result:
+            apply_star_if_needed(result, base_name, highlight_sources)
+        return result
 
 
 def build_file_item(entry: Path, rel_path: Path, is_reference: bool = False) -> Optional[Dict[str, Any]]:
@@ -166,11 +210,13 @@ def build_file_item(entry: Path, rel_path: Path, is_reference: bool = False) -> 
 
 def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     children: List[Dict[str, Any]] = []
+    highlight_names = read_highlights(folder)
+    highlight_lower = {name.lower() for name in highlight_names}
 
     # Process references from reference.txt
     ref_paths = read_references(folder)
     for ref_path in ref_paths:
-        ref_item = build_reference_item(ref_path, folder)
+        ref_item = build_reference_item(ref_path, folder, highlight_lower)
         if ref_item:
             children.append(ref_item)
 
@@ -191,6 +237,8 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
         # Skip references.txt - it's metadata, not content
         if entry.name == "references.txt":
             continue
+        if entry.name == "highlight.txt":
+            continue
         # Skip folder_image files - they are folder metadata
         if entry.is_file() and entry.stem == "folder_image":
             continue
@@ -200,27 +248,28 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
                 continue
             nested = build_folder(entry, rel_path)
             if nested:
+                apply_star_if_needed(nested, entry.name, highlight_lower)
                 children.append(nested)
         elif entry.suffix.lower() == ".md" and entry.name != "folder.md":
             size = entry.stat().st_size
-            children.append(
-                {
-                    "type": "wordpad",
-                    "name": display_name(entry.name),
-                    "path": rel_path.as_posix(),
-                    "size": size,
-                }
-            )
+            item = {
+                "type": "wordpad",
+                "name": display_name(entry.name),
+                "path": rel_path.as_posix(),
+                "size": size,
+            }
+            apply_star_if_needed(item, entry.name, highlight_lower)
+            children.append(item)
         elif entry.suffix.lower() in {".txt", ".js"}:
             size = entry.stat().st_size
-            children.append(
-                {
-                    "type": "notepad",
-                    "name": display_name(entry.name),
-                    "path": rel_path.as_posix(),
-                    "size": size,
-                }
-            )
+            item = {
+                "type": "notepad",
+                "name": display_name(entry.name),
+                "path": rel_path.as_posix(),
+                "size": size,
+            }
+            apply_star_if_needed(item, entry.name, highlight_lower)
+            children.append(item)
         elif entry.suffix.lower() in archive_exts:
             size = entry.stat().st_size
             archive_item = {
@@ -229,6 +278,7 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
                 "path": rel_path.as_posix(),
                 "size": size,
             }
+            apply_star_if_needed(archive_item, entry.name, highlight_lower)
             # If a zip contains a .jsdos folder, also expose it as an executable item.
             if entry.suffix.lower() == ".zip":
                 has_jsdos = False
@@ -244,6 +294,7 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
                         "path": rel_path.as_posix(),
                         "size": size,
                     }
+                    apply_star_if_needed(exec_item, entry.name, highlight_lower)
                     # Executable should appear before the plain archive entry.
                     children.append(exec_item)
                     children.append(archive_item)
@@ -251,48 +302,48 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
             children.append(archive_item)
         elif entry.suffix.lower() in html_exts:
             size = entry.stat().st_size
-            children.append(
-                {
-                    "type": "html",
-                    "name": display_name(entry.name),
-                    "path": rel_path.as_posix(),
-                    "size": size,
-                }
-            )
+            item = {
+                "type": "html",
+                "name": display_name(entry.name),
+                "path": rel_path.as_posix(),
+                "size": size,
+            }
+            apply_star_if_needed(item, entry.name, highlight_lower)
+            children.append(item)
         elif entry.suffix.lower() == ".url":
             link = read_url_target(entry)
             if not link:
                 continue
             size = entry.stat().st_size
-            children.append(
-                {
-                    "type": classify_external_url(link),
-                    "name": display_name(entry.name),
-                    "path": rel_path.as_posix(),
-                    "size": size,
-                    "url": link,
-                }
-            )
+            item = {
+                "type": classify_external_url(link),
+                "name": display_name(entry.name),
+                "path": rel_path.as_posix(),
+                "size": size,
+                "url": link,
+            }
+            apply_star_if_needed(item, entry.name, highlight_lower)
+            children.append(item)
         elif entry.suffix.lower() in sound_exts:
             size = entry.stat().st_size
-            children.append(
-                {
-                    "type": "sound",
-                    "name": display_name(entry.name),
-                    "path": rel_path.as_posix(),
-                    "size": size,
-                }
-            )
+            item = {
+                "type": "sound",
+                "name": display_name(entry.name),
+                "path": rel_path.as_posix(),
+                "size": size,
+            }
+            apply_star_if_needed(item, entry.name, highlight_lower)
+            children.append(item)
         elif entry.suffix.lower() in image_exts:
             size = entry.stat().st_size
-            children.append(
-                {
-                    "type": "image",
-                    "name": display_name(entry.name),
-                    "path": rel_path.as_posix(),
-                    "size": size,
-                }
-            )
+            item = {
+                "type": "image",
+                "name": display_name(entry.name),
+                "path": rel_path.as_posix(),
+                "size": size,
+            }
+            apply_star_if_needed(item, entry.name, highlight_lower)
+            children.append(item)
     # Sort all children: folders first, then alphabetically by name
     children.sort(key=lambda item: (0 if item['type'] == 'folder' else 1, item['name'].lower()))
     return children
@@ -345,6 +396,11 @@ def main() -> None:
         print("\nReference errors found:", file=sys.stderr)
         for error in reference_errors:
             print(f"  - {error}", file=sys.stderr)
+    if highlight_errors:
+        print("\nHighlight errors found:", file=sys.stderr)
+        for error in highlight_errors:
+            print(f"  - {error}", file=sys.stderr)
+    if reference_errors or highlight_errors:
         sys.exit(1)
 
 

@@ -352,7 +352,8 @@
             }
           ],
           "image": "folder_image.jpg",
-          "desc": "**Fields Of The Nephilims – PC demo**\nPentium-100, DOS, VGA, Sound Blaster\nIdea,Code,Gfx: ├┼AX (Roman Lut), Music: (Eugene Babich)\nBorland pascal 7.0, 8086 Assembler. Source code was lost 🙁\n\nThis demo should have been shown at [Enlight`97](https://www.enlight.ru/enlight/) demo party. Unfortunately, due to technical reasons second day of the party has been canceled, and demo was not shown.\n\nThis was the last demo released by our group. After that I lost interest to demo making and moved to game development.\n\nModern PC is 1000x faster that one used to write an intro. You can execute intro in the emulator by double clicking on MSDOS icon."
+          "desc": "**Fields Of The Nephilims – PC demo**\nPentium-100, DOS, VGA, Sound Blaster\nIdea,Code,Gfx: ├┼AX (Roman Lut), Music: (Eugene Babich)\nBorland pascal 7.0, 8086 Assembler. Source code was lost 🙁\n\nThis demo should have been shown at [Enlight`97](https://www.enlight.ru/enlight/) demo party. Unfortunately, due to technical reasons second day of the party has been canceled, and demo was not shown.\n\nThis was the last demo released by our group. After that I lost interest to demo making and moved to game development.\n\nModern PC is 1000x faster that one used to write an intro. You can execute intro in the emulator by double clicking on MSDOS icon.",
+          "star": true
         },
         {
           "type": "folder",
@@ -373,7 +374,8 @@
             }
           ],
           "image": "folder_image.jpg",
-          "desc": "**Lost In A Cave**\nJavascript 1024 bytes intro.\n**First place at JS1k 2019** [https://js1k.com/2019-x/](https://js1k.com/2019-x/)\n\nDouble click on javascript file to execute.\n\n*Unfortunatelly intro does not work on JS1k website in Chrome anymore due to canvas API changes in Chrome*."
+          "desc": "**Lost In A Cave**\nJavascript 1024 bytes intro.\n**First place at JS1k 2019** [https://js1k.com/2019-x/](https://js1k.com/2019-x/)\n\nDouble click on javascript file to execute.\n\n*Unfortunatelly intro does not work on JS1k website in Chrome anymore due to canvas API changes in Chrome*.",
+          "star": true
         },
         {
           "type": "folder",
@@ -736,7 +738,8 @@
               "path": "Electronics/2013-09_Midi_player_for_AVR/Midi_Player_для_AVR_(russian).md",
               "size": 55049
             }
-          ]
+          ],
+          "star": true
         },
         {
           "type": "folder",
@@ -898,7 +901,8 @@
               "path": "Electronics/2014-09_Digital_control_system_for_a_toy_railway/Оцифровка_игрушечной_железной_дороги_(russian).md",
               "size": 33829
             }
-          ]
+          ],
+          "star": true
         },
         {
           "type": "folder",
@@ -967,7 +971,8 @@
               "path": "Electronics/2015-09_80W_electronic_active_load/Электронная_активная_нагрузка_80Вт_(russian).md",
               "size": 50450
             }
-          ]
+          ],
+          "star": true
         },
         {
           "type": "folder",
@@ -992,14 +997,16 @@
               "path": "Electronics/2016-09_Dual-channel_programmable_laboratory_power_supply/Двухканальный_управляемый_лабораторный_блок_питания_(russian).md",
               "size": 67446
             }
-          ]
+          ],
+          "star": true
         },
         {
           "type": "github",
           "name": "2021-07 hx espnow rc",
           "path": "Electronics/2021-07_hx_espnow_rc.url",
           "size": 40,
-          "url": "https://github.com/RomanLut/hx_espnow_rc"
+          "url": "https://github.com/RomanLut/hx_espnow_rc",
+          "star": true
         },
         {
           "type": "github",
@@ -1060,14 +1067,16 @@
           "name": "2019-06 android-taranis-smartport-telemetry",
           "path": "Hobby_projects/2019-06_android-taranis-smartport-telemetry.url",
           "size": 63,
-          "url": "https://github.com/RomanLut/android-taranis-smartport-telemetry"
+          "url": "https://github.com/RomanLut/android-taranis-smartport-telemetry",
+          "star": true
         },
         {
           "type": "github",
           "name": "2021-07 hx espnow rc",
           "path": "Hobby_projects/2021-07_hx_espnow_rc.url",
           "size": 40,
-          "url": "https://github.com/RomanLut/hx_espnow_rc"
+          "url": "https://github.com/RomanLut/hx_espnow_rc",
+          "star": true
         },
         {
           "type": "github",
@@ -1081,14 +1090,16 @@
           "name": "2022-06 INAV-X-Plane-HITL",
           "path": "Hobby_projects/2022-06_INAV-X-Plane-HITL.url",
           "size": 45,
-          "url": "https://github.com/RomanLut/INAV-X-Plane-HITL"
+          "url": "https://github.com/RomanLut/INAV-X-Plane-HITL",
+          "star": true
         },
         {
           "type": "github",
           "name": "2023-01 hx-esp32-cam-fpv",
           "path": "Hobby_projects/2023-01_hx-esp32-cam-fpv.url",
           "size": 44,
-          "url": "https://github.com/RomanLut/hx-esp32-cam-fpv"
+          "url": "https://github.com/RomanLut/hx-esp32-cam-fpv",
+          "star": true
         },
         {
           "type": "github",
@@ -1336,7 +1347,8 @@
               "path": "Publications/2006-05_M5_Monitoring_Thread_Execution_in_Windows_XP_2000_Applications/Мониторинг_исполнения_потоков_в_приложениях_Windows_XP_2000_(russian).md",
               "size": 43920
             }
-          ]
+          ],
+          "star": true
         },
         {
           "type": "folder",
@@ -1392,7 +1404,8 @@
               "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/Архитектура_современного_3D_движка_(russian).md",
               "size": 29986
             }
-          ]
+          ],
+          "star": true
         },
         {
           "type": "folder",
@@ -1466,7 +1479,8 @@
               "path": "Publications/2008-06_DVD_Streaming/Стриминг_и_эффективное_чтение_с_DVD_диска_(russian).md",
               "size": 31224
             }
-          ]
+          ],
+          "star": true
         },
         {
           "type": "folder",
@@ -1510,7 +1524,8 @@
               "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Внедрение_многопоточного_рендеринга_в_игровой_движок_(russian).md",
               "size": 26982
             }
-          ]
+          ],
+          "star": true
         },
         {
           "type": "folder",
@@ -1658,7 +1673,8 @@
               "size": 55049
             }
           ],
-          "reference": "Yes"
+          "reference": "Yes",
+          "star": true
         },
         {
           "type": "folder",
@@ -1826,7 +1842,8 @@
               "size": 33829
             }
           ],
-          "reference": "Yes"
+          "reference": "Yes",
+          "star": true
         },
         {
           "type": "folder",
@@ -1878,7 +1895,8 @@
               "size": 50450
             }
           ],
-          "reference": "Yes"
+          "reference": "Yes",
+          "star": true
         },
         {
           "type": "folder",
@@ -1904,7 +1922,8 @@
               "size": 67446
             }
           ],
-          "reference": "Yes"
+          "reference": "Yes",
+          "star": true
         },
         {
           "type": "folder",
@@ -1927,7 +1946,8 @@
             }
           ],
           "image": "folder_image.jpg",
-          "desc": "This folder contains materials from the lecture “Physics in Video Games,” delivered to students of Class 9-V at Physics and Mathematics Lyceum No. 145 in Kyiv."
+          "desc": "This folder contains materials from the lecture “Physics in Video Games,” delivered to students of Class 9-V at Physics and Mathematics Lyceum No. 145 in Kyiv.",
+          "star": true
         }
       ],
       "image": "folder_image.jpg",
