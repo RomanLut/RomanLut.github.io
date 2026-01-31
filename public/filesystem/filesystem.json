@@ -7,14 +7,27 @@
       "items": [
         {
           "type": "folder",
-          "name": "DIY CNC1",
-          "path": "CNC/DIY_CNC1",
+          "name": "2008-05 DIY CNC1",
+          "path": "CNC/2008-05_DIY_CNC1",
           "items": [
             {
               "type": "wordpad",
               "name": "DIY CNC1",
-              "path": "CNC/DIY_CNC1/DIY_CNC1.md",
+              "path": "CNC/2008-05_DIY_CNC1/DIY_CNC1.md",
               "size": 2259
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "2008-06 3 axis STEP DIR controller",
+          "path": "CNC/2008-06_3_axis_STEP_DIR_controller",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "3 axis STEP-DIR controller",
+              "path": "CNC/2008-06_3_axis_STEP_DIR_controller/3_axis_STEP-DIR_controller.md",
+              "size": 6078
             }
           ]
         }

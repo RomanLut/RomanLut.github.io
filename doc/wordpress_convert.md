@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2015-09_80W_electronic_active_load\article.md
+[target]=\trunk\public\filesystem\Electronics\2008-06_3_axis_STEP_DIR_controller\article.md
 
 Read the article [location] fully.
 
@@ -25,7 +25,7 @@ Apply nice styling  - heading, indentation in .md file.
 
 Do not install aditional nodejs/python packages.
 
-Double check result.
+Double check result - check that iages has been copied to /images.
 
 
 
