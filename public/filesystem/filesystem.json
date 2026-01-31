@@ -1974,9 +1974,21 @@
     },
     {
       "type": "wordpad",
-      "name": "About me",
-      "path": "About_me.md",
+      "name": "About me Roman Lut",
+      "path": "About_me_Roman_Lut.md",
       "size": 988
+    },
+    {
+      "type": "wordpad",
+      "name": "Competitions and Events",
+      "path": "Competitions_and_Events.md",
+      "size": 91
+    },
+    {
+      "type": "wordpad",
+      "name": "Resume Roman Lut",
+      "path": "Resume_Roman_Lut.md",
+      "size": 19
     }
   ]
 }

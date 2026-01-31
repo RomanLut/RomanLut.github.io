@@ -23,6 +23,13 @@ export class Desktop {
 
     this.taskbar = new Taskbar();
     this.element.appendChild(this.taskbar.element);
+    const creditEl = document.createElement('div');
+    creditEl.className = 'desktop__credit';
+    creditEl.innerHTML = `
+      <span>Roman Lut AKA hax</span>
+      <span>Personal Page</span>
+    `;
+    this.element.appendChild(creditEl);
 
     this.spawnIcons();
 
@@ -201,11 +208,16 @@ export class Desktop {
 
   private spawnIcons() {
     //new DesktopIcon(this.element, 'notepad', 'Notepad', { x: 16, y: 136 });
-    new DesktopIcon(this.element, 'word', 'About me', { x: 16, y: 16 }, () =>
-      this.openWordPadFromDesktop('/filesystem/About_me.md', 'About me')
+    new DesktopIcon(this.element, 'word', 'About me Roman Lut', { x: 16, y: 16 }, () =>
+      this.openWordPadFromDesktop('/filesystem/About_me_Roman_Lut.md', 'About me Roman Lut')
     );
-    new DesktopIcon(this.element, 'word', 'Resume', { x: 120, y: 16 });
-    new DesktopIcon(this.element, 'word', 'Competitions and Events', { x: 120 + 200, y: 16 });
+    new DesktopIcon(this.element, 'word', 'Resume Roman Lut', { x: 120, y: 16 }, () =>
+      this.openWordPadFromDesktop('/filesystem/Resume_Roman_Lut.md', 'Resume me Roman Lut')
+    );
+
+    new DesktopIcon(this.element, 'word', 'Competitions and Events', { x: 120 + 200, y: 16 }, () =>
+      this.openWordPadFromDesktop('/filesystem/Competitions_and_Events.md', 'Competitions and Events')
+    );
 
     new DesktopIcon(this.element, 'folder', 'Game development', { x: 16, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Game_development')
@@ -246,6 +258,11 @@ export class Desktop {
             title: 'Suno AI track',
             detail: 'Streaming mp3',
             url: 'https://cdn1.suno.ai/0b88c092-f093-4486-aac8-94b035118c4d.mp3'
+          },
+          {
+            title: 'Suno AI track',
+            detail: 'Streaming m4a',
+            url: 'https://cdn1.suno.ai/71e3cc03-f01b-49c9-b1bd-3dc76c1095ed.m4a'
           }
         ])
     );

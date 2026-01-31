@@ -15,3 +15,22 @@
   pointer-events: none;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
 }
+
+.pc .desktop__credit {
+  position: absolute;
+  right: 18px;
+  bottom: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  opacity: 0.25;
+  z-index: 1600;
+  pointer-events: none;
+}
+
+.pc .desktop__credit span + span {
+  font-weight: 600;
+}
