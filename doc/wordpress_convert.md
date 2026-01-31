@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Electronics\2008-06_3_axis_STEP_DIR_controller\article.md
+[target]=\trunk\public\filesystem\Electronics\2009-06_DIY_CNC_2\article.md
 
 Read the article [location] fully.
 

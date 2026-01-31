@@ -28,6 +28,25 @@
               "name": "3 axis STEP-DIR controller",
               "path": "CNC/2008-06_3_axis_STEP_DIR_controller/3_axis_STEP-DIR_controller.md",
               "size": 6078
+            },
+            {
+              "type": "archive",
+              "name": "3axis controller",
+              "path": "CNC/2008-06_3_axis_STEP_DIR_controller/3axis_controller.zip",
+              "size": 337147
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "2009-06 DIY CNC 2",
+          "path": "CNC/2009-06_DIY_CNC_2",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "DIY CNC 2",
+              "path": "CNC/2009-06_DIY_CNC_2/DIY_CNC_2.md",
+              "size": 2055
             }
           ]
         }
