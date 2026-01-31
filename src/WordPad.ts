@@ -339,11 +339,17 @@ export class WordPad extends AppWindow {
       const parsed = new URL(url, window.location.origin);
       if (parsed.origin !== window.location.origin) return null;
       const pathname = parsed.pathname || '';
-      const lowerPath = pathname.toLowerCase();
       const prefix = '/filesystem/';
-      if (!lowerPath.startsWith(prefix)) return null;
-      if (!lowerPath.endsWith('.md')) return null;
-      return pathname.slice(prefix.length);
+      const lowerPath = pathname.toLowerCase();
+      if (lowerPath.startsWith(prefix) && lowerPath.endsWith('.md')) {
+        return pathname.slice(prefix.length);
+      }
+      const fileParam = parsed.searchParams.get('file') || '';
+      const decoded = decodeURIComponent(fileParam);
+      if (decoded && decoded.toLowerCase().endsWith('.md')) {
+        return decoded.replace(/^\/+/, '');
+      }
+      return null;
     } catch {
       return null;
     }
