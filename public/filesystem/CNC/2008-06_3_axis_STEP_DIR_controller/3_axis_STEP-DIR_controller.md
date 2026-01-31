@@ -1,6 +1,6 @@
 # 3 axis STEP-DIR controller
 
-I designed 3 axis STEP-DIR unipolar stepper motor controller for [my CNC](/filesystem/CNC/2008-05_DIY_CNC1\DIY_CNC1.md).
+I designed 3 axis STEP-DIR unipolar stepper motor controller for [my CNC](/?start=2&folder=CNC%2F2008-06_3_axis_STEP_DIR_controller&file=CNC%2F2008-05_DIY_CNC1%2FDIY_CNC1.md).
 
 The controller is based on ATTiny2313 micro-controller and custom firmware. Schematic is given below:
 

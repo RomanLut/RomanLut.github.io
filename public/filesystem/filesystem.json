@@ -27,7 +27,7 @@
               "type": "wordpad",
               "name": "3 axis STEP-DIR controller",
               "path": "CNC/2008-06_3_axis_STEP_DIR_controller/3_axis_STEP-DIR_controller.md",
-              "size": 6078
+              "size": 6133
             },
             {
               "type": "archive",
@@ -46,11 +46,44 @@
               "type": "wordpad",
               "name": "DIY CNC 2",
               "path": "CNC/2009-06_DIY_CNC_2/DIY_CNC_2.md",
-              "size": 2055
+              "size": 1975
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "2013-09 4 axis STEP-DIR controller 2",
+          "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "4 axis STEP-DIR controller",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/4_axis_STEP-DIR_controller.md",
+              "size": 20630
+            },
+            {
+              "type": "wordpad",
+              "name": "4 axis STEP-DIR контроллер шаговых двигателей 2",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/4_axis_STEP-DIR_контроллер_шаговых_двигателей_2.md",
+              "size": 32280
+            },
+            {
+              "type": "archive",
+              "name": "CNCContoller2 schematics",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/CNCContoller2_schematics.zip",
+              "size": 181101
+            },
+            {
+              "type": "archive",
+              "name": "CNCController2 src",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/CNCController2_src.zip",
+              "size": 17290
             }
           ]
         }
-      ]
+      ],
+      "image": "folder_image.jpg",
+      "desc": "During my involvement with CNC, I built two milling machines and developed controllers for them."
     },
     {
       "type": "folder",
@@ -115,7 +148,7 @@
             }
           ],
           "image": "folder_image.png",
-          "desc": "**Mbrot**\n32k intro. Zooming into Mundelbrot fractal in realtime, music.\n80286, DOS, VGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nTurbo Pascal 5.0, 8086 Assembler\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in the emulator by double clicking on MSDOS icon."
+          "desc": "**Mbrot**\n32k intro. Zooming into Mandelbrot fractal in realtime, music.\n80286, DOS, VGA, Adlib\nIdea,Code,Gfx: ├┼AX (Roman Lut)\nMusic: unknown\nTurbo Pascal 5.0, 8086 Assembler\nModern PC is 1000x faster that one used to write an intro. \nYou can execute intro in the emulator by double clicking on MSDOS icon."
         },
         {
           "type": "folder",
@@ -472,6 +505,26 @@
         },
         {
           "type": "folder",
+          "name": "2008-06 3 axis STEP DIR controller",
+          "path": "CNC/2008-06_3_axis_STEP_DIR_controller",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "3 axis STEP-DIR controller",
+              "path": "CNC/2008-06_3_axis_STEP_DIR_controller/3_axis_STEP-DIR_controller.md",
+              "size": 6133
+            },
+            {
+              "type": "archive",
+              "name": "3axis controller",
+              "path": "CNC/2008-06_3_axis_STEP_DIR_controller/3axis_controller.zip",
+              "size": 337147
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
           "name": "2009-02 Adding LED light to jigsaw",
           "path": "Electronics/2009-02_Adding_LED_light_to_jigsaw",
           "items": [
@@ -630,25 +683,57 @@
         },
         {
           "type": "folder",
-          "name": "2013-09 Midi player forAVR",
-          "path": "Electronics/2013-09_Midi_player_forAVR",
+          "name": "2013-09 4 axis STEP-DIR controller 2",
+          "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "4 axis STEP-DIR controller",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/4_axis_STEP-DIR_controller.md",
+              "size": 20630
+            },
+            {
+              "type": "wordpad",
+              "name": "4 axis STEP-DIR контроллер шаговых двигателей 2",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/4_axis_STEP-DIR_контроллер_шаговых_двигателей_2.md",
+              "size": 32280
+            },
+            {
+              "type": "archive",
+              "name": "CNCContoller2 schematics",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/CNCContoller2_schematics.zip",
+              "size": 181101
+            },
+            {
+              "type": "archive",
+              "name": "CNCController2 src",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/CNCController2_src.zip",
+              "size": 17290
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2013-09 Midi player for AVR",
+          "path": "Electronics/2013-09_Midi_player_for_AVR",
           "items": [
             {
               "type": "archive",
               "name": "AVRMusic",
-              "path": "Electronics/2013-09_Midi_player_forAVR/AVRMusic.rar",
+              "path": "Electronics/2013-09_Midi_player_for_AVR/AVRMusic.rar",
               "size": 3041918
             },
             {
               "type": "wordpad",
               "name": "Midi Player for AVR (translated to english)",
-              "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_for_AVR_(translated_to_english).md",
+              "path": "Electronics/2013-09_Midi_player_for_AVR/Midi_Player_for_AVR_(translated_to_english).md",
               "size": 34081
             },
             {
               "type": "wordpad",
               "name": "Midi Player для AVR (russian)",
-              "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_для_AVR_(russian).md",
+              "path": "Electronics/2013-09_Midi_player_for_AVR/Midi_Player_для_AVR_(russian).md",
               "size": 55049
             }
           ]
@@ -908,6 +993,20 @@
               "size": 67446
             }
           ]
+        },
+        {
+          "type": "github",
+          "name": "2021-07 hx espnow rc",
+          "path": "Electronics/2021-07_hx_espnow_rc.url",
+          "size": 40,
+          "url": "https://github.com/RomanLut/hx_espnow_rc"
+        },
+        {
+          "type": "github",
+          "name": "2021-07 Multiwii ESP32 port",
+          "path": "Electronics/2021-07_Multiwii_ESP32_port.url",
+          "size": 47,
+          "url": "https://github.com/RomanLut/Multiwii-ESP32-port"
         }
       ],
       "image": "folder_image.jpg",
@@ -972,6 +1071,13 @@
         },
         {
           "type": "github",
+          "name": "2022 05 Mavic Mini Controller As Gamepad",
+          "path": "Hobby_projects/2022_05_Mavic_Mini_Controller_As_Gamepad.url",
+          "size": 56,
+          "url": "https://github.com/RomanLut/MavicMiniControllerAsGamepad"
+        },
+        {
+          "type": "github",
           "name": "2022-06 INAV-X-Plane-HITL",
           "path": "Hobby_projects/2022-06_INAV-X-Plane-HITL.url",
           "size": 45,
@@ -983,6 +1089,13 @@
           "path": "Hobby_projects/2023-01_hx-esp32-cam-fpv.url",
           "size": 44,
           "url": "https://github.com/RomanLut/hx-esp32-cam-fpv"
+        },
+        {
+          "type": "github",
+          "name": "2025 11 VCD viewer",
+          "path": "Hobby_projects/2025_11_VCD_viewer.url",
+          "size": 39,
+          "url": "https://github.com/RomanLut/hxVCDViewer"
         }
       ],
       "image": "folder_image.jpg",
@@ -1491,25 +1604,57 @@
         },
         {
           "type": "folder",
-          "name": "2013-09 Midi player forAVR",
-          "path": "Electronics/2013-09_Midi_player_forAVR",
+          "name": "2013-09 4 axis STEP-DIR controller 2",
+          "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "4 axis STEP-DIR controller",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/4_axis_STEP-DIR_controller.md",
+              "size": 20630
+            },
+            {
+              "type": "wordpad",
+              "name": "4 axis STEP-DIR контроллер шаговых двигателей 2",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/4_axis_STEP-DIR_контроллер_шаговых_двигателей_2.md",
+              "size": 32280
+            },
+            {
+              "type": "archive",
+              "name": "CNCContoller2 schematics",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/CNCContoller2_schematics.zip",
+              "size": 181101
+            },
+            {
+              "type": "archive",
+              "name": "CNCController2 src",
+              "path": "CNC/2013-09_4_axis_STEP-DIR_controller_2/CNCController2_src.zip",
+              "size": 17290
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2013-09 Midi player for AVR",
+          "path": "Electronics/2013-09_Midi_player_for_AVR",
           "items": [
             {
               "type": "archive",
               "name": "AVRMusic",
-              "path": "Electronics/2013-09_Midi_player_forAVR/AVRMusic.rar",
+              "path": "Electronics/2013-09_Midi_player_for_AVR/AVRMusic.rar",
               "size": 3041918
             },
             {
               "type": "wordpad",
               "name": "Midi Player for AVR (translated to english)",
-              "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_for_AVR_(translated_to_english).md",
+              "path": "Electronics/2013-09_Midi_player_for_AVR/Midi_Player_for_AVR_(translated_to_english).md",
               "size": 34081
             },
             {
               "type": "wordpad",
               "name": "Midi Player для AVR (russian)",
-              "path": "Electronics/2013-09_Midi_player_forAVR/Midi_Player_для_AVR_(russian).md",
+              "path": "Electronics/2013-09_Midi_player_for_AVR/Midi_Player_для_AVR_(russian).md",
               "size": 55049
             }
           ],
@@ -1760,6 +1905,29 @@
             }
           ],
           "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2020-05 Physics in games",
+          "path": "Publications/2020-05_Physics_in_games",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Physics in games (russian)",
+              "path": "Publications/2020-05_Physics_in_games/Physics_in_games_(russian).url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=hmn1ty1lJTQ"
+            },
+            {
+              "type": "github",
+              "name": "Physics in games src",
+              "path": "Publications/2020-05_Physics_in_games/Physics_in_games_src.url",
+              "size": 48,
+              "url": "https://github.com/RomanLut/physicsInGamesLesson"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "This folder contains materials from the lecture “Physics in Video Games,” delivered to students of Class 9-V at Physics and Mathematics Lyceum No. 145 in Kyiv."
         }
       ],
       "image": "folder_image.jpg",
@@ -1808,7 +1976,7 @@
       "type": "wordpad",
       "name": "About me",
       "path": "About_me.md",
-      "size": 987
+      "size": 988
     }
   ]
 }

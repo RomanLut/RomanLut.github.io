@@ -11,12 +11,12 @@ I maintain multiple open-source projects on Github.
 Working at a game development company leaves little free time. Nevertheless, I still dedicate several hours each week to my hobby projects.
 
 Current interests:
-- Game design
+- Game engines
 - Embedded programming and microcontrollers
 - LLMs and AI automation
 - RC planes
-- Robotics
 - DIY electronics
+- Robotics
 
 Former interests:
 - 3D graphics engine programming

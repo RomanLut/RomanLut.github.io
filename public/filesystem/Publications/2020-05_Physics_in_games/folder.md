@@ -1,0 +1,1 @@
+This folder contains materials from the lecture “Physics in Video Games,” delivered to students of Class 9-V at Physics and Mathematics Lyceum No. 145 in Kyiv.

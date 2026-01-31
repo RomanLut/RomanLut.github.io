@@ -1,0 +1,1 @@
+During my involvement with CNC, I built two milling machines and developed controllers for them.

@@ -1,5 +1,5 @@
 **Mbrot**
-32k intro. Zooming into Mundelbrot fractal in realtime, music.
+32k intro. Zooming into Mandelbrot fractal in realtime, music.
 80286, DOS, VGA, Adlib
 Idea,Code,Gfx: ├┼AX (Roman Lut)
 Music: unknown
