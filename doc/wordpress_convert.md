@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\CNC\2013-09_DIY_CNC_2\article.md
+[target]=\trunk\public\filesystem\Hobby_projects\2003-08_ReadManiac\article.md
 
 Read the article [location] fully.
 

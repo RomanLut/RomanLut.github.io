@@ -1063,6 +1063,39 @@
       "path": "Hobby_projects",
       "items": [
         {
+          "type": "folder",
+          "name": "2003-08 ReadManiac",
+          "path": "Hobby_projects/2003-08_ReadManiac",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "ReadManiac",
+              "path": "Hobby_projects/2003-08_ReadManiac/ReadManiac.md",
+              "size": 1993
+            },
+            {
+              "type": "archive",
+              "name": "ReadManiac site backup",
+              "path": "Hobby_projects/2003-08_ReadManiac/ReadManiac_site_backup.rar",
+              "size": 2292280
+            },
+            {
+              "type": "archive",
+              "name": "ReadManiac SRC",
+              "path": "Hobby_projects/2003-08_ReadManiac/ReadManiac_SRC.zip",
+              "size": 31661752
+            },
+            {
+              "type": "archive",
+              "name": "ReadManiacSetup",
+              "path": "Hobby_projects/2003-08_ReadManiac/ReadManiacSetup.zip",
+              "size": 4146976
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**ReadManiac**\n\n**Date:** 2003-2006  \n**Platform:** JAVA-enabled phones (J2ME MIDP1.0, 2.0)  \n**Language:** J2ME, Delphi\n\nIn 2002, mobile phones became capable of running small Java applications.\nNaturally, I couldn’t miss the opportunity to create software for mobile devices. When the first Java-enabled phones appeared on the market, I bought an “early bird” Siemens SL42 and began developing a book reader application.\nReadManiac is a book reader MIDlet for mobile phones. It allows users to search, download, and read books on virtually any Java-enabled device.\nThe first version was compatible only with the SL42, but it quickly evolved into a large, full-featured, and user-friendly application that supported most J2ME-enabled phones.\n**In 2006, ReadManiac won 3rd place in the JavaKonkurs competition, sponsored by Sun Microsystems.**\nToday, the era of Java-enabled phones has ended. This folder contains an archive of the ReadManiac installation files, source code, and website."
+        },
+        {
           "type": "github",
           "name": "2019-06 android-taranis-smartport-telemetry",
           "path": "Hobby_projects/2019-06_android-taranis-smartport-telemetry.url",
