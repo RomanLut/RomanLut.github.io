@@ -4,7 +4,7 @@ import { AppWindowMenu, type MenuItem } from './appWindowMenu';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { Browser } from './browser';
 import { SoundPlayer } from './soundPlayer';
-import { applyInline, closeMenus, escapeHtml, inlineImages, isDownloadUrl, markdownToHtml, responsiveWidth, responsiveHeight, navigateToUrl, setFileParam } from './util';
+import { applyInline, closeMenus, escapeHtml, inlineImages, filesystemUrl, isDownloadUrl, markdownToHtml, normalizeFsPath, responsiveWidth, responsiveHeight, navigateToUrl, setFileParam } from './util';
 
 const WORDPAD_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true">
   <rect x="4" y="3" width="16" height="18" rx="2" fill="#ffffff" stroke="#d0d6e0" stroke-width="1"/>
@@ -311,6 +311,14 @@ export class WordPad extends AppWindow {
     event.preventDefault();
     event.stopPropagation();
     const url = hrefAttr || link.href;
+    const localMarkdown = this.getLocalMarkdownPath(url);
+    if (localMarkdown) {
+      const normalizedPath = normalizeFsPath(localMarkdown);
+      const targetUrl = filesystemUrl(normalizedPath);
+      setFileParam(normalizedPath);
+      new WordPad(this.desktopRef, this.taskbarRef, targetUrl);
+      return;
+    }
     if (hrefAttr.toLowerCase().endsWith('.ogg')) {
       const filename = hrefAttr.split('/').pop() || 'Audio';
       new SoundPlayer(this.desktopRef, this.taskbarRef, [{ title: filename, url: hrefAttr }]);
@@ -323,6 +331,21 @@ export class WordPad extends AppWindow {
       document.body.removeChild(a);
     } else {
       navigateToUrl(this.desktopRef, this.taskbarRef, url);
+    }
+  }
+
+  private getLocalMarkdownPath(url: string): string | null {
+    try {
+      const parsed = new URL(url, window.location.origin);
+      if (parsed.origin !== window.location.origin) return null;
+      const pathname = parsed.pathname || '';
+      const lowerPath = pathname.toLowerCase();
+      const prefix = '/filesystem/';
+      if (!lowerPath.startsWith(prefix)) return null;
+      if (!lowerPath.endsWith('.md')) return null;
+      return pathname.slice(prefix.length);
+    } catch {
+      return null;
     }
   }
 
