@@ -22,7 +22,7 @@ Each item, can have the following properties:
 type: folder, wordpad, notepad, archive, executable, html, sound, image, youtube, github
 name: displayed name
 path: path inside /filesystem folder
-image?: optional folder image name, without path (f.e. folder_image.jpg)
+image?: optional folder image name, without path (e.g. folder_image.jpg, folder_image.png, folder_image.gif)
 desc?: optional description text of the folder
 size: size in bytes for files
 reference: Yes if this file or folder is shortcut. File Explorer will show shortcut icon ot top of normal icon.
@@ -31,7 +31,7 @@ star: true or false
 The /public/filesystem/filesystem.json is build automatically with script tools/update_filesystem.py
 
 Script scans public/filesystem directory.
-If folder_image.jpg  is present, it is added to folder item. No file item is created folder_image.jpg.
+If folder_image.jpg, folder_image.png, folder_image.gif or folder_image.webp is present, it becomes the folder image. No file item is created for folder_image.*.
 If folder.md  is present, its conents are added as "desc". No file item is created folder.md.
 Items are sorted alphabetically by display name during generation. Folders are placed fisrt.
 
@@ -62,3 +62,6 @@ I folder contains highlight.txt, it has to be parsed.
 in each line file contains a file or folder name in current subfolder. Such files should get "star" : true property.
 Script should verify if actual folder or file exists and show error if not.
 higlhight.txt itself is not added to the list.
+
+ignore.txt In each line file contains a file or folder name in current subfolder that must be excluded from the generated list.
+Script should ignore those entries when building the filesystem tree; ignore.txt itself is not added to the list.

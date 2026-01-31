@@ -35,7 +35,7 @@ def read_desc(folder: Path) -> Optional[str]:
 
 
 def find_folder_image(folder: Path) -> Optional[str]:
-    for ext in (".jpg", ".jpeg", ".png", ".webp"):
+    for ext in (".jpg", ".jpeg", ".png", ".gif", ".webp"):
         candidate = folder / f"folder_image{ext}"
         if candidate.is_file():
             return candidate.name
@@ -119,6 +119,22 @@ def read_highlights(folder: Path) -> Set[str]:
             continue
         highlighted.add(normalized)
     return highlighted
+
+
+def read_ignore(folder: Path) -> Set[str]:
+    ignore_file = folder / "ignore.txt"
+    if not ignore_file.is_file():
+        return set()
+    try:
+        content = ignore_file.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        content = ignore_file.read_text(encoding="utf-8", errors="replace")
+    ignored: Set[str] = set()
+    for line in content.splitlines():
+        name = line.strip()
+        if name:
+            ignored.add(name)
+    return ignored
 
 
 def apply_star_if_needed(item: Dict[str, Any], entry_name: str, highlight_lower: Set[str]) -> None:
@@ -212,6 +228,8 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     children: List[Dict[str, Any]] = []
     highlight_names = read_highlights(folder)
     highlight_lower = {name.lower() for name in highlight_names}
+    ignore_names = read_ignore(folder)
+    ignore_lower = {name.lower() for name in ignore_names}
 
     # Process references from reference.txt
     ref_paths = read_references(folder)
@@ -238,6 +256,10 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
         if entry.name == "references.txt":
             continue
         if entry.name == "highlight.txt":
+            continue
+        if entry.name == "ignore.txt":
+            continue
+        if entry.name.lower() in ignore_lower:
             continue
         # Skip folder_image files - they are folder metadata
         if entry.is_file() and entry.stem == "folder_image":

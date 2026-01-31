@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Hobby_projects\2003-08_ReadManiac\article.md
+[target]=\trunk\public\filesystem\Hobby_projects\Hobby_projects\2012_04_Asus_Oplay_IPTVList_module\IPTVList.md
 
 Read the article [location] fully.
 

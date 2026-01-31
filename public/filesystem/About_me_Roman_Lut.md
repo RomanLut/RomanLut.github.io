@@ -27,3 +27,5 @@ Former interests:
 - Demo design
 
 While reviewing my hobby projects, I realized that I had lost a significant amount of source code over the years. To prevent this from happening again, I decided to create this archive.
+
+Technologies evolve rapidly, and many materials on this site are now outdated. Materials that are still relevant or that demonstrate my skills are marked with a red star.

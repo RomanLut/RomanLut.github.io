@@ -1071,7 +1071,7 @@
               "type": "wordpad",
               "name": "ReadManiac",
               "path": "Hobby_projects/2003-08_ReadManiac/ReadManiac.md",
-              "size": 1993
+              "size": 2196
             },
             {
               "type": "archive",
@@ -1094,6 +1094,133 @@
           ],
           "image": "folder_image.jpg",
           "desc": "**ReadManiac**\n\n**Date:** 2003-2006  \n**Platform:** JAVA-enabled phones (J2ME MIDP1.0, 2.0)  \n**Language:** J2ME, Delphi\n\nIn 2002, mobile phones became capable of running small Java applications.\nNaturally, I couldn’t miss the opportunity to create software for mobile devices. When the first Java-enabled phones appeared on the market, I bought an “early bird” Siemens SL42 and began developing a book reader application.\nReadManiac is a book reader MIDlet for mobile phones. It allows users to search, download, and read books on virtually any Java-enabled device.\nThe first version was compatible only with the SL42, but it quickly evolved into a large, full-featured, and user-friendly application that supported most J2ME-enabled phones.\n**In 2006, ReadManiac won 3rd place in the JavaKonkurs competition, sponsored by Sun Microsystems.**\nToday, the era of Java-enabled phones has ended. This folder contains an archive of the ReadManiac installation files, source code, and website."
+        },
+        {
+          "type": "folder",
+          "name": "2005-10 Using webcamera as virtual graphics tablet",
+          "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Using webcamera as virtual graphics tablet (translated to english)",
+              "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet_(translated_to_english).md",
+              "size": 14362
+            },
+            {
+              "type": "archive",
+              "name": "VTablet 0507",
+              "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet/VTablet_0507.rar",
+              "size": 65481851
+            },
+            {
+              "type": "wordpad",
+              "name": "Изготавливаем графический планшет из вебкамеры своими руками (russian)",
+              "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet/Изготавливаем_графический_планшет_из_вебкамеры_своими_руками_(russian).md",
+              "size": 23846
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
+          "type": "folder",
+          "name": "2006-01 3D Ripper DX",
+          "path": "Hobby_projects/2006-01_3D_Ripper_DX",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "3D Ripper DX",
+              "path": "Hobby_projects/2006-01_3D_Ripper_DX/3D_Ripper_DX.md",
+              "size": 10956
+            },
+            {
+              "type": "archive",
+              "name": "3DRipperDXSetup",
+              "path": "Hobby_projects/2006-01_3D_Ripper_DX/3DRipperDXSetup.zip",
+              "size": 2038399
+            }
+          ],
+          "image": "folder_image.gif",
+          "desc": "**3D Ripper DX**\n\n**Date:** 2006\n**Platform:** Windows\n**Language:** C++, Assembly\n\n3D Ripper DX captures frame geometry, textures, and shaders from DirectX 6.0-9.0 applications by intercepting DirectX API calls.\n\nThe complete frame geometry is reconstructed and imported into 3ds Max, allowing rendered scenes to be inspected and analyzed in detail.\n\nOriginally designed as an analysis and debugging tool for programmers, it unexpectedly gained widespread popularity among 3D artists due to its ability to reconstruct full scenes inside 3ds Max.\n\n**Note: This project has not been maintained since 2010 due to a lack of interest. It requires Windows XP to run. Because it uses aggressive code injection techniques, it may be falsely flagged as malware by antivirus software.**"
+        },
+        {
+          "type": "folder",
+          "name": "2007-07 HXGRID Distibuted Computing Library",
+          "path": "Hobby_projects/2007-07_HXGRID_Distibuted_Computing_Library",
+          "items": [
+            {
+              "type": "folder",
+              "name": "2007-07 hxGrid Distributed Computing In Small Office",
+              "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office",
+              "items": [
+                {
+                  "type": "wordpad",
+                  "name": "Distributed Computing in Small and Medium Offices (translated to english)",
+                  "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/Distributed_Computing_in_Small_and_Medium_Offices_(translated_to_english).md",
+                  "size": 27725
+                },
+                {
+                  "type": "archive",
+                  "name": "hxgrid agent setup",
+                  "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/hxgrid_agent_setup.zip",
+                  "size": 572298
+                },
+                {
+                  "type": "archive",
+                  "name": "hxgrid ATI NormalMapper setup",
+                  "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/hxgrid_ATI_NormalMapper_setup.zip",
+                  "size": 1914722
+                },
+                {
+                  "type": "archive",
+                  "name": "hxgrid coordinator setup",
+                  "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/hxgrid_coordinator_setup.zip",
+                  "size": 525362
+                },
+                {
+                  "type": "archive",
+                  "name": "hxgrid src",
+                  "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/hxgrid_src.7z",
+                  "size": 9957146
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Распределённые вычисления в малом и среднем офисе (russian)",
+                  "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/Распределённые_вычисления_в_малом_и_среднем_офисе_(russian).md",
+                  "size": 43927
+                }
+              ],
+              "reference": "Yes"
+            },
+            {
+              "type": "html",
+              "name": "hxGrid and Distributed ATI Normalmapper",
+              "path": "Hobby_projects/2007-07_HXGRID_Distibuted_Computing_Library/hxGrid_and_Distributed_ATI_Normalmapper.html",
+              "size": 24364
+            }
+          ],
+          "image": "folder_image.png",
+          "desc": "**hxGrid**\n\n**Date**: 2007\n**Platform**: Windows\n**Language**: Delphi, C++\n\n**hxGrid** is a distributed computing library designed for small office environments. It enables the transparent use of idle processing time on Windows XP, Vista, and Windows 7 workstations, without interfering with normal user activity.\n\nThe **ATI NormalMapper** tool was adapted for hxGrid, resulting in up to a 20x performance improvement. The library was also used in the **xNormal** tool (http://www.xnormal.net/\n).\n\n**hxGrid** is written in Delphi and can be used from both Delphi and C++, with example projects included.\n\nThe library is known to have been used by several game development companies to distribute and accelerate game level compilation tasks.\n\n*Note: This project is no longer maintained due to a lack of interest.*"
+        },
+        {
+          "type": "folder",
+          "name": "2012 04 Asus Oplay IPTVList module",
+          "path": "Hobby_projects/2012_04_Asus_Oplay_IPTVList_module",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "IPTVList",
+              "path": "Hobby_projects/2012_04_Asus_Oplay_IPTVList_module/IPTVList.md",
+              "size": 40928
+            },
+            {
+              "type": "archive",
+              "name": "iptvlist src",
+              "path": "Hobby_projects/2012_04_Asus_Oplay_IPTVList_module/iptvlist_src.rar",
+              "size": 2003608
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**IPTVList**\n\n**Date:** 2012\n**Platform:** Asus O!Play media player\n**Language:** xTreamer RSS\n\nModule for **Asus O!Play** media player. It turns **Asus O!Play** into **IPTV player**.\n\nThis is an IPTV playlist with a modern, user-friendly interface, easy navigation, and support for recording TV programs. The GUI is styled after the PlayOn! firmware skin.\n\n[Discussion thread on moservices.org forums](https://moservices.org/forum/viewtopic.php?f=5&t=1535)\n\n**Asus O!Play** is now completely outdated."
         },
         {
           "type": "github",
@@ -1442,43 +1569,43 @@
         },
         {
           "type": "folder",
-          "name": "2007-07 HXGRID Distributed Computing In Small Office",
-          "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office",
+          "name": "2007-07 hxGrid Distributed Computing In Small Office",
+          "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office",
           "items": [
             {
               "type": "wordpad",
               "name": "Distributed Computing in Small and Medium Offices (translated to english)",
-              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/Distributed_Computing_in_Small_and_Medium_Offices_(translated_to_english).md",
+              "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/Distributed_Computing_in_Small_and_Medium_Offices_(translated_to_english).md",
               "size": 27725
             },
             {
               "type": "archive",
               "name": "hxgrid agent setup",
-              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/hxgrid_agent_setup.zip",
+              "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/hxgrid_agent_setup.zip",
               "size": 572298
             },
             {
               "type": "archive",
               "name": "hxgrid ATI NormalMapper setup",
-              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/hxgrid_ATI_NormalMapper_setup.zip",
+              "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/hxgrid_ATI_NormalMapper_setup.zip",
               "size": 1914722
             },
             {
               "type": "archive",
               "name": "hxgrid coordinator setup",
-              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/hxgrid_coordinator_setup.zip",
+              "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/hxgrid_coordinator_setup.zip",
               "size": 525362
             },
             {
               "type": "archive",
               "name": "hxgrid src",
-              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/hxgrid_src.7z",
+              "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/hxgrid_src.7z",
               "size": 9957146
             },
             {
               "type": "wordpad",
               "name": "Распределённые вычисления в малом и среднем офисе (russian)",
-              "path": "Publications/2007-07_HXGRID_Distributed_Computing_In_Small_Office/Распределённые_вычисления_в_малом_и_среднем_офисе_(russian).md",
+              "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office/Распределённые_вычисления_в_малом_и_среднем_офисе_(russian).md",
               "size": 43927
             }
           ]
@@ -2029,7 +2156,7 @@
       "type": "wordpad",
       "name": "About me Roman Lut",
       "path": "About_me_Roman_Lut.md",
-      "size": 988
+      "size": 1160
     },
     {
       "type": "wordpad",
