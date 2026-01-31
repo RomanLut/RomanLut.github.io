@@ -1,0 +1,21 @@
+============
+Description
+============
+
+ ASC file format import\export plugins for 3DS MAX 4.x-6.x. UV coordinates 
+import/export are supported. Export plugin is just compiled example from
+SDK. Import plugin copyright (C) by Roman Lut.
+
+
+
+============
+Installation
+============
+
+ Place all files into "3DSMAX\plugins\" directory.
+
+============
+Terms of use
+============
+
+ Freeware. Can be used for any purposes.

@@ -1,0 +1,139 @@
+
+               McadRus v1.0 Copyright (C) 1995 by LoutSoft
+
+   This program enables the use of Russian letters and allows inserting images
+while working with MathCad v2.01 (C) MathSoft.
+
+1. Place the mcadrus.com file in the same directory as mcad.exe
+2. Run mcadrus.com
+   Note: It is not necessary and not recommended to use any external
+         keyboard or printer Russifiers (Russian language drivers) with
+         mcadrus - the program uses built-in Russification, and using
+         external ones may cause program malfunctions. However,
+         mcadrus detects the presence of the rk.com Russifier in memory
+         _if_it_was_launched_immediately_before_mcadrus.com and does not
+         enable its internal Russifier. If you still want to use an
+         external keyboard driver, disable the internal one using the /K
+         switch (mcadrus /k).
+         If you want to use a different font, specify the font filename
+         on the command line (e.g., mcadrus ibm.fnt).
+         When using mcadrus, mcad will always use CGA mode 640x200
+         regardless of your video adapter (by the way, the program will
+         NOT work with HERCULES adapters).
+
+   Switching to Russian letters (if using the internal keyboard Russifier):
+LeftShift+RightShift. Russian letters cannot be used (at least, most of them)
+as variable or matrix names; they can be freely used in comments ("...").
+The RUS/AT indicator in this case is the Scroll Lock indicator (but this
+works on AT machines with AMI BIOS only).
+   To insert an image into the file being edited, enter the following
+comment:
+
+   "@filename.ext,fromx,fromy,sizex,sizey;", where
+
+    filename.ext - name and path to the image file. The image file is created
+                   in any CGA graphics editor (e.g., PCI). Then run the
+                   cgagrab.com program (or cgasave.com for POISK 1), launch
+                   the editor, display the image in full screen and press
+                   ALT-G (CAPS for POISK 1) - a copy of the screen will be
+                   saved to the file grab_a.cga (grab_b.cga, if grab_a.cga
+                   already exists; on POISK 1 the filename is entered
+                   directly from the keyboard when prompted by the program)
+                   in the active directory. The size of this file is 16384
+                   bytes and it represents an exact copy of video memory
+                   in modes 4, 5, 6.
+   fromx,fromy  -  [0..79],[0..23] coordinates of the top-left corner of the
+                   image rectangle
+   sizex,sizey     [0..79],[0..25] dimensions of the image rectangle
+  
+   The presence of "@", separating commas, and ";" at the end is mandatory.
+The image is displayed after the comment is fully entered. To do this,
+press CTRL+R. The image will only be displayed on the screen if the
+comment described above is visible on the screen, i.e., if the comment is
+on line 1 but the screen shows file lines 2-25, the image will not be visible.
+   To display the image, it is loaded into an internal buffer, and for
+subsequent displays, disk access will not be required. Multiple images can
+be inserted into a file; only one can be stored in the buffer - therefore,
+the program will load another image into the buffer in place of the first
+one and vice versa.
+
+   Using Different Fonts
+You can use _any_ font you like. For editing, it is convenient to use
+the font.exe program by Flambeaux Software, mode 8x8, Range 0-255.
+To use a different font, specify "mcadrus myfont.fnt".
+The distribution includes 2 font files:
+  russian.fnt  - font with Russian letters
+  mcadfont.fnt - font as in standard MathCad
+When using the Russian font, many mathematical symbols (e.g., PI) are
+replaced with Russian letters, so you will have to forgo them (you could,
+of course, draw your own font).
+  Mcadrus uses the russian.fnt font built into it by default.
+You can modify any letters in the font, but keep in mind that English
+letters are also used for displaying menus.
+
+   Printing Files
+
+Only Epson-compatible graphic printers are supported, and they do not need
+to be hardware-Russified. In mcad's "Select Printer" menu, Epson must be
+selected.
+   When printing files, the comment "@filename,x,y,x,y," is not printed,
+but: after the image, as many blank lines are printed as the image occupied,
+so before printing, you need to move the text below the image right up
+to the comment. The mcad program itself treats the comment as one line,
+but when printing there are more lines - so you must calculate the number
+of lines to be sent to the printer yourself to ensure everything fits on
+a sheet of paper.
+   For the image to print correctly on the printer, there should be no
+expressions to the left of the comment in that line (comments are allowed).
+   Before printing, it is recommended to preview the page to be printed so
+that the image is loaded into the internal buffer and does not need to be
+loaded from disk during printing - otherwise, a hang may occur with some
+versions of DOS (problems with re-entrancy of interrupt 21h).
+   If you decide to cancel printing and ctrl-a doesn't work - simply turn
+the printer off for 5 seconds.
+   Only printers connected to LPT1: are supported.
+
+   Simplest Russification of Mcad
+Just copy the mc8x8.mcf file over the old one in the MCAD directory.
+No other programs from the distribution are required for this.
+Don't forget to load the keyboard and printer Russifier.
+
+  For practical use, only the mcadrus.com program is required; the presence
+of other files is optional.
+
+   Technical Details
+
+For enhancement, I do not modify a single byte in mcad.exe.
+The principle is simple - interrupts 10h, 17h are intercepted and the
+output of the "@" character is tracked. Additionally, for keyboard
+Russification, interrupt 9 is intercepted. Then the mcad.exe is launched
+using the exec function.
+Mcadrus occupies approximately 24k in memory.
+  Printing to the printer is done entirely in graphics mode - loading fonts
+into the printer is not used because this does not work on all printers.
+However, this has resulted in significantly reduced printing speed.
+
+File List:
+
+mcadrus.com  - main program
+mcadrus.doc  - this documentation  
+mcadrus.asm  - source code (looks messy because I glued it together from 3
+               programs and didn't comment it; by the way, thanks to
+               Onishchenko A.N. for the keyboard Russifier source code)
+mcadrus.cga  - splash screen for mcadrus.com
+assemble.doc - instructions for assembling mcadrus.com
+
+cgagrab.com  - program for saving images to file
+cgasave.com  - program for saving images to file on POISK 1
+
+font.exe     - program for editing fonts
+
+russian.fnt  - font
+mcadfont.fnt - font
+
+toe.mcd      - example demonstrating new features
+toe.cga      - image for the example
+
+mc8x8.mcf    - file for simplest Russification
+
+End.

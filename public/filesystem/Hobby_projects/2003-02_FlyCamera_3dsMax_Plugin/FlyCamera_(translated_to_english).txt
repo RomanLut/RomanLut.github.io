@@ -1,0 +1,30 @@
+FlyCamera - a plugin for 3DS MAX 4.x-6.x that allows you to move the camera using cursor control keys.
+
+After installing the plugin to the "3dsmax\plugins\" directory, the "FlyCamera" category appears in the User Interface customization dialog (Customize -> Customize User Interface..) with the following list of actions:
+
+FlyCameraForward        Ctrl+Shift+Up Arrow
+FlyCameraBackward       Ctrl+Shift+Down Arrow
+FlyCameraLeft           Ctrl+Shift+Left Arrow
+FlyCameraRight          Ctrl+Shift+Right Arrow
+FlyCameraUp             Ctrl+Shift+Home
+FlyCameraDown           Ctrl+Shift+End
+FlyCameraStrafeLeft     Ctrl+Alt+Shift+Left Arrow
+FlyCameraStrafeRight    Ctrl+Alt+Shift+Right Arrow
+FlyCameraCW             Ctrl+Shift+PgUp
+FlyCameraCCW            Ctrl+Shift+PgDn
+FlyCameraStrafeUp       Ctrl+Shift+A
+FlyCameraStrafeDown     Ctrl+Shift+Z
+FlyCameraIncreaseSpeed  Ctrl+Shift+Plus
+FlyCameraDecreaseSpeed  Ctrl+Shift+Minus
+
+You need to manually assign your own key combination to each action (you can assign them however you prefer; the above is just an example).
+
+After that, you can move a "Free camera" object named "FlyCamera" by simply pressing and holding the assigned key combinations.
+
+For the best experience, it is recommended to configure your keyboard settings (Control Panel -> Keyboard) to maximum key repeat rate and minimum delay before repeat.
+
+When invoking the FlyCameraIncreaseSpeed and FlyCameraDecreaseSpeed actions, the current movement speed is displayed in the bottom-left corner of the 3DS MAX window (log).
+
+If there is no object named "FlyCamera" in the scene, pressing any of the assigned key combinations will cause the plugin to automatically create a "Free camera" at coordinates 0,0,0, name it "FlyCamera", assign it to the Viewport, and even wash the dishes and take out the trash — allowing you to start exploring a newly loaded scene immediately without any unnecessary mouse movements.
+
+Certain parameters (speed, acceleration, etc.) can be modified directly in the script text (descriptions are provided there).

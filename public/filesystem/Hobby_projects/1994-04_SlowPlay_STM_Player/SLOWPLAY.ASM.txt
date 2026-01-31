@@ -1,0 +1,2042 @@
+seg_a           segment para public
+                assume cs:seg_a, ds:seg_a, es:seg_a, ss:seg_a
+
+buf_0           equ     end_prog + 100
+buf_1           equ     buf_0 + 4
+buf_2           equ     buf_1 + 4100h
+buf_3           equ     buf_2 + 400h
+buf_4           equ     buf_3 + 128
+buf_5           equ     buf_4 + 8
+buf_6           equ     buf_5 + 8
+buf_7           equ     buf_6 + 8
+buf_8           equ     buf_7 + 8
+buf_9           equ     buf_8 + 8
+buf_10          equ     buf_9 + 8
+buf_11          equ     buf_10 + 8
+buf_12          equ     buf_11 + 8
+buf_13          equ     buf_12 + 8
+buf_14          equ     buf_13 + 8
+buf_15          equ     buf_14 + 8
+buf_16          equ     buf_15 + 16
+buf_17          equ     buf_16 + 8
+buf_18          equ     buf_17 + 8
+buf_19          equ     buf_18 + 8
+buf_20          equ     buf_19 + 8
+buf_21          equ     buf_20 + 8
+buf_22          equ     buf_21 + 160
+buf_23          equ     buf_22 + 8
+buf_24          equ     buf_23 + 8
+buf_25          equ     buf_24 + 8
+buf_26          equ     buf_25 + 8
+end_data        equ     buf_26 + 8
+
+                org     100h
+
+music           proc    far
+
+start:
+                lea     sp,buf_0 - 1
+                mov     dx,3d9h
+                in      al,dx
+                in      al,28h
+                cmp     al,0d9h
+                jne     lagal2
+                mov     poisk,1
+lagal2:
+
+;===== Проверка указано ли устройство =========
+
+                mov     dx,3
+                lea     di,filename
+                call    getparm
+                or      cx,cx
+                jne     lagal5
+                jmp     lagal6
+lagal5: lea     si,filename
+                call    valuedec
+                or      cx,cx
+                je      lagal7
+lagal8: jmp     lagal1
+lagal7: cmp     ax,3
+                ja      lagal8
+                mov     device,al
+;=====для моноковокса
+                cmp     device,0
+                jne     lagal22
+                mov     dx,4
+                lea     di,filename
+                call    getparm
+                or      cx,cx
+                jz      lagal22
+                lea     si,filename
+                call    valuehex
+                or      cx,cx
+                jnz     lagal8
+                mov     word ptr [offset monocovport+1],ax
+lagal22:
+;=====для стереоковокса
+                cmp     device,1
+                jne     lagal23
+                mov     dx,4
+                lea     di,filename
+                call    getparm
+                or      cx,cx
+                jz      lagal23
+                lea     si,filename
+                call    valuehex
+                or      cx,cx
+                jz      lagal24
+lagal25:        jmp     lagal1
+lagal24:        mov     word ptr [offset stereoright+1],ax
+                cmp     device,1
+                jne     lagal23
+                mov     dx,5
+                lea     di,filename
+                call    getparm
+                or      cx,cx
+                jz      lagal23
+                lea     si,filename
+                call    valuehex
+                or      cx,cx
+                jnz     lagal25
+                mov     word ptr [offset stereoleft+1],ax
+lagal23:
+;=====для стереоонодинбоард
+                cmp     device,2
+                jne     lagal26
+                mov     dx,4
+                lea     di,filename
+                call    getparm
+                or      cx,cx
+                jz      lagal26
+                lea     si,filename
+                call    valuehex
+                or      cx,cx
+                jnz     lagal25
+                mov     word ptr [offset stereoon1_1p+1],ax
+                mov     word ptr [offset stereoon1_2p+1],ax
+                add     ax,2
+                mov     word ptr [offset stereoon1_2u+1],ax
+                mov     word ptr [offset stereoon1_2u+1],ax
+lagal26:
+
+;=========частота=======
+lagal6: mov     dx,2
+                lea     di,filename
+                call    getparm
+                or      cx,cx
+                je      lagal1
+                lea     si,filename
+                call    valuedec
+                mov     freq,ax
+                or      cx,cx
+                jne     lagal1
+                cmp     ax,199
+                jc      lagal1
+                xor     dx,dx
+                mov     bx,10813
+                mul     bx
+                mov     bx,10000
+                div     bx
+                mov     koef_div,ax
+                mov     dx,1
+
+;======== имя файла ===========
+
+                lea     di,filename
+                call    getparm
+                or      cx,cx
+                jnz     music_21
+lagal1:         lea     si,str_err_0
+                call    show
+                int     20h
+music_21:
+
+;===== Считывание файла с диска ================================
+
+                mov     ax,3d00h                ;Откpытие файла для
+                lea     dx,filename             ;чтения
+                int     21h
+                jnc     music_1
+                lea     si,str_err_x
+                call    show
+                lea     si,str_err_1
+                call    show
+                int     20h
+;---------------------------------------------------------------
+music_1:
+                mov     handle,ax
+                mov     bx,ax
+                mov     ax,4200h                ;Установить указатель
+                mov     dx,29                   ;на 29-й байт файла
+                int     21h
+                jnc     music_2
+                lea     si,str_err_x
+                call    show
+                lea     si,str_err_2
+                call    show
+                jmp     quit_err
+music_2:
+                mov     ah,3fh                  ;Чтение 6-ти байт из файла
+                mov     cx,6                    ;(N29 - N34)
+                lea     dx,num_music
+                int     21h
+                jnc     music_3
+                lea     si,str_err_x
+                call    show
+                lea     si,str_err_2
+                call    show
+                jmp     quit_err
+music_3:                                        ;Проверка правильности
+                cmp     num_music,2             ;версии музыки
+                jz      music_4
+                lea     si,str_err_x
+                call    show
+                lea     si,str_err_3
+                call    show
+                jmp     quit_err
+music_4:
+                mov     al,version
+                mov     cl,100
+                mul     cl
+                add     al,byte_31
+                cmp     al,0ddh
+                jz      music_5
+                lea     si,str_err_x
+                call    show
+                lea     si,str_err_4
+                call    show
+                jmp     quit_err
+
+;----- Подготовка данных ---------------------------------------
+
+music_5:
+                lea     ax,sub_2
+                mov     offs_sub_2,ax
+                call    clear_dat
+
+                mov     ax,1
+                lea     di,buf_6
+                mov     cx,4
+                rep     stosw
+
+                mov     ax,55f0h
+                mov     cx,4
+                lea     di,buf_7
+                rep     stosw
+
+                mov     ax,40h
+                mov     cx,8
+                lea     di,buf_10
+                rep     stosw
+
+                call    sub_1
+;---------------------------------------------------------------
+                mov     ax,4200h                ;Установить указатель
+                mov     bx,handle               ;на 48-й байт файла
+                mov     cx,0
+                mov     dx,48
+                int     21h
+                jnc     music_6
+                lea     si,str_err_x
+                call    show
+                lea     si,str_err_2
+                call    show
+                jmp     quit_err
+music_6:
+                mov     ah,3fh                  ;Чтение 992-х байт из файла
+                mov     bx,handle               ;(N48 - N1039)
+                mov     cx,992
+                lea     dx,buf_2
+                int     21h
+                jnc     music_7
+                lea     si,str_err_x
+                call    show
+                lea     si,str_err_2
+                call    show
+                jmp     quit_err
+;---------------------------------------------------------------
+music_7:
+                mov     ah,3fh                  ;Чтение 128-и байт из файла
+                mov     bx,handle               ;(N1040 - N1167)
+                mov     cx,128
+                lea     dx,buf_3
+                int     21h
+                jnc     music_8
+                lea     si,str_err_x
+                call    show
+                lea     si,str_err_2
+                call    show
+                jmp     quit_err
+;---------------------------------------------------------------
+music_8:                                        ;Чтение блока размером
+                push    ds                      ;byte_33 Кбайт начиная с
+                lea     dx,end_data             ;байта N1168
+                mov     cl,4
+                shr     dx,cl
+                inc     dx
+                mov     ax,ds
+                add     ax,dx
+                mov     seg_0,ax
+                mov     ds,ax
+
+                mov     al,cs:byte_33
+                mov     cl,0ah
+                shl     ax,cl
+                cmp     ax,0
+                jnz     music_20
+                dec     ax
+music_20:
+                mov     cx,ax
+                mov     ah,3fh
+                mov     bx,cs:handle
+                sub     dx,dx
+                int     21h
+                mov     ax,ds
+                pop     ds
+                jnc     music_9
+                lea     si,str_err_0
+                call    show
+                lea     si,str_err_2
+                call    show
+                jmp     quit_err
+music_9:
+                push    ds
+                mov     ds,ax
+                mov     ch,cs:byte_33
+                sub     cl,cl
+                sub     bx,bx
+                push    cx
+music_10:
+                mov     al,ds:[bx]
+                cmp     al,0fbh
+                jnz     music_11
+                mov     byte ptr ds:[bx],0
+                jmp     music_13
+music_11:
+                cmp     al,0fdh
+                jnz     music_12
+                mov     byte ptr ds:[bx],0feh
+                jmp     music_13
+music_12:
+                cmp     al,0fch
+                jnz     music_13
+                mov     byte ptr ds:[bx],0ffh
+music_13:
+                add     bx,4
+                loop    music_10
+                pop     ax
+                pop     ds
+;---------------------------------------------------------------
+                shr     ax,1
+                shr     ax,1
+                inc     ax
+                add     ax,seg_0
+                mov     data_seg,ax
+                mov     cx,32
+                lea     si,buf_2
+music_14:
+                push    cx
+                mov     al,byte ptr [si + 16h]
+                and     al,al
+                jz      music_18
+
+                mov     ax,word ptr [si + 10h]
+                and     ax,ax
+                jz      music_18
+
+                sub     ax,ax
+                mov     cx,4
+                mov     dx,word ptr [si + 0eh]
+music_15:
+                shl     dx,1
+                rcl     ax,1
+                loop    music_15
+
+                mov     cx,ax
+                mov     ax,4200h                ;Установить указатель
+                mov     bx,handle
+                int     21h
+                jnc     music_16
+                lea     si,str_err_2
+                call    show
+                pop     cx
+                jmp     quit_err
+music_16:
+                mov     cx,word ptr [si + 10h]
+                mov     ax,data_seg
+                push    ds
+                mov     ds,ax
+                push    cx
+                push    es
+                mov     es,ax
+                sub     al,al
+                sub     di,di
+                rep     stosb
+                pop     es
+                pop     cx
+                mov     ah,3fh                  ;Чтение блока музыки
+                sub     dx,dx
+                int     21h
+                pop     ds
+                jnc     music_17
+                lea     si,str_err_x
+                call    show
+                lea     si,str_err_2
+                call    show
+                pop     cx
+                jmp     quit_err
+music_17:
+                mov     ax,data_seg
+                mov     word ptr [si + 0eh],ax
+                mov     dx,word ptr [si + 10h]
+                mov     cl,4
+                shr     dx,cl
+                add     ax,dx
+                inc     ax
+                mov     data_seg,ax
+music_18:
+                pop     cx
+                add     si,32
+                loop    music_14
+;---------------------------------------------------------------
+                mov     ah,3eh                  ;Закpытие файла
+                mov     bx,handle
+                int     21h
+;---------------------------------------------------------------
+
+;=========подготовка данных=========
+                lea     di,mus_tabl
+                mov     dx,12h
+                mov     ax,34dch
+                div     freq
+                cmp     ax,254
+                jna     lagal20
+                mov     ax,254
+lagal20:        xor     cx,cx
+                mov     bx,ax
+                mov     si,255
+                cld
+lagal21:        mov     ax,bx
+                mul     cx
+                div     si
+                inc     ax
+                stos    byte ptr [di]
+                inc     cx
+                cmp     cx,100h
+                jc      lagal21
+
+;Подготовка таймера к работе
+
+                mov     al,0b0h
+                out     43h,al
+                mov     al,1
+                out     42h,al
+                dec     al
+                out     42h,al
+                in      al,61h
+                or      al,3
+                out     61h,al
+                mov     al,90h
+                out     43h,al
+;---------------------------------------------------------------
+                mov     al,byte_32
+                and     ax,0fh
+                mov     cl,18h
+                mul     cl
+                mov     cl,4
+                shr     ax,cl
+                mov     cl,31h
+                sub     cl,al
+                mov     ax,koef_div
+                sub     dx,dx
+                mov     ch,dh
+                div     cx
+                mov     koef_12,ax
+                mov     koef_11,ax
+;---------------------------------------------------------------
+                mov     al,byte_32
+                sub     ah,ah
+                mov     cl,4
+                shr     ax,cl
+                mov     koef_0,ax
+;---------------------------------------------------------------
+                mov     ax,0ffffh
+                mov     cx,4
+                lea     di,buf_13
+                rep     stosw
+;---------------------------------------------------------------
+                mov     cx,16
+                lea     si,tabl_0
+                lea     di,buf_21
+                rep     movsw
+                mov     cx,64
+                lea     si,buf_21
+                lea     di,buf_21 + 20h
+music_19:
+                lodsw
+                shr     ax,1
+                stosw
+                loop    music_19
+;---------------------------------------------------------------
+
+                mov     ax,3
+                int     10h
+                lea     si,gluk
+                call    show
+
+;Сохранение старого указателя на вектор 8 и 9
+
+                mov     si,20h
+                lea     di,old_int_8
+                push    ds
+                sub     ax,ax
+                mov     ds,ax
+                mov     cx,4
+                rep     movsw
+                pop     ds
+;---------------------------------------------------------------
+;Установка нового указателя на вектор 8 и 9
+
+                push    es
+                mov     es,ax
+                mov     di,20h
+                mov     bl,device
+                xor     bh,bh
+                shl     bx,1
+                mov     ax,int_8_ofs+bx
+                cli
+                stosw
+                mov     ax,cs
+                stosw
+                lea     ax,int_9
+                stosw
+                mov     ax,cs
+                stosw
+                sti
+                pop     es
+;---------------------------------------------------------------
+;Настройка таймера.
+
+                mov     al,36h
+                out     43h,al
+                mov     cx,koef_div
+;                mov     dx,12h
+;                mov     ax,34dch
+                mov     dx,19
+                mov     ax,45056
+                div     cx
+                out     40h,al
+                mov     al,ah
+                out     40h,al
+;---------------------------------------------------------------
+;Старт музыки.
+                mov     sound_on,1
+;---------------------------------------------------------------
+                call    sub_7
+;---------------------------------------------------------------
+;Обслуживание клавиатуры.
+                cmp     poisk,1
+                jne     lagal3
+                mov     al,0feh
+                out     21h,al
+                mov     al,0ffh
+                out     60h,al
+lagal3:
+key_0:          cmp     poisk,1
+                jne     lagal4
+                in      al,69h
+                and     al,80h
+                jnz     lagal4
+                jmp     exit_mus
+lagal4:
+                cmp     end_mus,0
+                jnz     exit_mus
+
+                cmp     scan_code,1
+                jnz     key_0
+;---------------------------------------------------------------
+;Восстановление счетчиков таймера и порта ВВ55.
+
+exit_mus:       sti
+                mov     al,36h
+                out     43h,al
+                sub     al,al
+                out     40h,al
+                out     40h,al
+
+                in      al,61h
+                and     al,0fch
+                out     61h,al
+                mov     ax,3
+                int     10h
+;---------------------------------------------------------------
+;Восстановление указателей на 8-й и 9-й вектора.
+
+                mov     di,20h
+                lea     si,old_int_8
+                push    es
+                sub     ax,ax
+                mov     es,ax
+                mov     cx,4
+                cli
+                rep     movsw
+                sti
+                pop     es
+                cmp     poisk,1
+                jne     lagal40
+                mov     al,0
+                out     21h,al
+lagal40:        int     20h
+;---------------------------------------------------------------
+quit_err:
+                mov     ah,3eh                  ;Закpытие файла
+                mov     bx,handle
+                int     21h
+                int     20h
+music           endp
+
+;===== Очистка буфера ==========================================
+
+clear_dat       proc    near
+
+                lea     di,buf_0
+                mov     cx,end_data - buf_0
+                sub     al,al
+                rep     stosb
+                ret
+
+clear_dat       endp
+
+;===== Заполнение буфера =======================================
+
+sub_1           proc    near
+
+                mov     cx,41h
+                sub     bx,bx
+                mov     di,bx
+sub_1_0:
+                push    cx
+                push    bx
+                mov     cx,100h
+                sub     ax,ax
+sub_1_1:
+                push    ax
+                imul    bl
+                mov     al,ah
+                cbw
+                push    bx
+                push    cx
+                mov     bx,40h
+                imul    bl
+                mov     cl,6
+                sar     ax,cl
+                pop     cx
+                pop     bx
+                mov     byte ptr buf_1 + di,al
+                inc     di
+                pop     ax
+                inc     al
+                loop    sub_1_1
+                pop     bx
+                pop     cx
+                inc     bl
+                loop    sub_1_0
+                ret
+
+sub_1           endp
+
+;===== Обработчик 9-го прерывания ==============================
+
+int_9           proc    far
+
+                sti
+                push    ax
+                in      al,60h
+                mov     cs:scan_code,al
+                in      al,61h
+                mov     ah,al
+                or      al,80h
+                out     61h,al
+                mov     al,ah
+                out     61h,al
+                mov     al,20h
+                out     20h,al
+                pop     ax
+                iret
+
+int_9           endp
+
+;===== Обработчик 8-го прерывания для моноковокса =========================
+
+int_8           proc    far
+                push    ax
+                push    bx
+                push    cx
+                push    dx
+                push    es
+                push    ds
+                mov     ax,cs
+                mov     ds,ax
+                mov     dx,0ffffh
+                mov     cl,80h
+                les     bx,dword ptr buf_15 + 0
+                cmp     bx,word ptr buf_12 + 0
+                jc      int_8_1
+                cmp     word ptr buf_13 + 0,dx
+                jz      int_8_0
+                mov     bx,word ptr buf_13 + 0
+                mov     word ptr buf_15 + 0,bx
+                jmp     int_8_1
+int_8_0:
+                mov     voice_0,1
+                jmp     int_8_2
+int_8_1:
+                mov     ax,word ptr buf_7 + 0
+                add     word ptr buf_6 + 0,ax
+                adc     bx,word ptr buf_8 + 0
+                mov     word ptr buf_15 + 0,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 0
+                add     cl,byte ptr buf_1 + bx
+int_8_2:
+                les     bx,dword ptr buf_15 + 4
+                cmp     bx,word ptr buf_12 + 2
+                jc      int_8_4
+                cmp     word ptr buf_13 + 2,dx
+                jz      int_8_3
+                mov     bx,word ptr buf_13 + 2
+                mov     word ptr buf_15 + 4,bx
+                jmp     int_8_4
+int_8_3:
+                mov     voice_1,1
+                jmp     int_8_5
+int_8_4:
+                mov     ax,word ptr buf_7 + 2
+                add     word ptr buf_6 + 2,ax
+                adc     bx,word ptr buf_8 + 2
+                mov     word ptr buf_15 + 4,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 2
+                add     cl,byte ptr buf_1 + bx
+int_8_5:
+                les     bx,dword ptr buf_15 + 8
+                cmp     bx,word ptr buf_12 + 4
+                jc      int_8_7
+                cmp     word ptr buf_13 + 4,dx
+                jz      int_8_6
+                mov     bx,word ptr buf_13 + 4
+                mov     word ptr buf_15 + 8,bx
+                jmp     int_8_7
+int_8_6:
+                mov     voice_2,1
+                jmp     int_8_8
+int_8_7:
+                mov     ax,word ptr buf_7 + 4
+                add     word ptr buf_6 + 4,ax
+                adc     bx,word ptr buf_8 + 4
+                mov     word ptr buf_15 + 8,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 4
+                add     cl,byte ptr buf_1 + bx
+int_8_8:
+                les     bx,dword ptr buf_15 + 12
+                cmp     bx,word ptr buf_12 + 6
+                jc      int_8_10
+                cmp     word ptr buf_13 + 6,dx
+                jz      int_8_9
+                mov     bx,word ptr buf_13 + 6
+                mov     word ptr buf_15 + 12,bx
+                jmp     int_8_10
+int_8_9:
+                mov     voice_3,1
+                jmp     int_8_11
+int_8_10:
+                mov     ax,word ptr buf_7 + 6
+                add     word ptr buf_6 + 6,ax
+                adc     bx,word ptr buf_8 + 6
+                mov     word ptr buf_15 + 12,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 6
+                add     cl,byte ptr buf_1 + bx
+int_8_11:
+                mov     al,cl
+monocovport:    mov     dx,378h
+                out     dx,al
+                mov     flag_cont,0
+                mov     ax,koef_11
+                dec     ax
+                jnz     int_8_12
+                mov     flag_cont,1
+                mov     ax,koef_12
+int_8_12:
+                mov     koef_11,ax
+                inc     count_0
+                mov     al,20h
+                out     20h,al
+                pop     ds
+                pop     es
+                pop     dx
+                pop     cx
+                pop     bx
+                pop     ax
+                cmp     flag_cont,0
+                jz      int_8_13
+                pop     cs:offs_ret + 2
+                pop     cs:offs_ret
+                pop     cs:reg_flags
+                push    cs:reg_flags
+                push    cs
+                push    cs:offs_sub_2
+int_8_13:
+                iret
+int_8           endp
+
+;=======обработчик int 8 для стерео ковокса
+
+int_8_stereo    proc    far
+                push    ax
+                push    bx
+                push    cx
+                push    dx
+                push    es
+                push    ds
+                mov     ax,cs
+                mov     ds,ax
+                mov     dx,0ffffh
+                mov     cl,80h
+                les     bx,dword ptr buf_15 + 0
+                cmp     bx,word ptr buf_12 + 0
+                jc      int_8_1b
+                cmp     word ptr buf_13 + 0,dx
+                jz      int_8_0b
+                mov     bx,word ptr buf_13 + 0
+                mov     word ptr buf_15 + 0,bx
+                jmp     int_8_1b
+int_8_0b:
+                mov     voice_0,1
+                jmp     int_8_2b
+int_8_1b:
+                mov     ax,word ptr buf_7 + 0
+                add     word ptr buf_6 + 0,ax
+                adc     bx,word ptr buf_8 + 0
+                mov     word ptr buf_15 + 0,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 0
+                add     cl,byte ptr buf_1 + bx
+int_8_2b:
+                les     bx,dword ptr buf_15 + 4
+                cmp     bx,word ptr buf_12 + 2
+                jc      int_8_4b
+                cmp     word ptr buf_13 + 2,dx
+                jz      int_8_3b
+                mov     bx,word ptr buf_13 + 2
+                mov     word ptr buf_15 + 4,bx
+                jmp     int_8_4b
+int_8_3b:
+                mov     voice_1,1
+                jmp     int_8_5b
+int_8_4b:
+                mov     ax,word ptr buf_7 + 2
+                add     word ptr buf_6 + 2,ax
+                adc     bx,word ptr buf_8 + 2
+                mov     word ptr buf_15 + 4,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 2
+                add     cl,byte ptr buf_1 + bx
+int_8_5b:
+                push    dx
+stereoright:    mov     dx,278h
+                mov     al,cl
+                out     dx,al
+                mov     cl,80h
+                pop     dx
+
+                les     bx,dword ptr buf_15 + 8
+                cmp     bx,word ptr buf_12 + 4
+                jc      int_8_7b
+                cmp     word ptr buf_13 + 4,dx
+                jz      int_8_6b
+                mov     bx,word ptr buf_13 + 4
+                mov     word ptr buf_15 + 8,bx
+                jmp     int_8_7b
+int_8_6b:
+                mov     voice_2,1
+                jmp     int_8_8b
+int_8_7b:
+                mov     ax,word ptr buf_7 + 4
+                add     word ptr buf_6 + 4,ax
+                adc     bx,word ptr buf_8 + 4
+                mov     word ptr buf_15 + 8,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 4
+                add     cl,byte ptr buf_1 + bx
+int_8_8b:
+                les     bx,dword ptr buf_15 + 12
+                cmp     bx,word ptr buf_12 + 6
+                jc      int_8_10b
+                cmp     word ptr buf_13 + 6,dx
+                jz      int_8_9b
+                mov     bx,word ptr buf_13 + 6
+                mov     word ptr buf_15 + 12,bx
+                jmp     int_8_10b
+int_8_9b:
+                mov     voice_3,1
+                jmp     int_8_11b
+int_8_10b:
+                mov     ax,word ptr buf_7 + 6
+                add     word ptr buf_6 + 6,ax
+                adc     bx,word ptr buf_8 + 6
+                mov     word ptr buf_15 + 12,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 6
+                add     cl,byte ptr buf_1 + bx
+int_8_11b:
+                mov     al,cl
+stereoleft:     mov     dx,378h
+                out     dx,al
+                mov     flag_cont,0
+                mov     ax,koef_11
+                dec     ax
+                jnz     int_8_12b
+                mov     flag_cont,1
+                mov     ax,koef_12
+int_8_12b:
+                mov     koef_11,ax
+                inc     count_0
+                mov     al,20h
+                out     20h,al
+                pop     ds
+                pop     es
+                pop     dx
+                pop     cx
+                pop     bx
+                pop     ax
+                cmp     flag_cont,0
+                jz      int_8_13b
+                pop     cs:offs_ret + 2
+                pop     cs:offs_ret
+                pop     cs:reg_flags
+                push    cs:reg_flags
+                push    cs
+                push    cs:offs_sub_2
+int_8_13b:
+                iret
+
+int_8_stereo    endp
+
+;===== Обработчик 8-го прерывания для stereoon1 =========================
+
+int_8_stereoon1 proc    far
+                push    ax
+                push    bx
+                push    cx
+                push    dx
+                push    es
+                push    ds
+                mov     ax,cs
+                mov     ds,ax
+                mov     dx,0ffffh
+                mov     cl,80h
+                les     bx,dword ptr buf_15 + 0
+                cmp     bx,word ptr buf_12 + 0
+                jc      int_8_1c
+                cmp     word ptr buf_13 + 0,dx
+                jz      int_8_0c
+                mov     bx,word ptr buf_13 + 0
+                mov     word ptr buf_15 + 0,bx
+                jmp     int_8_1c
+int_8_0c:
+                mov     voice_0,1
+                jmp     int_8_2c
+int_8_1c:
+                mov     ax,word ptr buf_7 + 0
+                add     word ptr buf_6 + 0,ax
+                adc     bx,word ptr buf_8 + 0
+                mov     word ptr buf_15 + 0,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 0
+                add     cl,byte ptr buf_1 + bx
+int_8_2c:
+                les     bx,dword ptr buf_15 + 4
+                cmp     bx,word ptr buf_12 + 2
+                jc      int_8_4c
+                cmp     word ptr buf_13 + 2,dx
+                jz      int_8_3c
+                mov     bx,word ptr buf_13 + 2
+                mov     word ptr buf_15 + 4,bx
+                jmp     int_8_4c
+int_8_3c:
+                mov     voice_1,1
+                jmp     int_8_5c
+int_8_4c:
+                mov     ax,word ptr buf_7 + 2
+                add     word ptr buf_6 + 2,ax
+                adc     bx,word ptr buf_8 + 2
+                mov     word ptr buf_15 + 4,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 2
+                add     cl,byte ptr buf_1 + bx
+int_8_5c:
+                push    dx
+stereoon1_1u:   mov     dx,37ah
+                mov     al,1
+                out     dx,al
+stereoon1_1p:   mov     dx,378h
+                mov     al,cl
+                out     dx,al
+                mov     cl,80h
+                pop     dx
+
+                les     bx,dword ptr buf_15 + 8
+                cmp     bx,word ptr buf_12 + 4
+                jc      int_8_7c
+                cmp     word ptr buf_13 + 4,dx
+                jz      int_8_6c
+                mov     bx,word ptr buf_13 + 4
+                mov     word ptr buf_15 + 8,bx
+                jmp     int_8_7c
+int_8_6c:
+                mov     voice_2,1
+                jmp     int_8_8c
+int_8_7c:
+                mov     ax,word ptr buf_7 + 4
+                add     word ptr buf_6 + 4,ax
+                adc     bx,word ptr buf_8 + 4
+                mov     word ptr buf_15 + 8,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 4
+                add     cl,byte ptr buf_1 + bx
+int_8_8c:
+                les     bx,dword ptr buf_15 + 12
+                cmp     bx,word ptr buf_12 + 6
+                jc      int_8_10c
+                cmp     word ptr buf_13 + 6,dx
+                jz      int_8_9c
+                mov     bx,word ptr buf_13 + 6
+                mov     word ptr buf_15 + 12,bx
+                jmp     int_8_10c
+int_8_9c:
+                mov     voice_3,1
+                jmp     int_8_11c
+int_8_10c:
+                mov     ax,word ptr buf_7 + 6
+                add     word ptr buf_6 + 6,ax
+                adc     bx,word ptr buf_8 + 6
+                mov     word ptr buf_15 + 12,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 6
+                add     cl,byte ptr buf_1 + bx
+int_8_11c:
+                push    dx
+stereoon1_2u:   mov     dx,37ah
+                mov     al,2
+                out     dx,al
+stereoon1_2p:   mov     dx,378h
+                mov     al,cl
+                out     dx,al
+                pop     dx
+
+                mov     flag_cont,0
+                mov     ax,koef_11
+                dec     ax
+                jnz     int_8_12c
+                mov     flag_cont,1
+                mov     ax,koef_12
+int_8_12c:
+                mov     koef_11,ax
+                inc     count_0
+                mov     al,20h
+                out     20h,al
+                pop     ds
+                pop     es
+                pop     dx
+                pop     cx
+                pop     bx
+                pop     ax
+                cmp     flag_cont,0
+                jz      int_8_13c
+                pop     cs:offs_ret + 2
+                pop     cs:offs_ret
+                pop     cs:reg_flags
+                push    cs:reg_flags
+                push    cs
+                push    cs:offs_sub_2
+int_8_13c:
+                iret
+int_8_stereoon1 endp
+
+;===== Обработчик 8-го прерывания для speaker =========================
+
+int_8_speaker   proc    far
+                push    ax
+                push    bx
+                push    cx
+                push    dx
+                push    es
+                push    ds
+                mov     ax,cs
+                mov     ds,ax
+                mov     dx,0ffffh
+                mov     cl,80h
+                les     bx,dword ptr buf_15 + 0
+                cmp     bx,word ptr buf_12 + 0
+                jc      int_8_1a
+                cmp     word ptr buf_13 + 0,dx
+                jz      int_8_0a
+                mov     bx,word ptr buf_13 + 0
+                mov     word ptr buf_15 + 0,bx
+                jmp     int_8_1a
+int_8_0a:
+                mov     voice_0,1
+                jmp     int_8_2a
+int_8_1a:
+                mov     ax,word ptr buf_7 + 0
+                add     word ptr buf_6 + 0,ax
+                adc     bx,word ptr buf_8 + 0
+                mov     word ptr buf_15 + 0,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 0
+                add     cl,byte ptr buf_1 + bx
+int_8_2a:
+                les     bx,dword ptr buf_15 + 4
+                cmp     bx,word ptr buf_12 + 2
+                jc      int_8_4a
+                cmp     word ptr buf_13 + 2,dx
+                jz      int_8_3a
+                mov     bx,word ptr buf_13 + 2
+                mov     word ptr buf_15 + 4,bx
+                jmp     int_8_4a
+int_8_3a:
+                mov     voice_1,1
+                jmp     int_8_5a
+int_8_4a:
+                mov     ax,word ptr buf_7 + 2
+                add     word ptr buf_6 + 2,ax
+                adc     bx,word ptr buf_8 + 2
+                mov     word ptr buf_15 + 4,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 2
+                add     cl,byte ptr buf_1 + bx
+int_8_5a:
+                les     bx,dword ptr buf_15 + 8
+                cmp     bx,word ptr buf_12 + 4
+                jc      int_8_7a
+                cmp     word ptr buf_13 + 4,dx
+                jz      int_8_6a
+                mov     bx,word ptr buf_13 + 4
+                mov     word ptr buf_15 + 8,bx
+                jmp     int_8_7a
+int_8_6a:
+                mov     voice_2,1
+                jmp     int_8_8a
+int_8_7a:
+                mov     ax,word ptr buf_7 + 4
+                add     word ptr buf_6 + 4,ax
+                adc     bx,word ptr buf_8 + 4
+                mov     word ptr buf_15 + 8,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 4
+                add     cl,byte ptr buf_1 + bx
+int_8_8a:
+                les     bx,dword ptr buf_15 + 12
+                cmp     bx,word ptr buf_12 + 6
+                jc      int_8_10a
+                cmp     word ptr buf_13 + 6,dx
+                jz      int_8_9a
+                mov     bx,word ptr buf_13 + 6
+                mov     word ptr buf_15 + 12,bx
+                jmp     int_8_10a
+int_8_9a:
+                mov     voice_3,1
+                jmp     int_8_11a
+int_8_10a:
+                mov     ax,word ptr buf_7 + 6
+                add     word ptr buf_6 + 6,ax
+                adc     bx,word ptr buf_8 + 6
+                mov     word ptr buf_15 + 12,bx
+                mov     bl,es:[bx]
+                mov     bh,byte ptr buf_10 + 6
+                add     cl,byte ptr buf_1 + bx
+int_8_11a:
+                mov     al,cl
+                lea     bx,mus_tabl
+                xlat
+                out     42h,al
+                mov     flag_cont,0
+                mov     ax,koef_11
+                dec     ax
+                jnz     int_8_12a
+                mov     flag_cont,1
+                mov     ax,koef_12
+int_8_12a:
+                mov     koef_11,ax
+                inc     count_0
+                mov     al,20h
+                out     20h,al
+                pop     ds
+                pop     es
+                pop     dx
+                pop     cx
+                pop     bx
+                pop     ax
+                cmp     flag_cont,0
+                jz      int_8_13a
+                pop     cs:offs_ret + 2
+                pop     cs:offs_ret
+                pop     cs:reg_flags
+                push    cs:reg_flags
+                push    cs
+                push    cs:offs_sub_2
+int_8_13a:
+                iret
+
+int_8_speaker   endp
+
+
+
+;----- Продолжение 8-го прерывания -----------------------------
+
+sub_2           proc    near
+
+                pushf
+                push    ax
+                push    bx
+                push    cx
+                push    dx
+                push    es
+                push    ds
+                push    si
+                push    di
+                push    bp
+                mov     ax,cs
+                mov     ds,ax
+                mov     ax,koef_2
+                cmp     ax,0000
+                jz      sub_2_0
+
+                dec     ax
+                mov     koef_2,ax
+                mov     si,0000
+                call    sub_6
+                mov     si,0002
+                call    sub_6
+                mov     si,0004
+                call    sub_6
+                mov     si,0006
+                call    sub_6
+                jmp     sub_2_1
+sub_2_0:
+                cmp     sound_on,0
+                jz      sub_2_1
+                mov     ax,koef_0
+                cmp     ax,0000
+                jz      sub_2_2
+                dec     ax
+sub_2_2:
+                mov     koef_2,ax
+                cmp     koef_1,1
+                jnz     sub_2_3
+                mov     koef_1,0
+                call    sub_7
+sub_2_3:
+                mov     si,0000
+                call    sub_3
+                mov     si,0002
+                call    sub_3
+                mov     si,0004
+                call    sub_3
+                mov     si,0006
+                call    sub_3
+                call    sub_8
+sub_2_1:
+                mov     ax,word ptr buf_11 + 0
+                mul     loud
+                mov     cl,06
+                shr     ax,cl
+                mov     word ptr buf_10 + 0,ax
+                mov     ax,word ptr buf_11 + 2
+                mul     loud
+                mov     cl,06
+                shr     ax,cl
+                mov     word ptr buf_10 + 2,ax
+                mov     ax,word ptr buf_11 + 4
+                mul     loud
+                mov     cl,6
+                shr     ax,cl
+                mov     word ptr buf_10 + 4,ax
+                mov     ax,word ptr buf_11 + 6
+                mul     loud
+                mov     cl,6
+                shr     ax,cl
+                mov     word ptr buf_10 + 6,ax
+                pop     bp
+                pop     di
+                pop     si
+                pop     ds
+                pop     es
+                pop     dx
+                pop     cx
+                pop     bx
+                pop     ax
+                popf
+                push    cs:offs_ret
+                push    cs:offs_ret + 2
+                retf
+
+sub_2           endp
+
+;---------------------------------------------------------------
+
+sub_3           proc    near
+
+                mov     ax,seg_0
+                mov     es,ax
+                inc     word ptr buf_4 + si
+                cmp     word ptr buf_4 + si,40h
+                jc      sub_3_0
+                mov     koef_1,1
+sub_3_0:
+                cmp     word ptr tabl_2 + si,0
+                jz      sub_3_1
+                mov     bx,word ptr buf_5 + si
+                xor     ah,ah
+                mov     al,es:[bx]
+                mov     word ptr buf_24 + si,ax
+                mov     al,es:[bx+01]
+                shr     al,1
+                shr     al,1
+                shr     al,1
+                mov     word ptr buf_25 + si,ax
+                mov     al,es:[bx+01]
+                and     al,7
+                mov     dl,es:[bx+02]
+                shr     dl,1
+                and     dl,78h
+                or      al,dl
+                mov     word ptr buf_23 + si,ax
+                mov     al,es:[bx+02]
+                and     al,0fh
+                mov     word ptr buf_22 + si,ax
+                mov     al,es:[bx+03]
+                mov     word ptr buf_26 + si,ax
+                add     bx,10h
+                mov     word ptr buf_5 + si,bx
+                call    sub_4
+                cmp     word ptr buf_22 + si,9
+                jnz     sub_3_1
+                call    sub_6
+sub_3_1:
+                ret
+
+sub_3           endp
+
+;---------------------------------------------------------------
+
+sub_4           proc    near
+
+                mov     di,si
+                shl     di,1
+                mov     ax,word ptr buf_23 + si
+                cmp     ax,41h
+                jz      sub_4_0
+
+                mov     word ptr buf_11 + si,ax
+                mov     word ptr buf_20 + si,ax
+sub_4_0:
+                cmp     word ptr buf_22 + si,7
+                jnz     sub_4_1
+                jmp     sub_4_2
+sub_4_1:
+                mov     bx,word ptr buf_25 + si
+                cmp     bx,0
+                jz      sub_4_3
+                mov     cl,5
+                shl     bx,cl
+                add     bx,offset buf_2 - 20h
+                mov     word ptr buf_9 + si,bx
+                cmp     word ptr buf_23 + si,41h
+                jnz     sub_4_4
+                mov     al,[bx + 16h]
+                xor     ah,ah
+                mov     word ptr buf_11 + si,ax
+                mov     word ptr buf_20 + si,ax
+sub_4_4:
+                mov     ax,[bx + 0eh]
+                mov     word ptr buf_15[2 + di],ax
+                mov     ax,[bx + 14h]
+                cmp     ax,0ffffh
+                jz      sub_4_5
+                mov     word ptr buf_12 + si,ax
+                mov     ax,[bx + 12h]
+                mov     word ptr buf_13 + si,ax
+                jmp     sub_4_3
+sub_4_5:
+                mov     word ptr buf_13 + si,ax
+                mov     ax,[bx + 10h]
+                mov     word ptr buf_12 + si,ax
+sub_4_3:
+                mov     bx,word ptr buf_24 + si
+                cmp     bx,0feh
+                jnz     sub_4_6
+                xor     ax,ax
+                mov     word ptr buf_6 + si,ax
+                mov     word ptr buf_15 + di,ax
+                mov     word ptr buf_12 + si,ax
+                mov     word ptr buf_13 + si,0ffffh
+                jmp     sub_4_7
+sub_4_6:
+                cmp     bx,0ffh
+                jz      sub_4_7
+                mov     ax,word ptr buf_11 + si
+                shr     si,1
+                shr     al,1
+                mov     byte ptr buf_0 + si,al
+                shl     si,1
+                shl     bx,1
+                mov     ax,word ptr buf_21 + bx
+                mov     word ptr buf_14 + si,ax
+                mov     word ptr buf_16 + si,ax
+                call    sub_9
+                xor     ax,ax
+                mov     word ptr buf_6 + si,ax
+                mov     word ptr buf_15 + di,ax
+sub_4_7:
+                call    sub_5
+                ret
+sub_4_2:
+                mov     bx,word ptr buf_24 + si
+                cmp     bx,0ffh
+                jz      sub_4_8
+                shl     bx,1
+                mov     ax,word ptr buf_21 + bx
+                mov     word ptr buf_16 + si,ax
+sub_4_8:
+                ret
+
+sub_4           endp
+
+;---------------------------------------------------------------
+
+sub_5           proc    near
+
+                mov     ah,byte ptr buf_22 + si
+                mov     al,byte ptr buf_26 + si
+                cmp     ah,01
+                jz      sub_5_0
+                cmp     ah,02
+                jz      sub_5_1
+                cmp     ah,03
+                jz      sub_5_2
+sub_5_3:
+                ret
+sub_5_0:
+                cmp     al,00
+                jz      sub_5_3
+                xor     ah,ah
+                shr     al,1
+                shr     al,1
+                shr     al,1
+                shr     al,1
+                mov     koef_0,ax
+                ret
+sub_5_1:
+                xor     ah,ah
+                add     ax,offset buf_3
+                mov     offs_buf_3,ax
+                ret
+sub_5_2:
+                mov     koef_1,1
+                ret
+
+sub_5           endp
+
+;---------------------------------------------------------------
+
+sub_6           proc    near
+
+                mov     ah,byte ptr buf_22 + si
+                mov     al,byte ptr buf_26 + si
+                cmp     ah,5
+                jz      sub_6_0
+                cmp     ah,6
+                jz      sub_6_1
+                cmp     ah,4
+                jz      sub_6_2
+                cmp     ah,9
+                jz      sub_6_3
+                mov     word ptr buf_18 + si,0
+                mov     word ptr buf_19 + si,1
+                cmp     ah,7
+                jz      sub_6_4
+                cmp     ah,8
+                jz      sub_6_5
+                mov     word ptr buf_17 + si,0
+                ret
+sub_6_3:
+                jmp     sub_6_6
+sub_6_5:
+                jmp     sub_6_7
+sub_6_4:
+                jmp     sub_6_8
+sub_6_1:
+                xor     ah,ah
+                mul     koef_3
+                sub     word ptr buf_14 + si,ax
+                call    sub_9
+                ret
+sub_6_0:
+                xor     ah,ah
+                mul     koef_3
+                add     word ptr buf_14 + si,ax
+                call    sub_9
+                ret
+sub_6_2:
+                mov     dl,al
+                and     dl,0fh
+                cmp     dl,0
+                jz      sub_6_9
+                xor     dh,dh
+                sub     word ptr buf_11 + si,dx
+                cmp     word ptr buf_11 + si,0ffffh
+                jg      sub_6_10
+                mov     word ptr buf_11 + si,0
+                ret
+sub_6_9:
+                xor     ah,ah
+                mov     cl,4
+                shr     al,cl
+                add     word ptr buf_11 + si,ax
+                cmp     word ptr buf_11 + si,41h
+                jc      sub_6_10
+                mov     word ptr buf_11 + si,40h
+sub_6_10:
+                ret
+sub_6_8:
+                mov     ax,word ptr buf_14 + si
+                cmp     ax,word ptr buf_16 + si
+                jnz     sub_6_11
+                ret
+sub_6_11:
+                ja      sub_6_12
+                add     ax,word ptr buf_26 + si
+                add     ax,word ptr buf_26 + si
+                add     ax,word ptr buf_26 + si
+                add     ax,word ptr buf_26 + si
+                add     ax,word ptr buf_26 + si
+                add     ax,word ptr buf_26 + si
+                add     ax,word ptr buf_26 + si
+                add     ax,word ptr buf_26 + si
+                add     ax,word ptr buf_26 + si
+                add     ax,word ptr buf_26 + si
+                cmp     ax,word ptr buf_16 + si
+                jna     sub_6_13
+                mov     ax,word ptr buf_16 + si
+sub_6_13:
+                mov     word ptr buf_14 + si,ax
+                call    sub_9
+                ret
+sub_6_12:
+                sub     ax,word ptr buf_26 + si
+                sub     ax,word ptr buf_26 + si
+                sub     ax,word ptr buf_26 + si
+                sub     ax,word ptr buf_26 + si
+                sub     ax,word ptr buf_26 + si
+                sub     ax,word ptr buf_26 + si
+                sub     ax,word ptr buf_26 + si
+                sub     ax,word ptr buf_26 + si
+                sub     ax,word ptr buf_26 + si
+                sub     ax,word ptr buf_26 + si
+                cmp     ax,word ptr buf_16 + si
+                jnc     sub_6_14
+                mov     ax,word ptr buf_16 + si
+sub_6_14:
+                mov     word ptr buf_14 + si,ax
+                call    sub_9
+                ret
+sub_6_7:
+                mov     cl,al
+                mov     ch,al
+                and     cl,0fh
+                mov     bx,word ptr buf_17 + si
+                mov     ax,word ptr tabl_4 + bx
+                push    cx
+                xor     ch,ch
+                imul    cx
+                pop     cx
+                mov     cl,6
+                sar     ax,cl
+                imul    koef_3
+                add     ax,word ptr buf_16 + si
+                mov     word ptr buf_14 + si,ax
+                call    sub_9
+                mov     cl,4
+                shr     ch,cl
+                shl     ch,1
+                add     bl,ch
+                and     bl,7eh
+                mov     word ptr buf_17 + si,bx
+                ret
+sub_6_6:
+                mov     ax,word ptr buf_18 + si
+                cmp     ax,0
+                jz      sub_6_15
+                dec     ax
+                mov     word ptr buf_18 + si,ax
+                ret
+sub_6_15:
+                mov     ax,word ptr buf_19 + si
+                cmp     ax,1
+                jz      sub_6_16
+                mov     word ptr buf_19 + si,1
+                mov     ax,word ptr buf_20 + si
+                mov     word ptr buf_11 + si,ax
+                mov     ax,word ptr buf_26 + si
+                shr     al,1
+                shr     al,1
+                shr     al,1
+                shr     al,1
+                mov     word ptr buf_18 + si,ax
+                ret
+sub_6_16:
+                mov     word ptr buf_19 + si,0
+                mov     ax,0
+                mov     word ptr buf_11 + si,ax
+                mov     ax,word ptr buf_26 + si
+                and     ax,0fh
+                mov     word ptr buf_18 + si,ax
+                ret
+
+sub_6           endp
+
+;---------------------------------------------------------------
+
+sub_7           proc    near
+
+                xor     ah,ah
+                mov     bx,offs_buf_3
+                mov     al,[bx]
+                inc     bx
+                cmp     ax,63h
+                jnz     sub_7_0
+                inc     koef_9
+                lea     bx,end_mus
+                mov     al,1
+                mov     cs:[bx],al
+                mov     bx,old_buf_3
+                mov     al,[bx]
+                inc     bx
+sub_7_0:
+                dec     bx
+                mov     cs:offs_num_part,bx
+                inc     bx
+                cmp     ax,62h
+                jnz     sub_7_1
+                inc     koef_9
+                lea     bx,buf_3
+                mov     al,[bx]
+                inc     bx
+                mov     koef_6,1
+                mov     koef_4,0
+                mov     koef_5,0
+sub_7_1:
+                mov     offs_buf_3,bx
+                mov     num_part,ax
+                mov     ah,al
+                xor     al,al
+                shl     ax,1
+                shl     ax,1
+                mov     word ptr buf_5 + 0,ax
+                add     ax,4
+                mov     word ptr buf_5 + 2,ax
+                add     ax,4
+                mov     word ptr buf_5 + 4,ax
+                add     ax,4
+                mov     word ptr buf_5 + 6,ax
+                xor     ax,ax
+                mov     word ptr buf_4 + 0,ax
+                mov     word ptr buf_4 + 2,ax
+                mov     word ptr buf_4 + 4,ax
+                mov     word ptr buf_4 + 6,ax
+                ret
+
+sub_7           endp
+
+;---------------------------------------------------------------
+
+sub_8           proc    near
+
+                mov     ax,word ptr buf_4 + 6
+                xor     ah,ah
+                mov     koef_7,ax
+                mov     ax,num_part
+                xor     ah,ah
+                mov     num_part_0,ax
+                mov     ax,offs_num_part
+                mov     koef_10,ax
+                ret
+
+sub_8           endp
+
+;---------------------------------------------------------------
+
+sub_9           proc    near
+
+                push    ax
+                push    bx
+                push    cx
+                push    dx
+                mov     cx,word ptr buf_14 + si
+                cmp     cx,0227h
+                jnc     sub_9_0
+                xor     ax,ax
+                mov     word ptr buf_7 + si,ax
+                mov     word ptr buf_8 + si,ax
+                pop     dx
+                pop     cx
+                pop     bx
+                pop     ax
+                ret
+sub_9_0:
+                mov     dx,0226h
+                mov     ax,6c34h
+                div     cx
+                xor     dx,dx
+                div     koef_div
+                mov     cx,ax
+                xor     ax,ax
+                div     koef_div
+                mov     dx,cx
+                mov     word ptr buf_7 + si,ax
+                mov     word ptr buf_8 + si,dx
+                pop     dx
+                pop     cx
+                pop     bx
+                pop     ax
+                ret
+
+sub_9           endp
+
+;Выводит на экран asciiz строку ds:si
+
+show            proc
+                push    es
+                push    ax
+                push    bx
+                push    si
+show_l2:        cld
+                lods    byte ptr [si]
+                or      al,al
+                je      show_l1
+                mov     ah,0eh
+                mov     bl,7
+                int     10h
+                jmp     show_l2
+show_l1:        pop     si
+                pop     bx
+                pop     ax
+                pop     es
+                ret
+show            endp
+
+;ax=value(asciiz ds:si)
+;cx = 1 - неконвертируемый символ,cx = 2 - переполнение
+valuedec        proc
+                push    bx
+                push    dx
+                push    si
+                xor     ax,ax
+valuedec_l2:    mov     bl,[si]
+                inc     si
+                xor     bh,bh
+                cmp     bl,'0'
+                jc      valuedec_l1
+                cmp     bl,'9'
+                ja      valuedec_l1
+                sub     bl,'0'
+                mov     cx,10
+                mul     cx
+                add     ax,bx
+                adc     dx,0
+                or      dx,dx
+                je      valuedec_l2
+                mov     cx,2
+                mov     ax,0ffffh
+                jmp     valuedec_l3
+valuedec_l1:    xor     cx,cx
+                or      bl,bl
+                je      valuedec_l3
+                mov     cx,1
+valuedec_l3:    pop     si
+                pop     dx
+                pop     bx
+                ret
+valuedec        endp
+;Заполняет буфер es:di asciiz строкой - парамeтром номер dx
+;=> cx - длина без ascii 0
+getparm  proc
+                push    ax
+                push    bx
+                push    dx
+                push    si
+                push    di
+                push    ds
+                mov     ah,62h
+                int     21h
+                mov     ds,bx
+                cld
+                mov     si,80h
+                lods    byte ptr [si]
+                or      al,al
+                jne     getparm_l1
+getparm_l3:     xor     cx,cx
+getparm_l5:     xor     al,al
+                stos    byte ptr [di]
+                jmp     getparm_l2
+getparm_l1:     lods    byte ptr [si]
+                cmp     al,20h
+                je      getparm_l1
+                dec     si
+                dec     dx
+                je      getparm_l4
+getparm_l7:     lods    byte ptr [si]
+                cmp     al,0dh
+                je      getparm_l3
+                cmp     al,20h
+                jne     getparm_l7
+                jmp     getparm_l1
+getparm_l4:     xor     cx,cx
+getparm_l6:     lods    byte ptr [si]
+                cmp     al,0dh
+                je      getparm_l5
+                cmp     al,20h
+                je      getparm_l5
+                stos    byte ptr [di]
+                inc     cx
+                jmp     getparm_l6
+getparm_l2:     pop     ds
+                pop     di
+                pop     si
+                pop     dx
+                pop     bx
+                pop     ax
+                ret
+getparm endp
+
+;ax=value(ds:si) hex
+;cx=1 неконверт    cx=2 переполнение
+valuehex        proc
+                push    bx
+                push    si
+                push    di
+                push    es
+                push    cs
+                pop     es
+                cld
+                xor     bx,bx
+valuehex_l1:    lods    byte ptr [si]
+                cmp     al,'a'
+                jc      valuehex_l2
+                cmp     al,'f'
+                ja      valuehex_l2
+                sub     al,32
+valuehex_l2:    lea     di,valhextabl
+                mov     cx,16
+        repnz   scas    byte ptr [di]
+                jz      valuehex_l3
+                xor     cx,cx
+                cmp     al,'h'
+                je      valuehex_l4
+                cmp     al,'H'
+                je      valuehex_l4
+                or      al,al
+                je      valuehex_l4
+                mov     cx,1
+                xor     bx,bx
+valuehex_l4:    mov     ax,bx
+                pop     es
+                pop     di
+                pop     si
+                pop     bx
+                ret
+valuehex_l3:    test    bx,0f000h
+                jnz     valuehex_l5
+                shl     bx,1
+                shl     bx,1
+                shl     bx,1
+                shl     bx,1
+                sub     di,offset valhextabl+1
+                add     bx,di
+                jc      valuehex_l5
+                jmp     valuehex_l1
+valuehex_l5:    mov     cx,2
+                mov     bx,0ffffh
+                jmp     valuehex_l4
+valhextabl      db '0123456789ABCDEF'
+valuehex        endp
+
+
+;================================= Данные ======================
+
+filename        db 128 dup(0)
+
+gluk    db '╔════════════════════════════════════════════════════════════════════════════╗',0dh,0ah
+        db '║               .           .        .        .                   .       .  ║',0dh,0ah
+        db '║    .  ▄▄▄▄                                          .                      ║',0dh,0ah
+        db '║      █░   ▀       .       .       .           .                .           ║',0dh,0ah
+        db '║ .   █░     .                  .          .      .      .             .     ║',0dh,0ah
+        db '║      █░                .                                       .           ║',0dh,0ah
+        db '║       ▀█▄      ▄▄▄▄   ▄ ▄▄▄    ▄▄▄▄      ▄▄▄   ▄▄▄▄ ▄▄▄▄                   ║',0dh,0ah
+        db '║    .     █░   █░   ▀░ █▀   ▀░ █░   █░  ▄▀   █░ █░  █░   █░        .     .  ║',0dh,0ah
+        db '║           █░  █░  .   █░  .   █▄▄▄▄▀   █▄▄▄▄█░ █░. █░   █░  .              ║',0dh,0ah
+        db '║     ▄    █░   █░   ▄░ █░      █░   ▄░  █░   █░ █░  █░   █░                 ║',0dh,0ah
+        db '║  .   ▀▀▀▀      ▀▀▀▀   ▀░       ▀▀▀▀    ▀░   ▀░ ▀░  ▀░   ▀░          .      ║',0dh,0ah
+        db '║         .        .     .         .                           .           . ║',0dh,0ah
+        db '║                                          .                                 ║',0dh,0ah
+        db '║              ▄▄▄▄▄▄▄▄▄░     .                    .     .        .    .     ║',0dh,0ah
+        db '║      .           █░                .      .                                ║',0dh,0ah
+        db '║              .   █░     ▄ ▄▄▄     ▄▄▄    ▄▄▄▄   █░  █░  ▄▄▄▄   ▄ ▄▄▄       ║',0dh,0ah
+        db '║                  █░  .  █▀   ▀░ ▄▀ . █░ █░   ▀░ █░▄▀ . █░   █░ █▀   ▀░  .  ║',0dh,0ah
+        db '║  .               █░     █░  .   █▄▄▄▄█░ █░   .  █▀▄    █▄▄▄▄▀  █░ .        ║',0dh,0ah
+        db '║          .       █░     █░      █░   █░ █░   ▄░ █░ ▀▄  █░   ▄░ █░          ║',0dh,0ah
+        db '║                  █░     ▀░      ▀░   ▀░  ▀▀▀▀   ▀░  ▀░  ▀▀▀▀   ▀░       .  ║',0dh,0ah
+        db '║     .         .       .     .             .      .          .      .       ║',0dh,0ah
+        db '║                                     .                    .                 ║',0dh,0ah
+        db '║   .     ░░░▒▒▓▓▓█ SlowPlay Copyright (C) 1994 by LoutSoft █▓▓▓▒▒░░░    .   ║',0dh,0ah
+        db '║             .              .             .                      .          ║',0dh,0ah
+        db '╚════════════════════════════════════════════════════════════════════════════╝',0
+
+str_enter       db      0dh, 0ah, '$'
+
+str_err_0       db      '┌────────────────────────────────────────────────────────────────────────────┐',0dh,0ah
+                db      '│ Slowplay Copyright (C) 1994 by LoutSoft. Old asm source by B.C. & A.P.     │',0dh,0ah
+                db      '│                                                                            │',0dh,0ah
+                db      '│ Плейер написан специально для медленных компьютеров, хотя и на нормальных  │',0dh,0ah
+                db      '│ неплохо работает.                                                          │',0dh,0ah
+                db      '│                                                                            │',0dh,0ah
+                db      '│ Использование: SlowPlay filename.stm частота [устроуство]                  │',0dh,0ah
+                db      '│                                                                            │',0dh,0ah
+                db      '│ частота  -  200-65535, нормально около 25000,но всё зависит от компьютера, │',0dh,0ah
+                db      '│             например для компьютера 140% PC максимум 3500.                 │',0dh,0ah
+                db      '│ устройство - для моно ковокса: 0 [номер_порта] (порт по умолчанию 378h)    │',0dh,0ah
+                db      '│              для стерео ковокса: 1 [номер_порта_1] [номер_порта_2]         │',0dh,0ah
+                db      '│                                  (по умолчанию 278h,378h)                  │',0dh,0ah
+                db      '│              для Stereo-on-1-board: 2 [номер_порта] (по умолчанию 378h)    │',0dh,0ah
+                db      '│              для PC Speaker: 3                                             │',0dh,0ah
+                db      '└────────────────────────────────────────────────────────────────────────────┘',0dh,0ah,0ah,0
+
+str_err_x       db      '┌──────────────────────────────────────────┐',0dh,0ah 
+                db      '│ Slowplay Copyright (C) 1994 by LoutSoft. │',0dh,0ah
+                db      '│ Old asm source by B.C. & A.P.            │',0dh,0ah
+                db      '└──────────────────────────────────────────┘',0dh,0ah,0ah,0 
+
+str_err_1       db      'ERROR: Can', 27h, 't open file.',0dh,0ah,0
+
+str_err_2       db      'ERROR: Can', 27h, 't read file.',0dh,0ah,0
+str_err_3       db      'ERROR: Incorrect file type.',0dh,0ah,0
+str_err_4       db      'ERROR: Incorrect music version.',0dh,0ah,0
+
+handle          dw      0
+scan_code       db      0
+
+seg_0           dw      0
+data_seg        dw      0
+old_int_8       dw      0, 0
+
+old_int_9       dw      0, 0
+
+offs_ret        dw      0, 0
+
+reg_flags       dw      0
+
+flag_cont       dw      0
+
+offs_sub_2      dw      0
+
+end_mus db      0
+num_music       db      2
+version db      2
+byte_31  db     15h
+byte_32  db     60h
+byte_33 db      0ch
+loud            db      40h
+sound_on        db      0
+
+count_0 dw      3e7h
+
+koef_div        dw      0ef0h
+
+koef_0          dw      6
+
+koef_1          db      0
+
+koef_2          dw      0
+
+koef_3          db      0ah
+
+koef_4          db      1
+koef_5          db      1
+koef_6          db      0
+
+koef_7          dw      0
+koef_9          dw      0
+koef_10 dw      0
+
+koef_11  dw     144h
+koef_12  dw     144h
+
+voice_0  dw     1
+voice_1  dw     1
+voice_2 dw      1
+voice_3  dw     1
+
+offs_buf_3      dw      buf_3
+old_buf_3       dw      buf_3
+
+num_part        dw      0
+num_part_0      dw      0
+
+offs_num_part   dw      0
+
+tabl_0          dw      42b8h, 3e8ch, 3b50h, 379ch, 3560h, 3208h
+                dw      2ee8h, 2c7ch, 29b4h, 2808h, 2588h, 2394h
+                dw      0, 0, 0, 0
+
+tabl_2          dw      1, 1, 1, 1
+
+tabl_3          dw      0ffffh, 0ffffh, 0ffffh, 0ffffh
+
+tabl_4          db      000h, 000h, 018h, 000h, 031h, 000h, 04Ah, 000h
+                db      061h, 000h, 078h, 000h, 08Dh, 000h, 0A1h, 000h
+                db      0B4h, 000h, 0C5h, 000h, 0D4h, 000h, 0E0h, 000h
+                db      0EBh, 000h, 0F4h, 000h, 0FAh, 000h, 0FDh, 000h
+                db      0FFh, 000h, 0FDh, 000h, 0FAh, 000h, 0F4h, 000h
+                db      0EBh, 000h, 0E0h, 000h, 0D4h, 000h, 0C5h, 000h
+                db      0B4h, 000h, 0A1h, 000h, 08Dh, 000h, 078h, 000h
+                db      061h, 000h, 04Ah, 000h, 031h, 000h, 018h, 000h
+                db      000h, 000h, 0E8h, 0FFh, 0CFh, 0FFh, 0B6h, 0FFh
+                db      09Fh, 0FFh, 088h, 0FFh, 073h, 0FFh, 05Fh, 0FFh
+                db      04Ch, 0FFh, 03Bh, 0FFh, 02Ch, 0FFh, 020h, 0FFh
+                db      015h, 0FFh, 00Ch, 0FFh, 006h, 0FFh, 003h, 0FFh
+                db      001h, 0FFh, 003h, 0FFh, 006h, 0FFh, 00Ch, 0FFh
+                db      015h, 0FFh, 020h, 0FFh, 02Ch, 0FFh, 03Bh, 0FFh
+                db      04Ch, 0FFh, 05Fh, 0FFh, 073h, 0FFh, 088h, 0FFh
+                db      09Fh, 0FFh, 0B6h, 0FFh, 0CFh, 0FFh, 0E8h, 0FFh
+
+poisk           db      0
+device          db      0
+freq            dw      0
+int_8_ofs       dw      offset int_8
+                dw      offset int_8_stereo
+                dw      offset int_8_stereoon1
+                dw      offset int_8_speaker
+
+;Sin(0 - 3.14) для F = 8 МГц
+mus_tabl        db      256 dup (0)
+
+
+end_prog        db      0
+
+seg_a           ends
+
+                end     start

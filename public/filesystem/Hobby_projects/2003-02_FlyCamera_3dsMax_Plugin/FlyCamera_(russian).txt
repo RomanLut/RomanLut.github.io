@@ -1,0 +1,47 @@
+  FlyCamera - плагин для 3DS MAX 4.x-6.x, позволяющий двигать камеру с помощью
+клавиш управления курсором.
+
+  После установки плагина в каталог "3dsmax\plugins\", в диалоге настройки 
+User Interface (Customize -> Customize User Interface..) появляется
+категория "FlyCamera" cо списком actions:
+
+FlyCameraForward        Ctrl+Shift+Up Arrow
+FlyCameraBackaward      Ctrl+Shift+Down Arrow
+FlyCameraLeft           Ctrl+Shift+Left Arrow
+FlyCameraRight          Ctrl+Shift+Right Arrow
+FlyCameraUp             Ctrl+Shift+Home
+FlyCameraDown           Ctrl+Shift+End
+FlyCameraStrafeLeft     Ctrl+Alt+Shift+Left arrow
+FlyCameraStraceRight    Ctrl+Alt+Shift+Right arrow
+FlyCameraCW             Ctrl+Shift+PgUp
+FlyCameraCCW            Ctrl+Shift+PgDn
+FlyCameraStrafeUp       Ctrl+Shift+A
+FlyCameraStrafeDown     Ctrl+Shift+Z
+FlyCameraIncreaseSpeed  Ctrl+Shift+Plus
+FlyCameraDecreaseSpeed  Ctrl+Shift+Minus
+
+  Нужно самостоятельно назначить каждому action свою комбинацию клавиш
+(можно назначить так, как удобно, это всего лишь пример).
+
+  После этого можно двигать объект типа "Free camera" c именем "FlyCamera",
+просто нажимая и удерживая указанные комбинации клавиш. 
+
+  Для удобства лучше всего настроить клавиатуру (Control panel->Keyboard)
+на максимальную скорость повторения клавиш при нажатии, и минимальную паузу
+перед повторениями.
+
+ При вызове actions FlyCameraIncreaseSpeed и FlyCameraDecreaseSpeed, текущая 
+скорость движения отображается в левом нижнем углу окна 3DS MAX (log).
+
+ Если в сцене нет объекта с именем "FlyCamera", то при нажатии на любую из
+назначенных комбинаций клавиш, плагин сам создаст "Free camera" 
+в точке 0,0,0, назовет ее "FlyCamera", назначит на ее на ViewPort, 
+а также вымоет посуду и вынесет мусор, что позволяет приступать к 
+рассматриванию новой загруженной сцены сразу и без лишних движений мышкой.
+
+  Некоторые параметры (скорость, ускорение и т.д.) можно изменить в прямо 
+в тексте скрипта (описание - там).
+
+
+
+

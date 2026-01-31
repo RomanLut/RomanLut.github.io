@@ -1,0 +1,81 @@
+
+                             Hi all!
+
+   I've decided to release this STM file player that I used when writing my
+demos. I didn't write it myself - I don't know the author (Greets! :)
+I just modified the STMPLAY.PAS file, which I got from somewhere I can't
+remember (rewrote some parts in assembly with self-modifying code, added
+support for different devices).
+
+=========================================================
+ Written for TP6.0+ for Real Mode. External procedures:
+
+Procedure SetDefaultSetup;
+---------------------------------------------------------
+Sets up default values:
+ Setup.SBport=$220;
+ Setup.TimerOn=False;
+ Setup.SBDMA=1;
+ Setup.SBIRQ=7;
+ Setup.PSped:=20000;
+
+Function ReadSTM(fname:string):boolean;
+---------------------------------------------------------
+Loads an STM file into memory. Returns True if successful.
+Returns False if the file is not found, corrupted, or if there's
+not enough memory.
+
+Procedure PlayAllPatterns(device:byte);
+---------------------------------------------------------
+Starts playback on the specified device.
+Device=
+   0 - PC Speaker
+   1 - Covox LPT1:
+   2 - Covox LPT2:
+   3 - Stereo Covox LPT1+LPT2
+   4 - SB Mono
+   5 - SB Pro
+
+  Actually, the player was originally designed for Covox, so outputting
+1 byte corresponds to one IRQ0 call. But I managed to adapt it for SB -
+bytes are accumulated in a buffer and then played via DMA. However, this
+makes SB output slower than Covox (meaning the main program speed is
+reduced, especially for SB Pro, which requires DMA output at SPEED*2).
+  When outputting to Stereo Covox and SB Pro, channels 1 and 3 operate in
+SURRND mode, channels 2 and 4 in MID mode (in DMP terminology).
+
+Procedure Stop;
+----------------------------------------------------------
+Stops the player and removes the IRQ0 handler. This is called *automatically*
+when the program terminates - in case you forgot to call it yourself. This
+ensures the program won't hang even if you press Ctrl+Break.
+
+Function GetRowNum: byte;
+----------------------------------------------------------
+Returns the current column number.
+
+Function GetOrdNum
+----------------------------------------------------------
+Returns the current order number.
+
+Procedure GotoPattern(ordnum: byte);
+----------------------------------------------------------
+Jumps to the specified Order. (Only useful when debugging your program).
+
+ Setup record fields:
+Setup.SBPort - SB port
+Setup.SBIRQ  - SB IRQ
+Setup.SBDMA  - SB DMA channel
+ - these variables must be properly initialized for SB output.
+Setup.TimerOn - True - the old IRQ0 handler will be called
+ (at 18.2 Hz).
+Setup.PSPeed - mixing frequency.
+
+  There are also many internal variables available that can be used for
+tricks (for example, you can change the Order in real-time - I used this
+for looping). All of this can be seen in the source code.
+
+                                   30.04.96      MAX
+
+P.S. Actually, it's time to switch to Midas SS. Using this player only
+     makes sense if you really want to support Speaker and Covox.

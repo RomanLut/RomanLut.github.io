@@ -1064,6 +1064,145 @@
       "items": [
         {
           "type": "folder",
+          "name": "1994-04 SlowPlay STM Player",
+          "path": "Hobby_projects/1994-04_SlowPlay_STM_Player",
+          "items": [
+            {
+              "type": "executable",
+              "name": "SLOWPLAY",
+              "path": "Hobby_projects/1994-04_SlowPlay_STM_Player/SLOWPLAY.zip",
+              "size": 61527
+            },
+            {
+              "type": "archive",
+              "name": "SLOWPLAY",
+              "path": "Hobby_projects/1994-04_SlowPlay_STM_Player/SLOWPLAY.zip",
+              "size": 61527
+            },
+            {
+              "type": "notepad",
+              "name": "SLOWPLAY.ASM",
+              "path": "Hobby_projects/1994-04_SlowPlay_STM_Player/SLOWPLAY.ASM.txt",
+              "size": 69360
+            }
+          ],
+          "desc": "**SlowPlay**\n\n**Date:** 1994\n**Platform:** DOS\n**Language:** Pure 8086 Assembler\n\nHighly optimized *.STM player. Can play STM files on VERY slow PCs like POISK-1."
+        },
+        {
+          "type": "folder",
+          "name": "1995-05 Mathcad tools",
+          "path": "Hobby_projects/1995-05_Mathcad_tools",
+          "items": [
+            {
+              "type": "archive",
+              "name": "MCADRUS",
+              "path": "Hobby_projects/1995-05_Mathcad_tools/MCADRUS.zip",
+              "size": 57280
+            },
+            {
+              "type": "notepad",
+              "name": "mcadrus (russian)",
+              "path": "Hobby_projects/1995-05_Mathcad_tools/mcadrus_(russian).txt",
+              "size": 11520
+            },
+            {
+              "type": "notepad",
+              "name": "mcadrus (translated to english)",
+              "path": "Hobby_projects/1995-05_Mathcad_tools/mcadrus_(translated_to_english).txt",
+              "size": 6992
+            }
+          ],
+          "desc": "**MCADRus**\n\n**Date:** 1995\n**Platform:** DOS\n**Language:** Pure 8086 assembler\n                                 \nThis program makes possible to use russian characters and insert pictures(!) into Mathcad 2.01 documents."
+        },
+        {
+          "type": "folder",
+          "name": "1996-04 STM Player",
+          "path": "Hobby_projects/1996-04_STM_Player",
+          "items": [
+            {
+              "type": "archive",
+              "name": "stmplay",
+              "path": "Hobby_projects/1996-04_STM_Player/stmplay.zip",
+              "size": 11348
+            },
+            {
+              "type": "notepad",
+              "name": "stmplay (russian)",
+              "path": "Hobby_projects/1996-04_STM_Player/stmplay_(russian).txt",
+              "size": 4390
+            },
+            {
+              "type": "notepad",
+              "name": "stmplay (translated to english)",
+              "path": "Hobby_projects/1996-04_STM_Player/stmplay_(translated_to_english).txt",
+              "size": 3123
+            }
+          ],
+          "desc": "**STMPlay**\n\n**Date:** 1996\n**Platform:** DOS\n**Language:** Turbo pascal 6.0, 8086 Assembler\n\nSource code of *.STM files player (Turbo pascal unit). STM is Scream tracker music file format. I have used this player in some of my demos."
+        },
+        {
+          "type": "folder",
+          "name": "2002-04 ASCImport 3dsMax Plugin",
+          "path": "Hobby_projects/2002-04_ASCImport_3dsMax_Plugin",
+          "items": [
+            {
+              "type": "archive",
+              "name": "ascimpexp",
+              "path": "Hobby_projects/2002-04_ASCImport_3dsMax_Plugin/ascimpexp.zip",
+              "size": 426326
+            },
+            {
+              "type": "notepad",
+              "name": "ascimport",
+              "path": "Hobby_projects/2002-04_ASCImport_3dsMax_Plugin/ascimport.txt",
+              "size": 432
+            }
+          ],
+          "desc": "**ASCImport**\n\n**Date:** 2002\n**Platform:** Windows\n**Language:** VC 6.0\n\nASC file format import/export plugins for 3DS MAX 4.x-7.x."
+        },
+        {
+          "type": "folder",
+          "name": "2003-01 SendToPDA",
+          "path": "Hobby_projects/2003-01_SendToPDA",
+          "items": [
+            {
+              "type": "archive",
+              "name": "SendToPDASetup",
+              "path": "Hobby_projects/2003-01_SendToPDA/SendToPDASetup.zip",
+              "size": 493964
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "﻿**SendToPDA**\n\n**Date:** 2003\n**Platform:** Windows XP\n**Language:** Delphi 6.0\n\nIn 2003, Android did not exist, and Palm PCs were popular. These were small, handheld devices capable of running applications and were controlled by the Palm OS operating system.\n\nThis folder contains a GUI for the iSiloX converter. It adds a “Send to PDA” option to the right-click context menu for HTM, HTML, TXT, RTF, and DOC files. The tool automatically handles all dialog steps, allowing you to send files to a Palm device in just two clicks.\n\n**Palm PDAs** are completely outdated now."
+        },
+        {
+          "type": "folder",
+          "name": "2003-02 FlyCamera 3dsMax Plugin",
+          "path": "Hobby_projects/2003-02_FlyCamera_3dsMax_Plugin",
+          "items": [
+            {
+              "type": "archive",
+              "name": "FlyCamera",
+              "path": "Hobby_projects/2003-02_FlyCamera_3dsMax_Plugin/FlyCamera.zip",
+              "size": 2501
+            },
+            {
+              "type": "notepad",
+              "name": "FlyCamera (russian)",
+              "path": "Hobby_projects/2003-02_FlyCamera_3dsMax_Plugin/FlyCamera_(russian).txt",
+              "size": 2821
+            },
+            {
+              "type": "notepad",
+              "name": "FlyCamera (translated to english)",
+              "path": "Hobby_projects/2003-02_FlyCamera_3dsMax_Plugin/FlyCamera_(translated_to_english).txt",
+              "size": 2080
+            }
+          ],
+          "desc": "**FlyCamera**\n\nSimple 3DS Max plugin for navigating with cursor keys in 3DS MAX viewport.\n\n**Date:** 2003\n**Platform:** Windows\n**Language:** 3DS MAX script"
+        },
+        {
+          "type": "folder",
           "name": "2003-08 ReadManiac",
           "path": "Hobby_projects/2003-08_ReadManiac",
           "items": [
@@ -1094,6 +1233,27 @@
           ],
           "image": "folder_image.jpg",
           "desc": "**ReadManiac**\n\n**Date:** 2003-2006  \n**Platform:** JAVA-enabled phones (J2ME MIDP1.0, 2.0)  \n**Language:** J2ME, Delphi\n\nIn 2002, mobile phones became capable of running small Java applications.\nNaturally, I couldn’t miss the opportunity to create software for mobile devices. When the first Java-enabled phones appeared on the market, I bought an “early bird” Siemens SL42 and began developing a book reader application.\nReadManiac is a book reader MIDlet for mobile phones. It allows users to search, download, and read books on virtually any Java-enabled device.\nThe first version was compatible only with the SL42, but it quickly evolved into a large, full-featured, and user-friendly application that supported most J2ME-enabled phones.\n**In 2006, ReadManiac won 3rd place in the JavaKonkurs competition, sponsored by Sun Microsystems.**\nToday, the era of Java-enabled phones has ended. This folder contains an archive of the ReadManiac installation files, source code, and website."
+        },
+        {
+          "type": "folder",
+          "name": "2004-02 SceneMainTool 3dsMax Plugin",
+          "path": "Hobby_projects/2004-02_SceneMainTool_3dsMax_Plugin",
+          "items": [
+            {
+              "type": "notepad",
+              "name": "readme",
+              "path": "Hobby_projects/2004-02_SceneMainTool_3dsMax_Plugin/readme.txt",
+              "size": 889
+            },
+            {
+              "type": "archive",
+              "name": "SceneMainTool",
+              "path": "Hobby_projects/2004-02_SceneMainTool_3dsMax_Plugin/SceneMainTool.zip",
+              "size": 13691
+            }
+          ],
+          "image": "folder_image.gif",
+          "desc": "﻿**SceneMainTool**\n\n**Date**: 2004\n**Platform**: Windows, 3ds MAX 4.x, 5.x, 6.x\n**Language**: C++\n\nThis tool creates a scene root dummy with a single click.\n\nIn 3ds Max, moving or rotating an entire scene is not as simple as selecting all objects, due to hierarchies, Physique-linked meshes, and link constraint controllers. These dependencies make global transformations difficult.\n\nTo solve this, animators usually create a root node that controls all scene objects (except Physique meshes and nodes with link constraints) and then move or rotate the scene using this root node. This plugin automatically creates such a root node in seconds."
         },
         {
           "type": "folder",
@@ -1141,6 +1301,33 @@
           ],
           "image": "folder_image.gif",
           "desc": "**3D Ripper DX**\n\n**Date:** 2006\n**Platform:** Windows\n**Language:** C++, Assembly\n\n3D Ripper DX captures frame geometry, textures, and shaders from DirectX 6.0-9.0 applications by intercepting DirectX API calls.\n\nThe complete frame geometry is reconstructed and imported into 3ds Max, allowing rendered scenes to be inspected and analyzed in detail.\n\nOriginally designed as an analysis and debugging tool for programmers, it unexpectedly gained widespread popularity among 3D artists due to its ability to reconstruct full scenes inside 3ds Max.\n\n**Note: This project has not been maintained since 2010 due to a lack of interest. It requires Windows XP to run. Because it uses aggressive code injection techniques, it may be falsely flagged as malware by antivirus software.**"
+        },
+        {
+          "type": "folder",
+          "name": "2007 01 hxMap",
+          "path": "Hobby_projects/2007_01_hxMap",
+          "items": [
+            {
+              "type": "html",
+              "name": "hxmap",
+              "path": "Hobby_projects/2007_01_hxMap/hxmap.html",
+              "size": 9042
+            },
+            {
+              "type": "archive",
+              "name": "hxmap",
+              "path": "Hobby_projects/2007_01_hxMap/hxmap.zip",
+              "size": 12223188
+            },
+            {
+              "type": "archive",
+              "name": "hxmap src",
+              "path": "Hobby_projects/2007_01_hxMap/hxmap_src.rar",
+              "size": 6974112
+            }
+          ],
+          "image": "folder_image.png",
+          "desc": "**Date:** 2007\n**Platform:** WM2005\n**Language:** C++, Delphi 2.0\n\n**hxMap** is Windows Mobile 2005 smartphone application for viewing large map images.\n\nThe only available map is Kiev, Ukraine.\n\nApp supports GPS position requests from GlabalSat TR-101 personal GPS tracker.\n\nWindows Mobile 2005 is completely outdated now."
         },
         {
           "type": "folder",
@@ -1203,19 +1390,19 @@
         },
         {
           "type": "folder",
-          "name": "2012 04 Asus Oplay IPTVList module",
-          "path": "Hobby_projects/2012_04_Asus_Oplay_IPTVList_module",
+          "name": "2012-04 Asus Oplay IPTVList module",
+          "path": "Hobby_projects/2012-04_Asus_Oplay_IPTVList_module",
           "items": [
             {
               "type": "wordpad",
               "name": "IPTVList",
-              "path": "Hobby_projects/2012_04_Asus_Oplay_IPTVList_module/IPTVList.md",
-              "size": 40928
+              "path": "Hobby_projects/2012-04_Asus_Oplay_IPTVList_module/IPTVList.md",
+              "size": 40851
             },
             {
               "type": "archive",
               "name": "iptvlist src",
-              "path": "Hobby_projects/2012_04_Asus_Oplay_IPTVList_module/iptvlist_src.rar",
+              "path": "Hobby_projects/2012-04_Asus_Oplay_IPTVList_module/iptvlist_src.rar",
               "size": 2003608
             }
           ],
