@@ -3,7 +3,7 @@
 
 [location]=D:\Github\PersonalPage\trunk\temp\article.html
 
-[target]=\trunk\public\filesystem\Hobby_projects\Hobby_projects\2012_04_Asus_Oplay_IPTVList_module\IPTVList.md
+[target]=\trunk\public\filesystem\Publications\2007-05_Videobroadcast_from_console_devkit\Videobroadcast_from_console_devkit.md
 
 Read the article [location] fully.
 

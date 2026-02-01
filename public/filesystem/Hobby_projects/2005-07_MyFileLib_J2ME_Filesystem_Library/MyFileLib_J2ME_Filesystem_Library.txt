@@ -1,0 +1,217 @@
+=========================================
+TMyFile library v0.2 for J2ME
+Copyright (C) 2005 by Roman Lut
+=========================================
+
+======================
+ Copyrights
+======================
+
+ TMyFile library v0.2 for J2ME
+ Copyright (C) 2005 by Roman Lut.  All rights reserved.
+ TMyFile library is available to download at http://www.deep-shadows.com/hax/ReadManiac.htm.
+
+ To access ZIP files, TMyFile library requires:
+
+ JZLib library port for J2ME 
+  Copyright (c) 2003 Asoft ltd. All rights reserved.                            
+  http://www.asoft.ru                                                                  
+  Authors: Alexandre Rusev, Alexey Soloviev                                     
+
+ Which is modified version of JZLib library
+  Copyright (c) 2000,2001,2002,2003 ymnk, JCraft,Inc. All rights reserved.
+  http://www.jcraft.com/
+
+ I sligtly modified above library to work correctly with ZIP archive compression
+and to be able to compile it with Borland JBuilder. This modified version is
+included in this archive.
+
+ Package includes JEnable preprocessor
+ Copyright (c) 2001, Sosnoski Software Solutions, Inc.
+ http://www.sosnoski.com/opensrc/jenable/
+
+=====================
+ About
+===================== 
+
+ TMyFile class hierarchy provides unified access to contents of files of various formats.
+
+Suported access options:
+- create/delete/list/read/write binary files on MMC card (Siemens only) or RecordStore(others);
+- read binary files from Midlet resources;
+- read uncompressed contents of PDB, PRC and TCR files;
+- read uncompresed contents of ZIP files, including ZIP file list.
+
+ Note that this library can only uncompress, but not compress files.
+
+Examples:
+
+ Open binary file:
+   TMyFile file = TMyFile.OpenFile("a:\\text.txt");
+   file.Seek(...);
+   file.Read(...);
+   file.Close();
+
+ Get list of files on MMC card (or RecordStore, see TMyMMCFile notes below):
+  String[] list = TMyFile.list("a:\\");
+
+ Open PDB or PRC file:
+   TMyFile file = TMyFile.OpenFile("a:\\text.pdb");
+   file.Seek(...);
+   file.Read(...);
+   file.Close();
+   Reading file contents will return uncompressed contents.
+   Only PalmDoc files are supported (iSilo not supported).
+
+ Open PDB file in binary mode:
+  TMyFile = new TMyMMCFile("a:\\file.pdb");
+   file.Seek(...);
+   file.Read(...);
+   file.Close();
+   Reading file contents will return compressed contents.
+
+ Open  TCR file:
+   TMyFile file = TMyFile.OpenFile("a:\\text.tcr");
+   Reading file contents will return uncompressed contents.
+   Note, that opening TCR file first time requires indexing, 
+   and "Open" operation can take a lot of time
+   (Check file.getProgress() and file.AbortReadOperation() methods).
+
+ Open binary file inside ZIP archive:
+   TMyFile file = TMyFile.OpenFile("a:\\archive.zip,text.txt");
+   Reading file contents will return uncompressed contents.
+
+   This file can be accessed just like general file - seeking, reading etc. 
+  But note, that seeking backwards or far forward will generally require 
+  uncompressing a lot of data = slowdown. ZIP file can be efficiently read only
+  as a non-seeking stream, so knowing this fact can help to understand what 
+  hapends behind curtains.
+   TMyZipFile DOES NOT uncompress whole file into memory, so archive and files 
+  inside it can have any size.
+   Since Read() operation can take a long time, it is possible to present 
+  current progress to user - call file.getProgress() from other thread;
+  also check "file.AbortReadOperation();"
+
+ Getting list of ZIP archive:
+  String[] list = TMyZipFile.List("a:\\archive.zip");
+
+
+ About TMyMMCFile: midlet can access phone's filesystem only on Siemens phones.
+The only available storage space for midlet on other phones is RecordStore.
+RecordStore provides API for storing blocks of data.
+TMyMMCFile also can provide unified file-like access to RecordStore.
+I use JEnable preprocessor. You will need to use JEnable to uncomment
+TMyMMCFile implementation based on RecordStore: disabled options: "MIDP10",
+disabled: "SIEMENS". Or just uncomment by hand.
+
+====================
+ How to build
+====================  
+
+ Build a small example how to use TMyFile hierarchy with "Build.bat".
+ Example is for Siemens phones, and requres SMTK with any 65-series emulator.
+ Please change pathes in build.bat before using.
+ (see "Source\Displayable1.java");
+ Install ZIPExamlple jar, jad and zip to a:\java\jam\ZIPExample\ directory on phone.
+
+ This example also available as Borland JBuilder project (requires MobileSet) - 
+ ZIPExample.jpx.
+
+
+ At general, I do not have enought time to write good documentation and
+build a good library. This is just a sources that "just work", and can be 
+used as a starting point.
+
+
+=============================
+ Side notes on ZIP files
+=============================
+
+ I do not have code for creating new ZIP files. You will have to write it yourself. 
+
+Here are the hints: 
+
+ZIP file contents are as follows:
+
+header
+
+--- repeat ---
+local file header
+compressed stream
+--- repeat ---
+
+global directory header
+
+--- repeat ---
+global directory item
+--- repeat ---
+
+end tag
+
+
+ So you have to write headers as described in ZIPFormat.txt, and write compressed stream,
+made with Deflate() method.
+ I also included SciZipFile.pas - an example how to handle ZIP archives in pascal.
+Many other examples can be found in Google for "ZLIB". I just want to make it clear:
+ZIP is not a ZLIB. Various ports of ZLIB may not contain code for handling ZIP files.
+ZLIB are used to create compressed streams. ZIP are archive file format,
+and files inside this archive are stored as compressed streams, produced by ZLIB.
+
+ I hope this helps :)
+
+
+---------------------------------------
+ About weird comments like:
+
+//#SIEMENS{
+
+ - I use JEnable preprocessor for java (Google for "JEnable").
+
+-----------------------------------------------
+
+
+========================
+ License
+========================
+
+Copyright (c) 2005 by Roman Lut. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  1. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in
+     the documentation and/or other materials provided with the distribution.
+
+  3. The names of the authors may not be used to endorse or promote products
+     derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL AUTHOR
+OR ANY CONTRIBUTORS TO THIS SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ PLEASE ALSO READ LICENCES FOR:
+
+ JZLib library port for J2ME 
+  Copyright (c) 2003 Asoft ltd. All rights reserved.                            
+  http://www.asoft.ru                                                                  
+  Authors: Alexandre Rusev, Alexey Soloviev                                     
+
+ JZLib library
+  Copyright (c) 2000,2001,2002,2003 ymnk, JCraft,Inc. All rights reserved.
+  http://www.jcraft.com/
+
+----------------------------------------
+Roman Lut
+http://www.deep-shadows.com/hax/
+hax@deep-shadows.com

@@ -1,0 +1,229 @@
+                         ┌─────────────────┐
+                         │ Texture Mapping │
+                        ─┴─────────────────┴─
+                             release 1.1
+
+  From the numerous messages in echo conferences, as well as personal 
+letters sent to me, it's clear that many people still cannot write a fast
+texture mapping procedure, no matter how much they want to. Even the 
+source code from Dr.Bug/Future Hackers didn't help. I'm releasing my own
+procedure with a detailed description, hoping to finally put this issue 
+to rest once and for all.
+  
+  Below is a description of the procedure.
+
+Requirements: the procedure must fit a quadrilateral texture into an 
+arbitrary quadrilateral on the screen.
+
+Conventions:
+ - the texture is defined as a 256x256 array, as these are the most 
+   convenient dimensions for binary arithmetic;
+ - the screen buffer is a 320x200 array, i.e., the video buffer of 
+   standard mode 13h;
+ - the algorithm used is not Real Mapping, as the latter is quite 
+   complex, and I have no real need for it;
+ - the language used is assembler, to achieve maximum speed; for 386+ 
+   processors;
+ - platforms - BP 7.0 Real/Protected, TC, ASM;
+ - the goal is not to write a procedure of small size (not for 4K 
+   Intro), the main thing is performance;
+ - no clipping - in my opinion, this is the job of a completely 
+   different procedure;
+ - please don't blame me for any possible errors.
+
+  ┌──────────────────┐
+  │ How It's Done    │
+  └──────────────────┘
+
+                         a
+ a───R────────b         @  @
+ │  / $ $     │        L-----R    <───── horizontal
+ L/  $   $    │       @    $$  @         scanline
+ │    $ $     │      d   $   $   b
+ d────────────c        @  $$   @      The texture is shown as a
+                         @   @        rectangle, but can be an
+                           c          arbitrary quadrilateral
+                      
+    Texture          Image
+
+   The image will be drawn using horizontal scanlines. To draw a 
+horizontal line, we need to know the starting coordinate x_left, the 
+ending coordinate x_right, the point on the texture corresponding to 
+x_left - bmpxy_left, and the point on the texture corresponding to 
+x_right - bmpxy_right.
+   To accomplish this, we construct lines ab, bc, cd, da, but not to 
+the screen, instead to arrays s_left_x, s_right_x, s_leftbmpxy, 
+s_right_bmpxy. In simpler terms, instead of a procedure that outputs 
+a point, we have a procedure:
+
+ if x < leftx[y], then leftx[y] := x
+ if x > rightx[y], then rightx[y] := x
+
+(initially leftx is filled with 320, rightx is filled with -1)
+   
+   This way, we obtain the left x and right x coordinates for each 
+y. A standard DDA algorithm is used; since all data is written to 
+arrays by y, a loop is only applied to y; x and y texture coordinates 
+are interpolated exactly the same way as screen x (bmp_line_simple 
+macro).
+         
+   Then we determine the minimum and maximum y of the image 
+quadrilateral, and in a loop from Ymin to Ymax we draw horizontal 
+lines as follows: the texture coordinates are linearly interpolated 
+from the left edge to the right edge: we take a texture point, put 
+it in the screen buffer, and so on.
+
+   This algorithm works for an N-gon: you just need to draw not 4, 
+but N lines into the arrays. The N-gon can be concave, with self-
+intersections, but the horizontal scanline must intersect its sides 
+no more than 2 times. To adapt the procedure for a triangle, you 
+just need to remove the last bmp_line macro, adjust the parameters 
+of the penultimate one, and remove the check for the last y 
+coordinate against maximum/minimum.
+
+                                * * *
+    
+   That's all about the algorithm. Now about the implementation. 
+Various tricks are used here to squeeze out maximum speed.
+
+   1. Loop unrolling. When it's known that the number of loop 
+iterations doesn't exceed some N, the loop can be unrolled into a 
+continuous stream of commands. If we need to execute the loop i 
+times, we simply skip (n-i) loop bodies with a simple jmp. This 
+method avoids checking for loop exit, frees a register that would 
+have stored the loop variable, and increases speed because there 
+are no conditional jumps - the processor's pipeline is not 
+disrupted.
+   
+   2. Keeping all data in registers.
+
+    main loop of the procedure - drawing a horizontal line
+
+;EAX - 0  :  0 | 0   byte
+;EBX - Ylo     | y   x
+;ECX - xlo     | 0   y
+;EDX - yloadd  : 0  xadd
+;ESI - xloadd  : 0 yadd
+;di - screenofs
+;=======================================
+REPT 160
+                mov     al,[bx]     ;get pixel from texture
+                adc     ebx,edx     ;ylo = ylo + yloadd
+                                    ;x = x + xadd + CF
+                                    ;(CF remained from previous cycle)
+                                    ;2 operations in one instruction!!!!
+                adc     ecx,esi     ;xlo = xlo + xloadd
+                                    ;y = y + yadd + CF
+                mov     bh,cl       ;form pointer to texture point
+                                    ;texture
+                mov     ah,[bx]     ;get texture pixel
+                adc     ebx,edx     ;-"-
+                adc     ecx,esi     ;-"-
+                mov     bh,cl       ;-"-
+                stosw               ;draw 2 pixels
+ENDM
+
+   At first glance, it might seem that the operation
+
+   adc ebx,edx
+                  
+   could cause an unwanted carry from the low word to the high word 
+when xadd < 0, but this will never happen, since x changes from 0 
+to 256 (the same applies to y). But in the BMP_LINE macro regarding 
+rx this can happen, so when xadd is negative, we have to introduce 
+rxloadd compensation - decrease by one, because this one will be 
+automatically added by the carry.
+ 
+   3. Word-oriented algorithm.
+
+  The main loop could also look like this (this is how Dr.Bug did it):
+
+                mov     al,[bx]     ;get pixel from texture
+                adc     ebx,edx     ;ylo = ylo + yloadd
+                                    ;x = x + xadd + CF
+                                    ;(CF remained from previous cycle)
+                adc     ecx,esi     ;xlo = xlo + xloadd
+                                    ;y = y + yadd + CF
+                mov     bh,cl       ;form pointer to texture point
+                                    ;texture
+                stosb               ;draw pixel
+
+
+   But by using stosw I not only saved one byte of code :) but also 
+write a whole word at once, instead of writing it 2 times. Here we 
+need to remember about data alignment. My experiments with the 
+speedtst.asm program showed:
+
+  mov di,0    mov di,1   mov di,2   mov di,3
+  stosw       stosw      stosw      stosw
+ ─────────   ─────────  ─────────  ─────────
+  X cycles    X cycles   X cycles   Y cycles
+ 
+   where Y ~ X * 1.19. In general, the processor writes to even-
+aligned addresses faster. For this, the procedure also aligns the 
+address (BTR DI, 0).
+   Switching to word writing sped up the procedure by ~7%, to words 
+with alignment - by ~13%, although it made it much more complicated.
+   
+   4. A few words about instruction ordering.
+
+                mov     al,[bx]   ;no AGI
+                adc     ebx,edx
+                adc     ecx,esi
+                mov     bh,cl
+                mov     ah,[bx]   ;couldn't avoid AGI
+                adc     ebx,edx
+                adc     ecx,esi
+                mov     bh,cl
+                stosw
+
+   The commands are arranged exactly this way to avoid AGI - a 1-
+cycle delay that occurs when before a command that uses a register 
+for addressing, there is a command that writes to this register 
+(i486).
+   
+   5. Through active use of macros, bmp_line addresses operands 
+directly, not indirectly. I also tried unrolling the loop inside 
+bmp_line, but this resulted in an OBJ file too large - Pascal 
+doesn't digest it.
+                                         
+   6. Self-modifying code. Well, everyone knows this. For working 
+in Protected Mode, I had to introduce the csalias variable - a 
+code segment descriptor with data segment rights.
+
+┌───────────────────────┐
+│ Global Variables      │
+└───────────────────────┘
+
+csalias: word;  For Real Mode = CSseg,
+                for Protected in Pascal it's CSeg + selectorinc
+
+s_poly2d: array [1..4, 1..2] of integer;
+                Before calling the procedure, the coordinates of 
+                the quadrilateral's vertices on the screen are 
+                stored here. Attention - there is no clipping. 
+                With invalid coordinate values - certain 
+                overwriting or exception.
+
+s_polybmp: array [1..4, 1..2] of byte;
+                Before calling, the coordinates of the polygon's 
+                vertices on the texture are stored here.
+
+s_leftx: array [1..200] of integer;
+s_rightx: array [1..200] of integer;
+s_left_bmpxy: array [1..200] of word;
+s_right_bmpxy: array [1..200] of word;
+                Arrays used by the procedure. Lines are drawn here.
+
+s_scrbuf1seg: word;
+                Screen buffer segment.
+
+s_bmpseg: word;
+                Texture buffer segment.
+   
+                              * * *
+   
+   That's all. If you know a faster way to draw, write to me at 
+Lout Roman 2:463/586.20@fidonet.
+   
+                                                   08.05.96 ├┼AX

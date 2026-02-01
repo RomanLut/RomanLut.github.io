@@ -1050,6 +1050,26 @@
           ]
         },
         {
+          "type": "folder",
+          "name": "2007-05 Videobroadcast from console devkit",
+          "path": "Publications/2007-05_Videobroadcast_from_console_devkit",
+          "items": [
+            {
+              "type": "archive",
+              "name": "videobroadcast",
+              "path": "Publications/2007-05_Videobroadcast_from_console_devkit/videobroadcast.rar",
+              "size": 1018807
+            },
+            {
+              "type": "wordpad",
+              "name": "Videobroadcast from console devkit",
+              "path": "Publications/2007-05_Videobroadcast_from_console_devkit/Videobroadcast_from_console_devkit.md",
+              "size": 4818
+            }
+          ],
+          "reference": "Yes"
+        },
+        {
           "type": "archive",
           "name": "3denginelect",
           "path": "Game_development/3denginelect.7z",
@@ -1373,6 +1393,12 @@
           "path": "Hobby_projects/2003-08_ReadManiac",
           "items": [
             {
+              "type": "archive",
+              "name": "L-Kit",
+              "path": "Hobby_projects/2003-08_ReadManiac/L-Kit.zip",
+              "size": 238958
+            },
+            {
               "type": "wordpad",
               "name": "ReadManiac",
               "path": "Hobby_projects/2003-08_ReadManiac/ReadManiac.md",
@@ -1420,6 +1446,25 @@
           ],
           "image": "folder_image.gif",
           "desc": "﻿**SceneMainTool**\n\n**Date**: 2004\n**Platform**: Windows, 3ds MAX 4.x, 5.x, 6.x\n**Language**: C++\n\nThis tool creates a scene root dummy with a single click.\n\nIn 3ds Max, moving or rotating an entire scene is not as simple as selecting all objects, due to hierarchies, Physique-linked meshes, and link constraint controllers. These dependencies make global transformations difficult.\n\nTo solve this, animators usually create a root node that controls all scene objects (except Physique meshes and nodes with link constraints) and then move or rotate the scene using this root node. This plugin automatically creates such a root node in seconds."
+        },
+        {
+          "type": "folder",
+          "name": "2005-07 MyFileLib J2ME Filesystem Library",
+          "path": "Hobby_projects/2005-07_MyFileLib_J2ME_Filesystem_Library",
+          "items": [
+            {
+              "type": "notepad",
+              "name": "MyFileLib J2ME Filesystem Library",
+              "path": "Hobby_projects/2005-07_MyFileLib_J2ME_Filesystem_Library/MyFileLib_J2ME_Filesystem_Library.txt",
+              "size": 8082
+            },
+            {
+              "type": "archive",
+              "name": "TMyFileLib",
+              "path": "Hobby_projects/2005-07_MyFileLib_J2ME_Filesystem_Library/TMyFileLib.zip",
+              "size": 272613
+            }
+          ]
         },
         {
           "type": "folder",
@@ -1630,6 +1675,43 @@
       "name": "Publications",
       "path": "Publications",
       "items": [
+        {
+          "type": "folder",
+          "name": "1996-05 Texture Mapping Example",
+          "path": "Publications/1996-05_Texture_Mapping_Example",
+          "items": [
+            {
+              "type": "executable",
+              "name": "TEXTMAPS",
+              "path": "Publications/1996-05_Texture_Mapping_Example/TEXTMAPS.zip",
+              "size": 52002
+            },
+            {
+              "type": "archive",
+              "name": "TEXTMAPS",
+              "path": "Publications/1996-05_Texture_Mapping_Example/TEXTMAPS.zip",
+              "size": 52002
+            },
+            {
+              "type": "notepad",
+              "name": "TEXTMAPS (russian)",
+              "path": "Publications/1996-05_Texture_Mapping_Example/TEXTMAPS_(russian).txt",
+              "size": 14218
+            },
+            {
+              "type": "notepad",
+              "name": "TEXTMAPS (translated to english)",
+              "path": "Publications/1996-05_Texture_Mapping_Example/TEXTMAPS_(translated_to_english).txt",
+              "size": 9999
+            },
+            {
+              "type": "notepad",
+              "name": "TEXTMAPS.ASM",
+              "path": "Publications/1996-05_Texture_Mapping_Example/TEXTMAPS.ASM.txt",
+              "size": 8483
+            }
+          ]
+        },
         {
           "type": "folder",
           "name": "1997-07 Morphing images",
@@ -1922,6 +2004,25 @@
         },
         {
           "type": "folder",
+          "name": "2007-05 Videobroadcast from console devkit",
+          "path": "Publications/2007-05_Videobroadcast_from_console_devkit",
+          "items": [
+            {
+              "type": "archive",
+              "name": "videobroadcast",
+              "path": "Publications/2007-05_Videobroadcast_from_console_devkit/videobroadcast.rar",
+              "size": 1018807
+            },
+            {
+              "type": "wordpad",
+              "name": "Videobroadcast from console devkit",
+              "path": "Publications/2007-05_Videobroadcast_from_console_devkit/Videobroadcast_from_console_devkit.md",
+              "size": 4818
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "2007-07 hxGrid Distributed Computing In Small Office",
           "path": "Publications/2007-07_hxGrid_Distributed_Computing_In_Small_Office",
           "items": [
@@ -2030,6 +2131,12 @@
               "name": "Optimizing Xenus 2 for multicore CPUs (translated to english)",
               "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Optimizing_Xenus_2_for_multicore_CPUs_(translated_to_english).md",
               "size": 16474
+            },
+            {
+              "type": "archive",
+              "name": "Parallel Rendering slides",
+              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Parallel_Rendering_slides.rar",
+              "size": 1781545
             },
             {
               "type": "wordpad",
