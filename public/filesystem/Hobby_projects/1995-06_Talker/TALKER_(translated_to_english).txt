@@ -1,0 +1,61 @@
+
+                           Talker version 1.1
+                    Copyright (C) 1994 by LoutSoft.
+
+   It all started when I copied several text book files. But I didn't want
+to print them - the printer was precious, and ribbons weren't in abundance.
+Reading from the screen made my eyes hurt. So I decided to completely automate
+the process - let the computer do the reading. My program that used the
+SPEECH.COM utility didn't satisfy me, because Speech had no Russian sounds,
+let alone soft ones (so it sounded something like "dyevushka, dyevushka"),
+and the pronunciation was terrible. My program that launched SPP.EXE, passing
+the next line of the file as a parameter, also didn't please me - SPP required
+at least a 286 to listen properly; plus it thrashed the hard drive (and was
+especially slow on a floppy drive).
+   I immediately apologize for the quality - I wasn't aiming for SB Pro or
+ADLIB board or even a PC speaker synthesizer, but used a homemade board based
+on 140UD6A, using only 2 digital channels. But even so, it turned out pretty
+good.
+   I intended to read files in Russian, so I don't recommend learning English
+pronunciation with this program - I only added English word reading to handle
+individual words encountered in the text (file names, terms, etc.). I might
+have included only one-hundredth of all English pronunciation rules. Words are
+read letter by letter, and numbers up to 1000 are read fully, so I don't even
+recognize my own voice, deadened by the computer, except perhaps for the numbers.
+   The program can output to any DAC, PC Speaker, and Lexand TS2400 modem,
+but the quality is worse on the speaker and modem.
+   The following command-line switches are used at startup:
+   (without switches, help is displayed)
+
+   talker {/B|/Pnnnn|/M} filename|"message"
+
+   /B output to PC Speaker
+   /M output to Lexand TS2400 modem
+   /P output to passive DAC on port nnnn, where nnnn is specified as a
+decimal(!) number.
+   By default, COVOX on LPT1 is used (port 378H, 888D).
+
+   filename - name of the file to be read
+   message  - message to be spoken (must be enclosed in quotes)
+
+   While reading a file, the program responds to keys as follows:
+   S - stop reading and exit to DOS
+   P - pause until any key is pressed
+   + - faster (you can reach the computer's speed limit - output will become
+       slower)
+   - - slower
+   T - turn voice on/off - for example, if you need to skip a page or two
+
+   Examples:
+     talker readme     -  read file on COVOX1
+     talker /B "You have a voice like hair in the ass - thin and not clear"
+                       - output message to speaker
+
+   The file talker.voi contains all the sounds; the program won't work without it.
+
+   Version 1.1:
+   Discovered that on AT computers, bit 6 of port 62h doesn't receive the
+signal from channel 2 of the 8254 timer, which I used for pauses - causing the
+program to hang. In this version, I've changed the algorithm.
+
+   Write letters to Lout Roma at Sciens&Business BBS (277-53-67).

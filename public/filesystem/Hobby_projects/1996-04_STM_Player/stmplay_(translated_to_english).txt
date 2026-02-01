@@ -75,7 +75,7 @@ Setup.PSPeed - mixing frequency.
 tricks (for example, you can change the Order in real-time - I used this
 for looping). All of this can be seen in the source code.
 
-                                   30.04.96      MAX
+                                   30.04.96      HAX
 
 P.S. Actually, it's time to switch to Midas SS. Using this player only
      makes sense if you really want to support Speaker and Covox.

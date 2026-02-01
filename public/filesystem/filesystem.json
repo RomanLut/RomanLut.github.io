@@ -963,7 +963,7 @@
               "type": "archive",
               "name": "ActiveLoad",
               "path": "Electronics/2015-09_80W_electronic_active_load/ActiveLoad.rar",
-              "size": 741642816
+              "size": 266973932
             },
             {
               "type": "wordpad",
@@ -1083,7 +1083,7 @@
               "type": "notepad",
               "name": "SLOWPLAY.ASM",
               "path": "Hobby_projects/1994-04_SlowPlay_STM_Player/SLOWPLAY.ASM.txt",
-              "size": 69360
+              "size": 72128
             }
           ],
           "desc": "**SlowPlay**\n\n**Date:** 1994\n**Platform:** DOS\n**Language:** Pure 8086 Assembler\n\nHighly optimized *.STM player. Can play STM files on VERY slow PCs like POISK-1."
@@ -1113,6 +1113,96 @@
             }
           ],
           "desc": "**MCADRus**\n\n**Date:** 1995\n**Platform:** DOS\n**Language:** Pure 8086 assembler\n                                 \nThis program makes possible to use russian characters and insert pictures(!) into Mathcad 2.01 documents."
+        },
+        {
+          "type": "folder",
+          "name": "1995-06 Talker",
+          "path": "Hobby_projects/1995-06_Talker",
+          "items": [
+            {
+              "type": "executable",
+              "name": "talker",
+              "path": "Hobby_projects/1995-06_Talker/talker.zip",
+              "size": 66555
+            },
+            {
+              "type": "archive",
+              "name": "talker",
+              "path": "Hobby_projects/1995-06_Talker/talker.zip",
+              "size": 66555
+            },
+            {
+              "type": "notepad",
+              "name": "TALKER (russian)",
+              "path": "Hobby_projects/1995-06_Talker/TALKER_(russian).txt",
+              "size": 4882
+            },
+            {
+              "type": "notepad",
+              "name": "TALKER (translated to english)",
+              "path": "Hobby_projects/1995-06_Talker/TALKER_(translated_to_english).txt",
+              "size": 3070
+            },
+            {
+              "type": "archive",
+              "name": "talker src",
+              "path": "Hobby_projects/1995-06_Talker/talker_src.zip",
+              "size": 78562
+            }
+          ],
+          "desc": "**Talker**\n\n**Date:** 1995\n**Platform:** DOS, can be run under DOSBOX\n**Language:** Turbo pascal 5.5, 8086 Assembler\n\nSpeech syntesis on PC Speaker. In 1995, sound blaster compartible card was a high-tech product and was not affordable. I developed a dedeicated hardware for sampling 1-bit sounds from microphone. This program uses library of pre-recorded phonemes to read text files on PC Speaker.\n\n**Russian text is supported only.**\n\nListen for sample text by clicking on MS-Dos talker icon."
+        },
+        {
+          "type": "folder",
+          "name": "1995-07 LHATPU",
+          "path": "Hobby_projects/1995-07_LHATPU",
+          "items": [
+            {
+              "type": "archive",
+              "name": "LHATPU",
+              "path": "Hobby_projects/1995-07_LHATPU/LHATPU.ZIP",
+              "size": 13354
+            },
+            {
+              "type": "notepad",
+              "name": "LHATPU (russian)",
+              "path": "Hobby_projects/1995-07_LHATPU/LHATPU_(russian).txt",
+              "size": 2382
+            },
+            {
+              "type": "notepad",
+              "name": "LHATPU (translated to english)",
+              "path": "Hobby_projects/1995-07_LHATPU/LHATPU_(translated_to_english).txt",
+              "size": 1598
+            }
+          ],
+          "desc": "﻿**LHATPU**\n\n**Date:** 1995\n**Platform:** DOS\n**Language:** Turbo pascal 5.5, 8086 Assembler\n\nLibrary for unpacking *.lzh archives. Actually dissasembled and turned to library a stub of self-extracting archive.\n\nBased on this library, I also made a tricky program which could launch a program directly from archive (all file-access functions were emulated and redirected to unpacking code. Unfortunately, sources and program itself have been lost 🙁"
+        },
+        {
+          "type": "folder",
+          "name": "1996-02 SpeedTst",
+          "path": "Hobby_projects/1996-02_SpeedTst",
+          "items": [
+            {
+              "type": "archive",
+              "name": "speedtst",
+              "path": "Hobby_projects/1996-02_SpeedTst/speedtst.zip",
+              "size": 4240
+            },
+            {
+              "type": "notepad",
+              "name": "SPEEDTST (russian)",
+              "path": "Hobby_projects/1996-02_SpeedTst/SPEEDTST_(russian).txt",
+              "size": 2599
+            },
+            {
+              "type": "notepad",
+              "name": "SPEEDTST (translated english)",
+              "path": "Hobby_projects/1996-02_SpeedTst/SPEEDTST_(translated_english).txt",
+              "size": 1842
+            }
+          ],
+          "desc": "**SpeedTst**\n\n**Date:** 1996\n**Platform:** DOS\n**Language:** 8086 Assembler\n\nTemplate for testing speed of assembler code fragments. Was used frequently for demo coding."
         },
         {
           "type": "folder",
@@ -2233,7 +2323,7 @@
               "type": "archive",
               "name": "ActiveLoad",
               "path": "Electronics/2015-09_80W_electronic_active_load/ActiveLoad.rar",
-              "size": 741642816
+              "size": 266973932
             },
             {
               "type": "wordpad",

@@ -1,0 +1,33 @@
+
+                           Unit LHATPU
+                Copyright (C) 1995 by LoutSoft
+
+    This unit allows your program to store data files in the form of
+lzh archives. The advantages of storing data in archive form are undeniable.
+
+The module contains only one procedure:
+
+ UnPackFile (Arcname,FileName: String; Buffer: Pointer; var Len: LongInt);
+
+It unpacks the file FileName from the archive ArcName into the memory area
+Buffer; the length of the unpacked file is returned in Len.
+  If an error occurred during unpacking (archive not found, file not found
+in archive, checksum error) - Len = -1;
+  If there was not enough memory (the unpacker requires 65535 bytes in Heap) -
+Len = -2.
+  You are responsible for the size of Buffer yourself - the procedure unpacks
+the file completely, and the file size can be larger than one segment.
+
+   The archive must be created with the LHA packer; I tried version 2.55b -
+everything works well. The LHIce packer cannot be used because it uses
+methods 0-4, while my unpacker only handles 0 and 5.
+   The unpacker is written in assembler and provides very fast speed,
+practically the same as during normal file loading.
+   The only drawback of the module is the inability to pack a file into an
+archive from the program - but please excuse me, extracting the packing
+procedure from a packer longer than 40K is not an easy task (whereas I
+extracted the unpacking procedure from a SELF-EXTRACTING archive); and
+anyway, what are we talking about?
+
+   The source code, I believe, can be recompiled for any version of Pascal.
+

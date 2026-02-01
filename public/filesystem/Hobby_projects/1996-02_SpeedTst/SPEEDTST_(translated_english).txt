@@ -1,0 +1,52 @@
+
+                              SPEEDTST.DOC
+
+ This source code will allow you to calculate the execution speed of your
+processor's command(s) in clock cycles(!).
+ Working principle: execute the command(s) being tested for a specific
+period of time and count the number of cycles. Also test the NOP command
+(for which it is known to take 1 clock cycle), test the number of cycles
+for only the commands that organize the loop (empty). The execution speed
+of the given command in clock cycles is calculated as:
+
+ (1/nCode-1/nEmpty)/(1/nNop-1/nEmpty) = number of clock cycles.
+
+In order to refine the result, the command is executed not just once, but
+REP_COUNT times per cycle.
+ In order to allow comparison of 2 code sections, 2 commands/code sections
+are tested simultaneously.
+
+Usage:
+ 
+ In the speedtst.asm file, enter your parameters:
+
+REPT_COUNT = 1024 - number of command repetitions within one cycle,
+ the higher the better (limited only by the com-file size)
+TEST_TIME  = 18 - test duration, in 1/18.2 sec. The longer,           
+  the better.
+
+In the TEST_CODE1 macro, enter the first commands to be tested, in TEST_CODE2 -
+the second ones. Commands must not disable interrupts! Modify the prepare
+section if needed. The freeseg segment can be used freely.
+======================
+ In short, I'm too lazy to write documentation - whoever understands the
+working principle will figure it out themselves.
+
+I suggest testing:
+local @@l1            local @@l1
+or cx,cx              jcxz @@l1
+jz @@l1               @@l1:
+@@l1:
+ * for cx=1 and cx=0
+
+mov ax,[si]          mov ax,es:[si]
+
+rol eax,1            rol eax,2/3/4/5/6/...
+
+mov bx,ax            xor dx,dx
+xor dx,dx            mov ax,bx
+mov ax,[bx]          mov ax,[bx]
+
+
+
+                                                Signed, √≈AX

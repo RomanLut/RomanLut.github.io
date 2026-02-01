@@ -185,7 +185,7 @@ def build_file_item(entry: Path, rel_path: Path, is_reference: bool = False) -> 
     """Build an item dict for a file."""
     archive_exts = {".zip", ".rar", ".7z"}
     html_exts = {".html", ".htm"}
-    sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a"}
+    sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a", ".wmv"}
     image_exts = {".jpg", ".jpeg", ".png", ".gif"}
 
     size = entry.stat().st_size
@@ -245,7 +245,7 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     ordered = folders + files
     archive_exts = {".zip", ".rar", ".7z"}
     html_exts = {".html", ".htm"}
-    sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a"}
+    sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a", ".wmv"}
     image_exts = {".jpg", ".jpeg", ".png", ".gif"}
     for entry in ordered:
         if entry.name == "filesystem.json":
