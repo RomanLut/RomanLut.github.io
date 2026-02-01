@@ -1,0 +1,270 @@
+
+                              *************
+                                Unit CGAKit
+                              *************
+
+                                Version 1.0
+
+                   Copyright (C) 1994,1995 by LoutSoft
+         Graph.* Copyright (C) by Borland International, Inc.
+
+
+                Working with CGA Graphics in Turbo Pascal
+
+   Any attempt to write a Pascal program that makes truly effective use 
+of graphics is doomed to fail because Pascal's procedures from the GRAPH 
+module write directly to the screen. As is well known, graphics procedures 
+are quite slow (for example, Circle needs to calculate sin and cos in a 
+long loop, perform multiplications — all of this takes considerable time), 
+and on top of that, the CGA memory area itself introduces many WAIT STATES 
+(more than 10, whereas regular RAM has 0/1). Watching a picture made of 
+lines and circles being drawn on the screen right before your eyes is 
+simply unprofessional.
+   ALL proper games work like this: they write to some buffer, and then 
+copy it to the CGA screen area (by the way, the buffer doesn't have to be 
+transferred completely — copying 16K is also rather slow — it's enough to 
+copy only the rectangle that has changed).
+   So I decided to write a UNIT that could write to any memory segment 
+(not just B800). After the first attempts to write a LINE or BAR procedure, 
+I realized this would be a nightmare — the implementation algorithms for 
+these procedures in assembly are quite complex. I abandoned that approach 
+and decided to do things my own way — like a hacker. The idea is simple: 
+find commands in the existing graphics procedures that look like
+
+          mov si,b800
+          mov es,si
+
+and write a SetActiveScreen(segm: word); procedure that would replace all 
+B800 with SEGM. The first attempts to crack open GRAPH.TPU and CGA.BGI 
+failed, so I decided to use the procedures from Turbo Pascal 3.0, which 
+are contained in the files Graph.P and Graph.BIN. The result is the CGAKit 
+module.
+   I didn't include "turtle graphics" procedures in the module — in my 
+opinion, they're useless. Besides the procedures from Pascal 3.0, the 
+module contains procedures that help work with buffers, and the ZoomImage 
+procedure, which I want to draw your attention to — this procedure copies 
+an image while changing its size (written entirely in assembly, quite a 
+complex algorithm. At large scaling factors, it works slowly compared to 
+similar procedures for VGA (for example, from C--) — but the algorithm 
+isn't at fault here, it's the fastest possible; the issue is that on VGA 
+each pixel takes 1 byte, while on CGA it takes 1 bit, and the operations 
+to extract/insert this bit from/into the byte take up most of the time).
+
+Below is a description of the procedures included in the module.
+
+
+Procedure GraphMode;
+---------------------------------------------------------------------------
+Switches the screen to graphics mode 4 (320x200, 4 colors)
+
+
+Procedure HiRes;
+---------------------------------------------------------------------------
+Switches the screen to mode 6 (640x200, 2 colors)
+
+
+Procedure HiresColor(Color: Integer);
+---------------------------------------------------------------------------
+In 640x200 mode, only one color is used, but you can choose from 16 
+available colors: Color 0..15
+
+
+Procedure Palette(N: Integer);
+---------------------------------------------------------------------------
+Sets the palette in 320x200 mode
+
+
+Procedure GraphWindow (X1,Y1,X2,Y2: Integer);
+---------------------------------------------------------------------------
+Sets the output window for graphics procedures.
+By default, the window is set to 0,0,319,199 for 320x200 mode and
+                              0,0,639,199 for 640x200 mode
+
+
+Procedure Plot(X,Y,Color: Integer);
+---------------------------------------------------------------------------
+Outputs a pixel of color Color at position X,Y
+
+
+Procedure Draw(X1,Y1,X2,Y2,Color: Integer);
+---------------------------------------------------------------------------
+Draws a line
+
+
+Procedure Arc(X,Y,Angle,Radius,Color: Integer);
+---------------------------------------------------------------------------
+Draws an arc (I'm also surprised there's only one Angle parameter — 
+you'll figure it out yourselves; at the time of writing this file, 
+I hadn't experimented with it yet)
+
+
+Procedure Circle(X,Y,Radius,Color: Integer);
+---------------------------------------------------------------------------
+Draws a circle. In 640x200 mode, it becomes elliptical, but that's 
+not my fault — Borland messed up, maybe? Tested on the actual 
+Turbo Pascal 3.0 — same thing.
+
+
+Procedure GetPic(var Buffer;X1,Y1,X2,Y2: Integer);
+---------------------------------------------------------------------------
+Stores a rectangular image area into the memory Buffer, which must 
+be at least (((X2-X1+15) div 8)*(Y2-Y1+1)+4) bytes in size.
+See the description of the similar GetImage procedure from the GRAPH module.
+
+
+Procedure PutPic(var Buffer; X,Y: Integer);
+---------------------------------------------------------------------------
+Displays an image stored by the GetPic procedure
+
+
+Function GetDotColor(X,Y: Integer);
+---------------------------------------------------------------------------
+Returns the color of a pixel
+
+
+Procedure FillScreen(Color: Integer);
+---------------------------------------------------------------------------
+Fills the current window with color Color
+
+
+Procedure FillShape(X,Y,FillCol,BorderCol: Integer);
+---------------------------------------------------------------------------
+Fills a closed area with color FillCol. BorderCol is the color 
+considered as background (usually black)
+
+
+Procedure FillPattern(X1,Y1,X2,Y2,Color: Integer);
+---------------------------------------------------------------------------
+Draws a filled rectangle in color Color
+
+
+Procedure ZoomImage (X1,Y1,SizeX1,SizeY1,X2,Y2,SizeX2,SizeY2,Seg1,Seg2: Word);
+---------------------------------------------------------------------------
+Copies an image from one buffer to another while changing its size.
+X,Y - coordinates of the upper-left corner of the rectangle
+SizeX,SizeY - width and height of the rectangle
+The images can be in the same buffer, but they should not overlap 
+(this isn't prohibited, of course, but who knows what would come out of it...)
+Requires 32K of free HEAP memory during operation, as it creates two 
+buffers because I wrote the procedure with line-by-line scanning in mind 
+(see the CopyCgatoBuf procedure)
+The procedure is designed for 640x200 mode; when used in 320x200 mode, 
+it distorts colors, and in this case, coordinates should be given as if 
+the screen were in 640x200 mode
+
+
+Procedure ClearCga(Seg: Word);
+---------------------------------------------------------------------------
+Clears a buffer, e.g., ClearCga($B800) - clears the screen
+
+
+Procedure CopyCgatoBuf(SegCga,SegBuf: Word);
+---------------------------------------------------------------------------
+In the CGA screen area, the image is stored using interlaced scanning:
+0  ..80  - line 0
+80 ..160 - line 2
+160..240 - line 4
+......................
+several unused bytes
+............................
+$2000   ..$2000+80  - line 1
+$2000+80..$2000+160 - line 3
+..............................
+
+After copying with this procedure, the image in SegBuf buffer is stored 
+in progressive scan format:
+0  .. 80  - line 0
+80 .. 160 - line 1
+160.. 240 - line 2
+....................
+
+
+Procedure CopyBuftoCga(SegBuf,SegCga: Word);
+---------------------------------------------------------------------------
+Same as CopyCgatoBuf but in reverse
+
+
+Procedure SetActiveScreen(SEG: Word);
+---------------------------------------------------------------------------
+Sets the segment to which all graphics procedures will write
+
+
+Procedure CreateBuf(var Seg: Word);
+---------------------------------------------------------------------------
+Reserves a 16K memory area in the HEAP and stores its segment in seg.
+Up to 32 buffers can be created. If there's not enough memory, Seg=$ffff.
+
+
+Procedure DeleteBuf(Seg: Word);
+---------------------------------------------------------------------------
+Frees the memory
+
+
+Procedure CopyCgatoCga(Seg1,Seg2: Word);
+---------------------------------------------------------------------------
+Copies one buffer to another, e.g., CopyCgatoCga(buf,$b800) - displays 
+the buf buffer
+
+
+Procedure Load_PIC(FileName: String; Buf: Word; var ErrCode: Byte);
+---------------------------------------------------------------------------
+Loads an image from a *.PIC file (Bsave PIC format 320x200x4) into a buffer.
+ErrCode=0 - Ok
+ErrCode=1 - file not found
+ErrCode=2 - read error
+ErrCode=3 - file is not in Bsave PIC format 320x200x4
+
+
+Procedure Save_PIC(FileName: String; Buf: Word; var ErrCode: Byte);
+---------------------------------------------------------------------------
+Writes an image to a file. Errors same as in Load_PIC.
+
+
+Procedure GetPCXHeader(FileName: String; var PCXHr: PCXHeader;
+                                                       var ErrCode: Byte);
+---------------------------------------------------------------------------
+Reads the header of a *.PCX file. Actually, I wanted to write a procedure 
+that would load any GIF and PCX files, converting them like CSHOW, but 
+so far it's not working out. Errors same as in Load_PIC.
+The PCXHeader type is defined in the module as follows:
+
+  PCXHeader = record
+                manufacturer    : Byte;         {$0A - PCX signature}
+                version         : Byte;
+                encode_mode     : Byte;
+                bits_per_pixel  : Byte;
+                start_x         : Word;
+                start_y         : Word;
+                end_x           : Word;
+                end_y           : Word;
+                x_resolution    : Word;
+                y_resolution    : Word;
+                palette_RGB     : array [1..48] of Byte;
+                vmode           : Byte;
+                planes          : Byte;
+                bytes_per_line  : Word;
+                unused          : array [1..60] of Byte;
+              end;
+
+The module defines a constant RealScreen = $B800, for example
+ClearCGA(RealScreen) - clears the screen.
+
+   The module can be used simultaneously with GRAPH; they don't interfere 
+with each other, but remember that until the module's procedure sets the 
+graphics mode, the procedures won't work. Simply set:
+
+GraphMode;      {for CGAKit}
+InitGraph(...)  {for Graph}
+
+   I'm providing the source code. CGAKit.ASM is compiled by TurboEditasm 
+1.0 into an OBJ file, CGAKit.PAS is compiled by Turbo Pascal 4.0 - 7.0 into 
+TPU (although actually I wrote it for TP 5.5).
+
+P.S. When using CGAKit in my programs, I was still dissatisfied with the 
+graphics procedures from TP 3.0 and took up cracking the Graph module. 
+As a result, I wrote the PManager module, which should be used together 
+with Graph and contains, practically, just one procedure — SetActivePage(segm:word), 
+which redirects the output of ALL procedures in the GRAPH module to the 
+specified segment. Again, designed for CGA modes, since on EGA/VGA the 
+screen area is organized as bit planes, and such tricks won't work there — 
+although for VGA there are already plenty of various units written anyway.

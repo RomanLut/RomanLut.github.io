@@ -960,12 +960,6 @@
               "size": 32762
             },
             {
-              "type": "archive",
-              "name": "ActiveLoad",
-              "path": "Electronics/2015-09_80W_electronic_active_load/ActiveLoad.rar",
-              "size": 266973932
-            },
-            {
               "type": "wordpad",
               "name": "Электронная активная нагрузка 80Вт (russian)",
               "path": "Electronics/2015-09_80W_electronic_active_load/Электронная_активная_нагрузка_80Вт_(russian).md",
@@ -1087,6 +1081,44 @@
             }
           ],
           "desc": "**SlowPlay**\n\n**Date:** 1994\n**Platform:** DOS\n**Language:** Pure 8086 Assembler\n\nHighly optimized *.STM player. Can play STM files on VERY slow PCs like POISK-1."
+        },
+        {
+          "type": "folder",
+          "name": "1994-06 CGAKit",
+          "path": "Hobby_projects/1994-06_CGAKit",
+          "items": [
+            {
+              "type": "archive",
+              "name": "CGAKIT",
+              "path": "Hobby_projects/1994-06_CGAKit/CGAKIT.ZIP",
+              "size": 26652
+            },
+            {
+              "type": "notepad",
+              "name": "CGAKIT (russian)",
+              "path": "Hobby_projects/1994-06_CGAKit/CGAKIT_(russian).txt",
+              "size": 14979
+            },
+            {
+              "type": "notepad",
+              "name": "CGAKIT (translated to english)",
+              "path": "Hobby_projects/1994-06_CGAKit/CGAKIT_(translated_to_english).txt",
+              "size": 11575
+            },
+            {
+              "type": "executable",
+              "name": "PMANAGER",
+              "path": "Hobby_projects/1994-06_CGAKit/PMANAGER.zip",
+              "size": 29979
+            },
+            {
+              "type": "archive",
+              "name": "PMANAGER",
+              "path": "Hobby_projects/1994-06_CGAKit/PMANAGER.zip",
+              "size": 29979
+            }
+          ],
+          "desc": "﻿**CGAKit**\n\n**Date:** 1995\n**Platform:** DOS\n**Language:** Turbo pascal 3.0 and 5.5, asm\n\nGraphics library for Turbo pascal 3.0 and 5.5 – CGA video modes. Introduces double-buffered drawing (standart BGI library in Turbo-pascal do not have this feature)."
         },
         {
           "type": "folder",
@@ -2318,12 +2350,6 @@
               "name": "80W Electronic Active Load (translated to english)",
               "path": "Electronics/2015-09_80W_electronic_active_load/80W Electronic Active Load_(translated_to_english).md",
               "size": 32762
-            },
-            {
-              "type": "archive",
-              "name": "ActiveLoad",
-              "path": "Electronics/2015-09_80W_electronic_active_load/ActiveLoad.rar",
-              "size": 266973932
             },
             {
               "type": "wordpad",
