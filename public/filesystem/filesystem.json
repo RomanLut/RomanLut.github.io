@@ -960,6 +960,12 @@
               "size": 32762
             },
             {
+              "type": "archive",
+              "name": "ActiveLoad",
+              "path": "Electronics/2015-09_80W_electronic_active_load/ActiveLoad.rar",
+              "size": 45784231
+            },
+            {
               "type": "wordpad",
               "name": "Электронная активная нагрузка 80Вт (russian)",
               "path": "Electronics/2015-09_80W_electronic_active_load/Электронная_активная_нагрузка_80Вт_(russian).md",
@@ -1056,6 +1062,44 @@
       "name": "Hobby projects",
       "path": "Hobby_projects",
       "items": [
+        {
+          "type": "folder",
+          "name": "1992-03 DOSEMU",
+          "path": "Hobby_projects/1992-03_DOSEMU",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Poisk-1 type recorder",
+              "path": "Hobby_projects/1992-03_DOSEMU/Poisk-1_type_recorder.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=lGRwWD4Nep8"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "﻿**DOSEMU**\n\n**Date:** 1992-1993\n**Platform:** Poisk-1, NO OS !\n**Language:** Pure 8086 Assembler\n\nThe low-cost IBM-compatible PC called **POISK-1**, developed by the Ukrainian company **ElectronMash** in 1992, became a memorable milestone in the lives of many people. Its significance is comparable to the emergence of the ZX Spectrum series.\n\n**Poisk-1** has modularized architecture. Base module has been limited to CPU, RAM and integrated Video Card. All software were loaded from tape recorder. During a year I ported about 30 games to cassette. When loaded from cassette, there is no operating system – only pure BIOS. INT21 and other interrupts should be emulated by a small stub – DOSEMU. DOSEMU did the good job with a lot of games, and even made possible making savegame to cassette – f.e. with ELITE.\n\nCassetes and source code was lost 🙁"
+        },
+        {
+          "type": "folder",
+          "name": "1993-06 HyperBIOS for Poisk-1",
+          "path": "Hobby_projects/1993-06_HyperBIOS_for_Poisk-1",
+          "items": [
+            {
+              "type": "archive",
+              "name": "HBIOS",
+              "path": "Hobby_projects/1993-06_HyperBIOS_for_Poisk-1/HBIOS.zip",
+              "size": 15333
+            },
+            {
+              "type": "youtube",
+              "name": "Poisk-1 hardware",
+              "path": "Hobby_projects/1993-06_HyperBIOS_for_Poisk-1/Poisk-1_hardware.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=Ociq39F2y34"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "﻿**HyperBIOS**\n\n**Date:** 1993\n**Platform:** POISK-1, DOS\n**Language:** 8086 Assembler\n\n\nThe low-cost IBM-compatible PC called **POISK-1**, developed by the Ukrainian company **ElectronMash** in 1992, became a memorable milestone in the lives of many people. Its significance is comparable to the emergence of the ZX Spectrum series.\n\nThis was my first home computer. After extensive experimentation, I developed a resident program that replaced the original BIOS and:\n- Made screen output 2-3 times faster\n- Solved many compatibility issues\n- Remapped the keyboard layout for better usability\n- Added support for a low-cost joystick interface that I designed myself\n\nProgram became very popular, many users considered it the most useful program for this PC 🙂\n\n*The POISK-1 had only two native graphics modes: 320x200x with 4 colors and 640x200 with 2 colors. All standard text modes were emulated by the BIOS by rendering characters within these graphics modes. Direct writes to video memory were intercepted by the BIOS (triggering INT 1), allowing the system to remain compatible with software that accessed video memory directly.*\n\n*HyperBIOS replaced both the INT 10 and INT 1 handlers with highly optimized assembly code, increasing screen output speed by 2-3 times. Performance could have been even better if HyperBIOS had been placed in ROM, which was 2-3 times faster than RAM on this system.*\n\nThe joystick interface wiring diagram and source code have unfortunately been lost 🙁"
+        },
         {
           "type": "folder",
           "name": "1994-04 SlowPlay STM Player",
@@ -2350,6 +2394,12 @@
               "name": "80W Electronic Active Load (translated to english)",
               "path": "Electronics/2015-09_80W_electronic_active_load/80W Electronic Active Load_(translated_to_english).md",
               "size": 32762
+            },
+            {
+              "type": "archive",
+              "name": "ActiveLoad",
+              "path": "Electronics/2015-09_80W_electronic_active_load/ActiveLoad.rar",
+              "size": 45784231
             },
             {
               "type": "wordpad",
