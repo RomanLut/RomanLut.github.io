@@ -1,4 +1,5 @@
 import { Taskbar } from './taskbar';
+import { setMaximizedParam } from './util';
 
 type WindowState = 'normal' | 'maximized' | 'minimized';
 
@@ -34,6 +35,11 @@ export class AppWindow {
   private iconMarkup: string | undefined;
   private static openWindows = new Set<AppWindow>();
   private static fsWatcherInit = false;
+  private static maximizedWindows = new Set<AppWindow>();
+  public static skipNextSpawnAnimation = false;
+  private static updateMaximizedFlag() {
+    setMaximizedParam(AppWindow.maximizedWindows.size > 0);
+  }
   private positioned = false;
   private overlayActive = false;
   private overlayKeyHandler: ((e: KeyboardEvent) => void) | null = null;
@@ -49,10 +55,14 @@ export class AppWindow {
   private showAnimation?: Animation;
   private spawnedAnimated = false;
   private spawnOrigin: { x: number; y: number } | null = null;
+  private pendingInitialMaximize = false;
+  private noSpawnAnimation = false;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, title: string, icon?: string, showFullscreen = false) {
     this.taskbar = taskbar;
     this.desktop = desktop;
+    this.noSpawnAnimation = AppWindow.skipNextSpawnAnimation;
+    AppWindow.skipNextSpawnAnimation = false;
     this.element = document.createElement('div');
     this.element.className = 'app-window';
     this.element.setAttribute('role', 'dialog');
@@ -110,7 +120,10 @@ export class AppWindow {
   private positionInitial() {
     if (this.positioned) return;
     const parentRect = this.desktop.getBoundingClientRect();
+    const prevTransform = this.element.style.transform;
+    this.element.style.transform = '';
     const rect = this.element.getBoundingClientRect();
+    this.element.style.transform = prevTransform;
     if (rect.width < 10 || rect.height < 10) {
       // Wait for layout (e.g., subclasses set width/height after super()).
       requestAnimationFrame(() => this.positionInitial());
@@ -162,7 +175,9 @@ export class AppWindow {
     this.positioned = true;
     if (!this.spawnedAnimated) {
       this.spawnedAnimated = true;
-      void this.animateSpawn();
+      if (!this.noSpawnAnimation) {
+        void this.animateSpawn();
+      }
     }
   }
 
@@ -439,8 +454,25 @@ export class AppWindow {
     });
   }
 
+  public applyInitialState(options?: { maximize?: boolean }) {
+    if (options?.maximize) {
+      this.pendingInitialMaximize = true;
+      requestAnimationFrame(() => {
+        if (!this.pendingInitialMaximize) return;
+        this.pendingInitialMaximize = false;
+        if (this.state !== 'normal') return;
+        this.maximize();
+      });
+    }
+  }
+
   private minimize() {
     if (this.state === 'minimized') return;
+    this.pendingInitialMaximize = false;
+    if (this.state === 'maximized') {
+      AppWindow.maximizedWindows.delete(this);
+      AppWindow.updateMaximizedFlag();
+    }
     this.animateToTaskbar().then(() => {
       this.state = 'minimized';
       this.element.style.display = 'none';
@@ -480,6 +512,9 @@ export class AppWindow {
     if (this.taskbarButton) {
       this.taskbarButton.remove();
       this.taskbarButton = null;
+    }
+    if (AppWindow.maximizedWindows.delete(this)) {
+      AppWindow.updateMaximizedFlag();
     }
     AppWindow.activeWindows.delete(this);
     AppWindow.openWindows.delete(this);
@@ -611,11 +646,15 @@ export class AppWindow {
     this.state = 'maximized';
     this.element.classList.add('is-maximized');
     this.setActiveState(true);
+    AppWindow.maximizedWindows.add(this);
+    AppWindow.updateMaximizedFlag();
     this.element.dispatchEvent(new CustomEvent('appwindow:maximized', { detail: { win: this } }));
   }
 
   private restoreFromMax() {
     if (this.state !== 'maximized' || !this.lastRect) return;
+    AppWindow.maximizedWindows.delete(this);
+    AppWindow.updateMaximizedFlag();
     this.element.style.left = `${this.lastRect.x}px`;
     this.element.style.top = `${this.lastRect.y}px`;
     this.element.style.width = `${this.lastRect.w}px`;

@@ -27,6 +27,10 @@ export function setFullscreenParam(enabled: boolean) {
   updateQueryParam('fullscreen', enabled ? '1' : null);
 }
 
+export function setMaximizedParam(enabled: boolean) {
+  updateQueryParam('maximized', enabled ? '1' : null);
+}
+
 export function setFolderParam(path: string | null) {
   updateQueryParam('folder', normalizeParamPath(path));
 }
@@ -57,7 +61,8 @@ export function formatDateShort(now: Date = new Date()): string {
 
 export async function exitFullscreenAndOpen(url: string, target: string = '_blank') {
   const openLink = () => window.open(url, target, 'noopener');
-  if (document.fullscreenElement && document.exitFullscreen) {
+  //if (document.fullscreenElement && document.exitFullscreen) {
+  if (document.exitFullscreen) {
     try {
       await document.exitFullscreen();
     } catch {
@@ -458,11 +463,28 @@ export async function loadFilesystem(url = '/filesystem/filesystem.json'): Promi
   return (await res.json()) as FsRoot;
 }
 
-export function navigateToUrl(desktop: HTMLElement, taskbar: any, url: string) {
+export async function navigateToUrl(desktop: HTMLElement, taskbar: any, url: string) {
+  try {
+    const parsed = new URL(url, window.location.href);
+    if (
+      parsed.origin === window.location.origin &&
+      (parsed.pathname === '/' || parsed.pathname === '') &&
+      parsed.searchParams.has('folder')
+    ) {
+      const folder = parsed.searchParams.get('folder')?.trim();
+      if (folder) {
+        const { FileExplorer } = await import('./fileExplorer');
+        new FileExplorer(desktop, taskbar, folder);
+        return;
+      }
+    }
+  } catch {
+    // ignore malformed URLs
+  }
   if (url.includes('dangerousprototypes.com') || url.includes('sparkfun.com') || url.includes('cxem.net')
       || url.includes('adafruit.com') || url.includes('github.com')) {
-    window.open(url, '_blank', 'noopener');
-  } else {
-    new Browser(desktop, taskbar, url);
+    await exitFullscreenAndOpen(url);
+    return;
   }
+  new Browser(desktop, taskbar, url);
 }

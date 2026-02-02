@@ -250,7 +250,7 @@ If ?start=1 query parameter is specified, then starting state is PC emulation, b
 If ?start=2 query parameter is specified, then starting state is PC emulation, desktop screen.
 If &fullscreen=1 parameter is present, page should switch to fulscreen.
 If &folder=path parameter is present, folder should be opened in file explorer app.
-If &file=path parameter is present, file should be opened with corresponding application on desktop screen.
+If &file=path parameter is present, file should be opened with corresponding application on desktop screen. Application's window should  be maximized if &maximized=1 parameter is present.
 
 If folder is opened in file explorer, &folder query parameter should be set to path. &folder patamter should be updated during navigaton in file explorer.
 If file explorer is closed, &file query parameter should be removed.

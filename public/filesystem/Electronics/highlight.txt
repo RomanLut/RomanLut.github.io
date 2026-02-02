@@ -2,4 +2,5 @@
 2015-09_80W_electronic_active_load
 2014-09_Digital_control_system_for_a_toy_railway
 2013-09_Midi_player_for_AVR
-2021-07_hx_espnow_rc.url 
+2021-07_hx_espnow_rc.url
+2023-01_hx-esp32-cam-fpv.url

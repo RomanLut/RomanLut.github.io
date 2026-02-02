@@ -4,11 +4,13 @@
 
 Let me introduce myself. My name is Roman Lut. I was born in Ukraine in 1975.
 
-I am a programmer with over 25 years of experience in the game development industry. For more details, please see my portfolio.
+I am a programmer with over 25 years of experience in the game development industry. For more details, please see my [portfolio](/?start=2&fullscreen=1&file=Resume_Roman_Lut.md).
 
-I maintain multiple open-source projects on Github.
+Working at a game development company leaves little free time. Nevertheless, I still dedicate several hours each week to my [hobby projects](/?start=2&folder=Hobby_projects).
 
-Working at a game development company leaves little free time. Nevertheless, I still dedicate several hours each week to my hobby projects.
+I also maintain multiple open-source projects on Github.
+
+I have been interested in programming and electronics since school.
 
 Current interests:
 - Game engines

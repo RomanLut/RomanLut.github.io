@@ -1,12 +1,13 @@
 import { Taskbar } from './taskbar';
 import { DesktopIcon } from './desktopIcon';
-import { exitFullscreenAndOpen, navigateToUrl, normalizeFsPath, filesystemUrl, setFileParam } from './util';
+import { navigateToUrl, normalizeFsPath, filesystemUrl, setFileParam } from './util';
 import { WordPad } from './WordPad';
 import { FileExplorer } from './fileExplorer';
 import { DosBox } from './dosbox';
 import { Browser } from './browser';
 import { SoundPlayer } from './soundPlayer';
 import { Notepad } from './notepad';
+import { AppWindow } from './appWindow';
 
 const SOUND_EXTENSIONS = new Set(['mp3', 'ogg', 'wav', 'flac', 'm4a']);
 
@@ -105,8 +106,9 @@ export class Desktop {
       this.openExplorerForFolder(folderParam);
     }
     const fileParam = params.get('file');
+    const maximizedParam = params.get('maximized') === '1';
     if (fileParam) {
-      this.openFileFromPath(fileParam);
+      this.openFileFromPath(fileParam, maximizedParam);
     }
   }
 
@@ -116,7 +118,8 @@ export class Desktop {
     new FileExplorer(this.element, this.taskbar, clean);
   }
 
-  private openFileFromPath(path: string) {
+  private openFileFromPath(path: string, maximize = false) {
+    AppWindow.skipNextSpawnAnimation = true;
     const raw = path.trim();
     if (!raw) return;
     const isExternal = this.isExternalPath(raw);
@@ -127,18 +130,22 @@ export class Desktop {
     const url = isExternal ? clean : filesystemUrl(clean);
     this.setFileParamForDesktop(raw);
     if (ext === 'md' && !isExternal) {
-      new WordPad(this.element, this.taskbar, url, filename);
+      const wordpad = new WordPad(this.element, this.taskbar, url, filename);
+      if (maximize) wordpad.applyInitialState({ maximize: true });
       return;
     }
     if (!isExternal && (ext === 'txt' || ext === 'js')) {
-      new Notepad(this.element, this.taskbar, filename, url);
+      const notepad = new Notepad(this.element, this.taskbar, filename, url);
+      if (maximize) notepad.applyInitialState({ maximize: true });
       return;
     }
     if (SOUND_EXTENSIONS.has(ext)) {
-      new SoundPlayer(this.element, this.taskbar, [{ title: filename, url }]);
+      const soundPlayer = new SoundPlayer(this.element, this.taskbar, [{ title: filename, url }]);
+      if (maximize) soundPlayer.applyInitialState({ maximize: true });
       return;
     }
-    new WordPad(this.element, this.taskbar, url, filename);
+    const wordpad = new WordPad(this.element, this.taskbar, url, filename);
+    if (maximize) wordpad.applyInitialState({ maximize: true });
   }
 
   private filenameFromValue(value: string, isExternal: boolean) {
@@ -240,11 +247,11 @@ export class Desktop {
     );
 
     new DesktopIcon(this.element, 'github', 'My GitHub page', { x: 16, y: 16 + 120 + 120 + 140 }, () =>
-      exitFullscreenAndOpen('https://github.com/RomanLut')
+      navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut')
     );
 
     new DesktopIcon(this.element, 'youtube', 'My Youtube Channel', { x: 16 +120, y: 16 + 120 + 120 + 140 }, () =>
-      exitFullscreenAndOpen('https://www.youtube.com/@RomanLutHax')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/@RomanLutHax')
     );
 
     new DesktopIcon(
@@ -296,21 +303,21 @@ export class Desktop {
 
 
     new DesktopIcon(this.element, 'github', 'hx_esp_now_rc', { x: 16 +120*11, y: 16 + 120 }, () =>
-      exitFullscreenAndOpen('https://github.com/RomanLut/hx_espnow_rc')
+      navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut/hx_espnow_rc')
     );
 
     new DesktopIcon(this.element, 'github', 'hx-esp32-cam-fpv', { x: 16 +120*12, y: 16 + 120 }, () =>
-      exitFullscreenAndOpen('https://github.com/RomanLut/hx-esp32-cam-fpv')
+      navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut/hx-esp32-cam-fpv')
     );
 
 
     new DesktopIcon(this.element, 'github', 'INAV-X-Plane-HITL', { x: 16 +120*13, y: 16 + 120 }, () =>
-      exitFullscreenAndOpen('https://github.com/RomanLut/INAV-X-Plane-HITL')
+      navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut/INAV-X-Plane-HITL')
     );
 
 
     new DesktopIcon(this.element, 'github', 'Telemetry Viewer', { x: 16 +120*14, y: 16 + 120 }, () =>
-      exitFullscreenAndOpen('https://github.com/RomanLut/android-taranis-smartport-telemetry')
+      navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut/android-taranis-smartport-telemetry')
     );
 
 
@@ -319,7 +326,7 @@ export class Desktop {
     );
 
     new DesktopIcon(this.element, 'youtube', 'Venom gameplay', { x: 16 +120*14, y: 16 + 120*2 }, () =>
-      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=9dHb_a4LRM4')
+      navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=MT7siAaqW-o')
     );
 
     new DesktopIcon(this.element, 'youtube', 'Xenus gameplay', { x: 16 +120*12, y: 16 + 120*3 }, () =>
