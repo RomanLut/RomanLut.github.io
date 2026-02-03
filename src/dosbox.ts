@@ -30,8 +30,12 @@ export class DosBox extends AppWindow {
   private resPoll: number | null = null;
   private lastRes = '';
   private resetStage() {
-    this.stage.innerHTML = '';
+    this.host.innerHTML = '';
+    this.stage = document.createElement('div');
     this.stage.className = 'dosbox__stage';
+    this.host.appendChild(this.stage);
+    this.host.style.width = '100%';
+    this.host.style.height = '100%';
   }
   private destroyed = false;
   private bundleBytes: Uint8Array | null = null;
