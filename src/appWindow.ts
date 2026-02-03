@@ -8,6 +8,7 @@ let windowId = 0;
 type ResizeDir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 const SPAWN_BASE = { x: 80, y: 80 };
 const SPAWN_STEP = { x: 32, y: 32 };
+const SPAWN_MARGIN = 16;
 
 export class AppWindow {
   readonly element: HTMLElement;
@@ -129,9 +130,21 @@ export class AppWindow {
       requestAnimationFrame(() => this.positionInitial());
       return;
     }
-    const margin = 16;
-    const maxLeft = Math.max(margin, parentRect.width - rect.width - margin);
-    const maxTop = Math.max(margin, parentRect.height - rect.height - margin);
+    const margin = SPAWN_MARGIN;
+    const availableWidth = Math.max(margin, parentRect.width - margin * 2);
+    const availableHeight = Math.max(margin, parentRect.height - margin * 2);
+    let windowWidth = rect.width;
+    let windowHeight = rect.height;
+    if (windowWidth > availableWidth) {
+      windowWidth = availableWidth;
+      this.element.style.width = `${windowWidth}px`;
+    }
+    if (windowHeight > availableHeight) {
+      windowHeight = availableHeight;
+      this.element.style.height = `${windowHeight}px`;
+    }
+    const maxLeft = Math.max(margin, parentRect.width - windowWidth - margin);
+    const maxTop = Math.max(margin, parentRect.height - windowHeight - margin);
     const baseX = Math.min(Math.max(SPAWN_BASE.x, margin), maxLeft);
     const baseY = Math.min(Math.max(SPAWN_BASE.y, margin), maxTop);
     const stepX = SPAWN_STEP.x;
