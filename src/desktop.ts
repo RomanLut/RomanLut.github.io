@@ -1,5 +1,5 @@
 import { Taskbar } from './taskbar';
-import { DesktopIcon } from './desktopIcon';
+import { DesktopIcon, IconType } from './desktopIcon';
 import { navigateToUrl, normalizeFsPath, filesystemUrl, setFileParam } from './util';
 import { WordPad } from './WordPad';
 import { FileExplorer } from './fileExplorer';
@@ -16,6 +16,9 @@ export class Desktop {
   private taskbar: Taskbar;
   private intervalId: number | undefined;
   private queryParamsHandled = false;
+  private icons: DesktopIcon[] = [];
+  private resizeObserver: ResizeObserver;
+  private iconLayoutScheduled = false;
 
   constructor(root: HTMLElement) {
     this.element = document.createElement('div');
@@ -79,6 +82,9 @@ export class Desktop {
     this.taskbar.onStart(() => this.spawnNotepad());
 
     root.prepend(this.element);
+    this.resizeObserver = new ResizeObserver(() => this.scheduleIconLayoutUpdate());
+    this.resizeObserver.observe(this.element);
+    this.scheduleIconLayoutUpdate();
 
     this.applyQueryParams();
     this.updateClock();
@@ -94,6 +100,7 @@ export class Desktop {
       window.clearInterval(this.intervalId);
       this.intervalId = undefined;
     }
+    this.resizeObserver.disconnect();
     this.element.remove();
   }
 
@@ -214,48 +221,47 @@ export class Desktop {
   }
 
   private spawnIcons() {
-    //new DesktopIcon(this.element, 'notepad', 'Notepad', { x: 16, y: 136 });
-    new DesktopIcon(this.element, 'word', 'About me Roman Lut', { x: 16, y: 16 }, () =>
+    // this.addIcon('notepad', 'Notepad', { x: 16, y: 136 });
+    this.addIcon('word', 'About me Roman Lut', { x: 16, y: 16 }, () =>
       this.openWordPadFromDesktop('/filesystem/About_me_Roman_Lut.md', 'About me Roman Lut')
     );
-    new DesktopIcon(this.element, 'word', 'Resume Roman Lut', { x: 120, y: 16 }, () =>
+    this.addIcon('word', 'Resume Roman Lut', { x: 120, y: 16 }, () =>
       this.openWordPadFromDesktop('/filesystem/Resume_Roman_Lut.md', 'Resume me Roman Lut')
     );
 
-    new DesktopIcon(this.element, 'word', 'Competitions and Events', { x: 120 + 200, y: 16 }, () =>
+    this.addIcon('word', 'Competitions and Events', { x: 120 + 200, y: 16 }, () =>
       this.openWordPadFromDesktop('/filesystem/Competitions_and_Events.md', 'Competitions and Events')
     );
 
-    new DesktopIcon(this.element, 'folder', 'Game development', { x: 16, y: 136 }, () =>
+    this.addIcon('folder', 'Game development', { x: 16, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Game_development')
     );
-    new DesktopIcon(this.element, 'folder', 'Hobby projects', { x: 136 + 120, y: 136 }, () =>
+    this.addIcon('folder', 'Hobby projects', { x: 136 + 120, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Hobby_projects')
     );
-    new DesktopIcon(this.element, 'folder', 'Electronics', { x: 136 + 120 + 120, y: 136 }, () =>
+    this.addIcon('folder', 'Electronics', { x: 136 + 120 + 120, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Electronics')
     );
-    new DesktopIcon(this.element, 'folder', 'Demoscene', { x: 136, y: 136 }, () =>
+    this.addIcon('folder', 'Demoscene', { x: 136, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Demoscene')
     );
-    new DesktopIcon(this.element, 'folder', 'Publications', { x: 136 + 120 + 120 + 120, y: 136 }, () =>
+    this.addIcon('folder', 'Publications', { x: 136 + 120 + 120 + 120, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Publications')
     );
 
-    new DesktopIcon(this.element, 'folder', 'CNC', { x: 16, y: 136 + 120 }, () =>
+    this.addIcon('folder', 'CNC', { x: 16, y: 136 + 120 }, () =>
       new FileExplorer(this.element, this.taskbar, 'CNC')
     );
 
-    new DesktopIcon(this.element, 'github', 'My GitHub page', { x: 16, y: 16 + 120 + 120 + 140 }, () =>
+    this.addIcon('github', 'My GitHub page', { x: 16, y: 16 + 120 + 120 + 140 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut')
     );
 
-    new DesktopIcon(this.element, 'youtube', 'My Youtube Channel', { x: 16 +120, y: 16 + 120 + 120 + 140 }, () =>
+    this.addIcon('youtube', 'My Youtube Channel', { x: 16 + 120, y: 16 + 120 + 120 + 140 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/@RomanLutHax')
     );
 
-    new DesktopIcon(
-      this.element,
+    this.addIcon(
       'sound',
       'Sound Player',
       { x: 16 + 120 * 2, y: 16 + 120 + 120 + 140 },
@@ -280,79 +286,99 @@ export class Desktop {
     );
 
     // HTML5 demo: JS1k - Lost In A Cave
-    new DesktopIcon(
-      this.element,
+    this.addIcon(
       'html',
       'JS1k - Lost In A Cave',
-      { x: 16 + 120*12, y: 16  },
+      { x: 16 + 120 * 13, y: 16 },
       () => navigateToUrl(this.element, this.taskbar, '/filesystem/Demoscene/2019-03_JS1k_Lost_In_A_Cave/Lost_In_A_Cave.html')
     );
 
     // Test MS-DOS launcher (executable type)
-    new DesktopIcon(
-      this.element,
+    this.addIcon(
       'msdos',
       'Fields of the Nephilims',
-      { x: 16  + 120* 13, y: 16 },
+      { x: 16 + 120 * 14, y: 16 },
       () => new DosBox(this.element, this.taskbar, 'Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip')
     );
 
-    new DesktopIcon(this.element, 'youtube', 'INAV HITL', { x: 16 +120*14, y: 16 }, () =>
+    this.addIcon('youtube', 'INAV HITL', { x: 16 + 120 * 15, y: 16 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=krTDi1tXGX8')
     );
 
-
-    new DesktopIcon(this.element, 'github', 'hx_esp_now_rc', { x: 16 +120*11, y: 16 + 120 }, () =>
+    this.addIcon('github', 'hx_esp_now_rc', { x: 16 + 120 * 12, y: 16 + 120 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut/hx_espnow_rc')
     );
 
-    new DesktopIcon(this.element, 'github', 'hx-esp32-cam-fpv', { x: 16 +120*12, y: 16 + 120 }, () =>
+    this.addIcon('github', 'hx-esp32-cam-fpv', { x: 16 + 120 * 13, y: 16 + 120 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut/hx-esp32-cam-fpv')
     );
 
-
-    new DesktopIcon(this.element, 'github', 'INAV-X-Plane-HITL', { x: 16 +120*13, y: 16 + 120 }, () =>
+    this.addIcon('github', 'INAV-X-Plane-HITL', { x: 16 + 120 * 14, y: 16 + 120 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut/INAV-X-Plane-HITL')
     );
 
-
-    new DesktopIcon(this.element, 'github', 'Telemetry Viewer', { x: 16 +120*14, y: 16 + 120 }, () =>
+    this.addIcon('github', 'Telemetry Viewer', { x: 16 + 120 * 15, y: 16 + 120 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://github.com/RomanLut/android-taranis-smartport-telemetry')
     );
 
-
-    new DesktopIcon(this.element, 'youtube', 'Venom Intro', { x: 16 +120*13, y: 16 + 120*2 }, () =>
+    this.addIcon('youtube', 'Venom Intro', { x: 16 + 120 * 14, y: 16 + 120 * 2 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=E1SpT1WoZ5w')
     );
 
-    new DesktopIcon(this.element, 'youtube', 'Venom gameplay', { x: 16 +120*14, y: 16 + 120*2 }, () =>
+    this.addIcon('youtube', 'Venom gameplay', { x: 16 + 120 * 15, y: 16 + 120 * 2 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=MT7siAaqW-o')
     );
 
-    new DesktopIcon(this.element, 'youtube', 'Xenus gameplay', { x: 16 +120*12, y: 16 + 120*3 }, () =>
+    this.addIcon('youtube', 'Xenus gameplay', { x: 16 + 120 * 13, y: 16 + 120 * 3 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=MBV_Fxryj3Q')
     );
 
-    new DesktopIcon(this.element, 'youtube', 'Xenus trailer', { x: 16 +120*13, y: 16 + 120*3 }, () =>
+    this.addIcon('youtube', 'Xenus trailer', { x: 16 + 120 * 14, y: 16 + 120 * 3 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=PJcGcuDtDY8')
     );
 
-    new DesktopIcon(this.element, 'youtube', 'Xenus 2: White Gold', { x: 16 +120*14, y: 16 + 120*3 }, () =>
+    this.addIcon('youtube', 'Xenus 2: White Gold', { x: 16 + 120 * 15, y: 16 + 120 * 3 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=7-iWnISp4H4')
     );
 
-    new DesktopIcon(this.element, 'youtube', 'Precursors', { x: 16 +120*12, y: 16 + 120*4 }, () =>
+    this.addIcon('youtube', 'Precursors', { x: 16 + 120 * 13, y: 16 + 120 * 4 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=Xt-sv4_Oe1I')
     );
 
-    new DesktopIcon(this.element, 'youtube', 'Partisans prototype', { x: 16 +120*13, y: 16 + 120*4 }, () =>
+    this.addIcon('youtube', 'Partisans prototype', { x: 16 + 120 * 14, y: 16 + 120 * 4 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=aA4gW7wgmsM')
     );
 
-    new DesktopIcon(this.element, 'youtube', 'Optimizing Xenus 2', { x: 16 +120*14, y: 16 + 120*4 }, () =>
+    this.addIcon('youtube', 'Optimizing Xenus 2', { x: 16 + 120 * 15, y: 16 + 120 * 4 }, () =>
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/watch?v=DlsWMxvlhWE')
     );
+  }
 
+  private addIcon(
+    type: IconType,
+    label?: string,
+    position?: { x: number; y: number },
+    onDoubleClick?: () => void
+  ) {
+    const icon = new DesktopIcon(this.element, type, label, position, onDoubleClick);
+    this.icons.push(icon);
+    this.scheduleIconLayoutUpdate();
+  }
 
+  private scheduleIconLayoutUpdate() {
+    if (this.iconLayoutScheduled) return;
+    this.iconLayoutScheduled = true;
+    window.requestAnimationFrame(() => {
+      this.iconLayoutScheduled = false;
+      this.updateIconLayout();
+    });
+  }
+
+  private updateIconLayout() {
+    const bounds = this.element.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) {
+      return;
+    }
+    this.icons.forEach((icon) => icon.updatePosition(bounds));
   }
 }

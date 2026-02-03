@@ -60,11 +60,15 @@ export const SHORTCUT_OVERLAY_SVG = `<svg class="shortcut-overlay" viewBox="0 0 
   <path d="M7.36 22.4 C 7.36 16.4, 11.36 12.4, 17.36 12.4 L 17.36 8.4 L 25.36 15.4 L 17.36 22.4 L 17.36 18.4 C 13.36 18.4, 10.36 19.4, 7.36 22.4 Z" fill="#0078d7"/>
 </svg>`;
 
+const VIRTUAL_DESKTOP = { width: 1920, height: 1080 };
+
 export class DesktopIcon {
   readonly element: HTMLElement;
   private desktop: HTMLElement;
   private dragging = false;
   private dragOffset = { x: 0, y: 0 };
+  private virtualPosition: { x: number; y: number };
+  private readonly isRightHalf: boolean;
 
   constructor(
     desktop: HTMLElement,
@@ -81,8 +85,11 @@ export class DesktopIcon {
       <div class="desktop__icon-image">${ICON_SVGS[type]}</div>
       <div class="desktop__icon-label">${label || type.charAt(0).toUpperCase() + type.slice(1)}</div>
     `;
-    this.element.style.left = `${position?.x ?? 16}px`;
-    this.element.style.top = `${position?.y ?? 16}px`;
+    this.virtualPosition = {
+      x: position?.x ?? 16,
+      y: position?.y ?? 16
+    };
+    this.isRightHalf = this.virtualPosition.x >= VIRTUAL_DESKTOP.width / 2;
 
     this.attachDrag();
     if (onDoubleClick) {
@@ -121,4 +128,21 @@ export class DesktopIcon {
     document.removeEventListener('mousemove', this.handleDrag);
     document.removeEventListener('mouseup', this.stopDrag);
   };
+
+  updatePosition(desktopBounds: DOMRect) {
+    if (!desktopBounds.width || !desktopBounds.height) {
+      return;
+    }
+    const { width, height } = desktopBounds;
+    const { x: virtualX, y: virtualY } = this.virtualPosition;
+    const offsetFromRight = VIRTUAL_DESKTOP.width - virtualX;
+    const targetX = this.isRightHalf ? width - offsetFromRight : virtualX;
+    const targetY = virtualY;
+    const maxLeft = Math.max(0, width - this.element.offsetWidth);
+    const maxTop = Math.max(0, height - this.element.offsetHeight);
+    this.element.style.left = `${Math.min(Math.max(targetX, 0), maxLeft)}px`;
+    this.element.style.top = `${Math.min(Math.max(targetY, 0), maxTop)}px`;
+    const shouldHide = this.isRightHalf && targetX < VIRTUAL_DESKTOP.width / 2;
+    this.element.style.visibility = shouldHide ? 'hidden' : '';
+  }
 }

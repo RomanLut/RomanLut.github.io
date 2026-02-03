@@ -261,6 +261,13 @@ When WordPad, Sound Player or Notepad app is closed, &file query parameter shoul
 File explorer should be spawned before apps, so that app appear on top of File Exploer app.
 
 
+## 7. Desktop icons behaviour
+
+DesktopIcon accepts x and y coordinates. It is virtual coordinates on the 1920x1080 screen.
+This virtual coordinates should be recalculated to the real desktop size:
+Icons which appear on the right half of the screen, should be bound to the right edge of the desktop and should move to the right on bigger desktop, to left left on smaller desktop.
+If desktop is small and such icons should be positioned at x < 1920/2, icons should became invisible.
+The positions of icons should not scale to real desktop size.
 
 
 
