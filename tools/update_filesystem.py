@@ -186,7 +186,7 @@ def build_file_item(entry: Path, rel_path: Path, is_reference: bool = False) -> 
     archive_exts = {".zip", ".rar", ".7z"}
     html_exts = {".html", ".htm"}
     sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a", ".wmv"}
-    image_exts = {".jpg", ".jpeg", ".png", ".gif"}
+    image_exts = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 
     size = entry.stat().st_size
     item: Dict[str, Any] = {
@@ -246,7 +246,7 @@ def build_items(folder: Path, relative: Path) -> List[Dict[str, Any]]:
     archive_exts = {".zip", ".rar", ".7z"}
     html_exts = {".html", ".htm"}
     sound_exts = {".mp3", ".ogg", ".wav", ".flac", ".m4a", ".wmv"}
-    image_exts = {".jpg", ".jpeg", ".png", ".gif"}
+    image_exts = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
     for entry in ordered:
         if entry.name == "filesystem.json":
             continue

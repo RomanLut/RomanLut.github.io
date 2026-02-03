@@ -482,7 +482,7 @@ export async function navigateToUrl(desktop: HTMLElement, taskbar: any, url: str
     // ignore malformed URLs
   }
   if (url.includes('dangerousprototypes.com') || url.includes('sparkfun.com') || url.includes('cxem.net')
-      || url.includes('adafruit.com') || url.includes('github.com')) {
+      || url.includes('adafruit.com') || url.includes('github.com') || url.includes('steampowered')) {
     await exitFullscreenAndOpen(url);
     return;
   }

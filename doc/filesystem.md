@@ -32,6 +32,7 @@ The /public/filesystem/filesystem.json is build automatically with script tools/
 
 Script scans public/filesystem directory.
 If folder_image.jpg, folder_image.png, folder_image.gif or folder_image.webp is present, it becomes the folder image. No file item is created for folder_image.*.
+WebP thumbnails are treated the same as the existing JPEG/PNG/GIF variants so they can carry folder metadata without extra files.
 If folder.md  is present, its conents are added as "desc". No file item is created folder.md.
 Items are sorted alphabetically by display name during generation. Folders are placed fisrt.
 
@@ -43,7 +44,8 @@ Empty folders are removed from the structure.
 Files with .txt extension are added as "notepad" type items and will open in Notepad when double-clicked.
 Files with .md extension are added as "wordpad" type items and will open in Wordpad when double-clicked.
 Files with .zip, .rar, .7z extension are added as "archive" type items. 
-Files with .jpg, .png, .gif extension are added as "image" type items. Images inside /images folders are ignored.
+Files with .jpg, .png, .gif, .webp extension are added as "image" type items. Images inside /images folders are ignored.
+WebP entries appear alongside other raster images in the generated filesystem so that double-clicking them opens the image viewer just like the other formats.
 Files with .url  extension are added as "github, youtube or html" type item depending on the link inside file. 
 .html files have type html. 
 

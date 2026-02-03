@@ -1059,26 +1059,97 @@
         },
         {
           "type": "folder",
-          "name": "2001 08-Venom Codename Outbreak",
-          "path": "Game_development/2001_08-Venom_Codename_Outbreak",
+          "name": "2001-08 Venom Codename Outbreak",
+          "path": "Game_development/2001-08_Venom_Codename_Outbreak",
           "items": [
+            {
+              "type": "image",
+              "name": "Codename Outbreak CD",
+              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Codename_Outbreak_CD.webp",
+              "size": 495234
+            },
+            {
+              "type": "image",
+              "name": "Codename Outbreak CD sides",
+              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Codename_Outbreak_CD_sides.jpg",
+              "size": 281603
+            },
+            {
+              "type": "image",
+              "name": "Venom CD",
+              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Venom_CD.jpg",
+              "size": 428838
+            },
             {
               "type": "youtube",
               "name": "Venom Gameplay",
-              "path": "Game_development/2001_08-Venom_Codename_Outbreak/Venom_Gameplay.url",
+              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Venom_Gameplay.url",
               "size": 43,
               "url": "https://www.youtube.com/watch?v=MT7siAaqW-o"
             },
             {
               "type": "youtube",
               "name": "Venom Intro",
-              "path": "Game_development/2001_08-Venom_Codename_Outbreak/Venom_Intro.url",
+              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Venom_Intro.url",
               "size": 43,
               "url": "https://www.youtube.com/watch?v=E1SpT1WoZ5w"
             }
           ],
           "image": "folder_image.jpg",
           "desc": "**Codename: Outbreak** (known as **Venom. Codename: Outbreak in Ukraine and Russia**) is a first-person shooter video game developed by **GSC Game World** and published by **Virgin Interactive**.\n\nThe game was developed by core team of 4 people, 8 people at peak.\n\n**My role**: Graphics Engine programming, Level Editor/Tools programming, Level Design.\n\n[Codename Outbreak on Wikipedia](https://en.wikipedia.org/wiki/Codename%3A_Outbreak)"
+        },
+        {
+          "type": "folder",
+          "name": "2005-05 Xenus Boiling Point",
+          "path": "Game_development/2005-05_Xenus_Boiling_Point",
+          "items": [
+            {
+              "type": "image",
+              "name": "Boling Point DVD",
+              "path": "Game_development/2005-05_Xenus_Boiling_Point/Boling_Point_DVD.jpg",
+              "size": 228290
+            },
+            {
+              "type": "image",
+              "name": "Boling Point DVD 2",
+              "path": "Game_development/2005-05_Xenus_Boiling_Point/Boling_Point_DVD_2.jpg",
+              "size": 135100
+            },
+            {
+              "type": "image",
+              "name": "Boling Point DVD 3",
+              "path": "Game_development/2005-05_Xenus_Boiling_Point/Boling_Point_DVD_3.jpg",
+              "size": 118456
+            },
+            {
+              "type": "image",
+              "name": "Xenus CD",
+              "path": "Game_development/2005-05_Xenus_Boiling_Point/Xenus_CD.jpg",
+              "size": 331265
+            },
+            {
+              "type": "image",
+              "name": "Xenus DVD",
+              "path": "Game_development/2005-05_Xenus_Boiling_Point/Xenus_DVD.jpg",
+              "size": 3992556
+            },
+            {
+              "type": "youtube",
+              "name": "Xenus Gameplay",
+              "path": "Game_development/2005-05_Xenus_Boiling_Point/Xenus_Gameplay.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=MBV_Fxryj3Q"
+            },
+            {
+              "type": "youtube",
+              "name": "Xenus Trailer",
+              "path": "Game_development/2005-05_Xenus_Boiling_Point/Xenus_Trailer.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=PJcGcuDtDY8"
+            }
+          ],
+          "image": "folder_image.png",
+          "desc": "**Boiling Point: Road to Hell** (**Xenus: Точка кипения**, **Xenus: Boiling Point**) is a 2005 first-person shooter game developed by Ukrainian game studio **Deep Shadows** and published by **Atari**. Boiling Point's gameplay is a combination of first-person shooter and role-playing video game mechanics, set in an open world. \n\nThe game was developed by core team of 15 people, 25 people at peak.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming.\n\n[Boiling Point: Road To Hell on Wikipeda](https://en.wikipedia.org/wiki/Boiling_Point:_Road_to_Hell)"
         },
         {
           "type": "folder",
@@ -1135,6 +1206,55 @@
         },
         {
           "type": "folder",
+          "name": "2008-10 Xenus 2 White Gold",
+          "path": "Game_development/2008-10_Xenus_2_White_Gold",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Lecture Optimizing Xenus 2 For Multicore CPUs",
+              "path": "Game_development/2008-10_Xenus_2_White_Gold/Lecture_Optimizing_Xenus_2_For_Multicore_CPUs.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=DlsWMxvlhWE"
+            },
+            {
+              "type": "image",
+              "name": "Xenus 2 DVD",
+              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_DVD.jpg",
+              "size": 3992556
+            },
+            {
+              "type": "image",
+              "name": "Xenus 2 DVD Box",
+              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_DVD_Box.jpg",
+              "size": 274062
+            },
+            {
+              "type": "image",
+              "name": "Xenus 2 DVD Box Back",
+              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_DVD_Box_Back.jpg",
+              "size": 373743
+            },
+            {
+              "type": "youtube",
+              "name": "Xenus 2 Gameplay",
+              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_Gameplay.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=peIGh6P9P6M"
+            },
+            {
+              "type": "youtube",
+              "name": "Xenus 2 Trailer",
+              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_Trailer.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=7-iWnISp4H4"
+            }
+          ],
+          "image": "folder_image.png",
+          "desc": "**White Gold: War in Paradise** (**Xenus II: Белое золото**, **Xenus II: White Gold**) is the sequel or possibly prequel to the 2005 video game [Boiling Point: Road to Hell](http://localhost:5173/?start=2&folder=Game_development%2F2005-05_Xenus_Boiling_Point). **White Gold** was developed by Ukrainian game studio **Deep Shadows**. \n\n**Xenus** gameplay is a combination of first-person shooter and role-playing video game mechanics, set in an open world. \n\nThe game was developed by core team of 15 people, 30 people at peak.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming, XBOX 360 port.\n\nIn 2009, **Deep Shadows** had working XBOX 360 prototype. Due to a crysis in the game industry in 2009, XBOX 360 development was cancelled.\n\n**Xenus 2** is the best game by **Deep Shadows**. I am proud to have been a core member of the **Xenus 2** development team. I truly love this game and would still play it with the same excitement even after 20 years.\n\n[Xenus: White Gold](https://en.wikipedia.org/wiki/White_Gold:_War_in_Paradise) on Wikipedia.\n\n[Xenus: White Gold](https://store.steampowered.com/app/546230/Xenus_2_White_gold/) on Steam.",
+          "star": true
+        },
+        {
+          "type": "folder",
           "name": "2009-04 Optimizing Xenus 2 for multicore CPUs",
           "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs",
           "items": [
@@ -1159,6 +1279,102 @@
           ],
           "reference": "Yes",
           "star": true
+        },
+        {
+          "type": "folder",
+          "name": "2009-10 The Precursors",
+          "path": "Game_development/2009-10_The_Precursors",
+          "items": [
+            {
+              "type": "image",
+              "name": "The Precursors DVD",
+              "path": "Game_development/2009-10_The_Precursors/The_Precursors_DVD.jpg",
+              "size": 3992556
+            },
+            {
+              "type": "image",
+              "name": "The Precursors DVD Box",
+              "path": "Game_development/2009-10_The_Precursors/The_Precursors_DVD_Box.webp",
+              "size": 534216
+            },
+            {
+              "type": "youtube",
+              "name": "The Precursors Gameplay Trailer",
+              "path": "Game_development/2009-10_The_Precursors/The_Precursors_Gameplay_Trailer.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=Xt-sv4_Oe1I"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**The Precursors** is a 2009 first-person shooter game developed by Ukrainian game studio **Deep Shadows**. The game was released for Windows in Russia on 4 December 2009. It was then released worldwide through GamersGate on 21 December 2010 and through Steam on 4 February 2017. \n\nThe Precursors is a sci-fi game that combines shooting, RPG, and space simulation in an open galaxy. Players explore four main planets and several space locations, complete quests, and fight enemies on foot and in space. \n\nThe game was developed by core team of 15 people, 30 people at peak.\n\nDue to a crysis in the game industry in 2009, it required a great effort to release this game.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming.\n\n[The Precursors](https://en.wikipedia.org/wiki/The_Precursors) on Wikipedia.\n\n[The Precursors](https://store.steampowered.com/app/547930/Precursors/) on Steam."
+        },
+        {
+          "type": "folder",
+          "name": "2010-01 The Partisans Prototype",
+          "path": "Game_development/2010-01_The_Partisans_Prototype",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Partisans Prototype",
+              "path": "Game_development/2010-01_The_Partisans_Prototype/Partisans_Prototype.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=aA4gW7wgmsM"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**The Partisans** is a first-person shooter game developed by Ukrainian game studio **Deep Shadows** for PC and XBOX 360. The game was cancelled because **Deep Shadows** was not able to find funding due to crysis in the game industry in 2009.\n\nThe prototype was developed by a team of 5 people.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming."
+        },
+        {
+          "type": "folder",
+          "name": "2011-04 Exorcist",
+          "path": "Game_development/2011-04_Exorcist",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Exorcist",
+              "path": "Game_development/2011-04_Exorcist/Exorcist.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=lsCpoKnim2M"
+            },
+            {
+              "type": "youtube",
+              "name": "Exporcist II",
+              "path": "Game_development/2011-04_Exorcist/Exporcist_II.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=RC3QnS-rNtw"
+            },
+            {
+              "type": "youtube",
+              "name": "Insider Tales Stolen Venus 2",
+              "path": "Game_development/2011-04_Exorcist/Insider_Tales_Stolen_Venus_2.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=CReUJg-f_AA"
+            },
+            {
+              "type": "youtube",
+              "name": "Sandra Fleming Chronicles Crystal Skulls",
+              "path": "Game_development/2011-04_Exorcist/Sandra_Fleming_Chronicles_Crystal_Skulls.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=nHFa0JWafSQ"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "﻿**Exorcist**\nHidden Object Game developed by **Deep Shadows**.\n\n**My Role:** Hidden Object Game Engine design, Scenes and Animation editor.\n**Platform:** Windows\n**Language:** C++\n\n\nIn 2011, **Deep Shadows** switched to the hidden object games genre. Before leaving the company, I developed the tools and game engine for this direction within a few months.\n\nSeveral other games have been developed using this engine:\n\n\nInsider Tales: The Stolen Venus 2 (2011)\nSandra Fleming Chronicles: Crystal Skulls (2011)\nDark Clown Mystery \t2012\tMicrosoft Windows\nTales of Terror: Crimson Dawn (2013)\nThe Exorcist II\t(2013)\nThe Exorcist III (2014)\nHaunted Train: Spirits Of Charon Collector’s Edition (2014)\nTales of Terror: House on the Hill Collector’s Edition (2014)\nFamily Tales: The Sisters (2015)\nHaunted Train: Frozen In Time. Collector’s Edition (2015)\nTales of Terror: Estate of the Heart Collector’s Edition (2016)\nHaunted Train: Clashing Worlds Collector’s Edition (2016)\nTales of Terror: Art of Horror Collector’s Edition (2017)\nMedium Detective: Fright from the Past Collector’s Edition (2018)\nHidden Epee (2021)"
+        },
+        {
+          "type": "folder",
+          "name": "2012 04 Poker World Tour",
+          "path": "Game_development/2012_04_Poker_World_Tour",
+          "items": [
+            {
+              "type": "image",
+              "name": "pwt3 screenshot",
+              "path": "Game_development/2012_04_Poker_World_Tour/pwt3_screenshot.jpg",
+              "size": 174992
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**Pockeer World Tour**\n\nMultiplayer Poker for soicial networks, developed by [Rheia Games](http://www.rheiagames.com/en/index).\n\nRelased on Facebook, Odnoklassniki, VKontakte, VZ Networks.\n\n\n**Date:** 2011-2012\n**Role:** Flash client development\n**Language:** actionscript, flex framework (Flash Builder)"
         }
       ]
     },
