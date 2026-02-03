@@ -1014,6 +1014,14 @@
           "path": "Electronics/2021-07_Multiwii_ESP32_port.url",
           "size": 47,
           "url": "https://github.com/RomanLut/Multiwii-ESP32-port"
+        },
+        {
+          "type": "github",
+          "name": "2023-01 hx-esp32-cam-fpv",
+          "path": "Electronics/2023-01_hx-esp32-cam-fpv.url",
+          "size": 44,
+          "url": "https://github.com/RomanLut/hx-esp32-cam-fpv",
+          "star": true
         }
       ],
       "image": "folder_image.jpg",
@@ -1051,6 +1059,62 @@
         },
         {
           "type": "folder",
+          "name": "2001 08-Venom Codename Outbreak",
+          "path": "Game_development/2001_08-Venom_Codename_Outbreak",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Venom Gameplay",
+              "path": "Game_development/2001_08-Venom_Codename_Outbreak/Venom_Gameplay.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=MT7siAaqW-o"
+            },
+            {
+              "type": "youtube",
+              "name": "Venom Intro",
+              "path": "Game_development/2001_08-Venom_Codename_Outbreak/Venom_Intro.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=E1SpT1WoZ5w"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**Codename: Outbreak** (known as **Venom. Codename: Outbreak in Ukraine and Russia**) is a first-person shooter video game developed by **GSC Game World** and published by **Virgin Interactive**.\n\nThe game was developed by core team of 4 people, 8 people at peak.\n\n**My role**: Graphics Engine programming, Level Editor/Tools programming, Level Design.\n\n[Codename Outbreak on Wikipedia](https://en.wikipedia.org/wiki/Codename%3A_Outbreak)"
+        },
+        {
+          "type": "folder",
+          "name": "2007-04 Architecture of a Modern 3D Engine",
+          "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine",
+          "items": [
+            {
+              "type": "archive",
+              "name": "3denginelect",
+              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/3denginelect.zip",
+              "size": 35262327
+            },
+            {
+              "type": "wordpad",
+              "name": "Architecture of a Modern 3D Engine (translated to english)",
+              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/Architecture_of_a_Modern_3D_Engine_(translated_to english).md",
+              "size": 17831
+            },
+            {
+              "type": "sound",
+              "name": "KRI 2007 Programming 08apr neptun 03 Lut Roman DeepShadows",
+              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/KRI_2007_Programming_08apr_neptun_03_Lut_Roman_DeepShadows.ogg",
+              "size": 13160020
+            },
+            {
+              "type": "wordpad",
+              "name": "Архитектура современного 3D движка (russian)",
+              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/Архитектура_современного_3D_движка_(russian).md",
+              "size": 29986
+            }
+          ],
+          "reference": "Yes",
+          "star": true
+        },
+        {
+          "type": "folder",
           "name": "2007-05 Videobroadcast from console devkit",
           "path": "Publications/2007-05_Videobroadcast_from_console_devkit",
           "items": [
@@ -1070,10 +1134,31 @@
           "reference": "Yes"
         },
         {
-          "type": "archive",
-          "name": "3denginelect",
-          "path": "Game_development/3denginelect.7z",
-          "size": 35329345
+          "type": "folder",
+          "name": "2009-04 Optimizing Xenus 2 for multicore CPUs",
+          "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs",
+          "items": [
+            {
+              "type": "wordpad",
+              "name": "Optimizing Xenus 2 for multicore CPUs (translated to english)",
+              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Optimizing_Xenus_2_for_multicore_CPUs_(translated_to_english).md",
+              "size": 16474
+            },
+            {
+              "type": "archive",
+              "name": "Parallel Rendering slides",
+              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Parallel_Rendering_slides.rar",
+              "size": 1781545
+            },
+            {
+              "type": "wordpad",
+              "name": "Внедрение многопоточного рендеринга в игровой движок (russian)",
+              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Внедрение_многопоточного_рендеринга_в_игровой_движок_(russian).md",
+              "size": 26982
+            }
+          ],
+          "reference": "Yes",
+          "star": true
         }
       ]
     },
@@ -1668,7 +1753,7 @@
         }
       ],
       "image": "folder_image.jpg",
-      "desc": "This folder contains my hobby projects (programming).\n\nI also maintain a number of open-source projects on Github."
+      "desc": "This folder contains my hobby projects (programming) released to public.\n\nI also maintain a number of open-source projects on Github currently."
     },
     {
       "type": "folder",
@@ -2616,7 +2701,7 @@
       "type": "wordpad",
       "name": "About me Roman Lut",
       "path": "About_me_Roman_Lut.md",
-      "size": 1160
+      "size": 1322
     },
     {
       "type": "wordpad",
