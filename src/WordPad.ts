@@ -85,11 +85,13 @@ export class WordPad extends AppWindow {
         void this.saveFile();
         return;
       }
-      if (normalized === 'print') {
-        this.printContent();
-        return;
-      }
+        if (normalized === 'print') {
+          closeMenus(this.menuElement);
+          this.printContent();
+          return;
+        }
       if (normalized === 'limit article width') {
+        closeMenus(this.menuElement);
         WordPad.setLimitWidth(!(WordPad.limitArticleWidth ?? true));
       }
     };
@@ -107,12 +109,13 @@ export class WordPad extends AppWindow {
     this.limitItemEl = menu.element.querySelector(
       '.app-window__menu-item[data-label="Limit Article Width"]'
     ) as HTMLElement | null;
-    if (this.limitItemEl) {
-      this.limitItemEl.addEventListener('click', (e) => {
-        e.stopPropagation();
-        WordPad.setLimitWidth(!(WordPad.limitArticleWidth ?? true));
-      });
-    }
+      if (this.limitItemEl) {
+        this.limitItemEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeMenus(this.menuElement);
+          WordPad.setLimitWidth(!(WordPad.limitArticleWidth ?? true));
+        });
+      }
     const openItem = menu.element.querySelector('.app-window__menu-item[data-label="Open"]') as HTMLElement | null;
     if (openItem) {
       openItem.addEventListener('click', (e) => {
@@ -131,6 +134,7 @@ export class WordPad extends AppWindow {
     if (printItem) {
       printItem.addEventListener('click', (e) => {
         e.stopPropagation();
+        closeMenus(this.menuElement);
         this.printContent();
       });
     }

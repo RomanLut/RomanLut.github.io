@@ -63,6 +63,7 @@ export class Notepad extends AppWindow {
         return;
       }
       if (normalized === 'print') {
+        closeMenus(this.menuElement);
         this.printContent();
         return;
       }
@@ -87,6 +88,7 @@ export class Notepad extends AppWindow {
     if (printItem) {
       printItem.addEventListener('click', (e) => {
         e.stopPropagation();
+        closeMenus(this.menuElement);
         this.printContent();
       });
     }
