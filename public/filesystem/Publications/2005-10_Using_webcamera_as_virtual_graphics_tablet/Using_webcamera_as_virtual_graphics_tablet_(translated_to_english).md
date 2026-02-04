@@ -1,4 +1,4 @@
-# Making a Graphics Tablet from a Webcam with Your Own Hands
+# Making a Graphics Tablet from a Webcam
 
 The article was published on the website [Hardware Portal](https://web.archive.org/web/20171215200516/http://www.hwp.ru/Handmade/Vtablet/index.html) on October 20, 2005. It was a prize winner of the “Do It Yourself” contest.
 
