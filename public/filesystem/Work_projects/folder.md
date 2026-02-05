@@ -1,0 +1,1 @@
+This folder contains a list of most projects I have worked on during my career.

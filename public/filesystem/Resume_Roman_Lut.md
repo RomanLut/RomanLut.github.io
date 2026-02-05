@@ -16,7 +16,7 @@ Windows, DOS, Xbox 360, HTML5, Flash/Flex, Wii (Homebrew SDK), AVR (ATtiny/ATmeg
 
 **Software & Tools**
 
-3ds Max, Photoshop, Premiere, Sound Forge, Proteus, EasyEDA, MathCAD, RenderMonkey, PerfHUD, VTune, Intel Thread Checker, Git, Perforce, Subversion, StarTeam, Confluence, TestTrack, Bugzilla, Wiki
+3ds Max, Photoshop, Premiere, Sound Forge, SolidWorks, Proteus, EasyEDA, MathCAD, RenderMonkey, PerfHUD, VTune, Intel Thread Checker, Git, Perforce, Subversion, StarTeam, Confluence, TestTrack, Bugzilla, Wiki
 
 **Professional Experience**
 

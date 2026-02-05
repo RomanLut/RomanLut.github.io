@@ -1,0 +1,5 @@
+Publications/2007-04_Architecture_of_a_Modern_3D_Engine/
+Publications/2007-03_Plugins_based_on_COM_interfaces/
+Publications/2007-05_Videobroadcast_from_console_devkit/
+Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/
+Publications/2008-06_DVD_Streaming/

@@ -233,19 +233,19 @@ export class Desktop {
       this.openWordPadFromDesktop('/filesystem/Competitions_and_Events.md', 'Competitions and Events')
     );
 
-    this.addIcon('folder', 'Game development', { x: 16, y: 136 }, () =>
-      new FileExplorer(this.element, this.taskbar, 'Game_development')
+    this.addIcon('folder', 'Work\nprojects', { x: 16, y: 136 }, () =>
+      new FileExplorer(this.element, this.taskbar, 'Work_projects')
     );
-    this.addIcon('folder', 'Hobby projects', { x: 136 + 120, y: 136 }, () =>
+    this.addIcon('folder', 'Hobby projects', { x: 16 + 120, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Hobby_projects')
     );
-    this.addIcon('folder', 'Electronics', { x: 136 + 120 + 120, y: 136 }, () =>
-      new FileExplorer(this.element, this.taskbar, 'Electronics')
-    );
-    this.addIcon('folder', 'Demoscene', { x: 136, y: 136 }, () =>
+    this.addIcon('folder', 'Demoscene', { x: 16 + 2*120, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Demoscene')
     );
-    this.addIcon('folder', 'Publications', { x: 136 + 120 + 120 + 120, y: 136 }, () =>
+    this.addIcon('folder', 'Electronics', { x: 16 + 3*120, y: 136 }, () =>
+      new FileExplorer(this.element, this.taskbar, 'Electronics')
+    );
+    this.addIcon('folder', 'Publications', { x: 16 + 4*120, y: 136 }, () =>
       new FileExplorer(this.element, this.taskbar, 'Publications')
     );
 

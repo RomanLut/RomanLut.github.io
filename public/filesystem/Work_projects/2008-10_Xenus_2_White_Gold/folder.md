@@ -1,4 +1,4 @@
-**White Gold: War in Paradise** (**Xenus II: Белое золото**, **Xenus II: White Gold**) is the sequel or possibly prequel to the 2005 video game [Boiling Point: Road to Hell](http://localhost:5173/?start=2&folder=Game_development%2F2005-05_Xenus_Boiling_Point). **White Gold** was developed by Ukrainian game studio **Deep Shadows**. 
+**White Gold: War in Paradise** (**Xenus II: Белое золото**, **Xenus II: White Gold**) is the sequel or possibly prequel to the 2005 video game [Boiling Point: Road to Hell](http://localhost:5173/?start=2&folder=Work_Projects%2F2005-05_Xenus_Boiling_Point). **White Gold** was developed by Ukrainian game studio **Deep Shadows**. 
 
 **Xenus** gameplay is a combination of first-person shooter and role-playing video game mechanics, set in an open world. 
 

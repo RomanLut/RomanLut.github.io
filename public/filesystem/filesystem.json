@@ -47,6 +47,12 @@
               "name": "DIY CNC 2",
               "path": "CNC/2009-06_DIY_CNC_2/DIY_CNC_2.md",
               "size": 1975
+            },
+            {
+              "type": "image",
+              "name": "Drawing",
+              "path": "CNC/2009-06_DIY_CNC_2/Drawing.jpg",
+              "size": 135111
             }
           ]
         },
@@ -443,7 +449,7 @@
         }
       ],
       "image": "folder_image.jpg",
-      "desc": "In 1996-1997, I, Roman Lut (aka Hax), together with Eugene Babich (aka Dem), worked as a demo group called **“The Nephilims.”** During that time, we created several demos and participated in demoscene events.\n\nToday, running these demos requires almost a “stone-age” setup, as most of them depend on pure DOS and are affected by the well-known Borland **“Runtime Error 200”** issue.\n\nFortunately, modern PCs are more than 1000 times faster than the machines we used back then. Thanks to this, the original demos can now be run directly in a web browser using a [DOS emulator](https://js-dos.com/v7/build/docs/).\n\nEnter a folder and double click on MS-DOS icon to lauch demo/intro."
+      "desc": "In 1996-1997, I, Roman Lut (aka Hax), together with Eugene Babich (aka Dem), worked as a demo group called **“The Nephilims.”** During that time, we created several demos and participated in demoscene events.\n\nToday, running these demos requires almost a “stone-age” setup, as most of them depend on pure DOS and are affected by the well-known Borland **“Runtime Error 200”** issue.\n\nFortunately, modern PCs are more than 1000 times faster than the machines we used back then. Thanks to this, the original demos can now be run directly in a web browser using a [DOS emulator](https://js-dos.com/v7/build/docs/).\n\nEnter a folder and double click on MS-DOS icon to launch demo/intro."
     },
     {
       "type": "folder",
@@ -1029,357 +1035,6 @@
     },
     {
       "type": "folder",
-      "name": "Game development",
-      "path": "Game_development",
-      "items": [
-        {
-          "type": "folder",
-          "name": "1994-Tank battle",
-          "path": "Game_development/1994-Tank_battle",
-          "items": [
-            {
-              "type": "executable",
-              "name": "BATTLE",
-              "path": "Game_development/1994-Tank_battle/BATTLE.zip",
-              "size": 208379
-            },
-            {
-              "type": "archive",
-              "name": "BATTLE",
-              "path": "Game_development/1994-Tank_battle/BATTLE.zip",
-              "size": 208379
-            },
-            {
-              "type": "archive",
-              "name": "battle src",
-              "path": "Game_development/1994-Tank_battle/battle_src.zip",
-              "size": 11916
-            }
-          ]
-        },
-        {
-          "type": "folder",
-          "name": "2001-08 Venom Codename Outbreak",
-          "path": "Game_development/2001-08_Venom_Codename_Outbreak",
-          "items": [
-            {
-              "type": "image",
-              "name": "Codename Outbreak CD",
-              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Codename_Outbreak_CD.webp",
-              "size": 495234
-            },
-            {
-              "type": "image",
-              "name": "Codename Outbreak CD sides",
-              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Codename_Outbreak_CD_sides.jpg",
-              "size": 281603
-            },
-            {
-              "type": "image",
-              "name": "Venom CD",
-              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Venom_CD.jpg",
-              "size": 428838
-            },
-            {
-              "type": "youtube",
-              "name": "Venom Gameplay",
-              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Venom_Gameplay.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=MT7siAaqW-o"
-            },
-            {
-              "type": "youtube",
-              "name": "Venom Intro",
-              "path": "Game_development/2001-08_Venom_Codename_Outbreak/Venom_Intro.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=E1SpT1WoZ5w"
-            }
-          ],
-          "image": "folder_image.jpg",
-          "desc": "**Codename: Outbreak** (known as **Venom. Codename: Outbreak in Ukraine and Russia**) is a first-person shooter video game developed by **GSC Game World** and published by **Virgin Interactive**.\n\nThe game was developed by core team of 4 people, 8 people at peak.\n\n**My role**: Graphics Engine programming, Level Editor/Tools programming, Level Design.\n\n[Codename Outbreak on Wikipedia](https://en.wikipedia.org/wiki/Codename%3A_Outbreak)"
-        },
-        {
-          "type": "folder",
-          "name": "2005-05 Xenus Boiling Point",
-          "path": "Game_development/2005-05_Xenus_Boiling_Point",
-          "items": [
-            {
-              "type": "image",
-              "name": "Boling Point DVD",
-              "path": "Game_development/2005-05_Xenus_Boiling_Point/Boling_Point_DVD.jpg",
-              "size": 228290
-            },
-            {
-              "type": "image",
-              "name": "Boling Point DVD 2",
-              "path": "Game_development/2005-05_Xenus_Boiling_Point/Boling_Point_DVD_2.jpg",
-              "size": 135100
-            },
-            {
-              "type": "image",
-              "name": "Boling Point DVD 3",
-              "path": "Game_development/2005-05_Xenus_Boiling_Point/Boling_Point_DVD_3.jpg",
-              "size": 118456
-            },
-            {
-              "type": "image",
-              "name": "Xenus CD",
-              "path": "Game_development/2005-05_Xenus_Boiling_Point/Xenus_CD.jpg",
-              "size": 331265
-            },
-            {
-              "type": "image",
-              "name": "Xenus DVD",
-              "path": "Game_development/2005-05_Xenus_Boiling_Point/Xenus_DVD.jpg",
-              "size": 3992556
-            },
-            {
-              "type": "youtube",
-              "name": "Xenus Gameplay",
-              "path": "Game_development/2005-05_Xenus_Boiling_Point/Xenus_Gameplay.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=MBV_Fxryj3Q"
-            },
-            {
-              "type": "youtube",
-              "name": "Xenus Trailer",
-              "path": "Game_development/2005-05_Xenus_Boiling_Point/Xenus_Trailer.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=PJcGcuDtDY8"
-            }
-          ],
-          "image": "folder_image.png",
-          "desc": "**Boiling Point: Road to Hell** (**Xenus: Точка кипения**, **Xenus: Boiling Point**) is a 2005 first-person shooter game developed by Ukrainian game studio **Deep Shadows** and published by **Atari**. Boiling Point's gameplay is a combination of first-person shooter and role-playing video game mechanics, set in an open world. \n\nThe game was developed by core team of 15 people, 25 people at peak.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming.\n\n[Boiling Point: Road To Hell on Wikipeda](https://en.wikipedia.org/wiki/Boiling_Point:_Road_to_Hell)"
-        },
-        {
-          "type": "folder",
-          "name": "2007-04 Architecture of a Modern 3D Engine",
-          "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine",
-          "items": [
-            {
-              "type": "archive",
-              "name": "3denginelect",
-              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/3denginelect.zip",
-              "size": 35262327
-            },
-            {
-              "type": "wordpad",
-              "name": "Architecture of a Modern 3D Engine (translated to english)",
-              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/Architecture_of_a_Modern_3D_Engine_(translated_to english).md",
-              "size": 17831
-            },
-            {
-              "type": "sound",
-              "name": "KRI 2007 Programming 08apr neptun 03 Lut Roman DeepShadows",
-              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/KRI_2007_Programming_08apr_neptun_03_Lut_Roman_DeepShadows.ogg",
-              "size": 13160020
-            },
-            {
-              "type": "wordpad",
-              "name": "Архитектура современного 3D движка (russian)",
-              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/Архитектура_современного_3D_движка_(russian).md",
-              "size": 29986
-            }
-          ],
-          "reference": "Yes",
-          "star": true
-        },
-        {
-          "type": "folder",
-          "name": "2007-05 Videobroadcast from console devkit",
-          "path": "Publications/2007-05_Videobroadcast_from_console_devkit",
-          "items": [
-            {
-              "type": "archive",
-              "name": "videobroadcast",
-              "path": "Publications/2007-05_Videobroadcast_from_console_devkit/videobroadcast.rar",
-              "size": 1018807
-            },
-            {
-              "type": "wordpad",
-              "name": "Videobroadcast from console devkit",
-              "path": "Publications/2007-05_Videobroadcast_from_console_devkit/Videobroadcast_from_console_devkit.md",
-              "size": 4818
-            }
-          ],
-          "reference": "Yes"
-        },
-        {
-          "type": "folder",
-          "name": "2008-10 Xenus 2 White Gold",
-          "path": "Game_development/2008-10_Xenus_2_White_Gold",
-          "items": [
-            {
-              "type": "youtube",
-              "name": "Lecture Optimizing Xenus 2 For Multicore CPUs",
-              "path": "Game_development/2008-10_Xenus_2_White_Gold/Lecture_Optimizing_Xenus_2_For_Multicore_CPUs.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=DlsWMxvlhWE"
-            },
-            {
-              "type": "image",
-              "name": "Xenus 2 DVD",
-              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_DVD.jpg",
-              "size": 3992556
-            },
-            {
-              "type": "image",
-              "name": "Xenus 2 DVD Box",
-              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_DVD_Box.jpg",
-              "size": 274062
-            },
-            {
-              "type": "image",
-              "name": "Xenus 2 DVD Box Back",
-              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_DVD_Box_Back.jpg",
-              "size": 373743
-            },
-            {
-              "type": "youtube",
-              "name": "Xenus 2 Gameplay",
-              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_Gameplay.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=peIGh6P9P6M"
-            },
-            {
-              "type": "youtube",
-              "name": "Xenus 2 Trailer",
-              "path": "Game_development/2008-10_Xenus_2_White_Gold/Xenus_2_Trailer.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=7-iWnISp4H4"
-            }
-          ],
-          "image": "folder_image.png",
-          "desc": "**White Gold: War in Paradise** (**Xenus II: Белое золото**, **Xenus II: White Gold**) is the sequel or possibly prequel to the 2005 video game [Boiling Point: Road to Hell](http://localhost:5173/?start=2&folder=Game_development%2F2005-05_Xenus_Boiling_Point). **White Gold** was developed by Ukrainian game studio **Deep Shadows**. \n\n**Xenus** gameplay is a combination of first-person shooter and role-playing video game mechanics, set in an open world. \n\nThe game was developed by core team of 15 people, 30 people at peak.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming, XBOX 360 port.\n\nIn 2009, **Deep Shadows** had working XBOX 360 prototype. Due to a crysis in the game industry in 2009, XBOX 360 development was cancelled.\n\n**Xenus 2** is the best game by **Deep Shadows**. I am proud to have been a core member of the **Xenus 2** development team. I truly love this game and would still play it with the same excitement even after 20 years.\n\n[Xenus: White Gold](https://en.wikipedia.org/wiki/White_Gold:_War_in_Paradise) on Wikipedia.\n\n[Xenus: White Gold](https://store.steampowered.com/app/546230/Xenus_2_White_gold/) on Steam.",
-          "star": true
-        },
-        {
-          "type": "folder",
-          "name": "2009-04 Optimizing Xenus 2 for multicore CPUs",
-          "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs",
-          "items": [
-            {
-              "type": "wordpad",
-              "name": "Optimizing Xenus 2 for multicore CPUs (translated to english)",
-              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Optimizing_Xenus_2_for_multicore_CPUs_(translated_to_english).md",
-              "size": 16474
-            },
-            {
-              "type": "archive",
-              "name": "Parallel Rendering slides",
-              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Parallel_Rendering_slides.rar",
-              "size": 1781545
-            },
-            {
-              "type": "wordpad",
-              "name": "Внедрение многопоточного рендеринга в игровой движок (russian)",
-              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Внедрение_многопоточного_рендеринга_в_игровой_движок_(russian).md",
-              "size": 26982
-            }
-          ],
-          "reference": "Yes",
-          "star": true
-        },
-        {
-          "type": "folder",
-          "name": "2009-10 The Precursors",
-          "path": "Game_development/2009-10_The_Precursors",
-          "items": [
-            {
-              "type": "image",
-              "name": "The Precursors DVD",
-              "path": "Game_development/2009-10_The_Precursors/The_Precursors_DVD.jpg",
-              "size": 3992556
-            },
-            {
-              "type": "image",
-              "name": "The Precursors DVD Box",
-              "path": "Game_development/2009-10_The_Precursors/The_Precursors_DVD_Box.webp",
-              "size": 534216
-            },
-            {
-              "type": "youtube",
-              "name": "The Precursors Gameplay Trailer",
-              "path": "Game_development/2009-10_The_Precursors/The_Precursors_Gameplay_Trailer.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=Xt-sv4_Oe1I"
-            }
-          ],
-          "image": "folder_image.jpg",
-          "desc": "**The Precursors** is a 2009 first-person shooter game developed by Ukrainian game studio **Deep Shadows**. The game was released for Windows in Russia on 4 December 2009. It was then released worldwide through GamersGate on 21 December 2010 and through Steam on 4 February 2017. \n\nThe Precursors is a sci-fi game that combines shooting, RPG, and space simulation in an open galaxy. Players explore four main planets and several space locations, complete quests, and fight enemies on foot and in space. \n\nThe game was developed by core team of 15 people, 30 people at peak.\n\nDue to a crysis in the game industry in 2009, it required a great effort to release this game.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming.\n\n[The Precursors](https://en.wikipedia.org/wiki/The_Precursors) on Wikipedia.\n\n[The Precursors](https://store.steampowered.com/app/547930/Precursors/) on Steam."
-        },
-        {
-          "type": "folder",
-          "name": "2010-01 The Partisans Prototype",
-          "path": "Game_development/2010-01_The_Partisans_Prototype",
-          "items": [
-            {
-              "type": "youtube",
-              "name": "Partisans Prototype",
-              "path": "Game_development/2010-01_The_Partisans_Prototype/Partisans_Prototype.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=aA4gW7wgmsM"
-            }
-          ],
-          "image": "folder_image.jpg",
-          "desc": "**The Partisans** is a first-person shooter game developed by Ukrainian game studio **Deep Shadows** for PC and XBOX 360. The game was cancelled because **Deep Shadows** was not able to find funding due to crysis in the game industry in 2009.\n\nThe prototype was developed by a team of 5 people.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming."
-        },
-        {
-          "type": "folder",
-          "name": "2011-04 Exorcist",
-          "path": "Game_development/2011-04_Exorcist",
-          "items": [
-            {
-              "type": "youtube",
-              "name": "Exorcist",
-              "path": "Game_development/2011-04_Exorcist/Exorcist.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=lsCpoKnim2M"
-            },
-            {
-              "type": "youtube",
-              "name": "Exporcist II",
-              "path": "Game_development/2011-04_Exorcist/Exporcist_II.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=RC3QnS-rNtw"
-            },
-            {
-              "type": "youtube",
-              "name": "Insider Tales Stolen Venus 2",
-              "path": "Game_development/2011-04_Exorcist/Insider_Tales_Stolen_Venus_2.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=CReUJg-f_AA"
-            },
-            {
-              "type": "youtube",
-              "name": "Sandra Fleming Chronicles Crystal Skulls",
-              "path": "Game_development/2011-04_Exorcist/Sandra_Fleming_Chronicles_Crystal_Skulls.url",
-              "size": 43,
-              "url": "https://www.youtube.com/watch?v=nHFa0JWafSQ"
-            }
-          ],
-          "image": "folder_image.jpg",
-          "desc": "﻿**Exorcist**\nHidden Object Game developed by **Deep Shadows**.\n\n**My Role:** Hidden Object Game Engine design, Scenes and Animation editor.\n**Platform:** Windows\n**Language:** C++\n\n\nIn 2011, **Deep Shadows** switched to the hidden object games genre. Before leaving the company, I developed the tools and game engine for this direction within a few months.\n\nSeveral other games have been developed using this engine:\n\n\nInsider Tales: The Stolen Venus 2 (2011)\nSandra Fleming Chronicles: Crystal Skulls (2011)\nDark Clown Mystery \t2012\tMicrosoft Windows\nTales of Terror: Crimson Dawn (2013)\nThe Exorcist II\t(2013)\nThe Exorcist III (2014)\nHaunted Train: Spirits Of Charon Collector’s Edition (2014)\nTales of Terror: House on the Hill Collector’s Edition (2014)\nFamily Tales: The Sisters (2015)\nHaunted Train: Frozen In Time. Collector’s Edition (2015)\nTales of Terror: Estate of the Heart Collector’s Edition (2016)\nHaunted Train: Clashing Worlds Collector’s Edition (2016)\nTales of Terror: Art of Horror Collector’s Edition (2017)\nMedium Detective: Fright from the Past Collector’s Edition (2018)\nHidden Epee (2021)"
-        },
-        {
-          "type": "folder",
-          "name": "2012 04 Poker World Tour",
-          "path": "Game_development/2012_04_Poker_World_Tour",
-          "items": [
-            {
-              "type": "image",
-              "name": "pwt3 screenshot",
-              "path": "Game_development/2012_04_Poker_World_Tour/pwt3_screenshot.jpg",
-              "size": 174992
-            }
-          ],
-          "image": "folder_image.jpg",
-          "desc": "**Pockeer World Tour**\n\nMultiplayer Poker for soicial networks, developed by [Rheia Games](http://www.rheiagames.com/en/index).\n\nRelased on Facebook, Odnoklassniki, VKontakte, VZ Networks.\n\n\n**Date:** 2011-2012\n**Role:** Flash client development\n**Language:** actionscript, flex framework (Flash Builder)"
-        }
-      ]
-    },
-    {
-      "type": "folder",
       "name": "Hobby projects",
       "path": "Hobby_projects",
       "items": [
@@ -1484,6 +1139,31 @@
             }
           ],
           "desc": "﻿**CGAKit**\n\n**Date:** 1995\n**Platform:** DOS\n**Language:** Turbo pascal 3.0 and 5.5, asm\n\nGraphics library for Turbo pascal 3.0 and 5.5 – CGA video modes. Introduces double-buffered drawing (standart BGI library in Turbo-pascal do not have this feature)."
+        },
+        {
+          "type": "folder",
+          "name": "1994-Tank battle",
+          "path": "Hobby_projects/1994-Tank_battle",
+          "items": [
+            {
+              "type": "executable",
+              "name": "BATTLE",
+              "path": "Hobby_projects/1994-Tank_battle/BATTLE.zip",
+              "size": 208379
+            },
+            {
+              "type": "archive",
+              "name": "BATTLE",
+              "path": "Hobby_projects/1994-Tank_battle/BATTLE.zip",
+              "size": 208379
+            },
+            {
+              "type": "archive",
+              "name": "battle src",
+              "path": "Hobby_projects/1994-Tank_battle/battle_src.zip",
+              "size": 11916
+            }
+          ]
         },
         {
           "type": "folder",
@@ -1776,7 +1456,7 @@
               "type": "wordpad",
               "name": "Using webcamera as virtual graphics tablet (translated to english)",
               "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet_(translated_to_english).md",
-              "size": 14362
+              "size": 14342
             },
             {
               "type": "archive",
@@ -2053,7 +1733,7 @@
               "type": "wordpad",
               "name": "Using webcamera as virtual graphics tablet (translated to english)",
               "path": "Publications/2005-10_Using_webcamera_as_virtual_graphics_tablet/Using_webcamera_as_virtual_graphics_tablet_(translated_to_english).md",
-              "size": 14362
+              "size": 14342
             },
             {
               "type": "archive",
@@ -2301,6 +1981,8 @@
               "size": 29986
             }
           ],
+          "image": "folder_image.jpg",
+          "desc": "**Architecture of a Modern 3D Engine: Development of Xenus: Boiling Point**\n\nThis lecture describes details on Vital Engine ZL, used to develop games:\n\n[Venom: Codename Outbreak](/?start=2&folder=Work_projects%2F2001-08_Venom_Codename_Outbreak)\n[Xenus: Boiling Point](/?start=2&folder=Work_projects%2F2005-05_Xenus_Boiling_Point)\n[Xenus 2: Road To Hell](/?start=2&folder=Work_projects%2F2008-10_Xenus_2_White_Gold)\n[The Partisans](/?start=2&folder=Work_projects%2F2010-01_The_Partisans_Prototype)",
           "star": true
         },
         {
@@ -2427,6 +2109,13 @@
           "name": "2009-04 Optimizing Xenus 2 for multicore CPUs",
           "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs",
           "items": [
+            {
+              "type": "youtube",
+              "name": "Optimizing Xenus 2 For Multicore CPUs",
+              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Optimizing_Xenus_2_For_Multicore_CPUs.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=DlsWMxvlhWE"
+            },
             {
               "type": "wordpad",
               "name": "Optimizing Xenus 2 for multicore CPUs (translated to english)",
@@ -2914,6 +2603,538 @@
       "desc": "folder.md Markdown Rendering Test\n\nText styles\nNormal text with **bold**, *italic*.\n\nLinks \n- Link: [OpenAI](https://www.openai.com/)\n\nLong text\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
     },
     {
+      "type": "folder",
+      "name": "Work projects",
+      "path": "Work_projects",
+      "items": [
+        {
+          "type": "folder",
+          "name": "1998-2010 Vital Engine ZL",
+          "path": "Work_projects/1998-2010_Vital_Engine_ZL",
+          "items": [
+            {
+              "type": "folder",
+              "name": "2007-03 Plugins based on COM interfaces",
+              "path": "Publications/2007-03_Plugins_based_on_COM_interfaces",
+              "items": [
+                {
+                  "type": "archive",
+                  "name": "cominterface",
+                  "path": "Publications/2007-03_Plugins_based_on_COM_interfaces/cominterface.rar",
+                  "size": 628244
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Plugins based on COM interfaces (translated to english)",
+                  "path": "Publications/2007-03_Plugins_based_on_COM_interfaces/Plugins_based_on_COM_interfaces_(translated_to_english).md",
+                  "size": 15768
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Плагины на основе COM интерфейсов (russian)",
+                  "path": "Publications/2007-03_Plugins_based_on_COM_interfaces/Плагины_на_основе_COM_интерфейсов_(russian).md",
+                  "size": 21517
+                }
+              ],
+              "reference": "Yes"
+            },
+            {
+              "type": "folder",
+              "name": "2007-04 Architecture of a Modern 3D Engine",
+              "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine",
+              "items": [
+                {
+                  "type": "archive",
+                  "name": "3denginelect",
+                  "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/3denginelect.zip",
+                  "size": 35262327
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Architecture of a Modern 3D Engine (translated to english)",
+                  "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/Architecture_of_a_Modern_3D_Engine_(translated_to english).md",
+                  "size": 17831
+                },
+                {
+                  "type": "sound",
+                  "name": "KRI 2007 Programming 08apr neptun 03 Lut Roman DeepShadows",
+                  "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/KRI_2007_Programming_08apr_neptun_03_Lut_Roman_DeepShadows.ogg",
+                  "size": 13160020
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Архитектура современного 3D движка (russian)",
+                  "path": "Publications/2007-04_Architecture_of_a_Modern_3D_Engine/Архитектура_современного_3D_движка_(russian).md",
+                  "size": 29986
+                }
+              ],
+              "image": "folder_image.jpg",
+              "desc": "**Architecture of a Modern 3D Engine: Development of Xenus: Boiling Point**\n\nThis lecture describes details on Vital Engine ZL, used to develop games:\n\n[Venom: Codename Outbreak](/?start=2&folder=Work_projects%2F2001-08_Venom_Codename_Outbreak)\n[Xenus: Boiling Point](/?start=2&folder=Work_projects%2F2005-05_Xenus_Boiling_Point)\n[Xenus 2: Road To Hell](/?start=2&folder=Work_projects%2F2008-10_Xenus_2_White_Gold)\n[The Partisans](/?start=2&folder=Work_projects%2F2010-01_The_Partisans_Prototype)",
+              "reference": "Yes",
+              "star": true
+            },
+            {
+              "type": "folder",
+              "name": "2007-05 Videobroadcast from console devkit",
+              "path": "Publications/2007-05_Videobroadcast_from_console_devkit",
+              "items": [
+                {
+                  "type": "archive",
+                  "name": "videobroadcast",
+                  "path": "Publications/2007-05_Videobroadcast_from_console_devkit/videobroadcast.rar",
+                  "size": 1018807
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Videobroadcast from console devkit",
+                  "path": "Publications/2007-05_Videobroadcast_from_console_devkit/Videobroadcast_from_console_devkit.md",
+                  "size": 4818
+                }
+              ],
+              "reference": "Yes"
+            },
+            {
+              "type": "folder",
+              "name": "2008-06 DVD Streaming",
+              "path": "Publications/2008-06_DVD_Streaming",
+              "items": [
+                {
+                  "type": "archive",
+                  "name": "DVDReading",
+                  "path": "Publications/2008-06_DVD_Streaming/DVDReading.7z",
+                  "size": 4114219
+                },
+                {
+                  "type": "sound",
+                  "name": "KRI 2008 Programming 20apr saturn 04 Lut Roman Deep Shadows",
+                  "path": "Publications/2008-06_DVD_Streaming/KRI_2008_Programming_20apr_saturn_04_Lut_Roman_Deep_Shadows.ogg",
+                  "size": 11163262
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Streaming and effective reading from DVD disk (translated to english)",
+                  "path": "Publications/2008-06_DVD_Streaming/Streaming_and_effective_reading_from_DVD_disk_(translated_to_english).md",
+                  "size": 19079
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Стриминг и эффективное чтение с DVD диска (russian)",
+                  "path": "Publications/2008-06_DVD_Streaming/Стриминг_и_эффективное_чтение_с_DVD_диска_(russian).md",
+                  "size": 31224
+                }
+              ],
+              "reference": "Yes",
+              "star": true
+            },
+            {
+              "type": "folder",
+              "name": "2009-04 Optimizing Xenus 2 for multicore CPUs",
+              "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs",
+              "items": [
+                {
+                  "type": "youtube",
+                  "name": "Optimizing Xenus 2 For Multicore CPUs",
+                  "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Optimizing_Xenus_2_For_Multicore_CPUs.url",
+                  "size": 43,
+                  "url": "https://www.youtube.com/watch?v=DlsWMxvlhWE"
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Optimizing Xenus 2 for multicore CPUs (translated to english)",
+                  "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Optimizing_Xenus_2_for_multicore_CPUs_(translated_to_english).md",
+                  "size": 16474
+                },
+                {
+                  "type": "archive",
+                  "name": "Parallel Rendering slides",
+                  "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Parallel_Rendering_slides.rar",
+                  "size": 1781545
+                },
+                {
+                  "type": "wordpad",
+                  "name": "Внедрение многопоточного рендеринга в игровой движок (russian)",
+                  "path": "Publications/2009-04_Optimizing_Xenus_2_for_multicore_CPUs/Внедрение_многопоточного_рендеринга_в_игровой_движок_(russian).md",
+                  "size": 26982
+                }
+              ],
+              "reference": "Yes",
+              "star": true
+            },
+            {
+              "type": "youtube",
+              "name": "Optimizing Xenus 2 For Multicore CPUs",
+              "path": "Work_projects/1998-2010_Vital_Engine_ZL/Optimizing_Xenus_2_For_Multicore_CPUs.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=DlsWMxvlhWE"
+            },
+            {
+              "type": "youtube",
+              "name": "Vital Engine ZL Grass Rendering",
+              "path": "Work_projects/1998-2010_Vital_Engine_ZL/Vital_Engine_ZL_Grass_Rendering.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=9vC6wU8-hJI"
+            },
+            {
+              "type": "youtube",
+              "name": "Vital Engine ZL Non Moving Objects animation",
+              "path": "Work_projects/1998-2010_Vital_Engine_ZL/Vital_Engine_ZL_Non_Moving_Objects_animation.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=e_nv_3p9RH0"
+            },
+            {
+              "type": "youtube",
+              "name": "Vital Engine ZL Sceletal Animation",
+              "path": "Work_projects/1998-2010_Vital_Engine_ZL/Vital_Engine_ZL_Sceletal_Animation.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=0YfUcgd9OaU"
+            },
+            {
+              "type": "youtube",
+              "name": "Vital Engine ZL Shaders",
+              "path": "Work_projects/1998-2010_Vital_Engine_ZL/Vital_Engine_ZL_Shaders.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=iak9fWH-tyo"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**Vital Engine ZL** is Game Engine developed by **Sergey Zabaryansky** and **Roman Lut**. This game engine was used in:\n\n[Venom: Codename Outbreak](/?start=2&folder=Work_projects%2F2001-08_Venom_Codename_Outbreak)\n[Xenus: Boiling Point](/?start=2&folder=Work_projects%2F2005-05_Xenus_Boiling_Point)\n[Xenus 2: Road To Hell](/?start=2&folder=Work_projects%2F2008-10_Xenus_2_White_Gold)\n[The Partisans](/?start=2&folder=Work_projects%2F2010-01_The_Partisans_Prototype)\n\nWe started engine development in 1998 and created a technical demo showcasing the engine’s graphics and physics features. With this demo, we approached **GSC Game World**, where **Venom** was developed and released.\n\nAfter the release of **Venom**, we left **GSC Game World** and founded our own company, **Deep Shadows**, where **Xenus**, **Xenus 2**, and **The Precursors** were developed and released.\n\nDue to a crisis in the game industry, development of **Vital Engine ZL** was stopped in 2010."
+        },
+        {
+          "type": "folder",
+          "name": "2001-08 Venom Codename Outbreak",
+          "path": "Work_projects/2001-08_Venom_Codename_Outbreak",
+          "items": [
+            {
+              "type": "image",
+              "name": "Codename Outbreak CD",
+              "path": "Work_projects/2001-08_Venom_Codename_Outbreak/Codename_Outbreak_CD.webp",
+              "size": 495234
+            },
+            {
+              "type": "image",
+              "name": "Codename Outbreak CD sides",
+              "path": "Work_projects/2001-08_Venom_Codename_Outbreak/Codename_Outbreak_CD_sides.jpg",
+              "size": 281603
+            },
+            {
+              "type": "image",
+              "name": "Venom CD",
+              "path": "Work_projects/2001-08_Venom_Codename_Outbreak/Venom_CD.jpg",
+              "size": 428838
+            },
+            {
+              "type": "youtube",
+              "name": "Venom Gameplay",
+              "path": "Work_projects/2001-08_Venom_Codename_Outbreak/Venom_Gameplay.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=MT7siAaqW-o"
+            },
+            {
+              "type": "youtube",
+              "name": "Venom Intro",
+              "path": "Work_projects/2001-08_Venom_Codename_Outbreak/Venom_Intro.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=E1SpT1WoZ5w"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**Codename: Outbreak** (known as **Venom. Codename: Outbreak in Ukraine and Russia**) is a first-person shooter video game developed by **GSC Game World** and published by **Virgin Interactive**.\n\nThe game was developed by core team of 4 people, 8 people at peak.\n\n**My role**: Graphics Engine programming, Level Editor/Tools programming, Level Design.\n\n[Codename Outbreak on Wikipedia](https://en.wikipedia.org/wiki/Codename%3A_Outbreak)",
+          "star": true
+        },
+        {
+          "type": "folder",
+          "name": "2005-05 Xenus Boiling Point",
+          "path": "Work_projects/2005-05_Xenus_Boiling_Point",
+          "items": [
+            {
+              "type": "image",
+              "name": "Boling Point DVD",
+              "path": "Work_projects/2005-05_Xenus_Boiling_Point/Boling_Point_DVD.jpg",
+              "size": 228290
+            },
+            {
+              "type": "image",
+              "name": "Boling Point DVD 2",
+              "path": "Work_projects/2005-05_Xenus_Boiling_Point/Boling_Point_DVD_2.jpg",
+              "size": 135100
+            },
+            {
+              "type": "image",
+              "name": "Boling Point DVD 3",
+              "path": "Work_projects/2005-05_Xenus_Boiling_Point/Boling_Point_DVD_3.jpg",
+              "size": 118456
+            },
+            {
+              "type": "image",
+              "name": "Xenus CD",
+              "path": "Work_projects/2005-05_Xenus_Boiling_Point/Xenus_CD.jpg",
+              "size": 331265
+            },
+            {
+              "type": "image",
+              "name": "Xenus DVD",
+              "path": "Work_projects/2005-05_Xenus_Boiling_Point/Xenus_DVD.jpg",
+              "size": 3992556
+            },
+            {
+              "type": "youtube",
+              "name": "Xenus Gameplay",
+              "path": "Work_projects/2005-05_Xenus_Boiling_Point/Xenus_Gameplay.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=MBV_Fxryj3Q"
+            },
+            {
+              "type": "youtube",
+              "name": "Xenus Trailer",
+              "path": "Work_projects/2005-05_Xenus_Boiling_Point/Xenus_Trailer.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=PJcGcuDtDY8"
+            }
+          ],
+          "image": "folder_image.png",
+          "desc": "**Boiling Point: Road to Hell** (**Xenus: Точка кипения**, **Xenus: Boiling Point**) is a 2005 first-person shooter game developed by Ukrainian game studio **Deep Shadows** and published by **Atari**. Boiling Point's gameplay is a combination of first-person shooter and role-playing video game mechanics, set in an open world. \n\nThe game was developed by core team of 15 people, 25 people at peak.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming.\n\n[Boiling Point: Road To Hell on Wikipeda](https://en.wikipedia.org/wiki/Boiling_Point:_Road_to_Hell)",
+          "star": true
+        },
+        {
+          "type": "folder",
+          "name": "2008-10 Xenus 2 White Gold",
+          "path": "Work_projects/2008-10_Xenus_2_White_Gold",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Lecture Optimizing Xenus 2 For Multicore CPUs",
+              "path": "Work_projects/2008-10_Xenus_2_White_Gold/Lecture_Optimizing_Xenus_2_For_Multicore_CPUs.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=DlsWMxvlhWE"
+            },
+            {
+              "type": "image",
+              "name": "Xenus 2 DVD",
+              "path": "Work_projects/2008-10_Xenus_2_White_Gold/Xenus_2_DVD.jpg",
+              "size": 3992556
+            },
+            {
+              "type": "image",
+              "name": "Xenus 2 DVD Box",
+              "path": "Work_projects/2008-10_Xenus_2_White_Gold/Xenus_2_DVD_Box.jpg",
+              "size": 274062
+            },
+            {
+              "type": "image",
+              "name": "Xenus 2 DVD Box Back",
+              "path": "Work_projects/2008-10_Xenus_2_White_Gold/Xenus_2_DVD_Box_Back.jpg",
+              "size": 373743
+            },
+            {
+              "type": "youtube",
+              "name": "Xenus 2 Gameplay",
+              "path": "Work_projects/2008-10_Xenus_2_White_Gold/Xenus_2_Gameplay.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=peIGh6P9P6M"
+            },
+            {
+              "type": "youtube",
+              "name": "Xenus 2 Trailer",
+              "path": "Work_projects/2008-10_Xenus_2_White_Gold/Xenus_2_Trailer.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=7-iWnISp4H4"
+            }
+          ],
+          "image": "folder_image.png",
+          "desc": "**White Gold: War in Paradise** (**Xenus II: Белое золото**, **Xenus II: White Gold**) is the sequel or possibly prequel to the 2005 video game [Boiling Point: Road to Hell](http://localhost:5173/?start=2&folder=Work_Projects%2F2005-05_Xenus_Boiling_Point). **White Gold** was developed by Ukrainian game studio **Deep Shadows**. \n\n**Xenus** gameplay is a combination of first-person shooter and role-playing video game mechanics, set in an open world. \n\nThe game was developed by core team of 15 people, 30 people at peak.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming, XBOX 360 port.\n\nIn 2009, **Deep Shadows** had working XBOX 360 prototype. Due to a crysis in the game industry in 2009, XBOX 360 development was cancelled.\n\n**Xenus 2** is the best game by **Deep Shadows**. I am proud to have been a core member of the **Xenus 2** development team. I truly love this game and would still play it with the same excitement even after 20 years.\n\n[Xenus: White Gold](https://en.wikipedia.org/wiki/White_Gold:_War_in_Paradise) on Wikipedia.\n\n[Xenus: White Gold](https://store.steampowered.com/app/546230/Xenus_2_White_gold/) on Steam.",
+          "star": true
+        },
+        {
+          "type": "folder",
+          "name": "2009-10 The Precursors",
+          "path": "Work_projects/2009-10_The_Precursors",
+          "items": [
+            {
+              "type": "image",
+              "name": "The Precursors DVD",
+              "path": "Work_projects/2009-10_The_Precursors/The_Precursors_DVD.jpg",
+              "size": 3992556
+            },
+            {
+              "type": "image",
+              "name": "The Precursors DVD Box",
+              "path": "Work_projects/2009-10_The_Precursors/The_Precursors_DVD_Box.webp",
+              "size": 534216
+            },
+            {
+              "type": "youtube",
+              "name": "The Precursors Gameplay Trailer",
+              "path": "Work_projects/2009-10_The_Precursors/The_Precursors_Gameplay_Trailer.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=Xt-sv4_Oe1I"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**The Precursors** is a 2009 first-person shooter game developed by Ukrainian game studio **Deep Shadows**. The game was released for Windows in Russia on 4 December 2009. It was then released worldwide through GamersGate on 21 December 2010 and through Steam on 4 February 2017. \n\nThe Precursors is a sci-fi game that combines shooting, RPG, and space simulation in an open galaxy. Players explore four main planets and several space locations, complete quests, and fight enemies on foot and in space. \n\nThe game was developed by core team of 15 people, 30 people at peak.\n\nDue to a crysis in the game industry in 2009, it required a great effort to release this game.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming.\n\n[The Precursors](https://en.wikipedia.org/wiki/The_Precursors) on Wikipedia.\n\n[The Precursors](https://store.steampowered.com/app/547930/Precursors/) on Steam.",
+          "star": true
+        },
+        {
+          "type": "folder",
+          "name": "2010-01 The Partisans Prototype",
+          "path": "Work_projects/2010-01_The_Partisans_Prototype",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Partisans Prototype",
+              "path": "Work_projects/2010-01_The_Partisans_Prototype/Partisans_Prototype.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=aA4gW7wgmsM"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**The Partisans** is a first-person shooter game developed by Ukrainian game studio **Deep Shadows** for PC and XBOX 360. The game was cancelled because **Deep Shadows** was not able to find funding due to crysis in the game industry in 2009.\n\nThe prototype was developed by a team of 5 people.\n\n**My role**: Lead Graphics Engine programming, Level Editor/Tools programming."
+        },
+        {
+          "type": "folder",
+          "name": "2011-04 Exorcist",
+          "path": "Work_projects/2011-04_Exorcist",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Exorcist",
+              "path": "Work_projects/2011-04_Exorcist/Exorcist.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=lsCpoKnim2M"
+            },
+            {
+              "type": "youtube",
+              "name": "Exporcist II",
+              "path": "Work_projects/2011-04_Exorcist/Exporcist_II.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=RC3QnS-rNtw"
+            },
+            {
+              "type": "youtube",
+              "name": "Insider Tales Stolen Venus 2",
+              "path": "Work_projects/2011-04_Exorcist/Insider_Tales_Stolen_Venus_2.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=CReUJg-f_AA"
+            },
+            {
+              "type": "youtube",
+              "name": "Sandra Fleming Chronicles Crystal Skulls",
+              "path": "Work_projects/2011-04_Exorcist/Sandra_Fleming_Chronicles_Crystal_Skulls.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=nHFa0JWafSQ"
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "﻿**Exorcist**\nHidden Object Game developed by **Deep Shadows**.\n\n**My Role:** Hidden Object Game Engine design, Scenes and Animation editor.\n**Platform:** Windows\n**Language:** C++\n\n\nIn 2011, **Deep Shadows** switched to the hidden object games genre. Before leaving the company, I developed the tools and game engine for this direction within a few months.\n\nSeveral other games have been developed using this engine:\n\n\nInsider Tales: The Stolen Venus 2 (2011)\nSandra Fleming Chronicles: Crystal Skulls (2011)\nDark Clown Mystery \t2012\tMicrosoft Windows\nTales of Terror: Crimson Dawn (2013)\nThe Exorcist II\t(2013)\nThe Exorcist III (2014)\nHaunted Train: Spirits Of Charon Collector’s Edition (2014)\nTales of Terror: House on the Hill Collector’s Edition (2014)\nFamily Tales: The Sisters (2015)\nHaunted Train: Frozen In Time. Collector’s Edition (2015)\nTales of Terror: Estate of the Heart Collector’s Edition (2016)\nHaunted Train: Clashing Worlds Collector’s Edition (2016)\nTales of Terror: Art of Horror Collector’s Edition (2017)\nMedium Detective: Fright from the Past Collector’s Edition (2018)\nHidden Epee (2021)"
+        },
+        {
+          "type": "folder",
+          "name": "2012 04 Poker World Tour",
+          "path": "Work_projects/2012_04_Poker_World_Tour",
+          "items": [
+            {
+              "type": "image",
+              "name": "pwt3 screenshot",
+              "path": "Work_projects/2012_04_Poker_World_Tour/pwt3_screenshot.jpg",
+              "size": 174992
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**Pockeer World Tour**\n\nMultiplayer Poker for soicial networks, developed by [Rheia Games](http://www.rheiagames.com/en/index).\n\nRelased on Facebook, Odnoklassniki, VKontakte, VZ Networks.\n\n\n**Date:** 2011-2012\n**Role:** Flash client development\n**Language:** actionscript, flex framework (Flash Builder)"
+        },
+        {
+          "type": "folder",
+          "name": "2012-2022 HTML5 Games",
+          "path": "Work_projects/2012-2022_HTML5_Games",
+          "items": [
+            {
+              "type": "image",
+              "name": "IdleZoo screenshot",
+              "path": "Work_projects/2012-2022_HTML5_Games/IdleZoo_screenshot.jpg",
+              "size": 126831
+            },
+            {
+              "type": "image",
+              "name": "solitaire screenshot",
+              "path": "Work_projects/2012-2022_HTML5_Games/solitaire_screenshot.jpg",
+              "size": 133242
+            },
+            {
+              "type": "image",
+              "name": "sudoku screenshot",
+              "path": "Work_projects/2012-2022_HTML5_Games/sudoku_screenshot.jpg",
+              "size": 77070
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**HTML5 games**\n\n**Platform:** HTML5, Canvas, Pixi.js\n**Role:** Typescript developer\n\nI am working as frontend developer at Game development companies as contractor.\n\n[Fantastic Realms Interactive GmbH](http://www.attic.de/index.en.html)\n[kr3m. media GmbH](https://kr3m.com/language/en/)\n\nScreenshots of some games developed are avialable in this folder."
+        },
+        {
+          "type": "folder",
+          "name": "2018-2020 Unity RPG NDA",
+          "path": "Work_projects/2018-2020_Unity_RPG_NDA",
+          "items": [
+            {
+              "type": "youtube",
+              "name": "Character animaion",
+              "path": "Work_projects/2018-2020_Unity_RPG_NDA/Character_animaion.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=ICvkRIGocVc"
+            },
+            {
+              "type": "youtube",
+              "name": "FaceTracker-Phoneme recognition using neural network",
+              "path": "Work_projects/2018-2020_Unity_RPG_NDA/FaceTracker-Phoneme_recognition using neural_network.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=fxAK7RljRq8"
+            },
+            {
+              "type": "image",
+              "name": "unity nda rpg dialogue screenshot",
+              "path": "Work_projects/2018-2020_Unity_RPG_NDA/unity_nda_rpg_dialogue_screenshot.jpg",
+              "size": 73609
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**Training application**\n\nI worked on a personnel training application for a well-known brand (NDA), delivered as a 3D FPS/RPG experience in a photorealistic environment.\n\nThe application featured extensive interactive dialogues, where facial animation was a core component. We developed a neural-network–based tool for automatic recognition of phonemes, head and body poses, and eyebrow movements from recorded actor videos, enabling realistic character animation during conversations.\n\n**Platform:** PC, iPad\n**Language:** C++, C#\n**My Role:** Unity developer, tools development"
+        },
+        {
+          "type": "folder",
+          "name": "2022-2025 FinConPro",
+          "path": "Work_projects/2022-2025_FinConPro",
+          "items": [
+            {
+              "type": "image",
+              "name": "Finconpro dashboard",
+              "path": "Work_projects/2022-2025_FinConPro/Finconpro_dashboard.png",
+              "size": 238658
+            },
+            {
+              "type": "image",
+              "name": "FinConPro input screenshot",
+              "path": "Work_projects/2022-2025_FinConPro/FinConPro_input_screenshot.png",
+              "size": 121804
+            },
+            {
+              "type": "image",
+              "name": "FinConPro plan screenshot",
+              "path": "Work_projects/2022-2025_FinConPro/FinConPro_plan_screenshot.png",
+              "size": 480793
+            },
+            {
+              "type": "image",
+              "name": "MyLifePlan plan screenshot",
+              "path": "Work_projects/2022-2025_FinConPro/MyLifePlan_plan_screenshot.png",
+              "size": 423342
+            }
+          ],
+          "image": "folder_image.jpg",
+          "desc": "**FinConPro and MyLifePlan**\n\n\n**FinConPro** is a Swiss all-in-one financial advisory software that combines CRM, wealth management, and pension and investment planning, designed for banks, advisors, and insurance professionals. It supports holistic financial planning, customer onboarding, and lifecycle investment analysis in a compliant business platform. \n**MyLifePlan** is the individual-focused planning component that works with FinConPro to help create personalized long-term financial and life goals.\n\n**Platform:** HTML5\n**Language:** Typescript, Angular framework\n**My role:** Frontend developer\n\n[FinConPro website](https://finconpro.ch/en/home/)\n[MyLifePlan website](https://ideaconseils.finconpro.ch/mylifeplan/)"
+        }
+      ],
+      "image": "folder_image.jpg",
+      "desc": "This folder contains a list of most projects I have worked on during my career."
+    },
+    {
       "type": "wordpad",
       "name": "About me Roman Lut",
       "path": "About_me_Roman_Lut.md",
@@ -2923,13 +3144,13 @@
       "type": "wordpad",
       "name": "Competitions and Events",
       "path": "Competitions_and_Events.md",
-      "size": 91
+      "size": 3552
     },
     {
       "type": "wordpad",
       "name": "Resume Roman Lut",
       "path": "Resume_Roman_Lut.md",
-      "size": 19
+      "size": 1852
     }
   ]
 }
