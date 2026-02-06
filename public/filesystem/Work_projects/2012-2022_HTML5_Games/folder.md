@@ -1,9 +1,9 @@
 **HTML5 games**
 
 **Platform:** HTML5, Canvas, Pixi.js
-**Role:** Typescript developer
+**My role:** Typescript developer
 
-I am working as frontend developer at Game development companies as contractor.
+I work as a front-end developer for game development companies as a contractor.
 
 [Fantastic Realms Interactive GmbH](http://www.attic.de/index.en.html)
 [kr3m. media GmbH](https://kr3m.com/language/en/)
