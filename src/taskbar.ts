@@ -1,4 +1,4 @@
-import { formatDateShort, formatTime } from './util';
+import { formatDateShort, formatTime, setFullscreenParam } from './util';
 
 export class Taskbar {
   readonly element: HTMLElement;
@@ -6,6 +6,7 @@ export class Taskbar {
   private dateEl: HTMLSpanElement | null = null;
   private windowsEl: HTMLElement | null = null;
   private startHandlers: Array<() => void> = [];
+  private fullscreenBtn: HTMLButtonElement | null = null;
 
   constructor() {
     this.element = document.createElement('div');
@@ -19,6 +20,20 @@ export class Taskbar {
       <div class="taskbar__windows"></div>
       <div class="taskbar__spacer"></div>
       <div class="taskbar__tray">
+        <button
+          type="button"
+          class="tray-button tray-button--fullscreen"
+          aria-label="Toggle fullscreen"
+          title="Toggle Fuscreen"
+          aria-pressed="false"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M3 3h6v2H5v4H3V3zm12 0h6v6h-2V5h-4V3zm6 12v6h-6v-2h4v-4h2zm-12 6H3v-6h2v4h4v2z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
         <svg class="tray-icon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor" />
         </svg>
@@ -49,6 +64,34 @@ export class Taskbar {
 
     const startBtn = this.element.querySelector<HTMLButtonElement>('.taskbar__start');
     startBtn?.addEventListener('click', () => this.startHandlers.forEach((cb) => cb()));
+
+    this.fullscreenBtn = this.element.querySelector<HTMLButtonElement>('.tray-button--fullscreen');
+    if (this.fullscreenBtn) {
+      this.fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
+      this.syncFullscreenButton();
+      document.addEventListener('fullscreenchange', () => this.syncFullscreenButton());
+    }
+  }
+
+  private toggleFullscreen() {
+    if (document.fullscreenElement) {
+      setFullscreenParam(false);
+      document.exitFullscreen?.().catch(() => {});
+      return;
+    }
+    setFullscreenParam(true);
+    const root = document.documentElement;
+    root.requestFullscreen?.().catch(() => {});
+  }
+
+  private syncFullscreenButton() {
+    /*
+    if (!this.fullscreenBtn) return;
+    const active = Boolean(document.fullscreenElement);
+    this.fullscreenBtn.setAttribute('aria-pressed', String(active));
+    this.fullscreenBtn.classList.toggle('is-active', active);
+    setFullscreenParam(active);
+    */
   }
 
   updateClock(now: Date = new Date()) {
