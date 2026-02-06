@@ -270,6 +270,14 @@ If desktop is small and such icons should be positioned at x < 1920/2, icons sho
 The positions of icons should not scale to real desktop size.
 
 
+# 7.Start menu
+Click on start menu should open Menu like Windows 11. 
+Start menu related code and scss should be placed in files startMenu.scss and startMenu.ts.
+Start menu should show Logout and TurnOff buttons.
+Start menu should show Application Icons: File Explorer, Browser, Notepad, Wordpad, DOSBox, Sound Player.
+Clicking on app icon should close menu ad start corresponding application.
+Clicking on Logoun menu should transition on Login screen.
+Clicking on Power Down should transiting to start screen.
 
 ## Glossary
 

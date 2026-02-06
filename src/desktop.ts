@@ -1,6 +1,7 @@
 import { Taskbar } from './taskbar';
 import { DesktopIcon, IconType } from './desktopIcon';
-import { navigateToUrl, normalizeFsPath, filesystemUrl, setFileParam } from './util';
+import { StartMenu } from './startMenu';
+import { navigateToUrl, normalizeFsPath, filesystemUrl, setFileParam, setFolderParam, setStartParam } from './util';
 import { WordPad } from './WordPad';
 import { FileExplorer } from './fileExplorer';
 import { DosBox } from './dosbox';
@@ -14,6 +15,7 @@ const SOUND_EXTENSIONS = new Set(['mp3', 'ogg', 'wav', 'flac', 'm4a']);
 export class Desktop {
   readonly element: HTMLElement;
   private taskbar: Taskbar;
+  private startMenu: StartMenu;
   private intervalId: number | undefined;
   private queryParamsHandled = false;
   private icons: DesktopIcon[] = [];
@@ -34,6 +36,17 @@ export class Desktop {
       <span>Personal Page</span>
     `;
     this.element.appendChild(creditEl);
+
+    this.startMenu = new StartMenu(this.element, {
+      explorer: () => new FileExplorer(this.element, this.taskbar),
+      browser: () => this.openBrowserFromStart(),
+      notepad: () => this.spawnNotepad(),
+      wordpad: () => this.openWordPadFromDesktop('/filesystem/About_me_Roman_Lut.md', 'About me Roman Lut'),
+      dosbox: () => this.openDosBoxDemo(),
+      sound: () => this.openSoundPlayerFromDesktop(this.defaultTracks()),
+      logout: () => this.logoutToLogin(),
+      power: () => this.powerDownToStart()
+    });
 
     this.spawnIcons();
 
@@ -79,7 +92,7 @@ export class Desktop {
     );    
 */
 
-    this.taskbar.onStart(() => this.spawnNotepad());
+    this.taskbar.onStart(() => this.startMenu.toggle());
 
     root.prepend(this.element);
     this.resizeObserver = new ResizeObserver(() => this.scheduleIconLayoutUpdate());
@@ -100,6 +113,7 @@ export class Desktop {
       window.clearInterval(this.intervalId);
       this.intervalId = undefined;
     }
+    this.startMenu.destroy();
     this.resizeObserver.disconnect();
     this.element.remove();
   }
@@ -123,6 +137,10 @@ export class Desktop {
     const clean = normalizeFsPath(path);
     if (!clean) return;
     new FileExplorer(this.element, this.taskbar, clean);
+  }
+
+  private openBrowserFromStart() {
+    new Browser(this.element, this.taskbar, 'https://www.google.com/?igu=1');
   }
 
   private openFileFromPath(path: string, maximize = false) {
@@ -220,6 +238,48 @@ export class Desktop {
     new SoundPlayer(this.element, this.taskbar, tracks);
   }
 
+  private defaultTracks() {
+    return [
+      {
+        title: 'Suno AI track',
+        detail: 'Streaming mp3',
+        url: 'https://cdn1.suno.ai/0b88c092-f093-4486-aac8-94b035118c4d.mp3'
+      },
+      {
+        title: 'Suno AI track',
+        detail: 'Streaming m4a',
+        url: 'https://cdn1.suno.ai/71e3cc03-f01b-49c9-b1bd-3dc76c1095ed.m4a'
+      },
+      {
+        title: 'Suno AI track',
+        detail: 'Streaming m4a',
+        url: 'https://cdn1.suno.ai/c05f8ddf-48de-4199-876c-3acd659a8e87.m4a'
+      }
+    ];
+  }
+
+  private openDosBoxDemo() {
+    new DosBox(this.element, this.taskbar, 'Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip');
+  }
+
+  private spawnNotepad() {
+    new Notepad(this.element, this.taskbar);
+  }
+
+  private logoutToLogin() {
+    setFolderParam(null);
+    setFileParam(null);
+    setStartParam('1');
+    window.location.reload();
+  }
+
+  private powerDownToStart() {
+    setFolderParam(null);
+    setFileParam(null);
+    setStartParam(null);
+    window.location.reload();
+  }
+
   private spawnIcons() {
     // this.addIcon('notepad', 'Notepad', { x: 16, y: 136 });
     this.addIcon('word', 'About me Roman Lut', { x: 16, y: 16 }, () =>
@@ -265,24 +325,7 @@ export class Desktop {
       'sound',
       'Sound Player',
       { x: 16 + 120 * 2, y: 16 + 120 + 120 + 140 },
-      () =>
-        this.openSoundPlayerFromDesktop([
-          {
-            title: 'Suno AI track',
-            detail: 'Streaming mp3',
-            url: 'https://cdn1.suno.ai/0b88c092-f093-4486-aac8-94b035118c4d.mp3'
-          },
-          {
-            title: 'Suno AI track',
-            detail: 'Streaming m4a',
-            url: 'https://cdn1.suno.ai/71e3cc03-f01b-49c9-b1bd-3dc76c1095ed.m4a'
-          },
-          {
-            title: 'Suno AI track',
-            detail: 'Streaming m4a',
-            url: 'https://cdn1.suno.ai/c05f8ddf-48de-4199-876c-3acd659a8e87.m4a'
-          }
-        ])
+      () => this.openSoundPlayerFromDesktop(this.defaultTracks())
     );
 
     // HTML5 demo: JS1k - Lost In A Cave
