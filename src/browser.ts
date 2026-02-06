@@ -137,18 +137,6 @@ export class Browser extends AppWindow {
     const toolbar = document.createElement('div');
     toolbar.className = 'browser__toolbar';
 
-    const backBtn = document.createElement('button');
-    backBtn.className = 'browser__btn browser__btn--disabled';
-    backBtn.textContent = '←';
-    backBtn.title = 'Back (disabled)';
-    backBtn.disabled = true;
-
-    const fwdBtn = document.createElement('button');
-    fwdBtn.className = 'browser__btn browser__btn--disabled';
-    fwdBtn.textContent = '→';
-    fwdBtn.title = 'Forward (disabled)';
-    fwdBtn.disabled = true;
-
     const reloadBtn = document.createElement('button');
     reloadBtn.className = 'browser__btn';
     reloadBtn.textContent = '⟳';
@@ -179,7 +167,7 @@ export class Browser extends AppWindow {
       }
     });
 
-    toolbar.append(backBtn, fwdBtn, reloadBtn, this.addressInput, externalBtn);
+    toolbar.append(reloadBtn, this.addressInput, externalBtn);
 
     const content = document.createElement('div');
     content.className = 'browser__content';
@@ -374,4 +362,5 @@ export class Browser extends AppWindow {
     super.close();
   }
 }
+
 
