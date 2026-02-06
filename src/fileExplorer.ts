@@ -46,6 +46,7 @@ export class FileExplorer extends AppWindow {
   private upBtn: HTMLButtonElement | null = null;
   private history: string[] = [''];
   private historyIndex = 0;
+  private readonly hideTestFolder = !this.isLocalhostHost();
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, startPath = '') {
     super(desktop, taskbar, 'File Exporer', FILE_EXPLORER_ICON);
@@ -172,9 +173,10 @@ export class FileExplorer extends AppWindow {
     this.currentPath = clean;
     setFolderParam(clean);
     this.renderBreadcrumb();
+    const visibleItems = this.getVisibleItems(folder.items);
     this.renderMeta(folder);
-    this.renderItems(folder.items);
-    this.statusBar.setText(formatItemCount(folder.items.length));
+    this.renderItems(visibleItems);
+    this.statusBar.setText(formatItemCount(visibleItems.length));
     this.updateUpButtonState();
     this.updateNavButtons();
     return true;
@@ -317,6 +319,22 @@ export class FileExplorer extends AppWindow {
       row.addEventListener('dblclick', () => this.handleItemClick(item));
       this.list.appendChild(row);
     });
+  }
+
+  private getVisibleItems(items: FsItem[]) {
+    if (!this.hideTestFolder) {
+      return items;
+    }
+    return items.filter((item) => {
+      if (item.type !== 'folder') return true;
+      const leaf = normalizeFsPath(item.path).split('/').pop()?.toLowerCase();
+      return leaf !== 'test';
+    });
+  }
+
+  private isLocalhostHost() {
+    const host = window.location.hostname.toLowerCase();
+    return host === 'localhost' || host === '127.0.0.1' || host === '[::1]';
   }
 
   private handleItemClick(item: FsItem) {
