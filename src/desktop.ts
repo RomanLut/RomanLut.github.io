@@ -16,6 +16,7 @@ export class Desktop {
   readonly element: HTMLElement;
   private taskbar: Taskbar;
   private startMenu: StartMenu;
+  private onLogout: (() => void) | null = null;
   private intervalId: number | undefined;
   private queryParamsHandled = false;
   private icons: DesktopIcon[] = [];
@@ -259,7 +260,7 @@ export class Desktop {
   }
 
   private openDosBoxDemo() {
-    new DosBox(this.element, this.taskbar, 'Demoscene/1997-08_Fields_of_the_Nephilims/fields.zip');
+    new DosBox(this.element, this.taskbar, 'test/DOS_prompt.zip');
   }
 
   private spawnNotepad() {
@@ -270,7 +271,11 @@ export class Desktop {
     setFolderParam(null);
     setFileParam(null);
     setStartParam('1');
-    window.location.reload();
+    if (this.onLogout) {
+      this.onLogout();
+    } else {
+      window.location.reload();
+    }
   }
 
   private powerDownToStart() {
@@ -321,13 +326,14 @@ export class Desktop {
       navigateToUrl(this.element, this.taskbar, 'https://www.youtube.com/@RomanLutHax')
     );
 
+/*
     this.addIcon(
       'sound',
       'Sound Player',
       { x: 16 + 120 * 2, y: 16 + 120 + 120 + 140 },
       () => this.openSoundPlayerFromDesktop(this.defaultTracks())
     );
-
+*/
     // HTML5 demo: JS1k - Lost In A Cave
     this.addIcon(
       'html',
@@ -423,5 +429,9 @@ export class Desktop {
       return;
     }
     this.icons.forEach((icon) => icon.updatePosition(bounds));
+  }
+
+  setOnLogout(handler: () => void) {
+    this.onLogout = handler;
   }
 }

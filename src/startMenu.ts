@@ -21,6 +21,7 @@ export class StartMenu {
     this.actions = actions;
     this.element = document.createElement('div');
     this.element.className = 'start-menu';
+    this.element.style.display = 'none';
     this.element.innerHTML = `
       <div class="start-menu__panel" role="menu" aria-label="Start menu">
         <div class="start-menu__grid">
@@ -54,7 +55,16 @@ export class StartMenu {
             </button>
             <button class="start-menu__footer-btn start-menu__footer-btn--power" data-action="power" aria-label="Power">
               <span class="start-menu__footer-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M12 3v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7.5 5.6A7 7 0 1 0 19 10.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 4v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                  <path
+                    d="M7 6.5a7 7 0 1 0 10 0"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    fill="none"
+                    stroke-linecap="round"
+                  />
+                </svg>
               </span>
               <span class="start-menu__sr">Power</span>
             </button>
@@ -93,6 +103,7 @@ export class StartMenu {
   show() {
     if (this.isOpen) return;
     this.isOpen = true;
+    this.element.style.display = 'block';
     this.element.classList.add('is-open');
   }
 
@@ -100,6 +111,7 @@ export class StartMenu {
     if (!this.isOpen) return;
     this.isOpen = false;
     this.element.classList.remove('is-open');
+    this.element.style.display = 'none';
   }
 
   toggle() {

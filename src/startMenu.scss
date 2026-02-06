@@ -17,8 +17,9 @@
   padding: 16px 16px 12px;
   border-radius: 9px;
   --start-menu-tile-height: 44px;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 55%),
-    linear-gradient(140deg, rgba(28, 40, 62, 0.92), rgba(22, 26, 36, 0.92));
+  background:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08)),
+    rgba(20, 20, 20, 0.7);
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.45),
     inset 0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -60,7 +61,7 @@
 }
 
 .desktop .start-menu__tile:hover {
-  background: linear-gradient(120deg, rgba(76, 139, 245, 0.18), rgba(143, 183, 255, 0.12));
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .desktop .start-menu__icon {
@@ -95,8 +96,8 @@
   gap: 8px;
   margin: 10px -16px -12px;
   padding: 10px 16px 8px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(16, 20, 28, 0.35));
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(40, 40, 40, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px;
 }
@@ -125,14 +126,10 @@
   transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
 }
 
-.desktop .start-menu__footer-btn:hover {
-  background: linear-gradient(140deg, rgba(251, 191, 36, 0.25), rgba(249, 115, 22, 0.2));
-  transform: translateY(-1px);
-}
-
+.desktop .start-menu__footer-btn:hover,
 .desktop .start-menu__footer-btn--power:hover {
-  background: linear-gradient(140deg, rgba(248, 113, 113, 0.24), rgba(239, 68, 68, 0.2));
-  border-color: rgba(248, 113, 113, 0.65);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
 }
 
 .desktop .start-menu__footer-icon {

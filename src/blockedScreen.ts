@@ -112,6 +112,29 @@ export class BlockedScreen {
     this.faded = true;
   }
 
+  fadeFromDesktop(duration = 800) {
+    const layer = this.blockedLayer;
+    if (!layer) return;
+    this.faded = false;
+    this.element.style.display = 'block';
+    this.element.style.opacity = '1';
+    layer.style.display = 'block';
+    layer.style.opacity = '0';
+    layer.style.transition = `opacity ${duration}ms ease`;
+    if (!this.intervalId) {
+      this.intervalId = window.setInterval(() => this.tick(), 5000);
+    }
+    setStartParam('1');
+    requestAnimationFrame(() => {
+      layer.style.opacity = '1';
+    });
+    const onEnd = () => {
+      layer.style.transition = '';
+      layer.removeEventListener('transitionend', onEnd);
+    };
+    layer.addEventListener('transitionend', onEnd);
+  }
+
   private tick() {
     const now = new Date();
     if (this.timeEl) this.timeEl.textContent = formatTime(now);

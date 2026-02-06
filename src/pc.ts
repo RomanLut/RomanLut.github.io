@@ -15,6 +15,7 @@ export class PC {
 
     this.desktop = new Desktop(this.element);
     this.blockedScreen = new BlockedScreen(this.element);
+    this.desktop.setOnLogout(() => this.blockedScreen.fadeFromDesktop());
   }
 
   getBlockedScreen() {
