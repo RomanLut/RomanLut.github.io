@@ -1530,8 +1530,8 @@
         },
         {
           "type": "folder",
-          "name": "2007-07 HXGRID Distibuted Computing Library",
-          "path": "Hobby_projects/2007-07_HXGRID_Distibuted_Computing_Library",
+          "name": "2007-07 hxGrid Distibuted Computing Library",
+          "path": "Hobby_projects/2007-07_hxGrid_Distibuted_Computing_Library",
           "items": [
             {
               "type": "folder",
@@ -1580,7 +1580,7 @@
             {
               "type": "html",
               "name": "hxGrid and Distributed ATI Normalmapper",
-              "path": "Hobby_projects/2007-07_HXGRID_Distibuted_Computing_Library/hxGrid_and_Distributed_ATI_Normalmapper.html",
+              "path": "Hobby_projects/2007-07_hxGrid_Distibuted_Computing_Library/hxGrid_and_Distributed_ATI_Normalmapper.html",
               "size": 24364
             }
           ],
