@@ -390,58 +390,58 @@
           "items": [
             {
               "type": "folder",
-              "name": "Into The Shadows",
-              "path": "Demoscene/Demos_which_inspired_me/Into_The_Shadows",
+              "name": "1993 Second Reality",
+              "path": "Demoscene/Demos_which_inspired_me/1993_Second_Reality",
+              "items": [
+                {
+                  "type": "executable",
+                  "name": "Second Reality",
+                  "path": "Demoscene/Demos_which_inspired_me/1993_Second_Reality/Second_Reality.zip",
+                  "size": 2085987
+                },
+                {
+                  "type": "archive",
+                  "name": "Second Reality",
+                  "path": "Demoscene/Demos_which_inspired_me/1993_Second_Reality/Second_Reality.zip",
+                  "size": 2085987
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "1995 Into The Shadows",
+              "path": "Demoscene/Demos_which_inspired_me/1995_Into_The_Shadows",
               "items": [
                 {
                   "type": "executable",
                   "name": "Into The Shadows",
-                  "path": "Demoscene/Demos_which_inspired_me/Into_The_Shadows/Into_The_Shadows.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/1995_Into_The_Shadows/Into_The_Shadows.zip",
                   "size": 3443703
                 },
                 {
                   "type": "archive",
                   "name": "Into The Shadows",
-                  "path": "Demoscene/Demos_which_inspired_me/Into_The_Shadows/Into_The_Shadows.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/1995_Into_The_Shadows/Into_The_Shadows.zip",
                   "size": 3443703
                 }
               ]
             },
             {
               "type": "folder",
-              "name": "Machines Of Madness",
-              "path": "Demoscene/Demos_which_inspired_me/Machines_Of_Madness",
+              "name": "1996 Machines Of Madness",
+              "path": "Demoscene/Demos_which_inspired_me/1996_Machines_Of_Madness",
               "items": [
                 {
                   "type": "executable",
                   "name": "Machines Of Madness",
-                  "path": "Demoscene/Demos_which_inspired_me/Machines_Of_Madness/Machines_Of_Madness.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/1996_Machines_Of_Madness/Machines_Of_Madness.zip",
                   "size": 3880975
                 },
                 {
                   "type": "archive",
                   "name": "Machines Of Madness",
-                  "path": "Demoscene/Demos_which_inspired_me/Machines_Of_Madness/Machines_Of_Madness.zip",
+                  "path": "Demoscene/Demos_which_inspired_me/1996_Machines_Of_Madness/Machines_Of_Madness.zip",
                   "size": 3880975
-                }
-              ]
-            },
-            {
-              "type": "folder",
-              "name": "Second Reality",
-              "path": "Demoscene/Demos_which_inspired_me/Second_Reality",
-              "items": [
-                {
-                  "type": "executable",
-                  "name": "Second Reality",
-                  "path": "Demoscene/Demos_which_inspired_me/Second_Reality/Second_Reality.zip",
-                  "size": 2085987
-                },
-                {
-                  "type": "archive",
-                  "name": "Second Reality",
-                  "path": "Demoscene/Demos_which_inspired_me/Second_Reality/Second_Reality.zip",
-                  "size": 2085987
                 }
               ]
             }
