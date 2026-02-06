@@ -31,6 +31,7 @@
   color: #ffffff;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
   font-family: 'Arial', 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  user-select: none;
 }
 
 .pc .wallpaper__time {
@@ -88,9 +89,11 @@
   padding: 10px 24px;
   border-radius: 12px;
   cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
 }
 
 .pc .lock-login:hover {
+  background: rgba(192, 192, 192, 0.4);
 }
 
 .pc .lock-login:active {
