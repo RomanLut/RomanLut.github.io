@@ -733,6 +733,13 @@
               "size": 3041918
             },
             {
+              "type": "youtube",
+              "name": "Midi Player For AVR",
+              "path": "Electronics/2013-09_Midi_player_for_AVR/Midi_Player_For_AVR.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=HkgqKiw3UaI"
+            },
+            {
               "type": "wordpad",
               "name": "Midi Player for AVR (translated to english)",
               "path": "Electronics/2013-09_Midi_player_for_AVR/Midi_Player_for_AVR_(translated_to_english).md",
@@ -2269,6 +2276,13 @@
               "name": "AVRMusic",
               "path": "Electronics/2013-09_Midi_player_for_AVR/AVRMusic.rar",
               "size": 3041918
+            },
+            {
+              "type": "youtube",
+              "name": "Midi Player For AVR",
+              "path": "Electronics/2013-09_Midi_player_for_AVR/Midi_Player_For_AVR.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=HkgqKiw3UaI"
             },
             {
               "type": "wordpad",
