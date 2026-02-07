@@ -46,6 +46,7 @@ export class DosBox extends AppWindow {
   private maxLogLines = 40;
   private paused = false;
   private launched = false;
+  private keyboardMenuItemEl: HTMLElement | null = null;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, archivePath: string, exeName?: string) {
     const guessedExe = DosBox.guessExeName(archivePath);
@@ -77,11 +78,13 @@ export class DosBox extends AppWindow {
           { label: '-' },
           { label: 'Reboot' }
         ]
-      }
+      },
+      { label: 'Show Keyboard' }
     ];
     const menu = new AppWindowMenu(menuItems);
     menu.onSelect((label) => this.handleMenu(label));
     container.appendChild(menu.element);
+    this.keyboardMenuItemEl = menu.element.querySelector('[data-label="Show Keyboard"]') as HTMLElement | null;
 
     container.appendChild(this.host);
     this.statusBar = document.createElement('div');
@@ -615,6 +618,10 @@ export class DosBox extends AppWindow {
 
   private async handleMenu(label: string) {
     const normalized = label.trim().toLowerCase();
+    if (normalized === 'show keyboard' || normalized === 'hide keyboard') {
+      this.toggleTouchKeyboard();
+      return;
+    }
     if (normalized === 'pause') {
       if (!this.paused) await this.togglePause();
       return;
@@ -625,6 +632,46 @@ export class DosBox extends AppWindow {
     }
     if (normalized === 'reboot') {
       await this.reboot();
+    }
+  }
+
+  private toggleTouchKeyboard() {
+    const layers = this.dosInstance?.layers;
+    if (!layers) {
+      this.statusMsg.textContent = 'Keyboard is available after emulator starts';
+      return;
+    }
+
+    const visible = !!layers.keyboardVisible;
+
+    if (typeof layers.toggleKeyboard === 'function') {
+      layers.toggleKeyboard();
+      this.updateKeyboardMenuLabel(!visible);
+      return;
+    }
+
+    if (!visible && typeof layers.showKeyboard === 'function') {
+      layers.showKeyboard();
+      this.updateKeyboardMenuLabel(true);
+      return;
+    }
+
+    if (visible && typeof layers.hideKeyboard === 'function') {
+      layers.hideKeyboard();
+      this.updateKeyboardMenuLabel(false);
+      return;
+    }
+
+    this.statusMsg.textContent = 'Keyboard API is not available in this runtime';
+  }
+
+  private updateKeyboardMenuLabel(visible: boolean) {
+    if (!this.keyboardMenuItemEl) return;
+    const next = visible ? 'Hide Keyboard' : 'Show Keyboard';
+    this.keyboardMenuItemEl.dataset.label = next;
+    const textEl = this.keyboardMenuItemEl.querySelector('.app-window__menu-item-label');
+    if (textEl) {
+      textEl.textContent = next;
     }
   }
 
