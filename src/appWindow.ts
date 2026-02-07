@@ -26,6 +26,8 @@ type ResizeSession = {
 const SPAWN_BASE = { x: 80, y: 80 };
 const SPAWN_STEP = { x: 16, y: 16 };
 const SPAWN_MARGIN = 16;
+const MIN_WINDOW_WIDTH = 300;
+const MIN_WINDOW_HEIGHT = 200;
 
 export class AppWindow {
   readonly element: HTMLElement;
@@ -53,6 +55,8 @@ export class AppWindow {
   private iconMarkup: string | undefined;
   private static openWindows = new Set<AppWindow>();
   private static fsWatcherInit = false;
+  private static viewportWatcherInit = false;
+  private static lastLandscape: boolean | null = null;
   private static maximizedWindows = new Set<AppWindow>();
   public static skipNextSpawnAnimation = false;
   private static updateMaximizedFlag() {
@@ -135,11 +139,28 @@ export class AppWindow {
     }
     AppWindow.openWindows.add(this);
     AppWindow.ensureFsWatcher();
+    AppWindow.ensureViewportWatcher();
+  }
+
+  private getTaskbarHeight() {
+    const h = this.taskbar.element.getBoundingClientRect().height;
+    return h > 0 ? h : 44;
+  }
+
+  private getUsableBounds() {
+    const rect = this.desktop.getBoundingClientRect();
+    const usableHeight = Math.max(0, rect.height - this.getTaskbarHeight());
+    return {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: usableHeight
+    };
   }
 
   private positionInitial() {
     if (this.positioned) return;
-    const parentRect = this.desktop.getBoundingClientRect();
+    const bounds = this.getUsableBounds();
     const prevTransform = this.element.style.transform;
     this.element.style.transform = '';
     const rect = this.element.getBoundingClientRect();
@@ -150,8 +171,8 @@ export class AppWindow {
       return;
     }
     const margin = SPAWN_MARGIN;
-    const availableWidth = Math.max(margin, parentRect.width - margin * 2);
-    const availableHeight = Math.max(margin, parentRect.height - margin * 2);
+    const availableWidth = Math.max(margin, bounds.width - margin * 2);
+    const availableHeight = Math.max(margin, bounds.height - margin * 2);
     let windowWidth = rect.width;
     let windowHeight = rect.height;
     if (windowWidth > availableWidth) {
@@ -162,8 +183,8 @@ export class AppWindow {
       windowHeight = availableHeight;
       this.element.style.height = `${windowHeight}px`;
     }
-    const maxLeft = Math.max(margin, parentRect.width - windowWidth - margin);
-    const maxTop = Math.max(margin, parentRect.height - windowHeight - margin);
+    const maxLeft = Math.max(margin, bounds.width - windowWidth - margin);
+    const maxTop = Math.max(margin, bounds.height - windowHeight - margin);
     const baseX = Math.min(Math.max(SPAWN_BASE.x, margin), maxLeft);
     const baseY = Math.min(Math.max(SPAWN_BASE.y, margin), maxTop);
     const stepX = SPAWN_STEP.x;
@@ -172,7 +193,7 @@ export class AppWindow {
     const getOrigin = (w: AppWindow) => {
       if (w.spawnOrigin) return { ...w.spawnOrigin };
       const r = w.element.getBoundingClientRect();
-      return { x: Math.round(r.left - parentRect.left), y: Math.round(r.top - parentRect.top) };
+      return { x: Math.round(r.left - bounds.left), y: Math.round(r.top - bounds.top) };
     };
 
     const existingOrigins = Array.from(AppWindow.openWindows)
@@ -301,19 +322,19 @@ export class AppWindow {
 
   private handleDrag = (event: PointerEvent) => {
     if (!this.dragging || this.state === 'maximized') return;
-    const parentRect = this.element.parentElement?.getBoundingClientRect();
-    if (!parentRect) return;
-    const x = event.clientX - this.dragOffset.x - parentRect.left;
-    const y = event.clientY - this.dragOffset.y - parentRect.top;
-    this.element.style.left = `${Math.max(0, Math.min(parentRect.width - 100, x))}px`;
-    this.element.style.top = `${Math.max(0, Math.min(parentRect.height - 80, y))}px`;
+    const bounds = this.getUsableBounds();
+    const x = event.clientX - this.dragOffset.x - bounds.left;
+    const y = event.clientY - this.dragOffset.y - bounds.top;
+    this.element.style.left = `${Math.max(0, Math.min(bounds.width - 100, x))}px`;
+    this.element.style.top = `${Math.max(0, Math.min(bounds.height - 80, y))}px`;
   };
 
   private handleResize = (event: PointerEvent) => {
     if (!this.resizing || this.state === 'maximized') return;
-    const minWidth = 300;
-    const minHeight = 200;
-    const { dir, startX, startY, startRect, parentRect } = this.resizing;
+    const minWidth = MIN_WINDOW_WIDTH;
+    const minHeight = MIN_WINDOW_HEIGHT;
+    const { dir, startX, startY, startRect } = this.resizing;
+    const bounds = this.getUsableBounds();
     const dx = event.clientX - startX;
     const dy = event.clientY - startY;
     let left = startRect.left;
@@ -335,11 +356,19 @@ export class AppWindow {
     }
     const width = right - left;
     const height = bottom - top;
+    const localLeft = Math.max(0, left - bounds.left);
+    const localTop = Math.max(0, top - bounds.top);
+    const maxAllowedWidth = Math.max(80, bounds.width - localLeft);
+    const maxAllowedHeight = Math.max(80, bounds.height - localTop);
+    const finalWidth = Math.min(width, maxAllowedWidth);
+    const finalHeight = Math.min(height, maxAllowedHeight);
+    const maxLeft = Math.max(0, bounds.width - finalWidth);
+    const maxTop = Math.max(0, bounds.height - finalHeight);
 
-    this.element.style.width = `${width}px`;
-    this.element.style.height = `${height}px`;
-    this.element.style.left = `${left - parentRect.left}px`;
-    this.element.style.top = `${top - parentRect.top}px`;
+    this.element.style.width = `${finalWidth}px`;
+    this.element.style.height = `${finalHeight}px`;
+    this.element.style.left = `${Math.min(localLeft, maxLeft)}px`;
+    this.element.style.top = `${Math.min(localTop, maxTop)}px`;
   };
 
   private stopResize = () => {
@@ -624,6 +653,78 @@ export class AppWindow {
     });
   }
 
+  private static ensureViewportWatcher() {
+    if (AppWindow.viewportWatcherInit) return;
+    AppWindow.viewportWatcherInit = true;
+    AppWindow.lastLandscape = window.innerWidth >= window.innerHeight;
+
+    let resizeTick: number | null = null;
+    const applyViewportLayout = () => {
+      const isLandscape = window.innerWidth >= window.innerHeight;
+      const switchedToPortrait = AppWindow.lastLandscape === true && isLandscape === false;
+      const switchedToLandscape = AppWindow.lastLandscape === false && isLandscape === true;
+      AppWindow.lastLandscape = isLandscape;
+      const transition: 'none' | 'toPortrait' | 'toLandscape' =
+        switchedToPortrait ? 'toPortrait' : switchedToLandscape ? 'toLandscape' : 'none';
+      AppWindow.openWindows.forEach((win) => win.onViewportChanged(transition));
+    };
+
+    const scheduleApply = (delay = 0) => {
+      if (resizeTick !== null) {
+        window.clearTimeout(resizeTick);
+      }
+      resizeTick = window.setTimeout(() => {
+        resizeTick = null;
+        applyViewportLayout();
+      }, delay);
+    };
+
+    window.addEventListener('resize', () => scheduleApply(50));
+    window.addEventListener('orientationchange', () => scheduleApply(120));
+  }
+
+  private onViewportChanged(transition: 'none' | 'toPortrait' | 'toLandscape') {
+    if (this.state === 'minimized' || this.overlayActive) return;
+
+    const bounds = this.getUsableBounds();
+    if (!bounds.width || !bounds.height) return;
+
+    const margin = SPAWN_MARGIN;
+    const maxWidth = Math.max(MIN_WINDOW_WIDTH, bounds.width - margin * 2);
+    const maxHeight = Math.max(MIN_WINDOW_HEIGHT, bounds.height - margin * 2);
+    const clampForViewport = (x: number, y: number, w: number, h: number) => {
+      const width = Math.max(MIN_WINDOW_WIDTH, Math.min(maxWidth, w));
+      const height = Math.max(MIN_WINDOW_HEIGHT, Math.min(maxHeight, h));
+      const maxLeft = Math.max(margin, bounds.width - width - margin);
+      const maxTop = Math.max(margin, bounds.height - height - margin);
+      const left = Math.min(Math.max(x, margin), maxLeft);
+      const top = Math.min(Math.max(y, margin), maxTop);
+      return { left, top, width, height };
+    };
+
+    if (this.state === 'maximized') {
+      if (this.lastRect) {
+        const normalized = clampForViewport(this.lastRect.x, this.lastRect.y, this.lastRect.w, this.lastRect.h);
+        this.lastRect = { x: normalized.left, y: normalized.top, w: normalized.width, h: normalized.height };
+      }
+      this.applyMaximizedLayout();
+      return;
+    }
+
+    const rect = this.element.getBoundingClientRect();
+    const currentX = rect.left - bounds.left;
+    const currentY = rect.top - bounds.top;
+    const nextWidth = transition === 'toPortrait' && rect.width > maxWidth ? maxWidth : rect.width;
+    const nextHeight = transition === 'toLandscape' && rect.height > maxHeight ? maxHeight : rect.height;
+    const target = clampForViewport(currentX, currentY, nextWidth, nextHeight);
+
+    this.element.style.left = `${target.left}px`;
+    this.element.style.top = `${target.top}px`;
+    this.element.style.width = `${target.width}px`;
+    this.element.style.height = `${target.height}px`;
+    this.spawnOrigin = { x: target.left, y: target.top };
+  }
+
   private setActiveState(active: boolean) {
     this.element.classList.toggle('is-active', active);
     if (active) {
@@ -708,18 +809,23 @@ export class AppWindow {
   private maximize() {
     if (this.state === 'maximized') return;
     const rect = this.element.getBoundingClientRect();
-    const parentRect = this.desktop.getBoundingClientRect();
-    this.lastRect = { x: rect.left - parentRect.left, y: rect.top - parentRect.top, w: rect.width, h: rect.height };
-    this.element.style.left = '0px';
-    this.element.style.top = '0px';
-    this.element.style.width = '100%';
-    this.element.style.height = `calc(100% - 44px)`;
+    const bounds = this.getUsableBounds();
+    this.lastRect = { x: rect.left - bounds.left, y: rect.top - bounds.top, w: rect.width, h: rect.height };
+    this.applyMaximizedLayout();
     this.state = 'maximized';
     this.element.classList.add('is-maximized');
     this.setActiveState(true);
     AppWindow.maximizedWindows.add(this);
     AppWindow.updateMaximizedFlag();
     this.element.dispatchEvent(new CustomEvent('appwindow:maximized', { detail: { win: this } }));
+  }
+
+  private applyMaximizedLayout() {
+    const bounds = this.getUsableBounds();
+    this.element.style.left = '0px';
+    this.element.style.top = '0px';
+    this.element.style.width = '100%';
+    this.element.style.height = `${bounds.height}px`;
   }
 
   private restoreFromMax() {
