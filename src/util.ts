@@ -437,12 +437,18 @@ export function formatSize(bytes: number): string {
   return `${normalized.toFixed(1)} KB`;
 }
 
-export function responsiveWidth(base: number, ratio = 0.45): number {
-  return Math.max(base, Math.floor(window.innerWidth * ratio));
+export function responsiveWidth(base: number, ratio = 0.45, viewportWidth: number = window.innerWidth): number {
+  return Math.max(base, Math.floor(viewportWidth * ratio));
 }
 
-export function responsiveHeight(basePx: number, taskbarHeight: number, spawnY = 80, ratio = 0.9): number {
-  const available = Math.floor(window.innerHeight * ratio - taskbarHeight - spawnY);
+export function responsiveHeight(
+  basePx: number,
+  taskbarHeight: number,
+  spawnY = 80,
+  ratio = 0.9,
+  viewportHeight: number = window.innerHeight
+): number {
+  const available = Math.floor(viewportHeight * ratio - taskbarHeight - spawnY);
   return Math.max(basePx, available);
 }
 

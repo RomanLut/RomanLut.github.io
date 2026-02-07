@@ -4,7 +4,7 @@ import { Landing } from './landing';
 import { isMobileTouchDevice } from './util';
 
 const TOUCH_POINT_DEBUG = false;
-const TOUCH_AREA_DEBUG = false;
+const TOUCH_AREA_DEBUG = true;
 
 function preventTouchZoom() {
   if (!isMobileTouchDevice()) return;
@@ -19,6 +19,7 @@ function preventTouchZoom() {
   const isSmallPhone = baseShortEdge <= 480;
   const mobileViewportScale = isSmallPhone ? 0.5 : 1;
   const rootEl = document.documentElement;
+  rootEl.classList.add('is-mobile-touch');
 
   if (isSmallPhone) {
     rootEl.classList.add('is-small-phone');

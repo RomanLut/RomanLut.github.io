@@ -119,13 +119,26 @@ export class DesktopIcon {
     this.element.addEventListener('pointerdown', this.startDrag);
   }
 
+  private toDesktopCoords(clientX: number, clientY: number) {
+    const rect = this.desktop.getBoundingClientRect();
+    const scaleX = rect.width > 0 ? rect.width / this.desktop.clientWidth : 1;
+    const scaleY = rect.height > 0 ? rect.height / this.desktop.clientHeight : 1;
+    return {
+      x: (clientX - rect.left) / (scaleX || 1),
+      y: (clientY - rect.top) / (scaleY || 1)
+    };
+  }
+
   private startDrag = (e: PointerEvent) => {
     if (e.button !== 0 && e.pointerType === 'mouse') return;
     this.dragging = true;
     this.dragMoved = false;
     this.dragStartClient = { x: e.clientX, y: e.clientY };
-    const rect = this.element.getBoundingClientRect();
-    this.dragOffset = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    const pointer = this.toDesktopCoords(e.clientX, e.clientY);
+    this.dragOffset = {
+      x: pointer.x - this.element.offsetLeft,
+      y: pointer.y - this.element.offsetTop
+    };
     this.element.setPointerCapture(e.pointerId);
     this.element.addEventListener('pointermove', this.handleDrag);
     this.element.addEventListener('pointerup', this.stopDrag);
@@ -142,11 +155,11 @@ export class DesktopIcon {
       const dy = e.clientY - this.dragStartClient.y;
       this.dragMoved = Math.hypot(dx, dy) > 4;
     }
-    const parentRect = this.desktop.getBoundingClientRect();
-    const x = e.clientX - parentRect.left - this.dragOffset.x;
-    const y = e.clientY - parentRect.top - this.dragOffset.y;
-    const clampedX = Math.max(0, Math.min(parentRect.width - this.element.offsetWidth, x));
-    const clampedY = Math.max(0, Math.min(parentRect.height - this.element.offsetHeight, y));
+    const pointer = this.toDesktopCoords(e.clientX, e.clientY);
+    const x = pointer.x - this.dragOffset.x;
+    const y = pointer.y - this.dragOffset.y;
+    const clampedX = Math.max(0, Math.min(this.desktop.clientWidth - this.element.offsetWidth, x));
+    const clampedY = Math.max(0, Math.min(this.desktop.clientHeight - this.element.offsetHeight, y));
     this.element.style.left = `${clampedX}px`;
     this.element.style.top = `${clampedY}px`;
   };

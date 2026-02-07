@@ -48,7 +48,7 @@ body {
   min-height: 100dvh;
 }
 
-html.is-small-phone.is-mobile-fullscreen #app > .pc {
+html.is-small-phone.is-mobile-fullscreen:not(.app-overlay-active) #app > .pc {
   transform: scale(var(--mobile-ui-scale, 1));
   transform-origin: top left;
   width: calc(100% / var(--mobile-ui-scale, 1));

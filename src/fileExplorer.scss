@@ -217,12 +217,15 @@
   border-radius: 0;
   cursor: pointer;
   transition: background 0.12s, border-color 0.12s;
-  gap: 5px
+  gap: 5px;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.fileexplorer__item:hover {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: transparent;
+@media (hover: hover) and (pointer: fine) {
+  .fileexplorer__item:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: transparent;
+  }
 }
 
 .fileexplorer__item-icon {

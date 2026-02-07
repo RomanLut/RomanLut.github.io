@@ -47,17 +47,20 @@ export class FileExplorer extends AppWindow {
   private history: string[] = [''];
   private historyIndex = 0;
   private readonly hideTestFolder = !this.isLocalhostHost();
+  private suppressItemActivationUntil = 0;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, startPath = '') {
     super(desktop, taskbar, 'File Exporer', FILE_EXPLORER_ICON);
     this.desktopRef = desktop;
     this.taskbarRef = taskbar;
 
+    const layoutWidth = desktop.clientWidth || window.innerWidth;
+    const layoutHeight = desktop.clientHeight || window.innerHeight;
     const baseWidth = 898;
-    this.element.style.width = `${responsiveWidth(baseWidth)}px`;
-    const taskbarHeight = this.taskbarRef.element.getBoundingClientRect().height || 0;
-    const baseHeight = Math.floor(window.innerHeight * 0.7);
-    this.element.style.height = `${responsiveHeight(baseHeight, taskbarHeight)}px`;
+    this.element.style.width = `${responsiveWidth(baseWidth, 0.45, layoutWidth)}px`;
+    const taskbarHeight = this.taskbarRef.element.offsetHeight || 0;
+    const baseHeight = Math.floor(layoutHeight * 0.7);
+    this.element.style.height = `${responsiveHeight(baseHeight, taskbarHeight, 80, 0.9, layoutHeight)}px`;
 
     const container = document.createElement('div');
     container.className = 'fileexplorer';
@@ -318,6 +321,11 @@ export class FileExplorer extends AppWindow {
       row.append(iconHolder, label, sizeEl);
       let lastTouchOpenAt = 0;
       row.addEventListener('dblclick', (e) => {
+        if (Date.now() < this.suppressItemActivationUntil) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         // iOS may dispatch a synthetic dblclick right after touch double-tap.
         if (Date.now() - lastTouchOpenAt < 700) {
           e.preventDefault();
@@ -325,6 +333,12 @@ export class FileExplorer extends AppWindow {
           return;
         }
         this.handleItemClick(item);
+      });
+      row.addEventListener('click', (e) => {
+        if (Date.now() < this.suppressItemActivationUntil) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
       });
       // Touch devices in emulation often don't synthesize dblclick reliably.
       // Mirror desktop icon behavior with explicit double-tap detection.
@@ -336,6 +350,11 @@ export class FileExplorer extends AppWindow {
       let lastTapY = 0;
       row.addEventListener('pointerdown', (e: PointerEvent) => {
         if (e.pointerType !== 'touch') return;
+        if (Date.now() < this.suppressItemActivationUntil) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         touchStartX = e.clientX;
         touchStartY = e.clientY;
         touchMoved = false;
@@ -349,6 +368,11 @@ export class FileExplorer extends AppWindow {
       });
       row.addEventListener('pointerup', (e: PointerEvent) => {
         if (e.pointerType !== 'touch') return;
+        if (Date.now() < this.suppressItemActivationUntil) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         if (touchMoved) {
           lastTapAt = 0;
           return;
@@ -390,6 +414,9 @@ export class FileExplorer extends AppWindow {
 
   private handleItemClick(item: FsItem) {
     if (item.type === 'folder') {
+      // Prevent delayed synthetic click/dblclick from activating a newly rendered row
+      // at the same screen coordinates right after folder navigation.
+      this.suppressItemActivationUntil = Date.now() + 450;
       this.setFolder(item.path);
       return;
     }

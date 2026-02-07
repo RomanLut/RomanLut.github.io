@@ -166,10 +166,12 @@ export class WordPad extends AppWindow {
     this.contentArea.addEventListener('click', (e) => this.handleContentClick(e as MouseEvent));
 
     // Target ~830px readable content area (padding + borders + scrollbar allowance).
-    this.element.style.width = `${responsiveWidth(WordPad.MAX_WIDTH + 68)}px`;
-    const taskbarHeight = taskbar.element.getBoundingClientRect().height || 0;
-    const baseHeight = Math.floor(window.innerHeight * 0.7);
-    this.element.style.height = `${responsiveHeight(baseHeight, taskbarHeight)}px`;
+    const layoutWidth = desktop.clientWidth || window.innerWidth;
+    const layoutHeight = desktop.clientHeight || window.innerHeight;
+    this.element.style.width = `${responsiveWidth(WordPad.MAX_WIDTH + 68, 0.45, layoutWidth)}px`;
+    const taskbarHeight = taskbar.element.offsetHeight || 0;
+    const baseHeight = Math.floor(layoutHeight * 0.7);
+    this.element.style.height = `${responsiveHeight(baseHeight, taskbarHeight, 80, 0.9, layoutHeight)}px`;
 
     WordPad.instances.add(this);
     this.applyLimitWidth(WordPad.limitArticleWidth ?? true);

@@ -280,7 +280,7 @@ body.touch-area-debug .desktop .app-window__resize {
 
 .desktop .app-window__resize--e,
 .desktop .app-window__resize--w {
-  top: 0;
+  top: 32px;
   bottom: 0;
   width: 8px;
   cursor: ew-resize;
@@ -336,7 +336,68 @@ body.touch-area-debug .desktop .app-window__resize {
   cursor: nesw-resize;
 }
 
-@media (hover: none) and (pointer: coarse) {
+html.is-mobile-touch .desktop .app-window__resize--n,
+html.is-mobile-touch .desktop .app-window__resize--ne,
+html.is-mobile-touch .desktop .app-window__resize--nw {
+  pointer-events: none;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--n,
+html.is-mobile-touch .desktop .app-window__resize--s {
+  height: 40px;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--n {
+  top: -20px;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--s {
+  bottom: -20px;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--e,
+html.is-mobile-touch .desktop .app-window__resize--w {
+  width: 32px;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--e {
+  right: -16px;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--w {
+  left: -16px;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--ne,
+html.is-mobile-touch .desktop .app-window__resize--nw,
+html.is-mobile-touch .desktop .app-window__resize--se,
+html.is-mobile-touch .desktop .app-window__resize--sw {
+  width: 48px;
+  height: 48px;
+  z-index: 9;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--ne {
+  top: -24px;
+  right: -24px;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--nw {
+  top: -24px;
+  left: -24px;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--se {
+  bottom: -24px;
+  right: -24px;
+}
+
+html.is-mobile-touch .desktop .app-window__resize--sw {
+  bottom: -24px;
+  left: -24px;
+}
+
+@media (pointer: coarse), (any-pointer: coarse) {
   .desktop .app-window__resize--n,
   .desktop .app-window__resize--ne,
   .desktop .app-window__resize--nw {
@@ -397,4 +458,40 @@ body.touch-area-debug .desktop .app-window__resize {
     bottom: -24px;
     left: -24px;
   }
+}
+
+/* Fullscreen small-phone mode scales .pc to 0.5, which also shrinks hit targets.
+   Compensate by doubling touch resize zones so physical touch area stays usable. */
+html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--s {
+  height: 80px;
+  bottom: -40px;
+}
+
+html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--e,
+html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--w {
+  width: 64px;
+}
+
+html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--e {
+  right: -32px;
+}
+
+html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--w {
+  left: -32px;
+}
+
+html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--se,
+html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--sw {
+  width: 96px;
+  height: 96px;
+}
+
+html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--se {
+  right: -48px;
+  bottom: -48px;
+}
+
+html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--sw {
+  left: -48px;
+  bottom: -48px;
 }

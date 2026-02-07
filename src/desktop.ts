@@ -424,10 +424,12 @@ export class Desktop {
   }
 
   private updateIconLayout() {
-    const bounds = this.element.getBoundingClientRect();
-    if (!bounds.width || !bounds.height) {
+    const width = this.element.clientWidth;
+    const height = this.element.clientHeight;
+    if (!width || !height) {
       return;
     }
+    const bounds = new DOMRect(0, 0, width, height);
     this.icons.forEach((icon) => icon.updatePosition(bounds));
   }
 

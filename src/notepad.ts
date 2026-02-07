@@ -22,10 +22,12 @@ export class Notepad extends AppWindow {
     );
     this.docTitle = title;
     this.touchReadOnly = isMobileTouchDevice();
-    this.element.style.width = `${responsiveWidth(880)}px`;
-    const taskbarHeight = this.taskbar.element.getBoundingClientRect().height || 0;
-    const baseHeight = Math.floor(window.innerHeight * 0.7);
-    this.element.style.height = `${responsiveHeight(baseHeight, taskbarHeight)}px`;
+    const layoutWidth = desktop.clientWidth || window.innerWidth;
+    const layoutHeight = desktop.clientHeight || window.innerHeight;
+    this.element.style.width = `${responsiveWidth(880, 0.45, layoutWidth)}px`;
+    const taskbarHeight = this.taskbar.element.offsetHeight || 0;
+    const baseHeight = Math.floor(layoutHeight * 0.7);
+    this.element.style.height = `${responsiveHeight(baseHeight, taskbarHeight, 80, 0.9, layoutHeight)}px`;
     const container = document.createElement('div');
     container.className = 'notepad';
 

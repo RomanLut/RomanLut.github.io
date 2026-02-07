@@ -1,7 +1,7 @@
 import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowStatusBar } from './appWindowStatusBar';
-import { responsiveWidth, responsiveHeight, isDownloadUrl } from './util';
+import { isDownloadUrl } from './util';
 
 function normalizeUrl(value: string): string {
   const trimmed = value.trim();
@@ -126,10 +126,30 @@ export class Browser extends AppWindow {
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, startUrl = 'https://github.com') {
     super(desktop, taskbar, 'Browser', BROWSER_ICON, true);
-    this.element.style.width = `${responsiveWidth(1144)}px`;
-    const taskbarHeight = taskbar.element.getBoundingClientRect().height || 0;
-    const baseHeight = Math.floor(window.innerHeight * 0.7);
-    this.element.style.height = `${responsiveHeight(baseHeight, taskbarHeight)}px`;
+    requestAnimationFrame(() => {
+      const margin = 16;
+      const targetAspect = 4 / 3;
+      const layoutWidth = desktop.clientWidth || window.innerWidth;
+      const layoutHeight = desktop.clientHeight || window.innerHeight;
+      const taskbarHeight = taskbar.element.offsetHeight || 44;
+      const originLeft = this.element.offsetLeft;
+      const originTop = this.element.offsetTop;
+      const usableWidth = Math.max(320, layoutWidth - originLeft - margin);
+      const usableHeight = Math.max(240, layoutHeight - taskbarHeight - originTop - margin);
+
+      let width: number;
+      let height: number;
+      if (usableWidth / usableHeight > targetAspect) {
+        height = usableHeight;
+        width = height * targetAspect;
+      } else {
+        width = usableWidth;
+        height = width / targetAspect;
+      }
+
+      this.element.style.width = `${Math.round(width)}px`;
+      this.element.style.height = `${Math.round(height)}px`;
+    });
 
     const container = document.createElement('div');
     container.className = 'browser';

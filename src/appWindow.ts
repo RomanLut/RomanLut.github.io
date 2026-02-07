@@ -18,16 +18,14 @@ type ResizeSession = {
     width: number;
     height: number;
   };
-  parentRect: {
-    left: number;
-    top: number;
-  };
 };
 const SPAWN_BASE = { x: 80, y: 80 };
 const SPAWN_STEP = { x: 16, y: 16 };
 const SPAWN_MARGIN = 16;
 const MIN_WINDOW_WIDTH = 300;
 const MIN_WINDOW_HEIGHT = 200;
+const TOUCH_DRAG_THRESHOLD_PX = 14;
+const MOUSE_DRAG_THRESHOLD_PX = 4;
 
 export class AppWindow {
   readonly element: HTMLElement;
@@ -48,7 +46,10 @@ export class AppWindow {
     | null = null;
   private lastRect: { x: number; y: number; w: number; h: number } | null = null;
   private dragging = false;
+  private dragMoved = false;
+  private dragPointerId: number | null = null;
   private dragOffset = { x: 0, y: 0 };
+  private dragStartClient = { x: 0, y: 0 };
   private resizing: ResizeSession | null = null;
   private resizeCursor: string | null = null;
   private prevUserSelect: string | null = null;
@@ -58,9 +59,13 @@ export class AppWindow {
   private static viewportWatcherInit = false;
   private static lastLandscape: boolean | null = null;
   private static maximizedWindows = new Set<AppWindow>();
+  private static overlayCount = 0;
   public static skipNextSpawnAnimation = false;
   private static updateMaximizedFlag() {
     setMaximizedParam(AppWindow.maximizedWindows.size > 0);
+  }
+  private static updateOverlayFlag() {
+    document.documentElement.classList.toggle('app-overlay-active', AppWindow.overlayCount > 0);
   }
   private positioned = false;
   private overlayActive = false;
@@ -81,6 +86,10 @@ export class AppWindow {
   private spawnOrigin: { x: number; y: number } | null = null;
   private pendingInitialMaximize = false;
   private noSpawnAnimation = false;
+  private minimizedWasMaximized = false;
+  private lastHeaderTouchTapAt = 0;
+  private lastHeaderTouchTapClient = { x: 0, y: 0 };
+  private lastHeaderTouchToggleAt = 0;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, title: string, icon?: string, showFullscreen = false) {
     this.taskbar = taskbar;
@@ -143,17 +152,36 @@ export class AppWindow {
   }
 
   private getTaskbarHeight() {
-    const h = this.taskbar.element.getBoundingClientRect().height;
+    const h = this.taskbar.element.offsetHeight;
     return h > 0 ? h : 44;
+  }
+
+  private getDesktopScale() {
+    const rect = this.desktop.getBoundingClientRect();
+    return {
+      x: rect.width > 0 ? rect.width / Math.max(1, this.desktop.clientWidth) : 1,
+      y: rect.height > 0 ? rect.height / Math.max(1, this.desktop.clientHeight) : 1
+    };
+  }
+
+  private toDesktopCoords(clientX: number, clientY: number) {
+    const rect = this.desktop.getBoundingClientRect();
+    const scale = this.getDesktopScale();
+    return {
+      x: (clientX - rect.left) / (scale.x || 1),
+      y: (clientY - rect.top) / (scale.y || 1)
+    };
   }
 
   private getUsableBounds() {
     const rect = this.desktop.getBoundingClientRect();
-    const usableHeight = Math.max(0, rect.height - this.getTaskbarHeight());
+    const width = this.desktop.clientWidth;
+    const height = this.desktop.clientHeight;
+    const usableHeight = Math.max(0, height - this.getTaskbarHeight());
     return {
       left: rect.left,
       top: rect.top,
-      width: rect.width,
+      width,
       height: usableHeight
     };
   }
@@ -161,11 +189,9 @@ export class AppWindow {
   private positionInitial() {
     if (this.positioned) return;
     const bounds = this.getUsableBounds();
-    const prevTransform = this.element.style.transform;
-    this.element.style.transform = '';
-    const rect = this.element.getBoundingClientRect();
-    this.element.style.transform = prevTransform;
-    if (rect.width < 10 || rect.height < 10) {
+    const windowWidth = this.element.offsetWidth;
+    const windowHeight = this.element.offsetHeight;
+    if (windowWidth < 10 || windowHeight < 10) {
       // Wait for layout (e.g., subclasses set width/height after super()).
       requestAnimationFrame(() => this.positionInitial());
       return;
@@ -173,18 +199,18 @@ export class AppWindow {
     const margin = SPAWN_MARGIN;
     const availableWidth = Math.max(margin, bounds.width - margin * 2);
     const availableHeight = Math.max(margin, bounds.height - margin * 2);
-    let windowWidth = rect.width;
-    let windowHeight = rect.height;
-    if (windowWidth > availableWidth) {
-      windowWidth = availableWidth;
-      this.element.style.width = `${windowWidth}px`;
+    let nextWindowWidth = windowWidth;
+    let nextWindowHeight = windowHeight;
+    if (nextWindowWidth > availableWidth) {
+      nextWindowWidth = availableWidth;
+      this.element.style.width = `${nextWindowWidth}px`;
     }
-    if (windowHeight > availableHeight) {
-      windowHeight = availableHeight;
-      this.element.style.height = `${windowHeight}px`;
+    if (nextWindowHeight > availableHeight) {
+      nextWindowHeight = availableHeight;
+      this.element.style.height = `${nextWindowHeight}px`;
     }
-    const maxLeft = Math.max(margin, bounds.width - windowWidth - margin);
-    const maxTop = Math.max(margin, bounds.height - windowHeight - margin);
+    const maxLeft = Math.max(margin, bounds.width - nextWindowWidth - margin);
+    const maxTop = Math.max(margin, bounds.height - nextWindowHeight - margin);
     const baseX = Math.min(Math.max(SPAWN_BASE.x, margin), maxLeft);
     const baseY = Math.min(Math.max(SPAWN_BASE.y, margin), maxTop);
     const stepX = SPAWN_STEP.x;
@@ -192,8 +218,7 @@ export class AppWindow {
 
     const getOrigin = (w: AppWindow) => {
       if (w.spawnOrigin) return { ...w.spawnOrigin };
-      const r = w.element.getBoundingClientRect();
-      return { x: Math.round(r.left - bounds.left), y: Math.round(r.top - bounds.top) };
+      return { x: Math.round(w.element.offsetLeft), y: Math.round(w.element.offsetTop) };
     };
 
     const existingOrigins = Array.from(AppWindow.openWindows)
@@ -249,14 +274,19 @@ export class AppWindow {
   }
 
   private attachEvents(desktop: HTMLElement) {
-    this.element.addEventListener('pointerdown', () => this.focus());
-
-    this.headerEl.addEventListener('pointerdown', (event) => {
-      if ((event.target as HTMLElement).closest('.app-window__actions')) return;
+    this.element.addEventListener('pointerdown', (event) => {
+      this.focus();
+      if (!this.isHeaderPointer(event)) return;
       if (event.button !== 0 && event.pointerType === 'mouse') return;
       this.dragging = true;
-      const rect = this.element.getBoundingClientRect();
-      this.dragOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      this.dragMoved = false;
+      this.dragPointerId = event.pointerId;
+      this.dragStartClient = { x: event.clientX, y: event.clientY };
+      const pointer = this.toDesktopCoords(event.clientX, event.clientY);
+      this.dragOffset = {
+        x: pointer.x - this.element.offsetLeft,
+        y: pointer.y - this.element.offsetTop
+      };
       document.addEventListener('pointermove', this.handleDrag);
       document.addEventListener('pointerup', this.stopDrag);
       document.addEventListener('pointercancel', this.stopDrag);
@@ -264,7 +294,9 @@ export class AppWindow {
         event.preventDefault();
       }
     });
-    this.headerEl.addEventListener('dblclick', () => {
+    this.element.addEventListener('dblclick', (event) => {
+      if (!this.isHeaderPointer(event)) return;
+      if (Date.now() - this.lastHeaderTouchToggleAt < 700) return;
       if (this.state === 'maximized') {
         this.restoreFromMax();
       } else {
@@ -279,24 +311,25 @@ export class AppWindow {
         if (event.button !== 0 && event.pointerType === 'mouse') return;
         event.stopPropagation();
         const dir = zone.dataset.resize as ResizeDir;
-        const rect = this.element.getBoundingClientRect();
-        const parentRect = this.element.parentElement?.getBoundingClientRect();
-        if (!parentRect) return;
+        if (isTouchDevice() && (dir === 'n' || dir === 'ne' || dir === 'nw')) {
+          return;
+        }
+        const pointer = this.toDesktopCoords(event.clientX, event.clientY);
+        const left = this.element.offsetLeft;
+        const top = this.element.offsetTop;
+        const width = this.element.offsetWidth;
+        const height = this.element.offsetHeight;
         this.resizing = {
           dir,
-          startX: event.clientX,
-          startY: event.clientY,
+          startX: pointer.x,
+          startY: pointer.y,
           startRect: {
-            left: rect.left,
-            top: rect.top,
-            right: rect.right,
-            bottom: rect.bottom,
-            width: rect.width,
-            height: rect.height
-          },
-          parentRect: {
-            left: parentRect.left,
-            top: parentRect.top
+            left,
+            top,
+            right: left + width,
+            bottom: top + height,
+            width,
+            height
           }
         };
         this.resizeCursor = this.cursorForDir(dir);
@@ -320,11 +353,29 @@ export class AppWindow {
     this.closeBtn.addEventListener('click', () => this.close());
   }
 
+  private isHeaderPointer(event: PointerEvent | MouseEvent) {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest('.app-window__actions')) return false;
+    if (target?.closest('[data-resize]')) return false;
+    const rect = this.headerEl.getBoundingClientRect();
+    return event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+  }
+
   private handleDrag = (event: PointerEvent) => {
     if (!this.dragging || this.state === 'maximized') return;
+    if (!this.dragMoved) {
+      const dx = event.clientX - this.dragStartClient.x;
+      const dy = event.clientY - this.dragStartClient.y;
+      const threshold = event.pointerType === 'touch' ? TOUCH_DRAG_THRESHOLD_PX : MOUSE_DRAG_THRESHOLD_PX;
+      this.dragMoved = Math.hypot(dx, dy) > threshold;
+    }
+    if (!this.dragMoved) {
+      return;
+    }
     const bounds = this.getUsableBounds();
-    const x = event.clientX - this.dragOffset.x - bounds.left;
-    const y = event.clientY - this.dragOffset.y - bounds.top;
+    const pointer = this.toDesktopCoords(event.clientX, event.clientY);
+    const x = pointer.x - this.dragOffset.x;
+    const y = pointer.y - this.dragOffset.y;
     this.element.style.left = `${Math.max(0, Math.min(bounds.width - 100, x))}px`;
     this.element.style.top = `${Math.max(0, Math.min(bounds.height - 80, y))}px`;
   };
@@ -335,8 +386,9 @@ export class AppWindow {
     const minHeight = MIN_WINDOW_HEIGHT;
     const { dir, startX, startY, startRect } = this.resizing;
     const bounds = this.getUsableBounds();
-    const dx = event.clientX - startX;
-    const dy = event.clientY - startY;
+    const pointer = this.toDesktopCoords(event.clientX, event.clientY);
+    const dx = pointer.x - startX;
+    const dy = pointer.y - startY;
     let left = startRect.left;
     let top = startRect.top;
     let right = startRect.right;
@@ -356,8 +408,8 @@ export class AppWindow {
     }
     const width = right - left;
     const height = bottom - top;
-    const localLeft = Math.max(0, left - bounds.left);
-    const localTop = Math.max(0, top - bounds.top);
+    const localLeft = Math.max(0, left);
+    const localTop = Math.max(0, top);
     const maxAllowedWidth = Math.max(80, bounds.width - localLeft);
     const maxAllowedHeight = Math.max(80, bounds.height - localTop);
     const finalWidth = Math.min(width, maxAllowedWidth);
@@ -398,13 +450,11 @@ export class AppWindow {
 
   private enterOverlay() {
     if (this.overlayActive) return;
-    const parentRect = this.desktop.getBoundingClientRect();
-    const rect = this.element.getBoundingClientRect();
     this.overlayPrevBox = {
-      left: rect.left - parentRect.left,
-      top: rect.top - parentRect.top,
-      width: rect.width,
-      height: rect.height
+      left: this.element.offsetLeft,
+      top: this.element.offsetTop,
+      width: this.element.offsetWidth,
+      height: this.element.offsetHeight
     };
     this.overlayPrevInline = {
       left: this.element.style.left,
@@ -422,6 +472,8 @@ export class AppWindow {
     this.element.style.width = '100vw';
     this.element.style.height = '100vh';
     this.overlayActive = true;
+    AppWindow.overlayCount += 1;
+    AppWindow.updateOverlayFlag();
     this.overlayNativeFs = false;
     if (isTouchDevice()) {
       if (!this.overlayExitBtn) {
@@ -496,6 +548,8 @@ export class AppWindow {
     }
     this.element.classList.remove('app-window--overlay');
     this.overlayActive = false;
+    AppWindow.overlayCount = Math.max(0, AppWindow.overlayCount - 1);
+    AppWindow.updateOverlayFlag();
     if (this.overlayNativeFs && document.fullscreenElement && document.exitFullscreen) {
       document.exitFullscreen().catch(() => {
         /* ignore failures to exit fullscreen */
@@ -535,11 +589,34 @@ export class AppWindow {
     this.overlayIframeHandlers = [];
   }
 
-  private stopDrag = () => {
+  private stopDrag = (event: PointerEvent) => {
+    if (this.dragPointerId !== null && event.pointerId !== this.dragPointerId) return;
+    const touchTravel = Math.hypot(event.clientX - this.dragStartClient.x, event.clientY - this.dragStartClient.y);
+    const wasTap = event.pointerType === 'touch' ? touchTravel <= TOUCH_DRAG_THRESHOLD_PX : !this.dragMoved;
     this.dragging = false;
+    this.dragMoved = false;
     document.removeEventListener('pointermove', this.handleDrag);
     document.removeEventListener('pointerup', this.stopDrag);
     document.removeEventListener('pointercancel', this.stopDrag);
+    this.dragPointerId = null;
+    if (event.pointerType !== 'touch' || !wasTap) return;
+    const now = Date.now();
+    const dt = now - this.lastHeaderTouchTapAt;
+    const dx = event.clientX - this.lastHeaderTouchTapClient.x;
+    const dy = event.clientY - this.lastHeaderTouchTapClient.y;
+    const isSecondTap = dt > 0 && dt <= 350 && Math.hypot(dx, dy) <= 24;
+    if (isSecondTap) {
+      this.lastHeaderTouchTapAt = 0;
+      this.lastHeaderTouchToggleAt = now;
+      if (this.state === 'maximized') {
+        this.restoreFromMax();
+      } else {
+        this.maximize();
+      }
+      return;
+    }
+    this.lastHeaderTouchTapAt = now;
+    this.lastHeaderTouchTapClient = { x: event.clientX, y: event.clientY };
   };
 
   private focus() {
@@ -567,6 +644,10 @@ export class AppWindow {
   private minimize() {
     if (this.state === 'minimized') return;
     this.pendingInitialMaximize = false;
+    if (this.overlayActive) {
+      this.exitOverlay();
+    }
+    this.minimizedWasMaximized = this.state === 'maximized';
     if (this.state === 'maximized') {
       AppWindow.maximizedWindows.delete(this);
       AppWindow.updateMaximizedFlag();
@@ -579,8 +660,18 @@ export class AppWindow {
   }
 
   private restore() {
-    this.state = 'normal';
     this.element.style.display = 'flex';
+    if (this.minimizedWasMaximized) {
+      this.state = 'maximized';
+      this.element.classList.add('is-maximized');
+      this.applyMaximizedLayout();
+      AppWindow.maximizedWindows.add(this);
+      AppWindow.updateMaximizedFlag();
+    } else {
+      this.state = 'normal';
+      this.element.classList.remove('is-maximized');
+    }
+    this.minimizedWasMaximized = false;
     this.setActiveState(true);
     this.animateFromTaskbar();
     this.focus();
@@ -711,11 +802,12 @@ export class AppWindow {
       return;
     }
 
-    const rect = this.element.getBoundingClientRect();
-    const currentX = rect.left - bounds.left;
-    const currentY = rect.top - bounds.top;
-    const nextWidth = transition === 'toPortrait' && rect.width > maxWidth ? maxWidth : rect.width;
-    const nextHeight = transition === 'toLandscape' && rect.height > maxHeight ? maxHeight : rect.height;
+    const currentX = this.element.offsetLeft;
+    const currentY = this.element.offsetTop;
+    const currentWidth = this.element.offsetWidth;
+    const currentHeight = this.element.offsetHeight;
+    const nextWidth = transition === 'toPortrait' && currentWidth > maxWidth ? maxWidth : currentWidth;
+    const nextHeight = transition === 'toLandscape' && currentHeight > maxHeight ? maxHeight : currentHeight;
     const target = clampForViewport(currentX, currentY, nextWidth, nextHeight);
 
     this.element.style.left = `${target.left}px`;
@@ -761,13 +853,17 @@ export class AppWindow {
   private computeTaskbarDelta() {
     const btn = this.getTaskbarButtonEl();
     if (!btn) return { dx: 0, dy: 0 };
+    const scale = this.getDesktopScale();
     const btnRect = btn.getBoundingClientRect();
     const winRect = this.element.getBoundingClientRect();
     const btnCenterX = btnRect.left + btnRect.width / 2;
     const btnCenterY = btnRect.top + btnRect.height / 2;
     const winCenterX = winRect.left + winRect.width / 2;
     const winCenterY = winRect.top + winRect.height / 2;
-    return { dx: btnCenterX - winCenterX, dy: btnCenterY - winCenterY };
+    return {
+      dx: (btnCenterX - winCenterX) / (scale.x || 1),
+      dy: (btnCenterY - winCenterY) / (scale.y || 1)
+    };
   }
 
   private animateFromTaskbar(reverse = false): Promise<void> {
@@ -808,9 +904,12 @@ export class AppWindow {
 
   private maximize() {
     if (this.state === 'maximized') return;
-    const rect = this.element.getBoundingClientRect();
-    const bounds = this.getUsableBounds();
-    this.lastRect = { x: rect.left - bounds.left, y: rect.top - bounds.top, w: rect.width, h: rect.height };
+    this.lastRect = {
+      x: this.element.offsetLeft,
+      y: this.element.offsetTop,
+      w: this.element.offsetWidth,
+      h: this.element.offsetHeight
+    };
     this.applyMaximizedLayout();
     this.state = 'maximized';
     this.element.classList.add('is-maximized');
