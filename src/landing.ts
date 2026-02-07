@@ -104,8 +104,8 @@ export class Landing {
     const BLINK_MAX_MS = 5000;
     const BLINK_DURATION_MS = 120;
     const NOISE_SIZE = 180;
-    const NOISE_FRAME_MS = 1000 / 30;
-    const NOISE_ALPHA = 0.05; // tiny white noise overlay
+    const NOISE_FRAME_MS = 1000 / 30000;
+    const NOISE_ALPHA = 0.03; // tiny white noise overlay
     const NB_SCREEN_POS = { x: 218, y: 415 };
     const NB_CLOCK_POS = { x: 253, y: 550 };
     const NB_CLOCK_ROTATION = (-6 * Math.PI) / 180;
@@ -116,7 +116,7 @@ export class Landing {
     const MONITOR_POS = { x: 550, y: 231 };
     const MONITOR_REGION = { width: 992 - 550, height: 501 - 231 };
     const MONITOR_FALLBACK_SIZE = { width: MONITOR_REGION.width, height: MONITOR_REGION.height };
-    const MONITOR_NOISE_ALPHA = 0.01;
+    const MONITOR_NOISE_ALPHA = 0.05;
     const MONITOR_NOISE_BLOCK_SIZE = 12;
     const NB_REGION = { x1: 226, y1: 444, x2: 532, y2: 573 };
     const NB_TARGET_CENTER = { x: 305, y: 510 };
@@ -153,6 +153,7 @@ export class Landing {
     let baseLoaded = false;
     let notebookLoaded = false;
     let monitorLoaded = false;
+    let monitorNoiseEnabled = true;
     let parallaxEnabled = true;
     let parallax = { translateX: 0, translateY: 0, rotateX: 0, rotateY: 0, originX: 0, originY: 0 };
     let camera = { translateX: 0, translateY: 0, scale: 1, rotateDeg: 0 };
@@ -187,7 +188,7 @@ export class Landing {
       NB_SCREEN_SRC,
       () => {
         notebookLoaded = true;
-        drawFrame();
+        //drawFrame();
       },
       (err) => {
         notebookLoaded = false;
@@ -200,7 +201,7 @@ export class Landing {
       MONITOR_SRC,
       () => {
         monitorLoaded = true;
-        drawFrame();
+        //drawFrame();
       },
       (err) => {
         monitorLoaded = false;
@@ -242,13 +243,15 @@ export class Landing {
       }
 
       // Monitor noise
-      const monitorNoisePattern = compositionCtx.createPattern(monitorNoiseCanvas, 'repeat');
-      if (monitorNoisePattern) {
-        compositionCtx.save();
-        compositionCtx.globalAlpha = MONITOR_NOISE_ALPHA;
-        compositionCtx.fillStyle = monitorNoisePattern;
-        compositionCtx.fillRect(MONITOR_POS.x, MONITOR_POS.y, MONITOR_REGION.width, MONITOR_REGION.height);
-        compositionCtx.restore();
+      if (monitorNoiseEnabled) {
+        const monitorNoisePattern = compositionCtx.createPattern(monitorNoiseCanvas, 'repeat');
+        if (monitorNoisePattern) {
+          compositionCtx.save();
+          compositionCtx.globalAlpha = MONITOR_NOISE_ALPHA;
+          compositionCtx.fillStyle = monitorNoisePattern;
+          compositionCtx.fillRect(MONITOR_POS.x, MONITOR_POS.y, MONITOR_REGION.width, MONITOR_REGION.height);
+          compositionCtx.restore();
+        }
       }
 
       // Frame
@@ -324,11 +327,9 @@ export class Landing {
       blinkTimeout = window.setTimeout(() => {
         if (!landingActive) return;
         ledOn = true;
-        drawFrame();
         blinkTimeout = window.setTimeout(() => {
           if (!landingActive) return;
           ledOn = false;
-          drawFrame();
           queueBlink();
         }, BLINK_DURATION_MS);
       }, delay);
@@ -380,7 +381,7 @@ export class Landing {
         return;
       }
 
-      if (timestamp - lastNoiseFrame >= NOISE_FRAME_MS) {
+      if (startAnim.active || timestamp - lastNoiseFrame >= NOISE_FRAME_MS) {
         generateNoise();
         drawFrame();
         lastNoiseFrame = timestamp;
@@ -651,6 +652,7 @@ export class Landing {
 
       startAnim.active = false;
       startAnim.raf = 0;
+      monitorNoiseEnabled = false;
       if (pcElement) {
         pcElement.style.display = 'block';
         pcElement.style.opacity = '1';
@@ -663,7 +665,6 @@ export class Landing {
     function beginStartAnimation() {
       if (startAnim.active || !landingActive) return;
       startAnim.active = true;
-      landingActive = false;
       parallaxEnabled = false;
       const target = computeStartTarget();
       parallax.originX = target.origin.x;
@@ -683,6 +684,7 @@ export class Landing {
     }
 
     function teardownLanding() {
+      landingActive = false;
       parallaxEnabled = false;
       window.removeEventListener('mousemove', applyParallax);
       window.removeEventListener('resize', applyLayout);
