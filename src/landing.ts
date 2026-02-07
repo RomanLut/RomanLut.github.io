@@ -54,6 +54,17 @@ export class Landing {
     const landing = root.querySelector<HTMLElement>('.landing');
     const canvas = root.querySelector<HTMLCanvasElement>('#landing-canvas');
 
+    const updateVisibleViewportHeight = () => {
+      if (!landing) return;
+      const vh = window.visualViewport?.height ?? window.innerHeight;
+      landing.style.setProperty('--visible-vh', `${Math.round(vh)}px`);
+    };
+
+    updateVisibleViewportHeight();
+    window.visualViewport?.addEventListener('resize', updateVisibleViewportHeight);
+    window.visualViewport?.addEventListener('scroll', updateVisibleViewportHeight);
+    window.addEventListener('resize', updateVisibleViewportHeight);
+
     if (!canvas) {
       throw new Error('Landing canvas not found');
     }
@@ -688,6 +699,9 @@ export class Landing {
       parallaxEnabled = false;
       window.removeEventListener('mousemove', applyParallax);
       window.removeEventListener('resize', applyLayout);
+      window.visualViewport?.removeEventListener('resize', updateVisibleViewportHeight);
+      window.visualViewport?.removeEventListener('scroll', updateVisibleViewportHeight);
+      window.removeEventListener('resize', updateVisibleViewportHeight);
       if (blinkTimeout !== undefined) {
         window.clearTimeout(blinkTimeout);
         blinkTimeout = undefined;
