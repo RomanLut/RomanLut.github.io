@@ -128,7 +128,7 @@ export class Landing {
     const MONITOR_REGION = { width: 992 - 550, height: 501 - 231 };
     const MONITOR_FALLBACK_SIZE = { width: MONITOR_REGION.width, height: MONITOR_REGION.height };
     const MONITOR_NOISE_ALPHA = 0.05;
-    const MONITOR_NOISE_BLOCK_SIZE = 12;
+    const MONITOR_NOISE_BLOCK_SIZE = 3;
     const NB_REGION = { x1: 226, y1: 444, x2: 532, y2: 573 };
     const NB_TARGET_CENTER = { x: 305, y: 510 };
     const START_ANIM_DURATION_MS = 3000;
