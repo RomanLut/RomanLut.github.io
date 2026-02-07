@@ -146,8 +146,12 @@ export class WordPad extends AppWindow {
     this.contentArea.className = 'wordpad__content';
     this.setupImageOverlay();
 
-    this.status = new AppWindowStatusBar('Line 1 / 1', '');
+    this.status = new AppWindowStatusBar('', '');
     this.status.element.classList.add('wordpad__status');
+    const modeEl = this.status.element.querySelector('.app-window__statusbar-mode') as HTMLElement | null;
+    if (modeEl) {
+      modeEl.textContent = 'Markdown';
+    }
 
     container.appendChild(menu.element);
     this.scrollArea.appendChild(this.contentArea);
@@ -246,7 +250,6 @@ export class WordPad extends AppWindow {
       this.contentArea.innerHTML = '';
       this.appendImageOverlay();
       this.updateStatus();
-      this.status.setText('Empty document');
       console.warn('WordPad failed to load file', path, err);
       }
   }
@@ -461,16 +464,15 @@ export class WordPad extends AppWindow {
     this.overlayImage.style.height = `${this.overlayImage.naturalHeight * scale}px`;
   }
 
-  private updateStatus() {
-    if (!this.markdownText) {
-      this.status.setText('Line 1 / 1');
-      return;
+  private utf8ByteLength(text: string) {
+    if (typeof TextEncoder !== 'undefined') {
+      return new TextEncoder().encode(text).length;
     }
-    const totalLines = Math.max(1, this.markdownText.split(/\r?\n/).length);
-    const scrollable = this.contentArea.scrollHeight - this.contentArea.clientHeight;
-    const ratio = scrollable > 0 ? this.contentArea.scrollTop / scrollable : 0;
-    const currentLine = Math.max(1, Math.floor(ratio * (totalLines - 1)) + 1);
-    this.status.setText(`Line ${currentLine} / ${totalLines}`);
+    return unescape(encodeURIComponent(text)).length;
+  }
+
+  private updateStatus() {
+    this.status.setText(`${this.utf8ByteLength(this.markdownText)} bytes`);
   }
 
   protected close() {

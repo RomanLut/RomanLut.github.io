@@ -2,7 +2,7 @@ import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowStatusBar } from './appWindowStatusBar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
-import { closeMenus, escapeHtml, responsiveWidth, responsiveHeight, setFileParam } from './util';
+import { closeMenus, escapeHtml, isMobileTouchDevice, responsiveWidth, responsiveHeight, setFileParam } from './util';
 
 export class Notepad extends AppWindow {
   private statusBar: AppWindowStatusBar;
@@ -11,6 +11,7 @@ export class Notepad extends AppWindow {
   private historyIndex = 0;
   private docTitle: string;
   private menuElement: HTMLElement | null = null;
+  private readonly touchReadOnly: boolean;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, title = 'Notepad', fileUrl?: string) {
     super(
@@ -20,6 +21,7 @@ export class Notepad extends AppWindow {
       `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="#2d7df6"/><path d="M7 7h10v1H7zm0 4h10v1H7zm0 4h6v1H7z" fill="#ffffff"/></svg>`
     );
     this.docTitle = title;
+    this.touchReadOnly = isMobileTouchDevice();
     this.element.style.width = `${responsiveWidth(880)}px`;
     const taskbarHeight = this.taskbar.element.getBoundingClientRect().height || 0;
     const baseHeight = Math.floor(window.innerHeight * 0.7);
@@ -37,8 +39,10 @@ export class Notepad extends AppWindow {
           { label: '-' },
           { label: 'Exit'}
         ]
-      },
-      {
+      }
+    ];
+    if (!this.touchReadOnly) {
+      menuItems.push({
         label: 'Edit',
         children: [
           { label: 'Undo', shortcut: 'Ctrl+Z' },
@@ -48,8 +52,8 @@ export class Notepad extends AppWindow {
           { label: 'Paste', shortcut: 'Ctrl+V' },
           { label: 'Delete', shortcut: 'Del' }
         ]
-      }
-    ];
+      });
+    }
     const menu = new AppWindowMenu(menuItems);
     this.menuElement = menu.element;
     const handleSelect = (label: string) => {
@@ -110,6 +114,10 @@ export class Notepad extends AppWindow {
     this.textarea = document.createElement('textarea');
     this.textarea.className = 'notepad__input';
     this.textarea.spellcheck = false;
+    this.textarea.readOnly = this.touchReadOnly;
+    if (this.touchReadOnly) {
+      this.textarea.setAttribute('aria-readonly', 'true');
+    }
 
     this.statusBar = new AppWindowStatusBar('ln 1, col 1', '0 characters');
 
@@ -152,6 +160,10 @@ export class Notepad extends AppWindow {
     this.statusBar.setExtra(`${this.textarea.value.length} characters`);
   }
 
+  private canEdit() {
+    return !this.touchReadOnly;
+  }
+
   private recordHistory() {
     const current = { value: this.textarea.value, selection: this.textarea.selectionStart || 0 };
     const last = this.history[this.historyIndex];
@@ -170,6 +182,7 @@ export class Notepad extends AppWindow {
   }
 
   private undo() {
+    if (!this.canEdit()) return;
     if (this.historyIndex === 0) return;
     this.historyIndex -= 1;
     const entry = this.history[this.historyIndex];
@@ -179,6 +192,7 @@ export class Notepad extends AppWindow {
   }
 
   private cut() {
+    if (!this.canEdit()) return;
     this.textarea.focus();
     const success = document.execCommand('cut');
     if (!success) {
@@ -200,6 +214,7 @@ export class Notepad extends AppWindow {
   }
 
   private async paste() {
+    if (!this.canEdit()) return;
     this.textarea.focus();
     const success = document.execCommand('paste');
     if (!success && navigator.clipboard && navigator.clipboard.readText) {
@@ -220,6 +235,7 @@ export class Notepad extends AppWindow {
   }
 
   private deleteSelection() {
+    if (!this.canEdit()) return;
     const start = this.textarea.selectionStart || 0;
     const end = this.textarea.selectionEnd || 0;
     if (start === end) {
