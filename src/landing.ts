@@ -2,7 +2,7 @@ import roomUrl from './assets/room.png';
 import nbscreenUrl from './assets/nbscreen.jpg';
 import mscreenUrl from './assets/mscreen.jpg';
 import type { BlockedScreen } from './blockedScreen';
-import { setStartParam, setFullscreenParam, formatTime, formatDateLong } from './util';
+import { setStartParam, setFullscreenParam, formatTime, formatDateLong, isMobileTouchDevice } from './util';
 
 type ImageDimensions = { naturalWidth: number; naturalHeight: number };
 type RenderState = { width: number; height: number; dpr: number };
@@ -20,6 +20,12 @@ export class Landing {
     let fullscreenRequested = false;
     let fullscreenPending = false;
     let landingActive = initialState === 'landing';
+    const docEl = document.documentElement;
+    const setLandingActiveClass = (active: boolean) => {
+      docEl.classList.toggle('landing-active', active);
+      window.dispatchEvent(new Event('landing-active-changed'));
+    };
+    setLandingActiveClass(landingActive);
 
     root.insertAdjacentHTML(
       'beforeend',
@@ -101,6 +107,8 @@ export class Landing {
       dpr: window.devicePixelRatio || 1
     };
     const layoutOffset = { left: 0, top: 0 };
+    const isMobilePhone = isMobileTouchDevice() && Math.min(window.screen.width, window.screen.height) <= 480;
+    const noiseEnabled = !isMobilePhone;
     const FADE_DURATION_MS = 500;
 
     const TOP_RATIO = 0.2;
@@ -165,7 +173,7 @@ export class Landing {
     let baseLoaded = false;
     let notebookLoaded = false;
     let monitorLoaded = false;
-    let monitorNoiseEnabled = true;
+    let monitorNoiseEnabled = noiseEnabled;
     let parallaxEnabled = true;
     let parallax = { translateX: 0, translateY: 0, rotateX: 0, rotateY: 0, originX: 0, originY: 0 };
     let camera = { translateX: 0, translateY: 0, scale: 1, rotateDeg: 0 };
@@ -321,13 +329,15 @@ export class Landing {
       }
 
       // White noise overlay
-      const pattern = ctx.createPattern(noiseCanvas, 'repeat');
-      if (pattern) {
-        ctx.save();
-        ctx.globalAlpha = NOISE_ALPHA;
-        ctx.fillStyle = pattern;
-        ctx.fillRect(0, 0, renderState.width, renderState.height);
-        ctx.restore();
+      if (noiseEnabled) {
+        const pattern = ctx.createPattern(noiseCanvas, 'repeat');
+        if (pattern) {
+          ctx.save();
+          ctx.globalAlpha = NOISE_ALPHA;
+          ctx.fillStyle = pattern;
+          ctx.fillRect(0, 0, renderState.width, renderState.height);
+          ctx.restore();
+        }
       }
 
       applyCanvasTransform();
@@ -394,7 +404,9 @@ export class Landing {
       }
 
       if (startAnim.active || timestamp - lastNoiseFrame >= NOISE_FRAME_MS) {
-        generateNoise();
+        if (noiseEnabled) {
+          generateNoise();
+        }
         drawFrame();
         lastNoiseFrame = timestamp;
       }
@@ -593,7 +605,9 @@ export class Landing {
         blinkTimeout = undefined;
       }
       queueBlink();
-      generateNoise();
+      if (noiseEnabled) {
+        generateNoise();
+      }
       if (noiseRaf) {
         window.cancelAnimationFrame(noiseRaf);
       }
@@ -665,6 +679,7 @@ export class Landing {
       startAnim.active = false;
       startAnim.raf = 0;
       monitorNoiseEnabled = false;
+      setLandingActiveClass(false);
       if (pcElement) {
         pcElement.style.display = 'block';
         pcElement.style.opacity = '1';
@@ -697,6 +712,7 @@ export class Landing {
 
     function teardownLanding() {
       landingActive = false;
+      setLandingActiveClass(false);
       parallaxEnabled = false;
       window.removeEventListener('mousemove', applyParallax);
       window.removeEventListener('resize', applyLayout);

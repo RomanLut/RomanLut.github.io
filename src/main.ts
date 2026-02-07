@@ -11,34 +11,65 @@ function preventTouchZoom() {
 
   let lastTouchEnd = 0;
   const touchOptions: AddEventListenerOptions = { passive: false, capture: true };
+  let viewportRefreshRaf: number | null = null;
+  let viewportRefreshTimers: number[] = [];
 
-  const getMobileViewportScale = () => {
-    const shortEdge = Math.min(window.screen.width, window.screen.height);
-    return shortEdge <= 480 ? 0.5 : 1;
-  };
+  // Keep one stable target scale for the whole session to avoid fullscreen flicker.
+  const baseShortEdge = Math.min(window.screen.width, window.screen.height);
+  const isSmallPhone = baseShortEdge <= 480;
+  const mobileViewportScale = isSmallPhone ? 0.5 : 1;
+  const rootEl = document.documentElement;
+
+  if (isSmallPhone) {
+    rootEl.classList.add('is-small-phone');
+    rootEl.style.setProperty('--mobile-ui-scale', String(mobileViewportScale));
+  }
 
   const forceViewportNoZoom = () => {
     const viewportMeta = document.querySelector('meta[name="viewport"]');
     if (!viewportMeta) return;
-    const scale = getMobileViewportScale();
-    viewportMeta.setAttribute(
-      'content',
-      `width=device-width, initial-scale=${scale}, minimum-scale=${scale}, maximum-scale=${scale}, user-scalable=no, viewport-fit=cover`
-    );
+    const isFullscreen = Boolean(document.fullscreenElement);
+    const landingActive = rootEl.classList.contains('landing-active');
+    const scale = isSmallPhone && isFullscreen && !landingActive ? 1 : mobileViewportScale;
+    const content = `width=device-width, initial-scale=${scale}, minimum-scale=${scale}, maximum-scale=${scale}, user-scalable=no, viewport-fit=cover`;
+    if (viewportMeta.getAttribute('content') !== content) {
+      viewportMeta.setAttribute('content', content);
+    }
   };
 
-  forceViewportNoZoom();
-  window.addEventListener('orientationchange', () => {
-    // iOS 15 may reset viewport constraints on orientation changes.
-    window.setTimeout(forceViewportNoZoom, 50);
-  });
-  window.addEventListener('resize', forceViewportNoZoom);
-  document.addEventListener('fullscreenchange', () => {
-    // Some mobile browsers recalculate/reset viewport zoom after fullscreen transitions.
+  const scheduleViewportRefresh = () => {
+    if (viewportRefreshRaf !== null) {
+      cancelAnimationFrame(viewportRefreshRaf);
+      viewportRefreshRaf = null;
+    }
+    viewportRefreshTimers.forEach((id) => window.clearTimeout(id));
+    viewportRefreshTimers = [];
+
     forceViewportNoZoom();
-    window.setTimeout(forceViewportNoZoom, 50);
-    window.setTimeout(forceViewportNoZoom, 250);
+    viewportRefreshRaf = requestAnimationFrame(() => {
+      forceViewportNoZoom();
+      viewportRefreshRaf = null;
+    });
+    [120, 300].forEach((ms) => {
+      const id = window.setTimeout(() => {
+        forceViewportNoZoom();
+      }, ms);
+      viewportRefreshTimers.push(id);
+    });
+  };
+
+  scheduleViewportRefresh();
+  window.addEventListener('orientationchange', scheduleViewportRefresh);
+  window.addEventListener('resize', () => {
+    forceViewportNoZoom();
   });
+  document.addEventListener('fullscreenchange', () => {
+    if (isSmallPhone) {
+      rootEl.classList.toggle('is-mobile-fullscreen', Boolean(document.fullscreenElement));
+    }
+    scheduleViewportRefresh();
+  });
+  window.addEventListener('landing-active-changed', scheduleViewportRefresh);
 
   document.addEventListener(
     'touchstart',
