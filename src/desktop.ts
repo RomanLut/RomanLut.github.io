@@ -248,13 +248,13 @@ export class Desktop {
       },
       {
         title: 'Suno AI track',
-        detail: 'Streaming m4a',
-        url: 'https://cdn1.suno.ai/71e3cc03-f01b-49c9-b1bd-3dc76c1095ed.m4a'
+        detail: 'Streaming mp3',
+        url: 'https://cdn1.suno.ai/71e3cc03-f01b-49c9-b1bd-3dc76c1095ed.mp3'
       },
       {
         title: 'Suno AI track',
-        detail: 'Streaming m4a',
-        url: 'https://cdn1.suno.ai/c05f8ddf-48de-4199-876c-3acd659a8e87.m4a'
+        detail: 'Streaming mp3',
+        url: 'https://cdn1.suno.ai/c05f8ddf-48de-4199-876c-3acd659a8e87.mp3'
       }
     ];
   }
