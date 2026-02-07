@@ -316,7 +316,16 @@ export class FileExplorer extends AppWindow {
       sizeEl.textContent = typeof (item as any).size === 'number' ? formatSize((item as any).size) : '';
 
       row.append(iconHolder, label, sizeEl);
-      row.addEventListener('dblclick', () => this.handleItemClick(item));
+      let lastTouchOpenAt = 0;
+      row.addEventListener('dblclick', (e) => {
+        // iOS may dispatch a synthetic dblclick right after touch double-tap.
+        if (Date.now() - lastTouchOpenAt < 700) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        this.handleItemClick(item);
+      });
       // Touch devices in emulation often don't synthesize dblclick reliably.
       // Mirror desktop icon behavior with explicit double-tap detection.
       let touchStartX = 0;
@@ -351,6 +360,7 @@ export class FileExplorer extends AppWindow {
         const isSecondTap = dt > 0 && dt <= 350 && Math.hypot(dx, dy) <= 24;
         if (isSecondTap) {
           lastTapAt = 0;
+          lastTouchOpenAt = now;
           this.handleItemClick(item);
           return;
         }

@@ -75,6 +75,7 @@ export class DesktopIcon {
   private onOpen: (() => void) | null = null;
   private lastTouchTapAt = 0;
   private lastTouchTapClient = { x: 0, y: 0 };
+  private lastTouchOpenAt = 0;
 
   constructor(
     desktop: HTMLElement,
@@ -101,6 +102,12 @@ export class DesktopIcon {
     this.attachDrag();
     if (this.onOpen) {
       this.element.addEventListener('dblclick', (e) => {
+        // iOS may emit a synthetic dblclick after touch double-tap handling.
+        if (Date.now() - this.lastTouchOpenAt < 700) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         e.stopPropagation();
         this.onOpen?.();
       });
@@ -167,6 +174,7 @@ export class DesktopIcon {
     const isSecondTap = dt > 0 && dt <= 350 && Math.hypot(dx, dy) <= 24;
     if (isSecondTap) {
       this.lastTouchTapAt = 0;
+      this.lastTouchOpenAt = now;
       this.onOpen();
       return;
     }

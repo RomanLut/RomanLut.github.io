@@ -10,6 +10,22 @@ function preventTouchZoom() {
   if (!isMobileTouchDevice()) return;
 
   let lastTouchEnd = 0;
+  const touchOptions: AddEventListenerOptions = { passive: false, capture: true };
+
+  const forceViewportNoZoom = () => {
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (!viewportMeta) return;
+    viewportMeta.setAttribute(
+      'content',
+      'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
+    );
+  };
+
+  forceViewportNoZoom();
+  window.addEventListener('orientationchange', () => {
+    // iOS 15 may reset viewport constraints on orientation changes.
+    window.setTimeout(forceViewportNoZoom, 50);
+  });
 
   document.addEventListener(
     'touchstart',
@@ -18,17 +34,18 @@ function preventTouchZoom() {
         event.preventDefault();
       }
     },
-    { passive: false }
+    touchOptions
   );
 
   document.addEventListener(
     'touchmove',
     (event) => {
-      if (event.touches.length > 1) {
+      const legacyTouchEvent = event as TouchEvent & { scale?: number };
+      if (event.touches.length > 1 || (typeof legacyTouchEvent.scale === 'number' && legacyTouchEvent.scale !== 1)) {
         event.preventDefault();
       }
     },
-    { passive: false }
+    touchOptions
   );
 
   document.addEventListener(
@@ -40,13 +57,15 @@ function preventTouchZoom() {
       }
       lastTouchEnd = now;
     },
-    { passive: false }
+    touchOptions
   );
 
+  document.addEventListener('dblclick', (event) => event.preventDefault(), touchOptions);
+
   const preventGesture = (event: Event) => event.preventDefault();
-  document.addEventListener('gesturestart', preventGesture, { passive: false });
-  document.addEventListener('gesturechange', preventGesture, { passive: false });
-  document.addEventListener('gestureend', preventGesture, { passive: false });
+  document.addEventListener('gesturestart', preventGesture, touchOptions);
+  document.addEventListener('gesturechange', preventGesture, touchOptions);
+  document.addEventListener('gestureend', preventGesture, touchOptions);
 }
 
 preventTouchZoom();
