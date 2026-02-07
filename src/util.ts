@@ -70,6 +70,10 @@ export function isMobileTouchDevice() {
   return isIosDevice() || (isAndroid && window.navigator.maxTouchPoints > 0);
 }
 
+export function isTouchDevice() {
+  return isMobileTouchDevice();
+}
+
 export async function exitFullscreenAndOpen(url: string, target: string = '_blank') {
   const openLink = () => window.open(url, target, 'noopener');
   //if (document.fullscreenElement && document.exitFullscreen) {
