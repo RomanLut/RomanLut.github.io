@@ -72,9 +72,11 @@ export class Landing {
 
     const handleVisualViewportResize = () => {
       updateVisibleViewportHeight();
+      if (startAnim.active) return;
       applyLayout();
     };
     const handleWindowLayoutResize = () => {
+      if (startAnim.active) return;
       applyLayout();
     };
 
@@ -628,7 +630,9 @@ export class Landing {
       fullscreenPending = false;
       if (landingActive) {
         updateVisibleViewportHeight();
-        applyLayout();
+        if (!startAnim.active) {
+          applyLayout();
+        }
       }
       if (active && startAfterFullscreen && !startAnim.active && landingActive) {
         waitForStableViewportAndStart();
@@ -906,6 +910,7 @@ export class Landing {
     if (startButton && landing) {
       startButton.addEventListener('click', () => {
         if (startAnim.active || !landingActive) return;
+        startAfterFullscreen = true;
         shouldRequestFullscreen = fullscreenCheckbox ? fullscreenCheckbox.checked : shouldRequestFullscreen;
         landing.classList.add('intro-dismissed');
         if (pcElement) {
@@ -925,7 +930,7 @@ export class Landing {
           }, 700);
           return;
         }
-        beginStartAnimation();
+        waitForStableViewportAndStart();
       });
     }
 
