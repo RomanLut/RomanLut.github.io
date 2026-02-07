@@ -66,9 +66,14 @@ export class DesktopIcon {
   readonly element: HTMLElement;
   private desktop: HTMLElement;
   private dragging = false;
+  private dragMoved = false;
   private dragOffset = { x: 0, y: 0 };
+  private dragStartClient = { x: 0, y: 0 };
   private virtualPosition: { x: number; y: number };
   private readonly isRightHalf: boolean;
+  private onOpen: (() => void) | null = null;
+  private lastTouchTapAt = 0;
+  private lastTouchTapClient = { x: 0, y: 0 };
 
   constructor(
     desktop: HTMLElement,
@@ -90,30 +95,45 @@ export class DesktopIcon {
       y: position?.y ?? 16
     };
     this.isRightHalf = this.virtualPosition.x >= VIRTUAL_DESKTOP.width / 2;
+    this.onOpen = onDoubleClick || null;
 
     this.attachDrag();
-    if (onDoubleClick) {
+    if (this.onOpen) {
       this.element.addEventListener('dblclick', (e) => {
         e.stopPropagation();
-        onDoubleClick();
+        this.onOpen?.();
       });
     }
     this.desktop.appendChild(this.element);
   }
 
   private attachDrag() {
-    this.element.addEventListener('mousedown', (e) => {
-      if (e.button !== 0) return;
-      this.dragging = true;
-      const rect = this.element.getBoundingClientRect();
-      this.dragOffset = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-      document.addEventListener('mousemove', this.handleDrag);
-      document.addEventListener('mouseup', this.stopDrag);
-    });
+    this.element.addEventListener('pointerdown', this.startDrag);
   }
 
-  private handleDrag = (e: MouseEvent) => {
+  private startDrag = (e: PointerEvent) => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    this.dragging = true;
+    this.dragMoved = false;
+    this.dragStartClient = { x: e.clientX, y: e.clientY };
+    const rect = this.element.getBoundingClientRect();
+    this.dragOffset = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    this.element.setPointerCapture(e.pointerId);
+    this.element.addEventListener('pointermove', this.handleDrag);
+    this.element.addEventListener('pointerup', this.stopDrag);
+    this.element.addEventListener('pointercancel', this.stopDrag);
+    if (e.pointerType !== 'mouse') {
+      e.preventDefault();
+    }
+  };
+
+  private handleDrag = (e: PointerEvent) => {
     if (!this.dragging) return;
+    if (!this.dragMoved) {
+      const dx = e.clientX - this.dragStartClient.x;
+      const dy = e.clientY - this.dragStartClient.y;
+      this.dragMoved = Math.hypot(dx, dy) > 4;
+    }
     const parentRect = this.desktop.getBoundingClientRect();
     const x = e.clientX - parentRect.left - this.dragOffset.x;
     const y = e.clientY - parentRect.top - this.dragOffset.y;
@@ -123,10 +143,34 @@ export class DesktopIcon {
     this.element.style.top = `${clampedY}px`;
   };
 
-  private stopDrag = () => {
+  private stopDrag = (e: PointerEvent) => {
+    const wasTap = !this.dragMoved;
     this.dragging = false;
-    document.removeEventListener('mousemove', this.handleDrag);
-    document.removeEventListener('mouseup', this.stopDrag);
+    this.element.removeEventListener('pointermove', this.handleDrag);
+    this.element.removeEventListener('pointerup', this.stopDrag);
+    this.element.removeEventListener('pointercancel', this.stopDrag);
+    if (this.element.hasPointerCapture(e.pointerId)) {
+      this.element.releasePointerCapture(e.pointerId);
+    }
+    if (e.pointerType === 'mouse' || !this.onOpen) {
+      return;
+    }
+    if (!wasTap) {
+      this.lastTouchTapAt = 0;
+      return;
+    }
+    const now = Date.now();
+    const dt = now - this.lastTouchTapAt;
+    const dx = e.clientX - this.lastTouchTapClient.x;
+    const dy = e.clientY - this.lastTouchTapClient.y;
+    const isSecondTap = dt > 0 && dt <= 350 && Math.hypot(dx, dy) <= 24;
+    if (isSecondTap) {
+      this.lastTouchTapAt = 0;
+      this.onOpen();
+      return;
+    }
+    this.lastTouchTapAt = now;
+    this.lastTouchTapClient = { x: e.clientX, y: e.clientY };
   };
 
   updatePosition(desktopBounds: DOMRect) {

@@ -209,15 +209,20 @@ export class AppWindow {
   }
 
   private attachEvents(desktop: HTMLElement) {
-    this.element.addEventListener('mousedown', () => this.focus());
+    this.element.addEventListener('pointerdown', () => this.focus());
 
-    this.headerEl.addEventListener('mousedown', (event) => {
+    this.headerEl.addEventListener('pointerdown', (event) => {
       if ((event.target as HTMLElement).closest('.app-window__actions')) return;
+      if (event.button !== 0 && event.pointerType === 'mouse') return;
       this.dragging = true;
       const rect = this.element.getBoundingClientRect();
       this.dragOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
-      document.addEventListener('mousemove', this.handleDrag);
-      document.addEventListener('mouseup', this.stopDrag);
+      document.addEventListener('pointermove', this.handleDrag);
+      document.addEventListener('pointerup', this.stopDrag);
+      document.addEventListener('pointercancel', this.stopDrag);
+      if (event.pointerType !== 'mouse') {
+        event.preventDefault();
+      }
     });
     this.headerEl.addEventListener('dblclick', () => {
       if (this.state === 'maximized') {
@@ -229,8 +234,9 @@ export class AppWindow {
 
     const resizeZones = this.element.querySelectorAll<HTMLElement>('[data-resize]');
     resizeZones.forEach((zone) => {
-      zone.addEventListener('mousedown', (event) => {
+      zone.addEventListener('pointerdown', (event) => {
         if (this.state === 'maximized' || this.overlayActive) return;
+        if (event.button !== 0 && event.pointerType === 'mouse') return;
         event.stopPropagation();
         const dir = zone.dataset.resize as ResizeDir;
         this.resizing = { dir };
@@ -241,8 +247,12 @@ export class AppWindow {
         this.prevUserSelect = document.body.style.userSelect;
         document.body.style.userSelect = 'none';
         this.element.classList.add('is-resizing');
-        document.addEventListener('mousemove', this.handleResize);
-        document.addEventListener('mouseup', this.stopResize);
+        document.addEventListener('pointermove', this.handleResize);
+        document.addEventListener('pointerup', this.stopResize);
+        document.addEventListener('pointercancel', this.stopResize);
+        if (event.pointerType !== 'mouse') {
+          event.preventDefault();
+        }
       });
     });
 
@@ -251,7 +261,7 @@ export class AppWindow {
     this.closeBtn.addEventListener('click', () => this.close());
   }
 
-  private handleDrag = (event: MouseEvent) => {
+  private handleDrag = (event: PointerEvent) => {
     if (!this.dragging || this.state === 'maximized') return;
     const parentRect = this.element.parentElement?.getBoundingClientRect();
     if (!parentRect) return;
@@ -261,7 +271,7 @@ export class AppWindow {
     this.element.style.top = `${Math.max(0, Math.min(parentRect.height - 80, y))}px`;
   };
 
-  private handleResize = (event: MouseEvent) => {
+  private handleResize = (event: PointerEvent) => {
     if (!this.resizing || this.state === 'maximized') return;
     const parentRect = this.element.parentElement?.getBoundingClientRect();
     if (!parentRect) return;
@@ -305,8 +315,9 @@ export class AppWindow {
       this.prevUserSelect = null;
     }
     this.element.classList.remove('is-resizing');
-    document.removeEventListener('mousemove', this.handleResize);
-    document.removeEventListener('mouseup', this.stopResize);
+    document.removeEventListener('pointermove', this.handleResize);
+    document.removeEventListener('pointerup', this.stopResize);
+    document.removeEventListener('pointercancel', this.stopResize);
   };
 
   // --- Overlay (fullscreen) support for optional fullscreen button ---
@@ -453,8 +464,9 @@ export class AppWindow {
 
   private stopDrag = () => {
     this.dragging = false;
-    document.removeEventListener('mousemove', this.handleDrag);
-    document.removeEventListener('mouseup', this.stopDrag);
+    document.removeEventListener('pointermove', this.handleDrag);
+    document.removeEventListener('pointerup', this.stopDrag);
+    document.removeEventListener('pointercancel', this.stopDrag);
   };
 
   private focus() {

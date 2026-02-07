@@ -59,6 +59,11 @@ export function formatDateShort(now: Date = new Date()): string {
   return `${day}.${month}.${year}`;
 }
 
+export function isIosDevice() {
+  const ua = window.navigator.userAgent;
+  return /iPad|iPhone|iPod/.test(ua) || (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
+}
+
 export async function exitFullscreenAndOpen(url: string, target: string = '_blank') {
   const openLink = () => window.open(url, target, 'noopener');
   //if (document.fullscreenElement && document.exitFullscreen) {

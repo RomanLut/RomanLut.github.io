@@ -1,6 +1,52 @@
 import './style.scss';
 import { PC } from './pc';
 import { Landing } from './landing';
+import { isIosDevice } from './util';
+
+function preventIosZoom() {
+  if (!isIosDevice()) return;
+
+  let lastTouchEnd = 0;
+
+  document.addEventListener(
+    'touchstart',
+    (event) => {
+      if (event.touches.length > 1) {
+        event.preventDefault();
+      }
+    },
+    { passive: false }
+  );
+
+  document.addEventListener(
+    'touchmove',
+    (event) => {
+      if (event.touches.length > 1) {
+        event.preventDefault();
+      }
+    },
+    { passive: false }
+  );
+
+  document.addEventListener(
+    'touchend',
+    (event) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    },
+    { passive: false }
+  );
+
+  const preventGesture = (event: Event) => event.preventDefault();
+  document.addEventListener('gesturestart', preventGesture, { passive: false });
+  document.addEventListener('gesturechange', preventGesture, { passive: false });
+  document.addEventListener('gestureend', preventGesture, { passive: false });
+}
+
+preventIosZoom();
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
