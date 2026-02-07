@@ -475,6 +475,11 @@ export async function loadFilesystem(url = '/filesystem/filesystem.json'): Promi
 }
 
 export async function navigateToUrl(desktop: HTMLElement, taskbar: any, url: string) {
+  const isYouTubeWatchUrl = (candidate: URL) =>
+    candidate.hostname.includes('youtube.com') && candidate.pathname === '/watch' && candidate.searchParams.has('v');
+  const isYouTubeUrl = (candidate: URL) =>
+    candidate.hostname.includes('youtube.com') || candidate.hostname.includes('youtu.be');
+
   try {
     const parsed = new URL(url, window.location.href);
     if (
@@ -488,6 +493,11 @@ export async function navigateToUrl(desktop: HTMLElement, taskbar: any, url: str
         new FileExplorer(desktop, taskbar, folder);
         return;
       }
+    }
+
+    if (isYouTubeUrl(parsed) && !isYouTubeWatchUrl(parsed)) {
+      await exitFullscreenAndOpen(url);
+      return;
     }
   } catch {
     // ignore malformed URLs
