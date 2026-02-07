@@ -181,7 +181,8 @@ export function applyInline(text: string, basePath: string) {
   t = t.replace(/`([^`]+)`/g, (_m, code) => tokenFor(`<code>${code}</code>`));
   t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   t = t.replace(/__([^_]+)__/g, '<strong>$1</strong>');
-  t = t.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
+  // Safari iOS 15 does not support RegExp lookbehind; keep emphasis parsing without it.
+  t = t.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
   t = t.replace(/_([^_]+)_/g, '<em>$1</em>');
 
   t = t.replace(/@@INLINE-(\d+)@@/g, (_m, idx) => replacements[Number(idx)] ?? '');
