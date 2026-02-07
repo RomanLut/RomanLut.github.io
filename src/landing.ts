@@ -115,7 +115,7 @@ export class Landing {
     const BLINK_MAX_MS = 5000;
     const BLINK_DURATION_MS = 120;
     const NOISE_SIZE = 180;
-    const NOISE_FRAME_MS = 1000 / 30000;
+    const NOISE_FRAME_MS = 1000 / 30;
     const NOISE_ALPHA = 0.03; // tiny white noise overlay
     const NB_SCREEN_POS = { x: 218, y: 415 };
     const NB_CLOCK_POS = { x: 253, y: 550 };
