@@ -6,6 +6,23 @@ type WindowState = 'normal' | 'maximized' | 'minimized';
 let zCounter = 10;
 let windowId = 0;
 type ResizeDir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
+type ResizeSession = {
+  dir: ResizeDir;
+  startX: number;
+  startY: number;
+  startRect: {
+    left: number;
+    top: number;
+    right: number;
+    bottom: number;
+    width: number;
+    height: number;
+  };
+  parentRect: {
+    left: number;
+    top: number;
+  };
+};
 const SPAWN_BASE = { x: 80, y: 80 };
 const SPAWN_STEP = { x: 32, y: 32 };
 const SPAWN_MARGIN = 16;
@@ -30,7 +47,7 @@ export class AppWindow {
   private lastRect: { x: number; y: number; w: number; h: number } | null = null;
   private dragging = false;
   private dragOffset = { x: 0, y: 0 };
-  private resizing: null | { dir: ResizeDir } = null;
+  private resizing: ResizeSession | null = null;
   private resizeCursor: string | null = null;
   private prevUserSelect: string | null = null;
   private iconMarkup: string | undefined;
@@ -239,7 +256,26 @@ export class AppWindow {
         if (event.button !== 0 && event.pointerType === 'mouse') return;
         event.stopPropagation();
         const dir = zone.dataset.resize as ResizeDir;
-        this.resizing = { dir };
+        const rect = this.element.getBoundingClientRect();
+        const parentRect = this.element.parentElement?.getBoundingClientRect();
+        if (!parentRect) return;
+        this.resizing = {
+          dir,
+          startX: event.clientX,
+          startY: event.clientY,
+          startRect: {
+            left: rect.left,
+            top: rect.top,
+            right: rect.right,
+            bottom: rect.bottom,
+            width: rect.width,
+            height: rect.height
+          },
+          parentRect: {
+            left: parentRect.left,
+            top: parentRect.top
+          }
+        };
         this.resizeCursor = this.cursorForDir(dir);
         if (this.resizeCursor) {
           document.body.style.cursor = this.resizeCursor;
@@ -273,30 +309,30 @@ export class AppWindow {
 
   private handleResize = (event: PointerEvent) => {
     if (!this.resizing || this.state === 'maximized') return;
-    const parentRect = this.element.parentElement?.getBoundingClientRect();
-    if (!parentRect) return;
-    const rect = this.element.getBoundingClientRect();
     const minWidth = 300;
     const minHeight = 200;
-    let { left, top, width, height } = rect;
-    const dir = this.resizing.dir;
+    const { dir, startX, startY, startRect, parentRect } = this.resizing;
+    const dx = event.clientX - startX;
+    const dy = event.clientY - startY;
+    let left = startRect.left;
+    let top = startRect.top;
+    let right = startRect.right;
+    let bottom = startRect.bottom;
 
     if (dir.includes('e')) {
-      width = Math.max(minWidth, event.clientX - rect.left);
+      right = Math.max(startRect.left + minWidth, startRect.right + dx);
     }
     if (dir.includes('s')) {
-      height = Math.max(minHeight, event.clientY - rect.top);
+      bottom = Math.max(startRect.top + minHeight, startRect.bottom + dy);
     }
     if (dir.includes('w')) {
-      const newLeft = Math.min(event.clientX, rect.right - minWidth);
-      width = rect.right - newLeft;
-      left = newLeft;
+      left = Math.min(startRect.left + dx, startRect.right - minWidth);
     }
     if (dir.includes('n')) {
-      const newTop = Math.min(event.clientY, rect.bottom - minHeight);
-      height = rect.bottom - newTop;
-      top = newTop;
+      top = Math.min(startRect.top + dy, startRect.bottom - minHeight);
     }
+    const width = right - left;
+    const height = bottom - top;
 
     this.element.style.width = `${width}px`;
     this.element.style.height = `${height}px`;

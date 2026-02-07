@@ -1,10 +1,13 @@
 import './style.scss';
 import { PC } from './pc';
 import { Landing } from './landing';
-import { isIosDevice } from './util';
+import { isMobileTouchDevice } from './util';
 
-function preventIosZoom() {
-  if (!isIosDevice()) return;
+const TOUCH_POINT_DEBUG = false;
+const TOUCH_AREA_DEBUG = false;
+
+function preventTouchZoom() {
+  if (!isMobileTouchDevice()) return;
 
   let lastTouchEnd = 0;
 
@@ -46,7 +49,75 @@ function preventIosZoom() {
   document.addEventListener('gestureend', preventGesture, { passive: false });
 }
 
-preventIosZoom();
+preventTouchZoom();
+
+function enableTouchPointDebug() {
+  if (!TOUCH_POINT_DEBUG || !isMobileTouchDevice()) return;
+
+  const drawCross = (x: number, y: number, color: string) => {
+    const cross = document.createElement('div');
+    cross.style.position = 'fixed';
+    cross.style.left = `${x}px`;
+    cross.style.top = `${y}px`;
+    cross.style.width = '24px';
+    cross.style.height = '24px';
+    cross.style.transform = 'translate(-50%, -50%)';
+    cross.style.pointerEvents = 'none';
+    cross.style.zIndex = '99999';
+
+    const h = document.createElement('div');
+    h.style.position = 'absolute';
+    h.style.left = '0';
+    h.style.right = '0';
+    h.style.top = '50%';
+    h.style.height = '2px';
+    h.style.transform = 'translateY(-50%)';
+    h.style.background = color;
+
+    const v = document.createElement('div');
+    v.style.position = 'absolute';
+    v.style.top = '0';
+    v.style.bottom = '0';
+    v.style.left = '50%';
+    v.style.width = '2px';
+    v.style.transform = 'translateX(-50%)';
+    v.style.background = color;
+
+    cross.append(h, v);
+    document.body.appendChild(cross);
+    window.setTimeout(() => cross.remove(), 500);
+  };
+
+  document.addEventListener(
+    'touchstart',
+    (event) => {
+      Array.from(event.touches).forEach((touch) => drawCross(touch.clientX, touch.clientY, '#00e0ff'));
+    },
+    { passive: true }
+  );
+
+  document.addEventListener(
+    'touchmove',
+    (event) => {
+      Array.from(event.touches).forEach((touch) => drawCross(touch.clientX, touch.clientY, '#ffd000'));
+    },
+    { passive: true }
+  );
+
+  document.addEventListener(
+    'touchend',
+    (event) => {
+      Array.from(event.changedTouches).forEach((touch) => drawCross(touch.clientX, touch.clientY, '#ff4b4b'));
+    },
+    { passive: true }
+  );
+}
+
+enableTouchPointDebug();
+
+if (TOUCH_AREA_DEBUG && isMobileTouchDevice()) {
+  document.body.classList.add('touch-area-debug');
+}
 
 const app = document.querySelector<HTMLDivElement>('#app');
 

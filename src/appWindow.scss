@@ -227,6 +227,11 @@
   touch-action: none;
 }
 
+body.touch-area-debug .desktop .app-window__resize {
+  background: rgba(255, 0, 0, 0.18);
+  outline: 1px dashed rgba(255, 0, 0, 0.65);
+}
+
 .desktop .app-window__resize--n,
 .desktop .app-window__resize--s {
   left: 0;
@@ -299,4 +304,67 @@
   bottom: -6px;
   left: -6px;
   cursor: nesw-resize;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .desktop .app-window__resize--n,
+  .desktop .app-window__resize--ne,
+  .desktop .app-window__resize--nw {
+    pointer-events: none;
+  }
+
+  .desktop .app-window__resize--n,
+  .desktop .app-window__resize--s {
+    height: 40px;
+  }
+
+  .desktop .app-window__resize--n {
+    top: -20px;
+  }
+
+  .desktop .app-window__resize--s {
+    bottom: -20px;
+  }
+
+  .desktop .app-window__resize--e,
+  .desktop .app-window__resize--w {
+    width: 32px;
+  }
+
+  .desktop .app-window__resize--e {
+    right: -16px;
+  }
+
+  .desktop .app-window__resize--w {
+    left: -16px;
+  }
+
+  .desktop .app-window__resize--ne,
+  .desktop .app-window__resize--nw,
+  .desktop .app-window__resize--se,
+  .desktop .app-window__resize--sw {
+    width: 48px;
+    height: 48px;
+    z-index: 9;
+  }
+
+  .desktop .app-window__resize--ne {
+    top: -24px;
+    right: -24px;
+  }
+
+  .desktop .app-window__resize--nw {
+    top: -24px;
+    left: -24px;
+  }
+
+  .desktop .app-window__resize--se {
+    bottom: -24px;
+    right: -24px;
+  }
+
+  .desktop .app-window__resize--sw {
+    bottom: -24px;
+    left: -24px;
+  }
 }
