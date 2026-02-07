@@ -1,7 +1,7 @@
 import { AppWindow } from './appWindow';
 import { Taskbar } from './taskbar';
 import { AppWindowMenu, type MenuItem } from './appWindowMenu';
-import { filesystemUrl } from './util';
+import { filesystemUrl, isIosDevice } from './util';
 
 declare global {
   interface Window {
@@ -112,6 +112,9 @@ export class DosBox extends AppWindow {
     this.element.style.height = '688px';
     // Give initial keyboard focus to the emulator surface.
     queueMicrotask(() => this.host.focus());
+    if (isIosDevice()) {
+      this.showIosSoundHint();
+    }
 
     // Expose for devtools debugging of the current instance
     (window as any).__lastDosBox = this;
@@ -150,6 +153,18 @@ export class DosBox extends AppWindow {
       this.fpsRaf = 0;
     }
     super.close();
+  }
+
+  private showIosSoundHint() {
+    const hint = document.createElement('div');
+    hint.className = 'dosbox__sound-hint';
+    hint.textContent = 'Tap on screen if sound is missing';
+    this.host.appendChild(hint);
+
+    window.setTimeout(() => {
+      hint.classList.add('is-fading');
+      window.setTimeout(() => hint.remove(), 300);
+    }, 3000);
   }
 
   private async launch() {
