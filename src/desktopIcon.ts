@@ -61,6 +61,7 @@ export const SHORTCUT_OVERLAY_SVG = `<svg class="shortcut-overlay" viewBox="0 0 
 </svg>`;
 
 const VIRTUAL_DESKTOP = { width: 1920, height: 1080 };
+const RIGHT_ANCHORED_HIDE_THRESHOLD_X = VIRTUAL_DESKTOP.width / 3;
 
 export class DesktopIcon {
   readonly element: HTMLElement;
@@ -186,7 +187,7 @@ export class DesktopIcon {
     const maxTop = Math.max(0, height - this.element.offsetHeight);
     this.element.style.left = `${Math.min(Math.max(targetX, 0), maxLeft)}px`;
     this.element.style.top = `${Math.min(Math.max(targetY, 0), maxTop)}px`;
-    const shouldHide = this.isRightHalf && targetX < VIRTUAL_DESKTOP.width / 2;
+    const shouldHide = this.isRightHalf && targetX < RIGHT_ANCHORED_HIDE_THRESHOLD_X;
     this.element.style.visibility = shouldHide ? 'hidden' : '';
   }
 }
