@@ -317,6 +317,47 @@ export class FileExplorer extends AppWindow {
 
       row.append(iconHolder, label, sizeEl);
       row.addEventListener('dblclick', () => this.handleItemClick(item));
+      // Touch devices in emulation often don't synthesize dblclick reliably.
+      // Mirror desktop icon behavior with explicit double-tap detection.
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchMoved = false;
+      let lastTapAt = 0;
+      let lastTapX = 0;
+      let lastTapY = 0;
+      row.addEventListener('pointerdown', (e: PointerEvent) => {
+        if (e.pointerType !== 'touch') return;
+        touchStartX = e.clientX;
+        touchStartY = e.clientY;
+        touchMoved = false;
+      });
+      row.addEventListener('pointermove', (e: PointerEvent) => {
+        if (e.pointerType !== 'touch') return;
+        if (touchMoved) return;
+        const dx = e.clientX - touchStartX;
+        const dy = e.clientY - touchStartY;
+        touchMoved = Math.hypot(dx, dy) > 10;
+      });
+      row.addEventListener('pointerup', (e: PointerEvent) => {
+        if (e.pointerType !== 'touch') return;
+        if (touchMoved) {
+          lastTapAt = 0;
+          return;
+        }
+        const now = Date.now();
+        const dt = now - lastTapAt;
+        const dx = e.clientX - lastTapX;
+        const dy = e.clientY - lastTapY;
+        const isSecondTap = dt > 0 && dt <= 350 && Math.hypot(dx, dy) <= 24;
+        if (isSecondTap) {
+          lastTapAt = 0;
+          this.handleItemClick(item);
+          return;
+        }
+        lastTapAt = now;
+        lastTapX = e.clientX;
+        lastTapY = e.clientY;
+      });
       this.list.appendChild(row);
     });
   }

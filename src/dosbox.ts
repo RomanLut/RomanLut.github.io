@@ -47,6 +47,7 @@ export class DosBox extends AppWindow {
   private paused = false;
   private launched = false;
   private keyboardMenuItemEl: HTMLElement | null = null;
+  private removeTapToClick: (() => void) | null = null;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, archivePath: string, exeName?: string) {
     const guessedExe = DosBox.guessExeName(archivePath);
@@ -65,7 +66,9 @@ export class DosBox extends AppWindow {
     this.host.className = 'dosbox__screen';
     this.host.style.width = '100%';
     this.host.style.height = '100%';
+    this.host.style.touchAction = 'none';
     this.host.tabIndex = 0; // allow keyboard focus
+    this.removeTapToClick = this.setupTapToClick();
     this.stage = document.createElement('div');
     this.stage.className = 'dosbox__stage';
     this.host.appendChild(this.stage);
@@ -139,6 +142,10 @@ export class DosBox extends AppWindow {
 
   protected close() {
     this.destroyed = true;
+    if (this.removeTapToClick) {
+      this.removeTapToClick();
+      this.removeTapToClick = null;
+    }
     if (this.resPoll) {
       clearInterval(this.resPoll);
       this.resPoll = null;
@@ -168,6 +175,116 @@ export class DosBox extends AppWindow {
       hint.classList.add('is-fading');
       window.setTimeout(() => hint.remove(), 300);
     }, 3000);
+  }
+
+  private setupTapToClick() {
+    let startX = 0;
+    let startY = 0;
+    let activeId: number | null = null;
+    let moved = false;
+    let activeSurfaceEl: HTMLElement | null = null;
+    const TAP_THRESHOLD = 10;
+    const pickSurfaceElement = (clientX: number, clientY: number) => {
+      const hit = document.elementFromPoint(clientX, clientY) as HTMLElement | null;
+      if (hit && this.host.contains(hit)) {
+        const fromHit = hit.closest('canvas, video, .emulator-screen, .emulator-canvas') as HTMLElement | null;
+        if (fromHit) return fromHit;
+      }
+      return this.host.querySelector('canvas, video, .emulator-screen, .emulator-canvas') as HTMLElement | null;
+    };
+    const getMouseMapRect = (clientX: number, clientY: number) => {
+      if (activeSurfaceEl && this.host.contains(activeSurfaceEl)) {
+        const rect = activeSurfaceEl.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) return rect;
+      }
+      const surface = pickSurfaceElement(clientX, clientY);
+      if (surface) {
+        const rect = surface.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          activeSurfaceEl = surface;
+          return rect;
+        }
+      }
+      const overlay = this.host.querySelector('.emulator-mouse-overlay') as HTMLElement | null;
+      if (overlay) {
+        const rect = overlay.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) return rect;
+      }
+      return this.host.getBoundingClientRect();
+    };
+    const sendAbsoluteMouse = (clientX: number, clientY: number) => {
+      const ci = this.ci;
+      if (!ci || typeof ci.sendMouseMotion !== 'function') return;
+      const rect = getMouseMapRect(clientX, clientY);
+      if (rect.width <= 0 || rect.height <= 0) return;
+      const localX = Math.max(0, Math.min(rect.width, clientX - rect.left));
+      const localY = Math.max(0, Math.min(rect.height, clientY - rect.top));
+      // js-dos sendMouseMotion expects normalized coords (0..1), not framebuffer pixels.
+      ci.sendMouseMotion(localX / rect.width, localY / rect.height);
+    };
+
+    const moveMouse = (clientX: number, clientY: number) => {
+      sendAbsoluteMouse(clientX, clientY);
+    };
+    const sendClick = (clientX: number, clientY: number) => {
+      this.host.focus();
+      const ci = this.ci;
+      if (ci && typeof ci.sendMouseButton === 'function') {
+        sendAbsoluteMouse(clientX, clientY);
+        // Send only left click. Sending both 0 and 1 can be interpreted by games
+        // as secondary action/menu (often ESC-like behavior).
+        ci.sendMouseButton(0, true);
+        setTimeout(() => ci.sendMouseButton(0, false), 16);
+      }
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.changedTouches.length === 0) return;
+      const t = e.changedTouches[0];
+      activeId = t.identifier;
+      startX = t.clientX;
+      startY = t.clientY;
+      moved = false;
+      activeSurfaceEl = pickSurfaceElement(t.clientX, t.clientY);
+      moveMouse(t.clientX, t.clientY);
+      e.preventDefault();
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (activeId === null) return;
+      const t = Array.from(e.changedTouches).find((touch) => touch.identifier === activeId);
+      if (!t) return;
+      if (Math.abs(t.clientX - startX) > TAP_THRESHOLD || Math.abs(t.clientY - startY) > TAP_THRESHOLD) {
+        moved = true;
+      }
+      moveMouse(t.clientX, t.clientY);
+      e.preventDefault();
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (activeId === null) return;
+      const t = Array.from(e.changedTouches).find((touch) => touch.identifier === activeId);
+      if (!t) return;
+      if (!moved) {
+        // For taps, click at initial touch point to avoid touchend drift on iOS.
+        sendClick(startX, startY);
+        e.preventDefault();
+      }
+      activeId = null;
+      moved = false;
+      activeSurfaceEl = null;
+    };
+
+    const opts: AddEventListenerOptions = { passive: false };
+    this.host.addEventListener('touchstart', onTouchStart, opts);
+    this.host.addEventListener('touchmove', onTouchMove, opts);
+    this.host.addEventListener('touchend', onTouchEnd, opts);
+
+    return () => {
+      this.host.removeEventListener('touchstart', onTouchStart);
+      this.host.removeEventListener('touchmove', onTouchMove);
+      this.host.removeEventListener('touchend', onTouchEnd);
+    };
   }
 
   private async launch() {
@@ -361,6 +478,13 @@ export class DosBox extends AppWindow {
     if (!player) {
       throw new Error('Failed to initialize js-dos player');
     }
+    if (typeof player.setMouseCapture === 'function') {
+      try {
+        player.setMouseCapture(true);
+      } catch {
+        /* ignore mouse capture setup errors */
+      }
+    }
     // Cache command interface for pause/resume/etc once available
     this.ci = await player.ciPromise;
     try {
@@ -436,7 +560,6 @@ export class DosBox extends AppWindow {
         }
         this.statusMsg.textContent = 'Running';
         this.ensureFrameSize(player);
-        this.hideOverlays();
         this.pushLog('run(blob) started');
         this.startResolutionWatcher();
         this.refreshResolution();
@@ -463,7 +586,6 @@ export class DosBox extends AppWindow {
         }
         this.statusMsg.textContent = 'Running';
         this.ensureFrameSize(player);
-        this.hideOverlays();
         this.pushLog(`run(blob,args) started exe=${exe}`);
         this.startResolutionWatcher();
         this.refreshResolution();
@@ -487,7 +609,6 @@ export class DosBox extends AppWindow {
             }
             await this.runProgram(main ? { main, run: main } : player);
             this.ensureFrameSize(player);
-            this.hideOverlays();
             this.statusMsg.textContent = 'Running';
             this.startResolutionWatcher();
             this.refreshResolution();
@@ -508,7 +629,6 @@ export class DosBox extends AppWindow {
       }
       await this.runProgram(player);
       this.ensureFrameSize(player);
-      this.hideOverlays();
       this.statusMsg.textContent = 'Running';
       this.startResolutionWatcher();
       this.refreshResolution();
@@ -530,26 +650,6 @@ export class DosBox extends AppWindow {
     }
   }
 
-  // Remove js-dos onboarding overlays that cover the screen.
-  private hideOverlays() {
-    /*
-    const selectors = [
-      '.emulator-click-to-start-overlay',
-      '.bg-gray-500.bg-opacity-80',
-      '.emulator-loading',
-      '.bg-gray-300', // side control rail
-      '.hg-theme-default', // soft keyboard
-      '.emulator-mouse-overlay', // click catcher
-      '.bg-gray-800.opacity-95' // fullscreen dark overlay
-    ];
-    selectors.forEach((sel) => {
-      const el = this.host.querySelector(sel);
-      if (el) {
-        (el as HTMLElement).style.display = 'none';
-      }
-    });
-*/
-  }
 
   private startFpsCounter() {
     this.fpsFrame = 0;

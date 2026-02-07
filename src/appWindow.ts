@@ -1,5 +1,5 @@
 import { Taskbar } from './taskbar';
-import { setMaximizedParam } from './util';
+import { isTouchDevice, setMaximizedParam } from './util';
 
 type WindowState = 'normal' | 'maximized' | 'minimized';
 
@@ -61,14 +61,16 @@ export class AppWindow {
   private positioned = false;
   private overlayActive = false;
   private overlayKeyHandler: ((e: KeyboardEvent) => void) | null = null;
-  private overlayClickHandler: ((e: MouseEvent) => void) | null = null;
   private overlayPrevOverflow: string | null = null;
   private overlayPrevBox: { left: number; top: number; width: number; height: number } | null = null;
   private overlayPrevInline: { left: string; top: string; width: string; height: string; right: string; bottom: string } | null = null;
-  private overlayIframeHandlers: Array<{ win: Window; click: (e: MouseEvent) => void; key: (e: KeyboardEvent) => void }> =
-    [];
+  private overlayIframeHandlers: Array<{
+    win: Window;
+    key: (e: KeyboardEvent) => void;
+  }> = [];
   private overlayFsHandler: ((e: Event) => void) | null = null;
   private overlayNativeFs = false;
+  private overlayExitBtn: HTMLButtonElement | null = null;
   private closeHandlers: Array<() => void> = [];
   private showAnimation?: Animation;
   private spawnedAnimated = false;
@@ -392,6 +394,21 @@ export class AppWindow {
     this.element.style.height = '100vh';
     this.overlayActive = true;
     this.overlayNativeFs = false;
+    if (isTouchDevice()) {
+      if (!this.overlayExitBtn) {
+        const btn = document.createElement('button');
+        btn.className = 'app-window__overlay-exit';
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Exit fullscreen');
+        btn.innerHTML = '<span aria-hidden="true">⤢</span>';
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.exitOverlay();
+        });
+        this.overlayExitBtn = btn;
+      }
+      this.element.appendChild(this.overlayExitBtn);
+    }
     if (!document.fullscreenElement && this.element.requestFullscreen) {
       this.element
         .requestFullscreen()
@@ -407,12 +424,6 @@ export class AppWindow {
     this.overlayKeyHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') this.exitOverlay();
     };
-    this.overlayClickHandler = (evt: MouseEvent) => {
-      // ignore clicks on the fullscreen button itself to prevent immediate toggle loops
-      const target = evt.target as HTMLElement;
-      if (target && target.closest('.app-window__btn--fs')) return;
-      this.exitOverlay();
-    };
     this.overlayFsHandler = () => {
       // If native fullscreen was exited (e.g., user pressed Esc), restore window size.
       if (this.overlayActive && this.overlayNativeFs && document.fullscreenElement !== this.element) {
@@ -420,7 +431,6 @@ export class AppWindow {
       }
     };
     window.addEventListener('keydown', this.overlayKeyHandler);
-    this.element.addEventListener('click', this.overlayClickHandler);
     document.addEventListener('fullscreenchange', this.overlayFsHandler);
     this.bindIframeOverlayHandlers();
   }
@@ -463,12 +473,13 @@ export class AppWindow {
       });
     }
     this.overlayNativeFs = false;
+    if (this.overlayExitBtn && this.overlayExitBtn.parentElement === this.element) {
+      this.overlayExitBtn.remove();
+    }
     if (this.overlayKeyHandler) window.removeEventListener('keydown', this.overlayKeyHandler);
-    if (this.overlayClickHandler) this.element.removeEventListener('click', this.overlayClickHandler);
     if (this.overlayFsHandler) document.removeEventListener('fullscreenchange', this.overlayFsHandler);
     this.unbindIframeOverlayHandlers();
     this.overlayKeyHandler = null;
-    this.overlayClickHandler = null;
     this.overlayFsHandler = null;
     this.overlayPrevBox = null;
     this.overlayPrevInline = null;
@@ -480,19 +491,16 @@ export class AppWindow {
     iframes.forEach((frame) => {
       const win = frame.contentWindow;
       if (!win) return;
-      const click = () => this.exitOverlay();
       const key = (e: KeyboardEvent) => {
         if (e.key === 'Escape') this.exitOverlay();
       };
-      win.addEventListener('click', click);
       win.addEventListener('keydown', key);
-      this.overlayIframeHandlers.push({ win, click, key });
+      this.overlayIframeHandlers.push({ win, key });
     });
   }
 
   private unbindIframeOverlayHandlers() {
-    this.overlayIframeHandlers.forEach(({ win, click, key }) => {
-      win.removeEventListener('click', click);
+    this.overlayIframeHandlers.forEach(({ win, key }) => {
       win.removeEventListener('keydown', key);
     });
     this.overlayIframeHandlers = [];
