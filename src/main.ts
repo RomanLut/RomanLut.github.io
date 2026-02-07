@@ -4,7 +4,7 @@ import { Landing } from './landing';
 import { isMobileTouchDevice } from './util';
 
 const TOUCH_POINT_DEBUG = false;
-const TOUCH_AREA_DEBUG = true;
+const TOUCH_AREA_DEBUG = false;
 
 function preventTouchZoom() {
   if (!isMobileTouchDevice()) return;

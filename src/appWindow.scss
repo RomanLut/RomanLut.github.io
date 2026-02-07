@@ -58,6 +58,16 @@
   justify-content: center;
 }
 
+.desktop .app-window__overlay-exit > span {
+  display: block;
+  transform: translate(0, -6%);
+}
+
+html.is-small-phone.is-mobile-fullscreen .desktop .app-window__overlay-exit > span {
+  font-size: calc(16px / var(--mobile-ui-scale, 1));
+  transform: translate(2%, -20%);
+}
+
 .desktop .app-window__header {
   position: relative;
   display: grid;
@@ -494,4 +504,9 @@ html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__r
 html.is-mobile-touch.is-small-phone.is-mobile-fullscreen .desktop .app-window__resize--sw {
   left: -48px;
   bottom: -48px;
+}
+
+html.is-small-phone.is-mobile-fullscreen .desktop .app-window__btn--fs::before {
+  font-size: calc(16px / var(--mobile-ui-scale, 1));
+  transform: translate(-48%, -64%);
 }
