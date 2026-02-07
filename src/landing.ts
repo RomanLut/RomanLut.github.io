@@ -26,33 +26,34 @@ export class Landing {
       `
         <main class="landing" aria-label="Illustrated room landing">
           <canvas id="landing-canvas" aria-label="Illustrated room"></canvas>
-          <section class="intro" aria-label="Introduction overlay">
-            <div class="intro__card">
-            <div class="intro__content">
-              <div class="intro__text">
-                <p class="intro__lead">Welcome to the personal page of Roman Lut.</p>
-                <p class="intro__body">
-                  Due to the large amount of material, everything is organized using a Desktop-style user interface. Feel free to explore the folders and read the documents.
-                  <br />
-                  For the best experience, fullscreen mode is recommended.
-                </p>
-              </div>
-              <div class="intro__actions">
-                <button type="button" class="intro__start">Start</button>
-                <label class="intro__checkbox">
-                  <input type="checkbox" class="intro__fullscreen" checked />
-                  <span>Fullscreen</span>
-                </label>
-              </div>
+        </main>
+        <section class="intro" aria-label="Introduction overlay">
+          <div class="intro__card">
+          <div class="intro__content">
+            <div class="intro__text">
+              <p class="intro__lead">Welcome to the personal page of Roman Lut.</p>
+              <p class="intro__body">
+                Due to the large amount of material, everything is organized using a Desktop-style user interface. Feel free to explore the folders and read the documents.
+                <br />
+                For the best experience, fullscreen mode is recommended.
+              </p>
+            </div>
+            <div class="intro__actions">
+              <button type="button" class="intro__start">Start</button>
+              <label class="intro__checkbox">
+                <input type="checkbox" class="intro__fullscreen" checked />
+                <span>Fullscreen</span>
+              </label>
             </div>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
     `
     );
 
     const landing = root.querySelector<HTMLElement>('.landing');
     const canvas = root.querySelector<HTMLCanvasElement>('#landing-canvas');
+    const intro = root.querySelector<HTMLElement>('.intro');
 
     const updateVisibleViewportHeight = () => {
       if (!landing) return;
@@ -711,6 +712,7 @@ export class Landing {
         noiseRaf = 0;
       }
       landing?.style.setProperty('display', 'none');
+      intro?.style.setProperty('display', 'none');
     }
 
     function requestFullscreenIfNeeded(force = false) {

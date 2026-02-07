@@ -12,12 +12,18 @@ function preventTouchZoom() {
   let lastTouchEnd = 0;
   const touchOptions: AddEventListenerOptions = { passive: false, capture: true };
 
+  const getMobileViewportScale = () => {
+    const shortEdge = Math.min(window.screen.width, window.screen.height);
+    return shortEdge <= 480 ? 0.5 : 1;
+  };
+
   const forceViewportNoZoom = () => {
     const viewportMeta = document.querySelector('meta[name="viewport"]');
     if (!viewportMeta) return;
+    const scale = getMobileViewportScale();
     viewportMeta.setAttribute(
       'content',
-      'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
+      `width=device-width, initial-scale=${scale}, minimum-scale=${scale}, maximum-scale=${scale}, user-scalable=no, viewport-fit=cover`
     );
   };
 
@@ -25,6 +31,13 @@ function preventTouchZoom() {
   window.addEventListener('orientationchange', () => {
     // iOS 15 may reset viewport constraints on orientation changes.
     window.setTimeout(forceViewportNoZoom, 50);
+  });
+  window.addEventListener('resize', forceViewportNoZoom);
+  document.addEventListener('fullscreenchange', () => {
+    // Some mobile browsers recalculate/reset viewport zoom after fullscreen transitions.
+    forceViewportNoZoom();
+    window.setTimeout(forceViewportNoZoom, 50);
+    window.setTimeout(forceViewportNoZoom, 250);
   });
 
   document.addEventListener(
