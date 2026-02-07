@@ -4,7 +4,7 @@ I am a programmer with over 25 years of experience in core roles within the game
 
 **Languages**
 
-C++ (20+ years), TypeScript (10+ years), Delphi (10+ years), x86 Assembly (10+ years), HLSL/Shaders (5+ years), J2ME (5 years), Flash/Flex (2+ years), C# (6 months)
+C++ (20+ years), TypeScript (10+ years), Delphi (10+ years), x86 Assembly (10+ years), HLSL/Shaders (5+ years), J2ME (5 years), Flash/Flex (2+ years), C# (2 years)
 
 **Technologies**
 
