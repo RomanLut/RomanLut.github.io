@@ -1107,7 +1107,7 @@
               "size": 72128
             }
           ],
-          "desc": "**SlowPlay**\n\n**Date:** 1994\n**Platform:** DOS\n**Language:** Pure 8086 Assembler\n\nHighly optimized *.STM player. Can play STM files on VERY slow PCs like POISK-1."
+          "desc": "**SlowPlay**\n\n**Date:** 1994\n**Platform:** DOS\n**Language:** Pure 8086 Assembler\n\nHighly optimized *.STM player. Can play STM files on VERY slow PCs like POISK-1 (4.77Mhz 8086)."
         },
         {
           "type": "folder",
@@ -1145,7 +1145,7 @@
               "size": 29979
             }
           ],
-          "desc": "﻿**CGAKit**\n\n**Date:** 1995\n**Platform:** DOS\n**Language:** Turbo pascal 3.0 and 5.5, asm\n\nGraphics library for Turbo pascal 3.0 and 5.5 – CGA video modes. Introduces double-buffered drawing (standart BGI library in Turbo-pascal do not have this feature)."
+          "desc": "﻿**CGAKit**\n\n**Date:** 1995\n**Platform:** DOS\n**Language:** Turbo pascal 3.0 and 5.5, asm\n\nGraphics library for Turbo pascal 3.0 and 5.5 – CGA video modes. Introduces double-buffered drawing (standart BGI library in Turbo-pascal do not have this feature).\n\nIn 1994, drawing pixel on screen was a major task! :)"
         },
         {
           "type": "folder",
@@ -3164,7 +3164,7 @@
       "type": "wordpad",
       "name": "Resume Roman Lut",
       "path": "Resume_Roman_Lut.md",
-      "size": 1852
+      "size": 1851
     }
   ]
 }
