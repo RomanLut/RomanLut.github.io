@@ -24,7 +24,7 @@ type ResizeSession = {
   };
 };
 const SPAWN_BASE = { x: 80, y: 80 };
-const SPAWN_STEP = { x: 32, y: 32 };
+const SPAWN_STEP = { x: 16, y: 16 };
 const SPAWN_MARGIN = 16;
 
 export class AppWindow {
@@ -194,7 +194,7 @@ export class AppWindow {
     }
 
     if (originUsed(x, y)) {
-      const offset = (AppWindow.openWindows.size % 8) * 4;
+      const offset = (AppWindow.openWindows.size % 8) * 2;
       x = Math.min(Math.max(baseX + offset, margin), maxLeft);
       y = Math.min(Math.max(baseY + offset, margin), maxTop);
     }
@@ -597,6 +597,7 @@ export class AppWindow {
   }
 
   private deactivate() {
+    this.element.classList.remove('is-active');
     if (this.taskbarButton) this.taskbarButton.setActive(false);
     AppWindow.activeWindows.delete(this);
   }
@@ -616,6 +617,7 @@ export class AppWindow {
   }
 
   private setActiveState(active: boolean) {
+    this.element.classList.toggle('is-active', active);
     if (active) {
       AppWindow.activeWindows.add(this);
       if (this.taskbarButton) this.taskbarButton.setActive(true);
