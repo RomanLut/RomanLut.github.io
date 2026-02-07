@@ -19,6 +19,9 @@ export class Landing {
     let shouldRequestFullscreen = params.get('fullscreen') === '1';
     let fullscreenRequested = false;
     let fullscreenPending = false;
+    let startAfterFullscreen = false;
+    let startAfterFullscreenTimeout: number | null = null;
+    let startStabilizingViewport = false;
     let landingActive = initialState === 'landing';
     const docEl = document.documentElement;
     const setLandingActiveClass = (active: boolean) => {
@@ -67,8 +70,16 @@ export class Landing {
       landing.style.setProperty('--visible-vh', `${Math.round(vh)}px`);
     };
 
+    const handleVisualViewportResize = () => {
+      updateVisibleViewportHeight();
+      applyLayout();
+    };
+    const handleWindowLayoutResize = () => {
+      applyLayout();
+    };
+
     updateVisibleViewportHeight();
-    window.visualViewport?.addEventListener('resize', updateVisibleViewportHeight);
+    window.visualViewport?.addEventListener('resize', handleVisualViewportResize);
     window.visualViewport?.addEventListener('scroll', updateVisibleViewportHeight);
     window.addEventListener('resize', updateVisibleViewportHeight);
 
@@ -124,7 +135,6 @@ export class Landing {
     const BLINK_MAX_MS = 5000;
     const BLINK_DURATION_MS = 120;
     const NOISE_SIZE = 180;
-    const NOISE_FRAME_MS = 1000 / 30;
     const NOISE_ALPHA = 0.03; // tiny white noise overlay
     const NB_SCREEN_POS = { x: 218, y: 415 };
     const NB_CLOCK_POS = { x: 253, y: 550 };
@@ -139,7 +149,7 @@ export class Landing {
     const MONITOR_NOISE_ALPHA = 0.05;
     const MONITOR_NOISE_BLOCK_SIZE = 3;
     const NB_REGION = { x1: 226, y1: 444, x2: 532, y2: 573 };
-    const NB_TARGET_CENTER = { x: 305, y: 510 };
+    const NB_TARGET_CENTER = { x: (NB_REGION.x1 + NB_REGION.x2) / 2, y: (NB_REGION.y1 + NB_REGION.y2) / 2 };
     const START_ANIM_DURATION_MS = 3000;
     const START_ANIM_ROTATE_DEG = 6; // clockwise to level the notebook
     const NB_SCREEN_SRC = nbscreenUrl;
@@ -168,7 +178,6 @@ export class Landing {
     monitorScreen.decoding = 'async';
     let ledOn = false;
     let blinkTimeout: number | undefined;
-    let lastNoiseFrame = 0;
     let noiseRaf = 0;
     let baseLoaded = false;
     let notebookLoaded = false;
@@ -392,7 +401,7 @@ export class Landing {
       monitorNoiseCtx.putImageData(monitorImageData, 0, 0);
     }
 
-    const animateNoise = (timestamp: number) => {
+    const animateNoise = () => {
       if (!landingActive) {
         noiseRaf = 0;
         return;
@@ -403,13 +412,10 @@ export class Landing {
         return;
       }
 
-      if (startAnim.active || timestamp - lastNoiseFrame >= NOISE_FRAME_MS) {
-        if (noiseEnabled) {
-          generateNoise();
-        }
-        drawFrame();
-        lastNoiseFrame = timestamp;
+      if (noiseEnabled) {
+        generateNoise();
       }
+      drawFrame();
 
       if (landingActive) {
         noiseRaf = window.requestAnimationFrame(animateNoise);
@@ -456,7 +462,7 @@ export class Landing {
         parallax.originX = bufferedWidth / 2;
         parallax.originY = bufferedHeight / 2;
 
-        drawFrame();
+        //drawFrame();
         applyCanvasTransform();
       };
 
@@ -611,7 +617,6 @@ export class Landing {
       if (noiseRaf) {
         window.cancelAnimationFrame(noiseRaf);
       }
-      lastNoiseFrame = 0;
       if (landingActive) {
         noiseRaf = window.requestAnimationFrame(animateNoise);
       }
@@ -621,6 +626,13 @@ export class Landing {
       const active = Boolean(document.fullscreenElement);
       fullscreenRequested = active;
       fullscreenPending = false;
+      if (landingActive) {
+        updateVisibleViewportHeight();
+        applyLayout();
+      }
+      if (active && startAfterFullscreen && !startAnim.active && landingActive) {
+        waitForStableViewportAndStart();
+      }
     });
 
     function computeStartTarget() {
@@ -635,16 +647,15 @@ export class Landing {
       const regionRenderedHeight = regionHeight * baseScaleY;
       const extraScale = vw >= vh ? vh / regionRenderedHeight : vw / regionRenderedWidth;
       const adjustedScale = extraScale / 1.5; // reduce final zoom
-      const cropLeftPx = Math.max(0, -layoutOffset.left);
-      const cropRatio = Math.min(1, cropLeftPx / renderState.width);
-      const shiftViewPx = cropRatio * 700;
-      const shiftSourcePx = shiftViewPx / baseScaleX;
-      const targetX = (NB_TARGET_CENTER.x + shiftSourcePx) * baseScaleX;
+      const targetX = NB_TARGET_CENTER.x * baseScaleX;
       const targetY = NB_TARGET_CENTER.y * baseScaleY;
-      const desiredX = vw / 2;
-      const desiredY = vh / 2;
-      const translateX = (desiredX - targetX) / adjustedScale;
-      const translateY = (desiredY - targetY) / adjustedScale;
+      const desiredX = rect.left + vw / 2;
+      const desiredY = rect.top + vh / 2;
+      const targetScreenX = rect.left + targetX;
+      const targetScreenY = rect.top + targetY;
+      // Keep notebook target pinned to viewport center.
+      const translateX = desiredX - targetScreenX;
+      const translateY = desiredY - targetScreenY;
       return { tx: translateX, ty: translateY, scale: adjustedScale, rot: START_ANIM_ROTATE_DEG, origin: { x: targetX, y: targetY } };
     }
 
@@ -692,14 +703,17 @@ export class Landing {
     function beginStartAnimation() {
       if (startAnim.active || !landingActive) return;
       startAnim.active = true;
+      startAnim.duration = START_ANIM_DURATION_MS;
       parallaxEnabled = false;
-      const target = computeStartTarget();
-      parallax.originX = target.origin.x;
-      parallax.originY = target.origin.y;
+      // Freeze canvas in neutral pose before measuring target bounds.
       parallax.translateX = 0;
       parallax.translateY = 0;
       parallax.rotateX = 0;
       parallax.rotateY = 0;
+      applyCanvasTransform();
+      const target = computeStartTarget();
+      parallax.originX = target.origin.x;
+      parallax.originY = target.origin.y;
       startAnim.from = { tx: camera.translateX, ty: camera.translateY, scale: camera.scale, rot: camera.rotateDeg };
       startAnim.to = { tx: target.tx, ty: target.ty, scale: target.scale, rot: target.rot };
       startAnim.origin = target.origin;
@@ -710,13 +724,66 @@ export class Landing {
       startAnim.raf = window.requestAnimationFrame(stepStartAnimation);
     }
 
+    function waitForStableViewportAndStart() {
+      if (startStabilizingViewport) return;
+      startStabilizingViewport = true;
+      const snapshot = () => {
+        const vv = window.visualViewport;
+        return [
+          window.innerWidth,
+          window.innerHeight,
+          Math.round(vv?.width ?? 0),
+          Math.round(vv?.height ?? 0),
+          Math.round(vv?.offsetLeft ?? 0),
+          Math.round(vv?.offsetTop ?? 0)
+        ].join('|');
+      };
+      let previous = snapshot();
+      let stableFrames = 0;
+      let totalFrames = 0;
+      const tick = () => {
+        if (!landingActive || startAnim.active || !startAfterFullscreen) {
+          startStabilizingViewport = false;
+          return;
+        }
+        const current = snapshot();
+        if (current === previous) {
+          stableFrames += 1;
+        } else {
+          previous = current;
+          stableFrames = 0;
+        }
+        totalFrames += 1;
+        if (stableFrames >= 2 || totalFrames >= 30) {
+          startStabilizingViewport = false;
+          startAfterFullscreen = false;
+          if (startAfterFullscreenTimeout !== null) {
+            window.clearTimeout(startAfterFullscreenTimeout);
+            startAfterFullscreenTimeout = null;
+          }
+          updateVisibleViewportHeight();
+          applyLayout();
+          beginStartAnimation();
+          return;
+        }
+        window.requestAnimationFrame(tick);
+      };
+      window.requestAnimationFrame(tick);
+    }
+
     function teardownLanding() {
       landingActive = false;
       setLandingActiveClass(false);
       parallaxEnabled = false;
+      startAfterFullscreen = false;
+      if (startAfterFullscreenTimeout !== null) {
+        window.clearTimeout(startAfterFullscreenTimeout);
+        startAfterFullscreenTimeout = null;
+      }
+      startStabilizingViewport = false;
       window.removeEventListener('mousemove', applyParallax);
-      window.removeEventListener('resize', applyLayout);
-      window.visualViewport?.removeEventListener('resize', updateVisibleViewportHeight);
+      window.removeEventListener('resize', handleWindowLayoutResize);
+      window.visualViewport?.removeEventListener('resize', handleVisualViewportResize);
       window.visualViewport?.removeEventListener('scroll', updateVisibleViewportHeight);
       window.removeEventListener('resize', updateVisibleViewportHeight);
       if (blinkTimeout !== undefined) {
@@ -810,7 +877,7 @@ export class Landing {
       (err) => console.error('Failed to load base image', roomUrl, err)
     );
 
-    window.addEventListener('resize', applyLayout);
+    window.addEventListener('resize', handleWindowLayoutResize);
 
     const startButton = root.querySelector<HTMLButtonElement>('.intro__start');
     const fullscreenCheckbox = root.querySelector<HTMLInputElement>('.intro__fullscreen');
@@ -838,11 +905,25 @@ export class Landing {
     }
     if (startButton && landing) {
       startButton.addEventListener('click', () => {
+        if (startAnim.active || !landingActive) return;
         shouldRequestFullscreen = fullscreenCheckbox ? fullscreenCheckbox.checked : shouldRequestFullscreen;
         landing.classList.add('intro-dismissed');
         if (pcElement) {
           pcElement.style.display = 'block';
           pcElement.style.opacity = '0';
+        }
+        if (shouldRequestFullscreen && !document.fullscreenElement) {
+          startAfterFullscreen = true;
+          requestFullscreenIfNeeded(true);
+          if (startAfterFullscreenTimeout !== null) {
+            window.clearTimeout(startAfterFullscreenTimeout);
+          }
+          startAfterFullscreenTimeout = window.setTimeout(() => {
+            startAfterFullscreenTimeout = null;
+            if (!landingActive || startAnim.active || !startAfterFullscreen) return;
+            waitForStableViewportAndStart();
+          }, 700);
+          return;
         }
         beginStartAnimation();
       });
