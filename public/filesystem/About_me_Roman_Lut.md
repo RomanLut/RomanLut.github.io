@@ -2,13 +2,13 @@
 
 <img src="/images/romanluthax.jpg" width="20%" align="right">
 
-Let me introduce myself. My name is Roman Lut. I was born in Ukraine in 1975.
+Let me introduce myself. My name is Roman Lut. I was born in Kyiv, Ukraine in 1975.
 
-I am a programmer with over 25 years of experience in the game development industry. For more details, please see my [portfolio](/?start=2&fullscreen=1&file=Resume_Roman_Lut.md).
+I am a programmer with over 25 years of experience in the game development industry. For more details, please see my [portfolio](/?start=2&fullscreen=1&file=Resume_Roman_Lut.md) and a list of [work projects](/?start=2&folder=Work_projects).
 
 Working at a game development company leaves little free time. Nevertheless, I still dedicate several hours each week to my [hobby projects](/?start=2&folder=Hobby_projects).
 
-I also maintain multiple open-source projects on Github.
+I also maintain multiple [open-source projects on Github](/?start=2&folder=Hobby_projects).
 
 I have been interested in programming and electronics since school.
 

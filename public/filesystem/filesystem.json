@@ -2903,6 +2903,13 @@
               "path": "Work_projects/2005-05_Xenus_Boiling_Point/Xenus_Trailer.url",
               "size": 43,
               "url": "https://www.youtube.com/watch?v=PJcGcuDtDY8"
+            },
+            {
+              "type": "youtube",
+              "name": "Обзор Xenus Точка Кипения",
+              "path": "Work_projects/2005-05_Xenus_Boiling_Point/Обзор_Xenus_Точка_Кипения.url",
+              "size": 43,
+              "url": "https://www.youtube.com/watch?v=u7YgR3nvKw4"
             }
           ],
           "image": "folder_image.png",
@@ -3152,7 +3159,7 @@
       "type": "wordpad",
       "name": "About me Roman Lut",
       "path": "About_me_Roman_Lut.md",
-      "size": 1322
+      "size": 1425
     },
     {
       "type": "wordpad",
