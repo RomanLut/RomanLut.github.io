@@ -50,7 +50,7 @@ export class FileExplorer extends AppWindow {
   private suppressItemActivationUntil = 0;
 
   constructor(desktop: HTMLElement, taskbar: Taskbar, startPath = '') {
-    super(desktop, taskbar, 'File Exporer', FILE_EXPLORER_ICON);
+    super(desktop, taskbar, 'File Explorer', FILE_EXPLORER_ICON);
     this.desktopRef = desktop;
     this.taskbarRef = taskbar;
 

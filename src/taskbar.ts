@@ -24,7 +24,7 @@ export class Taskbar {
           type="button"
           class="tray-button tray-button--fullscreen"
           aria-label="Toggle fullscreen"
-          title="Toggle Fuscreen"
+          title="Toggle fullscreen"
           aria-pressed="false"
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
